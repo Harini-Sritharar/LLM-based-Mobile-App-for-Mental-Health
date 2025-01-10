@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/screens/exercise_page.dart';
 import 'screens/community_page.dart';
 import 'screens/calendar_page.dart';
 import 'screens/courses_page.dart';
@@ -57,6 +58,14 @@ class _MainScreenState extends State<MainScreen> {
         selectedIndex: _selectedIndex,
         onTap: _onItemTapped,
       ),
+      floatingActionButton: ElevatedButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ExercisePage()),
+            );
+          },
+          child: const Icon(Icons.temple_buddhist)),
     );
   }
 }
