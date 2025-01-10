@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'edit_profile.dart'; // Import the new page
 
 class ProfilePage extends StatelessWidget {
   static const Color primaryTextColor = Color(0xFF687078);
@@ -16,19 +17,15 @@ class ProfilePage extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: primaryTextColor),
-        leading: Padding(
-          padding:
-              EdgeInsets.only(left: 12), // Adds padding for better visibility
-          child: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () => Navigator.pop(context),
-          ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
         ),
         actions: [
           IconButton(
             icon: SvgPicture.asset(
               'assets/icons/notification.svg',
-              width: 28, // Slightly larger for better balance
+              width: 28,
               height: 28,
               colorFilter: ColorFilter.mode(primaryTextColor, BlendMode.srcIn),
             ),
@@ -75,18 +72,24 @@ class ProfilePage extends StatelessWidget {
             child: ListView(
               children: [
                 _buildMenuItem(
-                    context, 'Edit Profile', 'assets/icons/user_edit.svg'),
+                    context, 'Edit Profile', 'assets/icons/user_edit.svg', () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => EditProfilePage()),
+                  );
+                }),
                 _buildMenuItem(
-                    context, 'Settings', 'assets/icons/setting-2.svg'),
+                    context, 'Settings', 'assets/icons/setting-2.svg', () {}),
                 _buildMenuItem(
-                    context, 'Ultimate Goal', 'assets/icons/cup.svg'),
+                    context, 'Ultimate Goal', 'assets/icons/cup.svg', () {}),
+                _buildMenuItem(context, 'Childhood photos',
+                    'assets/icons/gallery.svg', () {}),
+                _buildMenuItem(context, 'Payment Option',
+                    'assets/icons/empty-wallet.svg', () {}),
                 _buildMenuItem(
-                    context, 'Childhood photos', 'assets/icons/gallery.svg'),
+                    context, 'Invite Friends', 'assets/icons/send.svg', () {}),
                 _buildMenuItem(
-                    context, 'Payment Option', 'assets/icons/empty-wallet.svg'),
-                _buildMenuItem(
-                    context, 'Invite Friends', 'assets/icons/send.svg'),
-                _buildMenuItem(context, 'Logout', 'assets/icons/logout.svg'),
+                    context, 'Logout', 'assets/icons/logout.svg', () {}),
               ],
             ),
           ),
@@ -95,7 +98,8 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Widget _buildMenuItem(BuildContext context, String title, dynamic icon) {
+  Widget _buildMenuItem(
+      BuildContext context, String title, dynamic icon, VoidCallback onTap) {
     return ListTile(
       leading: (icon is String)
           ? SvgPicture.asset(
@@ -111,11 +115,7 @@ class ProfilePage extends StatelessWidget {
       ),
       trailing:
           Icon(Icons.arrow_forward_ios, size: 18, color: primaryTextColor),
-      onTap: () {
-        // ScaffoldMessenger.of(context).showSnackBar(
-        //   SnackBar(content: Text("$title tapped")),
-        // );
-      },
+      onTap: onTap, // Executes the navigation function
     );
   }
 }
