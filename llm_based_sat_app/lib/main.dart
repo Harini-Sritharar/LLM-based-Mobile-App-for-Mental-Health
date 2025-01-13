@@ -67,7 +67,7 @@ class _MainScreenState extends State<MainScreen> {
               MaterialPageRoute(
                 builder: (context) => ExercisePage(
                   heading: 'Exercise A', // Example heading
-                  stepNumber: 1, // Example step
+                  step: "Step 1", // Example step
                   description:
                       'This is the description for step 1.', // Example description
                   imageUrl:

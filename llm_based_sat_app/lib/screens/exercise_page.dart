@@ -9,7 +9,7 @@ import '../widgets/exercise_widgets/exercise_timer.dart';
 
 class ExercisePage extends StatelessWidget {
   final String heading;
-  final int stepNumber;
+  final String step;
   final String description;
   final String imageUrl;
   final String buttonText;
@@ -18,7 +18,7 @@ class ExercisePage extends StatelessWidget {
   const ExercisePage({
     super.key,
     required this.heading,
-    required this.stepNumber,
+    required this.step,
     required this.description,
     required this.imageUrl,
     required this.buttonText,
@@ -34,7 +34,7 @@ class ExercisePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ExerciseStepLabel(stepNumber: stepNumber),
+            ExerciseStepLabel(step: step),
             const SizedBox(height: 16),
             ExerciseDescription(description: description),
             const SizedBox(height: 16),
