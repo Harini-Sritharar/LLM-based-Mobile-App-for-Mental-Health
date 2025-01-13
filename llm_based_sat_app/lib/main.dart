@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:llm_based_sat_app/screens/exercise_page.dart';
-import 'screens/community_page.dart';
-import 'screens/calendar_page.dart';
-import 'screens/courses_page.dart';
-import 'screens/home_page.dart';
-import 'screens/score_page.dart';
-import 'widgets/bottom_nav_bar.dart';
+import '../screens/community_page.dart';
+import '../screens/calendar_page.dart';
+import '../screens/courses_page.dart';
+import '../screens/home_page.dart';
+import '../screens/score_page.dart';
+import '../screens/profile_page.dart';
+import '../widgets/bottom_nav_bar.dart';
+import 'screens/exercise_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -31,15 +32,8 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _selectedIndex = 2; // Default to Home page
-
-  final List<Widget> _pages = [
-    CommunityPage(),
-    CalendarPage(),
-    HomePage(),
-    ScorePage(),
-    CoursesPage()
-  ];
+  // Default page is home page (index 2)
+  int _selectedIndex = 2;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -49,6 +43,15 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Set up pages in the Bottom Navigation Bar
+    final List<Widget> _pages = [
+      CommunityPage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
+      CalendarPage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
+      HomePage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
+      ScorePage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
+      CoursesPage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
+    ];
+
     return Scaffold(
       body: IndexedStack(
         index: _selectedIndex,
@@ -56,9 +59,24 @@ class _MainScreenState extends State<MainScreen> {
       ),
       bottomNavigationBar: BottomNavBar(
         selectedIndex: _selectedIndex,
-        onTap: _onItemTapped,
+        onTap: (index) {
+          if (index == 5) {
+            // If Profile is tapped, navigate manually
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ProfilePage(
+                  onItemTapped: _onItemTapped,
+                  selectedIndex: _selectedIndex,
+                ),
+              ),
+            );
+          } else {
+            _onItemTapped(index);
+          }
+        },
       ),
-      // TODO
+// TODO
       // Convert to map and invoke from the map based on index
       floatingActionButton: ElevatedButton(
           onPressed: () {
@@ -78,8 +96,11 @@ class _MainScreenState extends State<MainScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => HomePage(), // Example next page
-                      ),
+                          builder: (context) => HomePage(
+                              onItemTapped: _onItemTapped,
+                              selectedIndex:
+                                  _selectedIndex) // Example next page
+                          ),
                     );
                   },
                 ),

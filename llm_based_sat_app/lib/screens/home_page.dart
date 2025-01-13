@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'profile_page.dart';
 
 class HomePage extends StatelessWidget {
+  final Function(int) onItemTapped;
+  final int selectedIndex;
+
+  HomePage({required this.onItemTapped, required this.selectedIndex});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -11,7 +16,7 @@ class HomePage extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.notifications),
             onPressed: () {
-              // Handle notification click
+              // Handle notifications
             },
           ),
           IconButton(
@@ -19,7 +24,12 @@ class HomePage extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ProfilePage()),
+                MaterialPageRoute(
+                  builder: (context) => ProfilePage(
+                    onItemTapped: onItemTapped,
+                    selectedIndex: selectedIndex,
+                  ),
+                ),
               );
             },
           ),
