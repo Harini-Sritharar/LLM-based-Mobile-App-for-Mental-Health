@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_appBar.dart';
 import '../widgets/exercise_widgets/exercise_bottom_message.dart';
 import '../widgets/exercise_widgets/exercise_button.dart';
 import '../widgets/exercise_widgets/exercise_description.dart';
@@ -27,10 +28,7 @@ class ExercisePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(heading),
-        centerTitle: true,
-      ),
+      appBar: ExerciseAppBar(title: heading),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
