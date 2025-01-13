@@ -5,7 +5,6 @@ class ExerciseAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double fontSize;
   final FontWeight fontWeight;
   final Color textColor;
-  final EdgeInsetsGeometry padding;
 
   const ExerciseAppBar({
     Key? key,
