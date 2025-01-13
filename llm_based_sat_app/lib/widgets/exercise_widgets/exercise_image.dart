@@ -8,9 +8,10 @@ class ExerciseImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Image.network(
+      child: Image.asset(
         imageUrl,
-        height: 200,
+        height: 300,
+        width: 350,
         fit: BoxFit.cover,
         errorBuilder: (context, error, stackTrace) => const Text(
           "Image not found",

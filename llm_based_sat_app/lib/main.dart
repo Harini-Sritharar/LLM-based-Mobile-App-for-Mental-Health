@@ -71,7 +71,7 @@ class _MainScreenState extends State<MainScreen> {
                   description:
                       'Look at your happy photo below. Recall positive childhood memories.', // Example description
                   imageUrl:
-                      'https://via.placeholder.com/150', // Example image URL
+                      'assets/icons/exercise_page_1.png', // Example image URL
                   buttonText: 'Next', // Example button text
                   onButtonPress: () {
                     // Define the behavior for button press
