@@ -58,11 +58,32 @@ class _MainScreenState extends State<MainScreen> {
         selectedIndex: _selectedIndex,
         onTap: _onItemTapped,
       ),
+      // TODO
+      // Convert to map and invoke from the map based on index
       floatingActionButton: ElevatedButton(
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ExercisePage()),
+              MaterialPageRoute(
+                builder: (context) => ExercisePage(
+                  heading: 'Exercise A', // Example heading
+                  stepNumber: 1, // Example step
+                  description:
+                      'This is the description for step 1.', // Example description
+                  imageUrl:
+                      'https://via.placeholder.com/150', // Example image URL
+                  buttonText: 'Next', // Example button text
+                  onButtonPress: () {
+                    // Define the behavior for button press
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HomePage(), // Example next page
+                      ),
+                    );
+                  },
+                ),
+              ),
             );
           },
           child: const Icon(Icons.temple_buddhist)),
