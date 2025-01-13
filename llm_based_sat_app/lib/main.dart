@@ -31,7 +31,8 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _selectedIndex = 2; // Default to Home page
+  // Default page is home page (index 2)
+  int _selectedIndex = 2;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -41,6 +42,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Set up pages in the Bottom Navigation Bar
     final List<Widget> _pages = [
       CommunityPage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
       CalendarPage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),

@@ -4,6 +4,7 @@ import '../widgets/main_layout.dart';
 import 'edit_profile.dart';
 import 'settings_page.dart';
 import 'ultimate_goal_page.dart';
+import '../widgets/custom_app_bar.dart';
 
 class ProfilePage extends StatelessWidget {
   static const Color primaryTextColor = Color(0xFF687078);
@@ -20,41 +21,7 @@ class ProfilePage extends StatelessWidget {
       onItemTapped: onItemTapped,
       body: Column(
         children: [
-          AppBar(
-            title: Text(
-              "Profile Settings",
-              style: TextStyle(color: primaryTextColor),
-            ),
-            centerTitle: true,
-            iconTheme: IconThemeData(color: primaryTextColor),
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () => Navigator.pop(context),
-            ),
-            actions: [
-              IconButton(
-                icon: SvgPicture.asset(
-                  'assets/icons/notification.svg',
-                  width: 28,
-                  height: 28,
-                  colorFilter:
-                      ColorFilter.mode(primaryTextColor, BlendMode.srcIn),
-                ),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: SvgPicture.asset(
-                  'assets/icons/profile.svg',
-                  width: 28,
-                  height: 28,
-                  colorFilter:
-                      ColorFilter.mode(primaryTextColor, BlendMode.srcIn),
-                ),
-                onPressed: () {},
-              ),
-            ],
-            elevation: 0,
-          ),
+          CustomAppBar(title: "Profile Page"),
           SizedBox(height: 20),
           CircleAvatar(
             radius: 50,
