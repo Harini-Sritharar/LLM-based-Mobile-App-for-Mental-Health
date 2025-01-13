@@ -13,21 +13,17 @@ class ExerciseAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.fontSize = 20.0,
     this.fontWeight = FontWeight.w600,
     this.textColor = const Color(0xFF687078),
-    this.padding = const EdgeInsets.symmetric(horizontal: 16.0),
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Padding(
-        padding: padding,
-        child: Text(
-          title,
-          style: TextStyle(
-            fontSize: fontSize,
-            fontWeight: fontWeight,
-            color: textColor,
-          ),
+      title: Text(
+        title,
+        style: TextStyle(
+          fontSize: fontSize,
+          fontWeight: fontWeight,
+          color: textColor,
         ),
       ),
       centerTitle: true,
