@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../widgets/main_layout.dart';
 import 'edit_profile.dart';
 import 'settings_page.dart';
+import 'ultimate_goal_page.dart';
 
 class ProfilePage extends StatelessWidget {
   static const Color primaryTextColor = Color(0xFF687078);
@@ -112,8 +113,18 @@ class ProfilePage extends StatelessWidget {
                     );
                   },
                 ),
-                _buildMenuItem(
-                    context, 'Ultimate Goal', 'assets/icons/cup.svg', () {}),
+                _buildMenuItem(context, 'Ultimate Goal', 'assets/icons/cup.svg',
+                    () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => UltimateGoalPage(
+                        onItemTapped: onItemTapped, // Pass function
+                        selectedIndex: selectedIndex, // Pass index
+                      ),
+                    ),
+                  );
+                }),
                 _buildMenuItem(context, 'Childhood photos',
                     'assets/icons/gallery.svg', () {}),
                 _buildMenuItem(context, 'Payment Option',
