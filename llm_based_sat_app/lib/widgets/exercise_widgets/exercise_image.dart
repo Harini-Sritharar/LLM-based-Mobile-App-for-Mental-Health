@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ExerciseImage extends StatelessWidget {
   final String imageUrl;
 
-  const ExerciseImage({required this.imageUrl});
+  const ExerciseImage({super.key, required this.imageUrl});
 
   @override
   Widget build(BuildContext context) {
