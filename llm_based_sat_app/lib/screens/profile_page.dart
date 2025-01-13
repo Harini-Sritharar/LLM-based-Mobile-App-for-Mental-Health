@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../widgets/main_layout.dart'; // Import MainLayout
-import 'edit_profile.dart'; // Import EditProfilePage
+import '../widgets/main_layout.dart';
+import 'edit_profile.dart';
+import 'settings_page.dart';
 
 class ProfilePage extends StatelessWidget {
   static const Color primaryTextColor = Color(0xFF687078);
@@ -24,7 +25,6 @@ class ProfilePage extends StatelessWidget {
               style: TextStyle(color: primaryTextColor),
             ),
             centerTitle: true,
-            backgroundColor: Colors.white,
             iconTheme: IconThemeData(color: primaryTextColor),
             leading: IconButton(
               icon: Icon(Icons.arrow_back),
@@ -97,7 +97,21 @@ class ProfilePage extends StatelessWidget {
                   },
                 ),
                 _buildMenuItem(
-                    context, 'Settings', 'assets/icons/setting-2.svg', () {}),
+                  context,
+                  'Settings',
+                  'assets/icons/setting-2.svg',
+                  () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SettingsPage(
+                          onItemTapped: onItemTapped, // Pass function
+                          selectedIndex: selectedIndex, // Pass index
+                        ),
+                      ),
+                    );
+                  },
+                ),
                 _buildMenuItem(
                     context, 'Ultimate Goal', 'assets/icons/cup.svg', () {}),
                 _buildMenuItem(context, 'Childhood photos',

@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../widgets/main_layout.dart'; // Import MainLayout
 
-class EditProfilePage extends StatelessWidget {
+class SettingsPage extends StatelessWidget {
   static const Color primaryTextColor = Color(0xFF687078);
   static const Color secondaryTextColor = Color(0xFF123659);
   static const Color primaryButtonColor = Color(0xFF2F4A79);
+  static const Color arrowColor = Color(0xFF1C548C);
 
   final Function(int) onItemTapped; // Receive function to update navbar index
   final int selectedIndex; // Keep track of selected index
 
-  EditProfilePage({required this.onItemTapped, required this.selectedIndex});
+  SettingsPage({required this.onItemTapped, required this.selectedIndex});
 
   @override
   Widget build(BuildContext context) {
@@ -58,15 +59,23 @@ class EditProfilePage extends StatelessWidget {
               ],
             ),
             SizedBox(height: 10),
-            Text(
-              "Edit your Personal Profile",
-              style: TextStyle(fontSize: 16, color: primaryTextColor),
-            ),
+            _buildSettingsItem(context, 'Notifications',
+                'assets/icons/profile/notification-bing.svg', () {}),
+            _buildSettingsItem(context, 'Security',
+                'assets/icons/profile/security-safe.svg', () {}),
+            _buildSettingsItem(context, 'Accessibility',
+                'assets/icons/profile/accessibility.svg', () {}),
+            _buildSettingsItem(context, 'Language',
+                'assets/icons/profile/language-circle.svg', () {}),
+            _buildSettingsItem(context, 'Terms & Conditions',
+                'assets/icons/profile/book.svg', () {}),
+            _buildSettingsItem(context, 'Help Centre',
+                'assets/icons/profile/message-question.svg', () {}),
+            _buildSettingsItem(context, 'Reset Setting',
+                'assets/icons/profile/rotate-left.svg', () {}),
+            _buildSettingsItem(context, 'Delete Account',
+                'assets/icons/profile/trash.svg', () {}),
             SizedBox(height: 20),
-            _buildProfileOption(context, "Personal Info", secondaryTextColor),
-            _buildProfileOption(context, "Contact Details", secondaryTextColor),
-            _buildProfileOption(context, "Profile Picture", secondaryTextColor),
-            SizedBox(height: 40),
             _buildBackButton(context),
           ],
         ),
@@ -74,21 +83,23 @@ class EditProfilePage extends StatelessWidget {
     );
   }
 
-  Widget _buildProfileOption(
-      BuildContext context, String title, Color secondaryTextColor) {
+  Widget _buildSettingsItem(
+      BuildContext context, String title, dynamic icon, VoidCallback onTap) {
     return ListTile(
+      leading: (icon is String)
+          ? SvgPicture.asset(
+              icon,
+              width: 24,
+              height: 24,
+              colorFilter: ColorFilter.mode(primaryTextColor, BlendMode.srcIn),
+            )
+          : Icon(icon, color: primaryTextColor),
       title: Text(
         title,
-        style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w500,
-            color: secondaryTextColor),
+        style: TextStyle(fontSize: 18, color: primaryTextColor),
       ),
-      trailing:
-          Icon(Icons.arrow_forward_ios, size: 20, color: Color(0xFF1C548C)),
-      onTap: () {
-        // Add navigation logic if required
-      },
+      trailing: Icon(Icons.arrow_forward_ios, size: 18, color: arrowColor),
+      onTap: onTap,
     );
   }
 
@@ -97,7 +108,7 @@ class EditProfilePage extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 10),
       child: SizedBox(
         width: double.infinity,
-        height: 50,
+        height: 60,
         child: ElevatedButton(
           onPressed: () => Navigator.pop(context),
           style: ElevatedButton.styleFrom(
@@ -106,16 +117,27 @@ class EditProfilePage extends StatelessWidget {
               borderRadius: BorderRadius.circular(25),
             ),
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: Stack(
+            alignment: Alignment.center,
             children: [
-              SvgPicture.asset(
-                'assets/icons/back_icon.svg',
-                width: 30,
-                height: 30,
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      left: 20), // Adjust left padding if needed
+                  child: SvgPicture.asset(
+                    'assets/icons/back_icon.svg',
+                    width: 30,
+                    height: 30,
+                  ),
+                ),
               ),
-              SizedBox(width: 10),
-              Text("Back", style: TextStyle(fontSize: 18, color: Colors.white)),
+              Center(
+                child: Text(
+                  "Back",
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                ),
+              ),
             ],
           ),
         ),
