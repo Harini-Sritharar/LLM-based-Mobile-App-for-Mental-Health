@@ -87,10 +87,10 @@ class _MainScreenState extends State<MainScreen> {
                   heading: 'Exercise A', // Example heading
                   step: "Step 1", // Example step
                   description:
-                      'This is the description for step 1.', // Example description
+                      'Look at your happy photo below. Recall positive childhood memories.', // Example description
                   imageUrl:
-                      'https://via.placeholder.com/150', // Example image URL
-                  buttonText: 'Next', // Example button text
+                      'assets/icons/exercise_page_1.png', // Example image URL
+                  buttonText: 'Next Step', // Example button text
                   onButtonPress: () {
                     // Define the behavior for button press
                     Navigator.push(
@@ -103,6 +103,7 @@ class _MainScreenState extends State<MainScreen> {
                           ),
                     );
                   },
+                  rightArrowPresent: true,
                 ),
               ),
             );

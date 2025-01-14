@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_appBar.dart';
 import '../widgets/exercise_widgets/exercise_bottom_message.dart';
-import '../widgets/exercise_widgets/exercise_button.dart';
+import '../widgets/custom_button.dart';
 import '../widgets/exercise_widgets/exercise_description.dart';
 import '../widgets/exercise_widgets/exercise_image.dart';
 import '../widgets/exercise_widgets/exercise_step_label.dart';
@@ -14,6 +14,7 @@ class ExercisePage extends StatelessWidget {
   final String imageUrl;
   final String buttonText;
   final VoidCallback onButtonPress;
+  final bool rightArrowPresent;
 
   const ExercisePage({
     super.key,
@@ -22,7 +23,8 @@ class ExercisePage extends StatelessWidget {
     required this.description,
     required this.imageUrl,
     required this.buttonText,
-    required this.onButtonPress,
+    required this.onButtonPress, 
+    required this.rightArrowPresent,
   });
 
   @override
@@ -41,9 +43,10 @@ class ExercisePage extends StatelessWidget {
             ExerciseImage(imageUrl: imageUrl),
             const SizedBox(height: 16),
             Center(
-              child: ExerciseButton(
+              child: CustomButton(
                 buttonText: buttonText,
-                onPress: onButtonPress,
+                onPress: onButtonPress, 
+                rightArrowPresent: rightArrowPresent,
               ),
             ),
             const SizedBox(height: 16),
