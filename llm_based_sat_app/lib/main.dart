@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/screens/sign_in_page.dart';
 import 'screens/community_page.dart';
 import 'screens/calendar_page.dart';
 import 'screens/courses_page.dart';
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MainScreen(),
+      home: SignInPage(),
     );
   }
 }

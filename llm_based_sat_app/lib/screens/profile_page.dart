@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:llm_based_sat_app/screens/sign_in_page.dart';
 import 'edit_profile.dart'; // Import the new page
 
 class ProfilePage extends StatelessWidget {
@@ -88,8 +89,13 @@ class ProfilePage extends StatelessWidget {
                     'assets/icons/empty-wallet.svg', () {}),
                 _buildMenuItem(
                     context, 'Invite Friends', 'assets/icons/send.svg', () {}),
-                _buildMenuItem(
-                    context, 'Logout', 'assets/icons/logout.svg', () {}),
+                _buildMenuItem(context, 'Logout', 'assets/icons/logout.svg',
+                    () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SignInPage()),
+                  );
+                }),
               ],
             ),
           ),
