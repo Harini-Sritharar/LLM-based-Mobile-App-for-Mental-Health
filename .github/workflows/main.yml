@@ -21,6 +21,9 @@ jobs:
       uses: subosito/flutter-action@v2
       with:
         flutter-version: ${{ env.FLUTTER_VERSION }}
+    
+    - name: Navigate to Project Directory
+      run: cd llm_based_sat_app
 
     - name: Install Dependencies
       run: flutter pub get
@@ -30,9 +33,6 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: '17'
-
-    - name: Navigate to Project Directory
-      run: cd llm_based_sat_app
 
     - name: Build APK
       run: flutter build apk --release
