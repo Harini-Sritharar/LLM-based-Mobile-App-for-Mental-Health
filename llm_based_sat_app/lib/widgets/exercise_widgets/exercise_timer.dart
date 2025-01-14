@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
+// TODO
+// Have it so that it accepts the time to continue from so that continous pages have timers continuing from prev page 
+
 class ExerciseTimer extends StatefulWidget {
   const ExerciseTimer({super.key});
 
