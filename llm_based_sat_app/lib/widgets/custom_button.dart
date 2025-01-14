@@ -30,6 +30,7 @@ class CustomButton extends StatelessWidget {
   final bool rightArrowPresent; // Display right arrow if true
   final bool leftArrowPresent; // Display left arrow if true
   final Color backgroundColor; // Background color of the button
+  final Color textColor; // Text color of the button text
 
   const CustomButton(
       {super.key,
@@ -37,7 +38,8 @@ class CustomButton extends StatelessWidget {
       required this.onPress,
       this.rightArrowPresent = false,
       this.leftArrowPresent = false,
-      this.backgroundColor = const Color(0xFF1C548C)}) // Default background color
+      this.backgroundColor = const Color(0xFF1C548C), // Default background color
+      this.textColor = Colors.white}) 
       : assert(!(rightArrowPresent && leftArrowPresent),
             'Only one of rightArrowPresent or leftArrowPresent can be true.');
 
@@ -85,8 +87,8 @@ class CustomButton extends StatelessWidget {
             child: Text(
               buttonText,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: Colors.white, // Text color
+              style: TextStyle(
+                color: textColor, // Text color
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
               ),
