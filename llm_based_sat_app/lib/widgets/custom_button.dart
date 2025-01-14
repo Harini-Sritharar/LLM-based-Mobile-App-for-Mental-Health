@@ -21,20 +21,23 @@ Parameters:
 - `buttonText`: The text to display on the button.
 - `onPress`: The function that is called when the button is pressed.
 - `rightArrowPresent`: An optional boolean to display a right arrow (default is false).
-- `leftArrowPresent`: An optional boolean to display a left arrow (default is false). */
+- `leftArrowPresent`: An optional boolean to display a left arrow (default is false).
+- `backgroundColor`: The background color of the button (optional). Defaults to a specific blue color. */
 
 class CustomButton extends StatelessWidget {
   final String buttonText; // Text to display
   final VoidCallback onPress; // Page to invoke on press
   final bool rightArrowPresent; // Display right arrow if true
   final bool leftArrowPresent; // Display left arrow if true
+  final Color backgroundColor; // Background color of the button
 
   const CustomButton(
       {super.key,
       required this.buttonText,
       required this.onPress,
       this.rightArrowPresent = false,
-      this.leftArrowPresent = false})
+      this.leftArrowPresent = false,
+      this.backgroundColor = const Color(0xFF1C548C)}) // Default background color
       : assert(!(rightArrowPresent && leftArrowPresent),
             'Only one of rightArrowPresent or leftArrowPresent can be true.');
 
@@ -50,7 +53,7 @@ class CustomButton extends StatelessWidget {
 
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFF1C548C), // Button background color
+        backgroundColor: backgroundColor, // Use the provided background color
         padding: padding,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(100), // Rounded Corners

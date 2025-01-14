@@ -104,6 +104,7 @@ class _MainScreenState extends State<MainScreen> {
                     );
                   },
                   rightArrowPresent: true,
+                  messageText: "Leave and lose your progress. X",
                 ),
               ),
             );

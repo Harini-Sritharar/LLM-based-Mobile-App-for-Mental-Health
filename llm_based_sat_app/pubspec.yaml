@@ -73,6 +73,11 @@ flutter:
     - assets/icons/back_icon.svg
     - assets/icons/exercise_page_1.png
 
+  fonts:
+    - family: SevenSegment
+      fonts:
+        - asset: assets/fonts/7Segment.ttf
+
 
     - assets/icons/profile/accessibility.svg
     - assets/icons/profile/book.svg
