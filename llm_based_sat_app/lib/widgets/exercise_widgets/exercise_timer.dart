@@ -40,7 +40,7 @@ class _ExerciseTimerState extends State<ExerciseTimer> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 200,
+      width: 160,
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: backgroundColor, // Light blue background
