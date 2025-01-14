@@ -43,13 +43,13 @@ jobs:
         CI: true
 
     - name: Archive APK
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: android-apk
         path: build/app/outputs/flutter-apk/app-release.apk
 
     - name: Archive IPA
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: ios-ipa
         path: build/ios/iphoneos/Runner.app
