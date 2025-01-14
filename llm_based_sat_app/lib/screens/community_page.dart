@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'profile_page.dart';
 
 class CommunityPage extends StatelessWidget {
+  final Function(int) onItemTapped; // Required for navigation
+  final int selectedIndex;
+
+  CommunityPage({required this.onItemTapped, required this.selectedIndex});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -11,7 +16,7 @@ class CommunityPage extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.notifications),
             onPressed: () {
-              // Handle notification click
+              // Handle notifications
             },
           ),
           IconButton(
@@ -19,7 +24,12 @@ class CommunityPage extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ProfilePage()),
+                MaterialPageRoute(
+                  builder: (context) => ProfilePage(
+                    onItemTapped: onItemTapped, // Pass function
+                    selectedIndex: selectedIndex, // Pass index
+                  ),
+                ),
               );
             },
           ),

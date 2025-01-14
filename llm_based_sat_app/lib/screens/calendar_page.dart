@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'profile_page.dart';
 
 class CalendarPage extends StatelessWidget {
+  final Function(int) onItemTapped; // Pass navigation function
+  final int selectedIndex; // Pass selected index
+
+  CalendarPage({required this.onItemTapped, required this.selectedIndex});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,7 +24,12 @@ class CalendarPage extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ProfilePage()),
+                MaterialPageRoute(
+                  builder: (context) => ProfilePage(
+                    onItemTapped: onItemTapped, // Pass function
+                    selectedIndex: selectedIndex, // Pass current index
+                  ),
+                ),
               );
             },
           ),
