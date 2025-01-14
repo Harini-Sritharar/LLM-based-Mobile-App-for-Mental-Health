@@ -72,7 +72,7 @@ class _MainScreenState extends State<MainScreen> {
                       'Look at your happy photo below. Recall positive childhood memories.', // Example description
                   imageUrl:
                       'assets/icons/exercise_page_1.png', // Example image URL
-                  buttonText: 'Next', // Example button text
+                  buttonText: 'Next Step', // Example button text
                   onButtonPress: () {
                     // Define the behavior for button press
                     Navigator.push(
@@ -82,6 +82,7 @@ class _MainScreenState extends State<MainScreen> {
                       ),
                     );
                   },
+                  rightArrowPresent: true,
                 ),
               ),
             );
