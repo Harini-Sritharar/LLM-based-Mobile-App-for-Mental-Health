@@ -24,7 +24,7 @@ class ExercisePage extends StatelessWidget {
     required this.description,
     required this.imageUrl,
     required this.buttonText,
-    required this.onButtonPress, 
+    required this.onButtonPress,
     required this.rightArrowPresent,
     required this.messageText,
   });
@@ -33,32 +33,53 @@ class ExercisePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: ExerciseAppBar(title: heading),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ExerciseStepLabel(step: step),
-            const SizedBox(height: 16),
-            ExerciseDescription(description: description),
-            const SizedBox(height: 16),
-            ExerciseImage(imageUrl: imageUrl),
-            const SizedBox(height: 16),
-            Center(
-              child: CustomButton(
-                buttonText: buttonText,
-                onPress: onButtonPress, 
-                rightArrowPresent: rightArrowPresent,
-              ),
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ExerciseStepLabel(step: step),
+                const SizedBox(height: 16),
+                ExerciseDescription(description: description),
+                const SizedBox(height: 16),
+                ExerciseImage(imageUrl: imageUrl),
+                const SizedBox(height: 16),
+                Center(
+                  child: CustomButton(
+                    buttonText: buttonText,
+                    onPress: onButtonPress,
+                    rightArrowPresent: rightArrowPresent,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                ExerciseBottomMessage(messageText: messageText),
+              ],
             ),
-            const SizedBox(height: 16),
-            ExerciseBottomMessage(messageText: messageText),
-            const Spacer(),
-            const Center(
+          ),
+
+          // Grey Line
+          const Positioned(
+            bottom: 85.0,
+            left: 0,
+            right: 0,
+            child: Divider(
+              height: 2.0,
+              color: Colors.grey,
+            ),
+          ),
+
+          // Timer
+          const Positioned(
+            bottom: 16.0,
+            left: 0,
+            right: 0,
+            child: Center(
               child: ExerciseTimer(),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
