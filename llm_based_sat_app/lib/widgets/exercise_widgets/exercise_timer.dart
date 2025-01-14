@@ -1,37 +1,35 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 
 class ExerciseTimer extends StatefulWidget {
-  const ExerciseTimer();
+  const ExerciseTimer({super.key});
 
   @override
   _ExerciseTimerState createState() => _ExerciseTimerState();
 }
 
 class _ExerciseTimerState extends State<ExerciseTimer> {
-  late Duration timerDuration;
   late Stopwatch stopwatch;
+  late Timer timer;
+
+  Color textColor = const Color(0xFF123659); // Text color for timer
+  Color backgroundColor = const Color(0xFFCEDFF2); // Background color for timer
 
   @override
   void initState() {
     super.initState();
-    timerDuration = const Duration(seconds: 0);
     stopwatch = Stopwatch()..start();
 
-    // Update timer every second
-    Future.doWhile(() async {
-      if (!stopwatch.isRunning) return false;
-      await Future.delayed(const Duration(seconds: 1));
+    timer = Timer.periodic(const Duration(milliseconds: 10), (Timer t) {
       if (mounted) {
-        setState(() {
-          timerDuration = stopwatch.elapsed;
-        });
+        setState(() {});
       }
-      return true;
     });
   }
 
   @override
   void dispose() {
+    timer.cancel();
     stopwatch.stop();
     super.dispose();
   }
@@ -39,21 +37,73 @@ class _ExerciseTimerState extends State<ExerciseTimer> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.blue,
-      padding: const EdgeInsets.all(12),
+      width: 200,
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: backgroundColor, // Light blue background
+        borderRadius: BorderRadius.circular(15),
+      ),
       child: Center(
-        child: Text(
-          _formatDuration(timerDuration),
-          style: const TextStyle(fontSize: 18, color: Colors.white),
+        child: Row(
+          mainAxisSize: MainAxisSize.min, // Makes the row fit the text width
+          children: [
+            // Minutes
+            _buildTimeSection(_formatMinutes(stopwatch.elapsed), 30),
+            const SizedBox(width: 10), // Gap between minutes and ":"
+
+            // ":"
+            Text(
+              ":",
+              style: TextStyle(fontSize: 25.0, color: textColor),
+            ),
+            const SizedBox(width: 10), // Gap between ":" and seconds
+
+            // Seconds
+            _buildTimeSection(_formatSeconds(stopwatch.elapsed), 30),
+            const SizedBox(width: 8), // Gap between seconds and milliseconds
+
+            // Milliseconds
+            Expanded(
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: _buildTimeSection(
+                    _formatMilliseconds(stopwatch.elapsed), 25),
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  // Helper function to format timer
-  String _formatDuration(Duration duration) {
+  // Helper method to build each time section
+  Widget _buildTimeSection(String text, double fontSize) {
+    return Text(
+      text,
+      style: TextStyle(
+        fontSize: fontSize,
+        fontFamily: 'SevenSegment',
+        color: textColor,
+        fontWeight: FontWeight.bold,
+      ),
+    );
+  }
+
+  // Formats the minutes
+  String _formatMinutes(Duration duration) {
     final minutes = duration.inMinutes;
+    return minutes.toString().padLeft(2, '0');
+  }
+
+  // Formats the seconds
+  String _formatSeconds(Duration duration) {
     final seconds = duration.inSeconds % 60;
-    return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+    return seconds.toString().padLeft(2, '0');
+  }
+
+  // Formats the milliseconds
+  String _formatMilliseconds(Duration duration) {
+    final hundredths = (duration.inMilliseconds % 1000) ~/ 10;
+    return hundredths.toString().padLeft(2, '0');
   }
 }

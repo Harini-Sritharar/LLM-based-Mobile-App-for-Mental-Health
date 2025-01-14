@@ -73,6 +73,11 @@ flutter:
     - assets/icons/back_icon.svg
     - assets/icons/exercise_page_1.png
 
+  fonts:
+    - family: SevenSegment
+      fonts:
+        - asset: assets/fonts/7Segment.ttf
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
