@@ -41,11 +41,11 @@ class ExercisePage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ExerciseStepLabel(step: step),
-                const SizedBox(height: 16),
+                const SizedBox(height: 32),
                 ExerciseDescription(description: description),
-                const SizedBox(height: 16),
+                const SizedBox(height: 40),
                 ExerciseImage(imageUrl: imageUrl),
-                const SizedBox(height: 16),
+                const SizedBox(height: 40),
                 Center(
                   child: CustomButton(
                     buttonText: buttonText,
@@ -53,7 +53,7 @@ class ExercisePage extends StatelessWidget {
                     rightArrowPresent: rightArrowPresent,
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 32),
                 ExerciseBottomMessage(messageText: messageText),
               ],
             ),
@@ -65,8 +65,8 @@ class ExercisePage extends StatelessWidget {
             left: 0,
             right: 0,
             child: Divider(
-              height: 2.0,
-              color: Colors.grey,
+              thickness: 0.5,
+              color: Color(0xFF8F959B),
             ),
           ),
 
