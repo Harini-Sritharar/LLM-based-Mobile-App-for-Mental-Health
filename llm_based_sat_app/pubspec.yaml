@@ -71,6 +71,17 @@ flutter:
     - assets/icons/profile.svg
     - assets/icons/show.svg
     - assets/icons/back_icon.svg
+    - assets/icons/exercise_page_1.png
+
+
+    - assets/icons/profile/accessibility.svg
+    - assets/icons/profile/book.svg
+    - assets/icons/profile/language-circle.svg
+    - assets/icons/profile/message-question.svg
+    - assets/icons/profile/notification-bing.svg
+    - assets/icons/profile/rotate-left.svg
+    - assets/icons/profile/security-safe.svg
+    - assets/icons/profile/trash.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
