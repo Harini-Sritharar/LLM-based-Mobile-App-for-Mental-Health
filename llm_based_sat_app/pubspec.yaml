@@ -58,6 +58,11 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
+  fonts:
+    - family: SevenSegment
+      fonts:
+        - asset: assets/fonts/7Segment.ttf
+
   assets:
     - assets/icons/user_edit.svg
     - assets/icons/cup.svg
@@ -72,11 +77,6 @@ flutter:
     - assets/icons/show.svg
     - assets/icons/back_icon.svg
     - assets/icons/exercise_page_1.png
-
-  fonts:
-    - family: SevenSegment
-      fonts:
-        - asset: assets/fonts/7Segment.ttf
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
