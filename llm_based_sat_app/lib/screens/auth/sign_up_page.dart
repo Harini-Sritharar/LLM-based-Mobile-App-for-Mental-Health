@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '/main.dart';
+import '../../widgets/auth_widgets/circular_checkbox.dart';
+import '../../widgets//auth_widgets/text_input_field.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -45,79 +47,33 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
             ),
             const SizedBox(height: 40),
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'Email',
-                prefixIcon: Icon(Icons.email),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                filled: true,
-                fillColor: Colors.blue[50],
-              ),
+            TextInputField(
+              label: "Email",
+              icon: Icons.email,
+              isPassword: false,
             ),
             const SizedBox(height: 20),
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'Password',
-                prefixIcon: Icon(Icons.lock),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                filled: true,
-                fillColor: Colors.blue[50],
-              ),
-              obscureText: true,
+            TextInputField(
+              label: "Password",
+              icon: Icons.lock,
+              isPassword: true,
             ),
             const SizedBox(height: 20),
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'Confirm Password',
-                prefixIcon: Icon(Icons.lock),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey.shade400, width: 1),
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue, width: 2),
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                filled: true,
-                fillColor: Colors.blue[50],
-              ),
-              obscureText: true,
+            TextInputField(
+              label: "Confirm Password",
+              icon: Icons.lock,
+              isPassword: true,
             ),
             const SizedBox(height: 20),
             Row(
               children: [
-                GestureDetector(
-                  onTap: () {
+                CircularCheckbox(
+                  initialValue: _isTermsChecked,
+                  onChanged: (bool value) {
                     setState(() {
-                      _isTermsChecked =
-                          !_isTermsChecked; // Toggle the checkbox state
+                      _isTermsChecked = value;
                     });
                   },
-                  child: Container(
-                    width: 24.0, // Set the size of the "checkbox"
-                    height: 24.0,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle, // Makes the container circular
-                      color: _isTermsChecked
-                          ? Colors.blue
-                          : Colors.grey[300], // Background color based on state
-                      border: Border.all(
-                        color: Colors.black54, // Border color
-                        width: 2.0, // Border width
-                      ),
-                    ),
-                    child: _isTermsChecked
-                        ? Icon(
-                            Icons.check, // Checkmark icon when selected
-                            color: Colors.white,
-                            size: 16.0,
-                          )
-                        : null, // Empty when unchecked
-                  ),
                 ),
                 const SizedBox(
                     width: 10), // Space between the checkbox and text
@@ -129,7 +85,6 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ],
             ),
-
             const SizedBox(height: 20),
             SizedBox(
               width: double.infinity,
