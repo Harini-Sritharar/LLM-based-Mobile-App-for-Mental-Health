@@ -101,9 +101,38 @@ class ProfilePage extends StatelessWidget {
                     context, 'Invite Friends', 'assets/icons/send.svg', () {}),
                 _buildMenuItem(context, 'Logout', 'assets/icons/logout.svg',
                     () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SignInPage()),
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text("Confirm Logout"),
+                        content: Text("Are you sure you want to log out?"),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              // Close the dialog without logging out
+                              Navigator.of(context).pop();
+                            },
+                            child: Text("Cancel"),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              // Log out and navigate to SignInPage
+                              Navigator.of(context).pop(); // Close the dialog
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SignInPage()),
+                              );
+                            },
+                            child: const Text(
+                              "Logout",
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   );
                 }),
               ],
