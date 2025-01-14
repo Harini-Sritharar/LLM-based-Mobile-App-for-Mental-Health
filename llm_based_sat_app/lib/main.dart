@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/screens/exercise_page.dart';
+import 'package:llm_based_sat_app/utils/exercise_page_caller.dart';
 import 'screens/community_page.dart';
 import 'screens/calendar_page.dart';
 import 'screens/courses_page.dart';
@@ -58,33 +59,15 @@ class _MainScreenState extends State<MainScreen> {
         selectedIndex: _selectedIndex,
         onTap: _onItemTapped,
       ),
+
       // TODO
-      // Convert to map and invoke from the map based on index
+      // Remove after debugging
       floatingActionButton: ElevatedButton(
           onPressed: () {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ExercisePage(
-                  heading: 'Exercise A', // Example heading
-                  step: "Step 1", // Example step
-                  description:
-                      'Look at your happy photo below. Recall positive childhood memories.', // Example description
-                  imageUrl:
-                      'assets/icons/exercise_page_1.png', // Example image URL
-                  buttonText: 'Next Step', // Example button text
-                  onButtonPress: () {
-                    // Define the behavior for button press
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => HomePage(), // Example next page
-                      ),
-                    );
-                  },
-                  rightArrowPresent: true,
-                  messageText: "Leave and lose your progress. X",
-                ),
+                builder: (context) => const ExercisePageCaller(id: "A_1")
               ),
             );
           },

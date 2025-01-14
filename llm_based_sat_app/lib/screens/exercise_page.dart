@@ -13,7 +13,7 @@ class ExercisePage extends StatelessWidget {
   final String description;
   final String imageUrl;
   final String buttonText;
-  final VoidCallback onButtonPress;
+  final void Function(BuildContext) onButtonPress;
   final bool rightArrowPresent;
   final String messageText;
 
@@ -49,7 +49,10 @@ class ExercisePage extends StatelessWidget {
                 Center(
                   child: CustomButton(
                     buttonText: buttonText,
-                    onPress: onButtonPress,
+                    onPress: () {
+                      // Wrap the onButtonPress function call with the context
+                      onButtonPress(context); // context is provided here
+                    },
                     rightArrowPresent: rightArrowPresent,
                   ),
                 ),

@@ -38,8 +38,9 @@ class CustomButton extends StatelessWidget {
       required this.onPress,
       this.rightArrowPresent = false,
       this.leftArrowPresent = false,
-      this.backgroundColor = const Color(0xFF1C548C), // Default background color
-      this.textColor = Colors.white}) 
+      this.backgroundColor =
+          const Color(0xFF1C548C), // Default background color
+      this.textColor = Colors.white})
       : assert(!(rightArrowPresent && leftArrowPresent),
             'Only one of rightArrowPresent or leftArrowPresent can be true.');
 
