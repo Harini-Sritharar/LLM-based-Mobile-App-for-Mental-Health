@@ -1,23 +1,57 @@
 import 'package:flutter/material.dart';
 
+/* CustomButton is a customizable button widget that allows for either left or right arrow icons to be displayed alongside the button text.
+
+Usage:
+CustomButton(
+  buttonText: "Click Me", 
+  onPress: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => HomePage(), // Example next page
+      ),
+    );
+  }, 
+  rightArrowPresent: true, 
+  leftArrowPresent: false
+)
+
+Parameters:
+- `buttonText`: The text to display on the button.
+- `onPress`: The function that is called when the button is pressed.
+- `rightArrowPresent`: An optional boolean to display a right arrow (default is false).
+- `leftArrowPresent`: An optional boolean to display a left arrow (default is false). */
+
 class CustomButton extends StatelessWidget {
   final String buttonText; // Text to display
   final VoidCallback onPress; // Page to invoke on press
   final bool rightArrowPresent; // Display right arrow if true
+  final bool leftArrowPresent; // Display left arrow if true
 
   const CustomButton(
       {super.key,
       required this.buttonText,
       required this.onPress,
-      required this.rightArrowPresent});
+      this.rightArrowPresent = false,
+      this.leftArrowPresent = false})
+      : assert(!(rightArrowPresent && leftArrowPresent),
+            'Only one of rightArrowPresent or leftArrowPresent can be true.');
 
   @override
   Widget build(BuildContext context) {
+    // Increase the vertical padding when neither the left nor the right arrow is true
+    EdgeInsetsGeometry padding =
+        (rightArrowPresent == false && leftArrowPresent == false)
+            ? const EdgeInsets.symmetric(
+                vertical: 16, horizontal: 16) // Increased padding
+            : const EdgeInsets.symmetric(
+                vertical: 6, horizontal: 6); // Default padding
+
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color(0xFF1C548C), // Button background color
-        padding: const EdgeInsets.symmetric(
-            vertical: 6, horizontal: 6), // Button padding
+        padding: padding,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(100), // Rounded Corners
         ),
@@ -27,6 +61,23 @@ class CustomButton extends StatelessWidget {
         mainAxisAlignment:
             MainAxisAlignment.center, // Space between text and icon
         children: [
+          if (leftArrowPresent)
+            Positioned(
+              left: 0,
+              child: Container(
+                width: 50, // Width of the circular container
+                height: 50, // Height of the circular container
+                decoration: const BoxDecoration(
+                  color: Colors.white, // Background color of the icon container
+                  shape: BoxShape.circle, // Circular shape
+                ),
+                child: const Icon(
+                  Icons.chevron_left,
+                  color: Color(0xFF1C548C), // Dark blue icon color
+                  size: 40,
+                ),
+              ),
+            ),
           Expanded(
             child: Text(
               buttonText,
