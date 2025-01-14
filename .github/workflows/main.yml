@@ -31,6 +31,9 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
+    - name: Navigate to Project Directory
+      run: cd llm_based_sat_app
+
     - name: Build APK
       run: flutter build apk --release
       env:
