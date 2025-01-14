@@ -11,7 +11,7 @@ jobs:
     runs-on: macos-latest
 
     env:
-      FLUTTER_VERSION: 3.22.1
+      FLUTTER_VERSION: 3.27.2
 
     steps:
     - name: Checkout Repository
