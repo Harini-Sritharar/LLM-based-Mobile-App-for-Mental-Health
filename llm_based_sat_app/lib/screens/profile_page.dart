@@ -4,6 +4,7 @@ import '../widgets/main_layout.dart';
 import 'edit_profile.dart';
 import 'settings_page.dart';
 import 'ultimate_goal_page.dart';
+import 'childhood_photos_page.dart';
 import '../widgets/custom_app_bar.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -92,8 +93,19 @@ class ProfilePage extends StatelessWidget {
                     ),
                   );
                 }),
-                _buildMenuItem(context, 'Childhood photos',
-                    'assets/icons/gallery.svg', () {}),
+                _buildMenuItem(
+                    context, 'Childhood photos', 'assets/icons/gallery.svg',
+                    () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ChildhoodPhotosPage(
+                        onItemTapped: onItemTapped, // Pass function
+                        selectedIndex: selectedIndex, // Pass index
+                      ),
+                    ),
+                  );
+                }),
                 _buildMenuItem(context, 'Payment Option',
                     'assets/icons/empty-wallet.svg', () {}),
                 _buildMenuItem(
@@ -108,6 +120,8 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
+  // Helper function to build a menu item in the profile page.
+  // Takes in context, menu item string, icon and the event that should happen once the menu item iss tapped on.
   Widget _buildMenuItem(
       BuildContext context, String title, dynamic icon, VoidCallback onTap) {
     return ListTile(
