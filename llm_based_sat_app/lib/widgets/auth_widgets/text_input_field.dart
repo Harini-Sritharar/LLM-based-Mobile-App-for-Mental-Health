@@ -12,14 +12,17 @@ class TextInputField extends StatelessWidget {
       isPassword; // boolean to determine if the input field is a password field
   final TextEditingController
       controller; // controls the input field, we can use this to get the value
-  TextInputField(
+  final String? Function(String?)? validator; // Optional validator
+  const TextInputField(
       {super.key,
       required this.label,
       required this.icon,
       required this.isPassword,
-      required this.controller});
+      required this.controller,
+      this.validator});
 
-  // Validation function
+  // Default validation function that provides default validation for email and password fields
+  // Will be used if the validator is not provided
   String? _validateInput(String? value) {
     if (value == null || value.isEmpty) {
       return '$label cannot be empty';
@@ -53,6 +56,6 @@ class TextInputField extends StatelessWidget {
           fillColor: Colors.blue[50],
         ),
         obscureText: isPassword, // hiding the input based on the label
-        validator: _validateInput);
+        validator: validator ?? _validateInput);
   }
 }

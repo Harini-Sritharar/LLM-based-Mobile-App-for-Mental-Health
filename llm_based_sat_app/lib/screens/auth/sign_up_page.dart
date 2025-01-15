@@ -9,11 +9,37 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  bool _isTermsChecked = false;
+  // Form specific fields
+  bool _agreeToTerms = false;
   final _formKey = GlobalKey<FormState>();
+
+  // Controllers, used for field validation and can be used to fetch the field value
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+
+  // Validator used to check if the password and confirm password fields match
+  String? _checkPasswordsMatch(String? value) {
+    if (value != _passwordController.text) {
+      return 'Passwords do not match';
+    }
+    return null;
+  }
+
+  // Function which will be called upon submitting the form; it checks that:
+  // - all form fields are valid
+  // - the terms have been agreed to before navigating to the main screen
+  void _submitForm() {
+    if (_formKey.currentState!.validate()) {
+      if (_agreeToTerms) {
+        // Navigate to the main screen
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => MainScreen()),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,24 +98,25 @@ class _SignUpPageState extends State<SignUpPage> {
                   icon: Icons.lock,
                   isPassword: true,
                   controller: _confirmPasswordController,
+                  validator: _checkPasswordsMatch,
                 ),
                 const SizedBox(height: 20),
                 Row(
                   children: [
                     CircularCheckbox(
-                      initialValue: _isTermsChecked,
+                      initialValue: _agreeToTerms,
                       onChanged: (bool value) {
                         setState(() {
-                          _isTermsChecked = value;
+                          _agreeToTerms = value;
                         });
                       },
                     ),
                     const SizedBox(
                         width: 10), // Space between the checkbox and text
-                    const Text(
+                    Text(
                       'Agree to Terms & Conditions',
                       style: TextStyle(
-                        color: Colors.black54,
+                        color: _agreeToTerms ? Colors.black : Colors.red,
                       ),
                     ),
                   ],
@@ -105,19 +132,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                       backgroundColor: Colors.blue[800],
                     ),
-                    onPressed: () {
-                      // Checking if each field is valid
-                      if (_formKey.currentState!.validate()) {
-                        // checking if the password field and the confirm password field match
-                        if (_passwordController.text == _confirmPasswordController.text){
-                          
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MainScreen()));
-                        }
-                      }
-                    },
+                    onPressed: _submitForm,
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
