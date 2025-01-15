@@ -18,7 +18,6 @@ class EditProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MainLayout(
       selectedIndex: selectedIndex,
-      onItemTapped: onItemTapped,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(

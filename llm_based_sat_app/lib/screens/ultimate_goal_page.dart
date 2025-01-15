@@ -40,7 +40,6 @@ class _UltimateGoalPageState extends State<UltimateGoalPage> {
   Widget build(BuildContext context) {
     return MainLayout(
       selectedIndex: widget.selectedIndex,
-      onItemTapped: widget.onItemTapped,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(

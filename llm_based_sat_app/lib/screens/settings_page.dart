@@ -18,7 +18,6 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MainLayout(
       selectedIndex: selectedIndex,
-      onItemTapped: onItemTapped,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: Column(

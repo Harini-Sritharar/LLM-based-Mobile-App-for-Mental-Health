@@ -5,22 +5,22 @@ class CalendarPage extends StatelessWidget {
   final Function(int) onItemTapped; // Pass navigation function
   final int selectedIndex; // Pass selected index
 
-  CalendarPage({required this.onItemTapped, required this.selectedIndex});
+  const CalendarPage({super.key, required this.onItemTapped, required this.selectedIndex});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Calendar'),
+        title: const Text('Calendar'),
         actions: [
           IconButton(
-            icon: Icon(Icons.notifications),
+            icon: const Icon(Icons.notifications),
             onPressed: () {
               // Handle notification click
             },
           ),
           IconButton(
-            icon: Icon(Icons.person),
+            icon: const Icon(Icons.person),
             onPressed: () {
               Navigator.push(
                 context,
@@ -35,7 +35,7 @@ class CalendarPage extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(
+      body: const Center(
         child: Text(
           'Calendar Page',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),

@@ -13,24 +13,24 @@ class ProfilePage extends StatelessWidget {
   final Function(int) onItemTapped; // Receive function to update navbar index
   final int selectedIndex; // Keep track of selected index
 
-  ProfilePage({required this.onItemTapped, required this.selectedIndex});
+  const ProfilePage(
+      {super.key, required this.onItemTapped, required this.selectedIndex});
 
   @override
   Widget build(BuildContext context) {
     return MainLayout(
       selectedIndex: selectedIndex,
-      onItemTapped: onItemTapped,
       body: Column(
         children: [
           CustomAppBar(title: "Profile Page"),
           SizedBox(height: 20),
           CircleAvatar(
             radius: 50,
-            backgroundColor: const Color(0xFFCEDFF2),
+            backgroundColor: Color(0xFFCEDFF2),
             child: Icon(Icons.person, size: 80, color: Color(0xFFF2F9FF)),
           ),
-          SizedBox(height: 10),
-          Text(
+          const SizedBox(height: 10),
+          const Text(
             'Neophytos Polydorou',
             style: TextStyle(
               fontSize: 22,
@@ -38,14 +38,14 @@ class ProfilePage extends StatelessWidget {
               color: primaryTextColor,
             ),
           ),
-          Text(
+          const Text(
             'neophytos@invincimind.com',
             style: TextStyle(
               fontSize: 16,
               color: primaryTextColor,
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Expanded(
             child: ListView(
               children: [
@@ -130,15 +130,16 @@ class ProfilePage extends StatelessWidget {
               icon,
               width: 24,
               height: 24,
-              colorFilter: ColorFilter.mode(primaryTextColor, BlendMode.srcIn),
+              colorFilter:
+                  const ColorFilter.mode(primaryTextColor, BlendMode.srcIn),
             )
           : Icon(icon, color: primaryTextColor),
       title: Text(
         title,
-        style: TextStyle(fontSize: 18, color: primaryTextColor),
+        style: const TextStyle(fontSize: 18, color: primaryTextColor),
       ),
-      trailing:
-          Icon(Icons.arrow_forward_ios, size: 18, color: primaryTextColor),
+      trailing: const Icon(Icons.arrow_forward_ios,
+          size: 18, color: primaryTextColor),
       onTap: onTap,
     );
   }
