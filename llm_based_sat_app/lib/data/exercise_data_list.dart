@@ -10,7 +10,7 @@ final List<ExerciseDataInterface> exerciseDataList = [
     heading: "Exercise A",
     step: "Step 1",
     description: "Look at your happy photo below. Recall positive childhood memories.",
-    imageUrl: "assets/icons/exercise_page_1.png",
+    imageUrl: "assets/icons/exercise_images/exercise_page_A_1.png",
     buttonText: "Next Step",
     onButtonPress: (BuildContext context) {
       // Navigate to ExercisePageCaller when the button is pressed
@@ -26,11 +26,12 @@ final List<ExerciseDataInterface> exerciseDataList = [
   ),
   ExerciseDataInterface(
     id: "A_2",
-    heading: "Exercise 2",
+    heading: "Exercise A",
     step: "Step 2",
-    description: "This is the second exercise.",
-    imageUrl: "assets/images/exercise2.png",
-    buttonText: "Start Exercise 2",
+    description: "Look at your unhappy photos. Recall negative childhood memories.",
+    imageUrl: "assets/icons/exercise_images/exercise_page_A_2.png",
+    buttonText: "Next Step",
+    rightArrowPresent: true,
     onButtonPress: (BuildContext context) {
       // Navigate to ExercisePageCaller when the button is pressed
       Navigator.push(
@@ -40,8 +41,7 @@ final List<ExerciseDataInterface> exerciseDataList = [
         ),
       );
     },
-    rightArrowPresent: false,
-    messageText: "Focus on this step carefully.",
+    messageText: "Leave and lose your progress. X",
   ),
   // Add more exercises here...
 ];
