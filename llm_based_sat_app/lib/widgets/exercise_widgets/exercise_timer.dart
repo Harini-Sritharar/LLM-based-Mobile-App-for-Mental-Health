@@ -63,16 +63,6 @@ class _ExerciseTimerState extends State<ExerciseTimer> {
 
             // Seconds
             _buildTimeSection(_formatSeconds(stopwatch.elapsed), 30),
-            const SizedBox(width: 8), // Gap between seconds and milliseconds
-
-            // Milliseconds
-            Expanded(
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: _buildTimeSection(
-                    _formatMilliseconds(stopwatch.elapsed), 25),
-              ),
-            ),
           ],
         ),
       ),
@@ -102,11 +92,5 @@ class _ExerciseTimerState extends State<ExerciseTimer> {
   String _formatSeconds(Duration duration) {
     final seconds = duration.inSeconds % 60;
     return seconds.toString().padLeft(2, '0');
-  }
-
-  // Formats the milliseconds
-  String _formatMilliseconds(Duration duration) {
-    final hundredths = (duration.inMilliseconds % 1000) ~/ 10;
-    return hundredths.toString().padLeft(2, '0');
   }
 }
