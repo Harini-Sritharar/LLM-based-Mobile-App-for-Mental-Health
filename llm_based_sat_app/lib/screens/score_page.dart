@@ -5,22 +5,23 @@ class ScorePage extends StatelessWidget {
   final Function(int) onItemTapped;
   final int selectedIndex;
 
-  ScorePage({required this.onItemTapped, required this.selectedIndex});
+  const ScorePage(
+      {super.key, required this.onItemTapped, required this.selectedIndex});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Score'),
+        title: const Text('Score'),
         actions: [
           IconButton(
-            icon: Icon(Icons.notifications),
+            icon: const Icon(Icons.notifications),
             onPressed: () {
               // Handle notifications
             },
           ),
           IconButton(
-            icon: Icon(Icons.person),
+            icon: const Icon(Icons.person),
             onPressed: () {
               Navigator.push(
                 context,
@@ -35,7 +36,7 @@ class ScorePage extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(
+      body: const Center(
         child: Text(
           'Score Page',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
