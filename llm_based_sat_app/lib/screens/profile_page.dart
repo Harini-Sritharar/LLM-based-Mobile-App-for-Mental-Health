@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:llm_based_sat_app/screens/payment_option_page.dart';
 import '../widgets/main_layout.dart';
 import 'edit_profile.dart';
 import 'settings_page.dart';
@@ -106,8 +107,19 @@ class ProfilePage extends StatelessWidget {
                     ),
                   );
                 }),
-                _buildMenuItem(context, 'Payment Option',
-                    'assets/icons/empty-wallet.svg', () {}),
+                _buildMenuItem(
+                    context, 'Payment Option', 'assets/icons/empty-wallet.svg',
+                    () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PaymentOptionPage(
+                        onItemTapped: onItemTapped, // Pass function
+                        selectedIndex: selectedIndex, // Pass index
+                      ),
+                    ),
+                  );
+                }),
                 _buildMenuItem(
                     context, 'Invite Friends', 'assets/icons/send.svg', () {}),
                 _buildMenuItem(
