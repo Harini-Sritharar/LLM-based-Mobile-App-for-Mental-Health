@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:llm_based_sat_app/screens/personal_info_page.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import '../widgets/custom_button.dart';
@@ -36,6 +38,12 @@ class EditProfilePage extends StatelessWidget {
                 title: "Personal Info",
                 color: AppColours.secondaryBlueTextColor,
                 onTap: () {
+                    Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PersonalInfoPage(),
+                    ),
+                  );
                   // Add navigation logic for Personal Info
                 },
               ),
