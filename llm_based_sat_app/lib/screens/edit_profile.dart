@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/main_layout.dart';
+import '../widgets/menu_item.dart';
 
 class EditProfilePage extends StatelessWidget {
   final Function(int) onItemTapped; // Receive function to update navbar index
@@ -31,9 +31,28 @@ class EditProfilePage extends StatelessWidget {
                     fontSize: 15, color: AppColours.primaryGreyTextColor),
               ),
               const SizedBox(height: 20),
-              _buildProfileOption(context, "Personal Info"),
-              _buildProfileOption(context, "Contact Details"),
-              _buildProfileOption(context, "Profile Picture"),
+              // Use MenuItem widget here
+              MenuItem(
+                title: "Personal Info",
+                color: AppColours.secondaryBlueTextColor,
+                onTap: () {
+                  // Add navigation logic for Personal Info
+                },
+              ),
+              MenuItem(
+                title: "Contact Details",
+                color: AppColours.secondaryBlueTextColor,
+                onTap: () {
+                  // Add navigation logic for Contact Details
+                },
+              ),
+              MenuItem(
+                title: "Profile Picture",
+                color: AppColours.secondaryBlueTextColor,
+                onTap: () {
+                  // Add navigation logic for Profile Picture
+                },
+              ),
               const SizedBox(height: 40),
               CustomButton(
                 buttonText: "Back",
@@ -46,23 +65,6 @@ class EditProfilePage extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  // Helper function to build menu items in the edit profile page.
-  // Takes in context and menu item name as parameters
-  Widget _buildProfileOption(BuildContext context, String title) {
-    return ListTile(
-      title: Text(
-        title,
-        style: const TextStyle(
-            fontSize: 17, color: AppColours.secondaryBlueTextColor),
-      ),
-      trailing: const Icon(Icons.arrow_forward_ios,
-          size: 20, color: AppColours.forwardArrowColor),
-      onTap: () {
-        // Add navigation logic if required
-      },
     );
   }
 }

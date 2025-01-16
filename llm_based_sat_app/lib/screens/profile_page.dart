@@ -8,6 +8,7 @@ import 'ultimate_goal_page.dart';
 import 'childhood_photos_page.dart';
 import '../widgets/custom_app_bar.dart';
 import '../theme/app_colours.dart';
+import '../widgets/menu_item.dart';
 
 /// A stateless widget that represents the Profile Page of the application.
 ///
@@ -87,11 +88,10 @@ class ProfilePage extends StatelessWidget {
             Expanded(
               child: ListView(
                 children: [
-                  _buildMenuItem(
-                    context,
-                    'Edit Profile',
-                    'assets/icons/user_edit.svg',
-                    () {
+                  MenuItem(
+                    title: "Edit Profile",
+                    icon: 'assets/icons/user_edit.svg',
+                    onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -103,11 +103,10 @@ class ProfilePage extends StatelessWidget {
                       );
                     },
                   ),
-                  _buildMenuItem(
-                    context,
-                    'Settings',
-                    'assets/icons/setting-2.svg',
-                    () {
+                  MenuItem(
+                    title: "Settings",
+                    icon: 'assets/icons/setting-2.svg',
+                    onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -119,11 +118,10 @@ class ProfilePage extends StatelessWidget {
                       );
                     },
                   ),
-                  _buildMenuItem(
-                    context,
-                    'Ultimate Goal',
-                    'assets/icons/cup.svg',
-                    () {
+                  MenuItem(
+                    title: "Ultimate Goal",
+                    icon: 'assets/icons/cup.svg',
+                    onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -135,11 +133,10 @@ class ProfilePage extends StatelessWidget {
                       );
                     },
                   ),
-                  _buildMenuItem(
-                    context,
-                    'Childhood Photos',
-                    'assets/icons/gallery.svg',
-                    () {
+                  MenuItem(
+                    title: "Childhood Photos",
+                    icon: 'assets/icons/gallery.svg',
+                    onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -151,11 +148,10 @@ class ProfilePage extends StatelessWidget {
                       );
                     },
                   ),
-                  _buildMenuItem(
-                    context,
-                    'Payment Option',
-                    'assets/icons/empty-wallet.svg',
-                    () {
+                  MenuItem(
+                    title: "Payment Option",
+                    icon: 'assets/icons/empty-wallet.svg',
+                    onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -167,19 +163,17 @@ class ProfilePage extends StatelessWidget {
                       );
                     },
                   ),
-                  _buildMenuItem(
-                    context,
-                    'Invite Friends',
-                    'assets/icons/send.svg',
-                    () {
+                  MenuItem(
+                    title: "Invite Friends",
+                    icon: 'assets/icons/send.svg',
+                    onTap: () {
                       // Logic for inviting friends goes here.
                     },
                   ),
-                  _buildMenuItem(
-                    context,
-                    'Logout',
-                    'assets/icons/logout.svg',
-                    () {
+                  MenuItem(
+                    title: "Logout",
+                    icon: 'assets/icons/logout.svg',
+                    onTap: () {
                       // Logic for logging out goes here.
                     },
                   ),
@@ -189,45 +183,6 @@ class ProfilePage extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-
-  /// Helper function to build a menu item widget.
-  ///
-  /// - [context]: The `BuildContext` of the current widget.
-  /// - [title]: The title text to display in the menu item.
-  /// - [icon]: The icon to display, which can be an asset path or a built-in `IconData`.
-  /// - [onTap]: The callback function to execute when the menu item is tapped.
-  ///
-  /// Returns a `ListTile` widget with the specified parameters.
-
-  Widget _buildMenuItem(
-      BuildContext context, String title, dynamic icon, VoidCallback onTap) {
-    return ListTile(
-      leading: (icon is String)
-          ? SvgPicture.asset(
-              icon,
-              width: 24,
-              height: 24,
-              colorFilter: const ColorFilter.mode(
-                AppColours.primaryGreyTextColor,
-                BlendMode.srcIn,
-              ),
-            )
-          : Icon(icon, color: AppColours.primaryGreyTextColor),
-      title: Text(
-        title,
-        style: const TextStyle(
-          fontSize: 18,
-          color: AppColours.primaryGreyTextColor,
-        ),
-      ),
-      trailing: const Icon(
-        Icons.arrow_forward_ios,
-        size: 18,
-        color: AppColours.primaryGreyTextColor,
-      ),
-      onTap: onTap,
     );
   }
 }
