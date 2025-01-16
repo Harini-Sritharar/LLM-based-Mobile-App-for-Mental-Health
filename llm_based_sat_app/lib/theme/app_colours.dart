@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 
 class AppColours {
+  static const Color backgroundColor = Colors.white;
   static const Color primaryGreyTextColor = Color(0xFF687078);
 
   // Profile Page
