@@ -58,7 +58,7 @@ class ProfilePage extends StatelessWidget {
               child: Icon(
                 Icons.person,
                 size: 80,
-                color: AppColours.avatarForegroundcolor,
+                color: AppColours.avatarForegroundColor,
               ),
             ),
             const SizedBox(height: 10),
