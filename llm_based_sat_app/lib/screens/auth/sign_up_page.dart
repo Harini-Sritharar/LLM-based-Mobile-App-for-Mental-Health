@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/widgets/custom_button.dart';
 import '/main.dart';
 import '../../widgets/auth_widgets/circular_checkbox.dart';
 import '../../widgets//auth_widgets/text_input_field.dart';
@@ -116,49 +117,38 @@ class _SignUpPageState extends State<SignUpPage> {
                     Text(
                       'Agree to Terms & Conditions',
                       style: TextStyle(
-                        color: _agreeToTerms ? Colors.black : Colors.red,
+                        color: Colors.black,
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 20),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                      backgroundColor: Colors.blue[800],
-                    ),
-                    onPressed: _submitForm,
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Sign Up',
-                          style: TextStyle(fontSize: 18),
-                        ),
-                        SizedBox(width: 10),
-                        Icon(Icons.arrow_forward),
-                      ],
-                    ),
-                  ),
+                CustomButton(
+                  buttonText: "Sign Up",
+                  onPress: _submitForm,
+                  rightArrowPresent: true,
                 ),
-                const Spacer(),
-                GestureDetector(
-                  onTap: () {
-                    // Navigate to sign-in page
-                  },
-                  child: const Text(
-                    'Already have an Account? SIGN IN',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.blue,
-                      decoration: TextDecoration.underline,
+                // const Spacer(),
+                const SizedBox(height: 40),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text('Already have an Account? '),
+                    GestureDetector(
+                      onTap: () {
+                        // Navigate to sign-in page
+                      },
+                      child: const Text(
+                        'SIGN IN',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFF1C548C),
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
                 const SizedBox(height: 20),
               ],
