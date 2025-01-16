@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:llm_based_sat_app/screens/notifications_page.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import '../widgets/main_layout.dart'; // Import MainLayout
 
@@ -26,7 +27,17 @@ class SettingsPage extends StatelessWidget {
             CustomAppBar(title: "Personal Profile"),
             SizedBox(height: 10),
             _buildSettingsItem(context, 'Notifications',
-                'assets/icons/profile/notification-bing.svg', () {}),
+                'assets/icons/profile/notification-bing.svg', () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => NotificationsPage(
+                    onItemTapped: onItemTapped, // Pass function
+                    selectedIndex: selectedIndex, // Pass index
+                  ),
+                ),
+              );
+            }),
             _buildSettingsItem(context, 'Security',
                 'assets/icons/profile/security-safe.svg', () {}),
             _buildSettingsItem(context, 'Accessibility',
