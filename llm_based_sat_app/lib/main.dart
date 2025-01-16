@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+      // For now, the landing screen is the Sign In page
       home: SignInPage(),
     );
   }

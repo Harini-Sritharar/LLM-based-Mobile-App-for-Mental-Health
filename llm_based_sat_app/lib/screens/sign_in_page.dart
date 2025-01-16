@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/main.dart';
+import 'package:llm_based_sat_app/widgets/custom_button.dart';
 
 class SignInPage extends StatelessWidget {
   @override
@@ -63,42 +64,18 @@ class SignInPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 40),
                 Center(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Handle sign-in logic here
-                      // Navigate to HomePage for now
-
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => MainScreen()),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(
-                          0xFF1C548C), // Matches the blue button color
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 15, horizontal: 50),
-                    ),
-                    child: const Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          "Sign In",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        Icon(Icons.arrow_forward, color: Colors.white),
-                      ],
-                    ),
-                  ),
-                ),
+                    child: CustomButton(
+                        buttonText: "Sign In",
+                        onPress: () {
+                          // The sign in logic goes here
+                          // For now we just navigate to the main screen
+                          // TODO: Validation and only sign in if authenticated
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MainScreen()));
+                        },
+                        rightArrowPresent: true)),
                 const SizedBox(height: 20),
                 Center(
                     child: Row(
