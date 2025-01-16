@@ -4,7 +4,8 @@ class BottomNavBar extends StatelessWidget {
   final int selectedIndex;
   final Function(int) onTap;
 
-  BottomNavBar({required this.selectedIndex, required this.onTap});
+  const BottomNavBar(
+      {super.key, required this.selectedIndex, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class BottomNavBar extends StatelessWidget {
         selectedFontSize: 12,
         unselectedFontSize: 12,
         type: BottomNavigationBarType.fixed, // Ensures consistent spacing
-        items: [
+        items: const [
           BottomNavigationBarItem(icon: Icon(Icons.people), label: 'Community'),
           BottomNavigationBarItem(
               icon: Icon(Icons.calendar_today), label: 'Calendar'),

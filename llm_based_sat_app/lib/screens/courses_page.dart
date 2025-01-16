@@ -5,22 +5,22 @@ class CoursesPage extends StatelessWidget {
   final Function(int) onItemTapped; // Required for bottom navigation
   final int selectedIndex; // Current tab index
 
-  CoursesPage({required this.onItemTapped, required this.selectedIndex});
+  const CoursesPage({super.key, required this.onItemTapped, required this.selectedIndex});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Courses'),
+        title: const Text('Courses'),
         actions: [
           IconButton(
-            icon: Icon(Icons.notifications),
+            icon: const Icon(Icons.notifications),
             onPressed: () {
               // Handle notifications
             },
           ),
           IconButton(
-            icon: Icon(Icons.person),
+            icon: const Icon(Icons.person),
             onPressed: () {
               Navigator.push(
                 context,
@@ -35,7 +35,7 @@ class CoursesPage extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(
+      body: const Center(
         child: Text(
           'Courses Page',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),

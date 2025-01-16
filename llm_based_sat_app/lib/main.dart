@@ -13,6 +13,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -27,6 +29,9 @@ class MyApp extends StatelessWidget {
 }
 
 class MainScreen extends StatefulWidget {
+  final int initialIndex;
+  const MainScreen({super.key, this.initialIndex = 2});
+
   @override
   _MainScreenState createState() => _MainScreenState();
 }
@@ -34,6 +39,11 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   // Default page is home page (index 2)
   int _selectedIndex = 2;
+
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.initialIndex;
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -43,8 +53,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Set up pages in the Bottom Navigation Bar
-    final List<Widget> _pages = [
+    final List<Widget> pages = [
       CommunityPage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
       CalendarPage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
       HomePage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
@@ -55,25 +64,12 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       body: IndexedStack(
         index: _selectedIndex,
-        children: _pages,
+        children: pages,
       ),
       bottomNavigationBar: BottomNavBar(
         selectedIndex: _selectedIndex,
         onTap: (index) {
-          if (index == 5) {
-            // If Profile is tapped, navigate manually
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ProfilePage(
-                  onItemTapped: _onItemTapped,
-                  selectedIndex: _selectedIndex,
-                ),
-              ),
-            );
-          } else {
-            _onItemTapped(index);
-          }
+          _onItemTapped(index);
         },
       ),
 // TODO
@@ -87,10 +83,10 @@ class _MainScreenState extends State<MainScreen> {
                   heading: 'Exercise A', // Example heading
                   step: "Step 1", // Example step
                   description:
-                      'This is the description for step 1.', // Example description
+                      'Look at your happy photo below. Recall positive childhood memories.', // Example description
                   imageUrl:
-                      'https://via.placeholder.com/150', // Example image URL
-                  buttonText: 'Next', // Example button text
+                      'assets/icons/exercise_page_1.png', // Example image URL
+                  buttonText: 'Next Step', // Example button text
                   onButtonPress: () {
                     // Define the behavior for button press
                     Navigator.push(
@@ -103,6 +99,8 @@ class _MainScreenState extends State<MainScreen> {
                           ),
                     );
                   },
+                  rightArrowPresent: true,
+                  messageText: "Leave and lose your progress. X",
                 ),
               ),
             );

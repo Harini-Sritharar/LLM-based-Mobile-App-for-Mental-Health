@@ -5,22 +5,22 @@ class CommunityPage extends StatelessWidget {
   final Function(int) onItemTapped; // Required for navigation
   final int selectedIndex;
 
-  CommunityPage({required this.onItemTapped, required this.selectedIndex});
+  const CommunityPage({super.key, required this.onItemTapped, required this.selectedIndex});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Community'),
+        title: const Text('Community'),
         actions: [
           IconButton(
-            icon: Icon(Icons.notifications),
+            icon: const Icon(Icons.notifications),
             onPressed: () {
               // Handle notifications
             },
           ),
           IconButton(
-            icon: Icon(Icons.person),
+            icon: const Icon(Icons.person),
             onPressed: () {
               Navigator.push(
                 context,
@@ -35,7 +35,7 @@ class CommunityPage extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(
+      body: const Center(
         child: Text(
           'Community Page',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
