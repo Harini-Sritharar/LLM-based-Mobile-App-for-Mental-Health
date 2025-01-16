@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:llm_based_sat_app/screens/notifications_page.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import '../widgets/main_layout.dart'; // Import MainLayout
+import './language_page.dart';
 
 class SettingsPage extends StatelessWidget {
   static const Color primaryTextColor = Color(0xFF687078);
@@ -42,8 +43,19 @@ class SettingsPage extends StatelessWidget {
                 'assets/icons/profile/security-safe.svg', () {}),
             _buildSettingsItem(context, 'Accessibility',
                 'assets/icons/profile/accessibility.svg', () {}),
-            _buildSettingsItem(context, 'Language',
-                'assets/icons/profile/language-circle.svg', () {}),
+            _buildSettingsItem(
+                context, 'Language', 'assets/icons/profile/language-circle.svg',
+                () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => LanguagePage(
+                    onItemTapped: onItemTapped, // Pass function
+                    selectedIndex: selectedIndex, // Pass index
+                  ),
+                ),
+              );
+            }),
             _buildSettingsItem(context, 'Terms & Conditions',
                 'assets/icons/profile/book.svg', () {}),
             _buildSettingsItem(context, 'Help Centre',
