@@ -15,6 +15,7 @@ class ExercisePage extends StatelessWidget {
   final String buttonText;
   final VoidCallback onButtonPress;
   final bool rightArrowPresent;
+  final String messageText;
 
   const ExercisePage({
     super.key,
@@ -25,6 +26,7 @@ class ExercisePage extends StatelessWidget {
     required this.buttonText,
     required this.onButtonPress, 
     required this.rightArrowPresent,
+    required this.messageText,
   });
 
   @override
@@ -50,7 +52,7 @@ class ExercisePage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            const ExerciseBottomMessage(),
+            ExerciseBottomMessage(messageText: messageText),
             const Spacer(),
             const Center(
               child: ExerciseTimer(),

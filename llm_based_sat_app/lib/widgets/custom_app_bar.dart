@@ -44,7 +44,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             height: 28,
             colorFilter: ColorFilter.mode(textColor, BlendMode.srcIn),
           ),
-          onPressed: () {}, // Define action if needed
+          onPressed: () {
+            Navigator.pop(context);
+          }, // Define action if needed
         ),
       ],
       elevation: 0,

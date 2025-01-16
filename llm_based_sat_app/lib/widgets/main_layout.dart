@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'bottom_nav_bar.dart'; // Import BottomNavBar
+import '../widgets/bottom_nav_bar.dart';
+import '../main.dart'; // For MainScreen
 
 class MainLayout extends StatelessWidget {
   final Widget body;
   final int selectedIndex;
-  final Function(int) onItemTapped;
 
-  MainLayout(
-      {required this.body,
-      required this.selectedIndex,
-      required this.onItemTapped});
+  const MainLayout({
+    super.key,
+    required this.body,
+    required this.selectedIndex,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,16 @@ class MainLayout extends StatelessWidget {
       body: body,
       bottomNavigationBar: BottomNavBar(
         selectedIndex: selectedIndex,
-        onTap: onItemTapped,
+        onTap: (index) {
+          // Navigate to MainScreen with the selected index
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MainScreen(initialIndex: index),
+            ),
+            (route) => false, // Remove all previous routes
+          );
+        },
       ),
     );
   }

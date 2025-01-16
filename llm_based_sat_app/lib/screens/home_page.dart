@@ -5,22 +5,23 @@ class HomePage extends StatelessWidget {
   final Function(int) onItemTapped;
   final int selectedIndex;
 
-  HomePage({required this.onItemTapped, required this.selectedIndex});
+  const HomePage(
+      {super.key, required this.onItemTapped, required this.selectedIndex});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home'),
+        title: const Text('Home'),
         actions: [
           IconButton(
-            icon: Icon(Icons.notifications),
+            icon: const Icon(Icons.notifications),
             onPressed: () {
               // Handle notifications
             },
           ),
           IconButton(
-            icon: Icon(Icons.person),
+            icon: const Icon(Icons.person),
             onPressed: () {
               Navigator.push(
                 context,
@@ -35,7 +36,7 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(
+      body: const Center(
         child: Text(
           'Home Page',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),

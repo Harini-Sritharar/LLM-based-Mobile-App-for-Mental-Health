@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import '../widgets/main_layout.dart'; // Import MainLayout
 
 class SettingsPage extends StatelessWidget {
@@ -17,47 +18,12 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MainLayout(
       selectedIndex: selectedIndex,
-      onItemTapped: onItemTapped,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AppBar(
-              title: Text(
-                "Personal Profile",
-                style: TextStyle(color: primaryTextColor, fontSize: 20),
-              ),
-              centerTitle: true,
-              elevation: 0,
-              iconTheme: IconThemeData(color: primaryTextColor),
-              leading: IconButton(
-                icon: Icon(Icons.arrow_back),
-                onPressed: () => Navigator.pop(context),
-              ),
-              actions: [
-                IconButton(
-                  icon: SvgPicture.asset(
-                    'assets/icons/notification.svg',
-                    width: 28,
-                    height: 28,
-                    colorFilter:
-                        ColorFilter.mode(primaryTextColor, BlendMode.srcIn),
-                  ),
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: SvgPicture.asset(
-                    'assets/icons/profile.svg',
-                    width: 28,
-                    height: 28,
-                    colorFilter:
-                        ColorFilter.mode(primaryTextColor, BlendMode.srcIn),
-                  ),
-                  onPressed: () {},
-                ),
-              ],
-            ),
+            CustomAppBar(title: "Personal Profile"),
             SizedBox(height: 10),
             _buildSettingsItem(context, 'Notifications',
                 'assets/icons/profile/notification-bing.svg', () {}),

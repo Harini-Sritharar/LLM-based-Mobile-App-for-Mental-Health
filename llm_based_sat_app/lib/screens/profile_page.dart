@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:llm_based_sat_app/screens/payment_option_page.dart';
 import 'package:llm_based_sat_app/screens/sign_in_page.dart';
 import '../widgets/main_layout.dart';
 import 'edit_profile.dart';
 import 'settings_page.dart';
 import 'ultimate_goal_page.dart';
+import 'childhood_photos_page.dart';
 import '../widgets/custom_app_bar.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -13,24 +15,24 @@ class ProfilePage extends StatelessWidget {
   final Function(int) onItemTapped; // Receive function to update navbar index
   final int selectedIndex; // Keep track of selected index
 
-  ProfilePage({required this.onItemTapped, required this.selectedIndex});
+  const ProfilePage(
+      {super.key, required this.onItemTapped, required this.selectedIndex});
 
   @override
   Widget build(BuildContext context) {
     return MainLayout(
       selectedIndex: selectedIndex,
-      onItemTapped: onItemTapped,
       body: Column(
         children: [
           CustomAppBar(title: "Profile Page"),
           SizedBox(height: 20),
           CircleAvatar(
             radius: 50,
-            backgroundColor: const Color(0xFFCEDFF2),
+            backgroundColor: Color(0xFFCEDFF2),
             child: Icon(Icons.person, size: 80, color: Color(0xFFF2F9FF)),
           ),
-          SizedBox(height: 10),
-          Text(
+          const SizedBox(height: 10),
+          const Text(
             'Neophytos Polydorou',
             style: TextStyle(
               fontSize: 22,
@@ -38,14 +40,14 @@ class ProfilePage extends StatelessWidget {
               color: primaryTextColor,
             ),
           ),
-          Text(
+          const Text(
             'neophytos@invincimind.com',
             style: TextStyle(
               fontSize: 16,
               color: primaryTextColor,
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Expanded(
             child: ListView(
               children: [
@@ -93,10 +95,32 @@ class ProfilePage extends StatelessWidget {
                     ),
                   );
                 }),
-                _buildMenuItem(context, 'Childhood photos',
-                    'assets/icons/gallery.svg', () {}),
-                _buildMenuItem(context, 'Payment Option',
-                    'assets/icons/empty-wallet.svg', () {}),
+                _buildMenuItem(
+                    context, 'Childhood photos', 'assets/icons/gallery.svg',
+                    () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ChildhoodPhotosPage(
+                        onItemTapped: onItemTapped, // Pass function
+                        selectedIndex: selectedIndex, // Pass index
+                      ),
+                    ),
+                  );
+                }),
+                _buildMenuItem(
+                    context, 'Payment Option', 'assets/icons/empty-wallet.svg',
+                    () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PaymentOptionPage(
+                        onItemTapped: onItemTapped, // Pass function
+                        selectedIndex: selectedIndex, // Pass index
+                      ),
+                    ),
+                  );
+                }),
                 _buildMenuItem(
                     context, 'Invite Friends', 'assets/icons/send.svg', () {}),
                 _buildMenuItem(context, 'Logout', 'assets/icons/logout.svg',
@@ -143,6 +167,8 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
+  // Helper function to build a menu item in the profile page.
+  // Takes in context, menu item string, icon and the event that should happen once the menu item iss tapped on.
   Widget _buildMenuItem(
       BuildContext context, String title, dynamic icon, VoidCallback onTap) {
     return ListTile(
@@ -151,15 +177,16 @@ class ProfilePage extends StatelessWidget {
               icon,
               width: 24,
               height: 24,
-              colorFilter: ColorFilter.mode(primaryTextColor, BlendMode.srcIn),
+              colorFilter:
+                  const ColorFilter.mode(primaryTextColor, BlendMode.srcIn),
             )
           : Icon(icon, color: primaryTextColor),
       title: Text(
         title,
-        style: TextStyle(fontSize: 18, color: primaryTextColor),
+        style: const TextStyle(fontSize: 18, color: primaryTextColor),
       ),
-      trailing:
-          Icon(Icons.arrow_forward_ios, size: 18, color: primaryTextColor),
+      trailing: const Icon(Icons.arrow_forward_ios,
+          size: 18, color: primaryTextColor),
       onTap: onTap,
     );
   }

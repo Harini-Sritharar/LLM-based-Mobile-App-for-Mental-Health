@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import '../widgets/main_layout.dart'; // Import MainLayout
 
 class UltimateGoalPage extends StatefulWidget {
@@ -39,48 +40,12 @@ class _UltimateGoalPageState extends State<UltimateGoalPage> {
   Widget build(BuildContext context) {
     return MainLayout(
       selectedIndex: widget.selectedIndex,
-      onItemTapped: widget.onItemTapped,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AppBar(
-              title: const Text(
-                "Ultimate Goal",
-                style: TextStyle(color: Color(0xFF687078), fontSize: 20),
-              ),
-              centerTitle: true,
-              elevation: 0,
-              backgroundColor: Colors.transparent,
-              iconTheme: const IconThemeData(color: Color(0xFF687078)),
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () => Navigator.pop(context),
-              ),
-              actions: [
-                IconButton(
-                  icon: SvgPicture.asset(
-                    'assets/icons/notification.svg',
-                    width: 28,
-                    height: 28,
-                    colorFilter: const ColorFilter.mode(
-                        Color(0xFF687078), BlendMode.srcIn),
-                  ),
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: SvgPicture.asset(
-                    'assets/icons/profile.svg',
-                    width: 28,
-                    height: 28,
-                    colorFilter: const ColorFilter.mode(
-                        Color(0xFF687078), BlendMode.srcIn),
-                  ),
-                  onPressed: () {},
-                ),
-              ],
-            ),
+            CustomAppBar(title: "Ultimate Goal"),
             const SizedBox(height: 10),
             const Text(
               "Set Yourself an Ultimate Goal",
