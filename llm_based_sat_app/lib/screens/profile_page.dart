@@ -7,10 +7,9 @@ import 'settings_page.dart';
 import 'ultimate_goal_page.dart';
 import 'childhood_photos_page.dart';
 import '../widgets/custom_app_bar.dart';
+import '../theme/app_colours.dart';
 
 class ProfilePage extends StatelessWidget {
-  static const Color primaryTextColor = Color(0xFF687078);
-
   final Function(int) onItemTapped; // Receive function to update navbar index
   final int selectedIndex; // Keep track of selected index
 
@@ -27,8 +26,9 @@ class ProfilePage extends StatelessWidget {
           SizedBox(height: 20),
           CircleAvatar(
             radius: 50,
-            backgroundColor: Color(0xFFCEDFF2),
-            child: Icon(Icons.person, size: 80, color: Color(0xFFF2F9FF)),
+            backgroundColor: AppColours.avatarBackgroundColor,
+            child: Icon(Icons.person,
+                size: 80, color: AppColours.avatarForegroundcolor),
           ),
           const SizedBox(height: 10),
           const Text(
@@ -36,14 +36,14 @@ class ProfilePage extends StatelessWidget {
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.bold,
-              color: primaryTextColor,
+              color: AppColours.primaryGreyTextColor,
             ),
           ),
           const Text(
             'neophytos@invincimind.com',
             style: TextStyle(
               fontSize: 16,
-              color: primaryTextColor,
+              color: AppColours.primaryGreyTextColor,
             ),
           ),
           const SizedBox(height: 20),
@@ -142,16 +142,17 @@ class ProfilePage extends StatelessWidget {
               icon,
               width: 24,
               height: 24,
-              colorFilter:
-                  const ColorFilter.mode(primaryTextColor, BlendMode.srcIn),
+              colorFilter: const ColorFilter.mode(
+                  AppColours.primaryGreyTextColor, BlendMode.srcIn),
             )
-          : Icon(icon, color: primaryTextColor),
+          : Icon(icon, color: AppColours.primaryGreyTextColor),
       title: Text(
         title,
-        style: const TextStyle(fontSize: 18, color: primaryTextColor),
+        style: const TextStyle(
+            fontSize: 18, color: AppColours.primaryGreyTextColor),
       ),
       trailing: const Icon(Icons.arrow_forward_ios,
-          size: 18, color: primaryTextColor),
+          size: 18, color: AppColours.primaryGreyTextColor),
       onTap: onTap,
     );
   }
