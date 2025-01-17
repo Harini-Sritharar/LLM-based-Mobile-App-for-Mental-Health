@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/course_list_all_prerequisites.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/empty_pre_requisite.dart';
+import 'package:llm_based_sat_app/widgets/custom_button.dart';
 
 // If watchedIntroductoryVideo is false or prerequisite is there or childhood photo is not uploaded then user cannot proceed to start exercise
 // TODO
@@ -108,6 +109,19 @@ class PreCourseList extends StatelessWidget {
                 ],
               )),
         ),
+
+        const SizedBox(height: 30),
+
+        // Start Course Button
+        if (childhoodPhotosUploaded &&
+            prerequisites.isEmpty &&
+            watchedIntroductoryVideo)
+          CustomButton(
+              buttonText: "Start Course",
+              onPress: () {
+                // Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+              },
+              rightArrowPresent: true),
       ],
     );
   }
