@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 
 import '../widgets/custom_button.dart'; // Ensure the correct path to the CustomButton widget
 
@@ -25,17 +26,12 @@ class _LanguagePageState extends State<LanguagePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Available Language",
-            style: TextStyle(color: LanguagePage.primaryTextColor)),
-        backgroundColor: Colors.white,
-        elevation: 0,
-      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            CustomAppBar(title: "Available Language"),
             const SizedBox(height: 10),
             const Text(
               "Select your preferred language from below. Restart the app to apply changes.",
