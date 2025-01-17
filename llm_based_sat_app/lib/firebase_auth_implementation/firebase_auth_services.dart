@@ -1,39 +1,48 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 class FirebaseAuthService {
-  FirebaseAuth _auth = FirebaseAuth.instance;
-
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   Future<User?> signUpWithEmailAndPassword(
-      String email, String password) async {
+      BuildContext context, String email, String password) async {
     try {
       UserCredential credential = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       return credential.user;
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'email-already-in-use') {
-        // showToast(message: 'The email address is already in use.');
-        print("Email already in use");
-      } else {
-        // showToast(message: 'An error occurred: ${e.code}');
-        print("An error occured: ${e.code}");
+      if (context.mounted) {
+        _handleFirebaseAuthError(context, e);
+      }
+    } catch (e) {
+      if (context.mounted) {
+        // Handle any other errors
+        _showSnackBar(
+            context, 'An unexpected error occurred. Please try again.');
       }
     }
     return null;
   }
 
-//   Future<User?> signInWithEmailAndPassword(
-//       String email, String password) async {
-//     try {
-//       UserCredential credential = await _auth.signInWithEmailAndPassword(
-//           email: email, password: password);
-//       return credential.user;
-//     } on FirebaseAuthException catch (e) {
-//       if (e.code == 'user-not-found' || e.code == 'wrong-password') {
-//         showToast(message: 'Invalid email or password.');
-//       } else {
-//         showToast(message: 'An error occurred: ${e.code}');
-//       }
-//     }
-//     return null;
-//   }
+  void _handleFirebaseAuthError(BuildContext context, FirebaseAuthException e) {
+    switch (e.code) {
+      case 'email-already-in-use':
+        _showSnackBar(context,
+            'This email address is already registered. Try signing in instead!');
+        break;
+      case 'invalid-email':
+        _showSnackBar(context, 'The email address provided is not valid.');
+        break;
+      case 'weak-password':
+        _showSnackBar(context,
+            'The password is too weak. Please use a stronger password.');
+        break;
+      default:
+        _showSnackBar(context, 'An error occurred: ${e.message}');
+    }
+  }
+
+  void _showSnackBar(BuildContext context, String message) {
+    final snackBar = SnackBar(content: Text(message));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
 }
