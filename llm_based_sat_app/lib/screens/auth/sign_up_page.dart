@@ -168,14 +168,13 @@ class _SignUpPageState extends State<SignUpPage> {
 
       if (user != null) {
         print("User is successfully created");
-        Navigator.pushNamed(context, "/home");
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => MainScreen()),
+        );
       } else {
         print("Some error happened");
       }
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => MainScreen()),
-      );
     }
   }
 }

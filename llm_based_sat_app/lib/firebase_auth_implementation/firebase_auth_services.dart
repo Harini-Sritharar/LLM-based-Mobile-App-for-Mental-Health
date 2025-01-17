@@ -1,5 +1,3 @@
-import 'dart:nativewrappers/_internal/vm/lib/internal_patch.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
 
 class FirebaseAuthService {
@@ -14,10 +12,10 @@ class FirebaseAuthService {
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
         // showToast(message: 'The email address is already in use.');
-        printToConsole("Email already in use");
+        print("Email already in use");
       } else {
         // showToast(message: 'An error occurred: ${e.code}');
-        printToConsole("An error occured: ${e.code}");
+        print("An error occured: ${e.code}");
       }
     }
     return null;
