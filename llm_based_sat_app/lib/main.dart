@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/screens/sign_in_page.dart';
-import 'package:llm_based_sat_app/utils/exercise_page_caller.dart';
 import '../screens/community_page.dart';
 import '../screens/calendar_page.dart';
 import '../screens/courses_page.dart';
@@ -77,19 +76,6 @@ class _MainScreenState extends State<MainScreen> {
           _onItemTapped(index);
         },
       ),
-
-      // TODO
-      // Remove after debugging
-      floatingActionButton: ElevatedButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const ExercisePageCaller(id: "A_1")
-              ),
-            );
-          },
-          child: const Icon(Icons.temple_buddhist)),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/screens/course_info.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/course_card.dart'; // Custom reusable widget for course cards
 
 class CoursesPage extends StatelessWidget {
@@ -59,6 +60,17 @@ class CoursesPage extends StatelessWidget {
                     duration: '2 week',
                     rating: 4.2,
                     ratingsCount: 7830,
+                    onButtonPress: (BuildContext context) {
+                      // Navigate to ExercisePageCaller when the button is pressed
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CourseInfo(
+                              onItemTapped: onItemTapped,
+                              selectedIndex: selectedIndex),
+                        ),
+                      );
+                    },
                   ),
                   CourseCard(
                     imageUrl: 'assets/images/humour.png',
@@ -67,6 +79,17 @@ class CoursesPage extends StatelessWidget {
                     duration: '6 week',
                     rating: 4.9,
                     ratingsCount: 560,
+                    onButtonPress: (BuildContext context) {
+                      // Navigate to ExercisePageCaller when the button is pressed
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CourseInfo(
+                              onItemTapped: onItemTapped,
+                              selectedIndex: selectedIndex),
+                        ),
+                      );
+                    },
                   ),
                   CourseCard(
                     imageUrl: 'assets/images/creativity.png',
@@ -75,6 +98,17 @@ class CoursesPage extends StatelessWidget {
                     duration: '3 week',
                     rating: 3.9,
                     ratingsCount: 67,
+                    onButtonPress: (BuildContext context) {
+                      // Navigate to ExercisePageCaller when the button is pressed
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CourseInfo(
+                              onItemTapped: onItemTapped,
+                              selectedIndex: selectedIndex),
+                        ),
+                      );
+                    },
                   ),
                   CourseCard(
                     imageUrl: 'assets/images/nature.png',
@@ -83,6 +117,17 @@ class CoursesPage extends StatelessWidget {
                     duration: '1 week',
                     rating: 4.5,
                     ratingsCount: 1496,
+                    onButtonPress: (BuildContext context) {
+                      // Navigate to ExercisePageCaller when the button is pressed
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CourseInfo(
+                              onItemTapped: onItemTapped,
+                              selectedIndex: selectedIndex),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
