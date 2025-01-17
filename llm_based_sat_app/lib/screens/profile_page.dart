@@ -48,7 +48,10 @@ class ProfilePage extends StatelessWidget {
         child: Column(
           children: [
             /// Custom app bar for the profile page.
-            CustomAppBar(title: "Profile Settings", onItemTapped: onItemTapped, selectedIndex: selectedIndex),
+            CustomAppBar(
+                title: "Profile Settings",
+                onItemTapped: onItemTapped,
+                selectedIndex: selectedIndex),
 
             /// Spacer to add vertical space between the app bar and the profile avatar.
             SizedBox(height: 20),
@@ -175,7 +178,40 @@ class ProfilePage extends StatelessWidget {
                     title: "Logout",
                     icon: 'assets/icons/logout.svg',
                     onTap: () {
-                      // Logic for logging out goes here.
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text("Confirm Logout"),
+                            content: Text("Are you sure you want to log out?"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  // Close the dialog without logging out
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text("Cancel"),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  // Log out and navigate to SignInPage
+                                  Navigator.of(context)
+                                      .pop(); // Close the dialog
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => SignInPage()),
+                                  );
+                                },
+                                child: const Text(
+                                  "Logout",
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      );
                     },
                   ),
                 ],
