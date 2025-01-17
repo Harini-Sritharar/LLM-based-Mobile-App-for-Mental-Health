@@ -36,6 +36,9 @@ dependencies:
   cupertino_icons: ^1.0.6
   flutter_svg: ^2.0.0
   firebase_core: ^3.10.0 # For linking to Firebase
+  firebase_auth: ^5.4.0
+  firebase_storage: ^12.4.0
+  cloud_firestore: ^5.6.1
 
 dev_dependencies:
   flutter_test:

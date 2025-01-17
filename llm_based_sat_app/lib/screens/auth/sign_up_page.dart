@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/firebase_auth_implementation/firebase_auth_services.dart';
 import 'package:llm_based_sat_app/screens/sign_in_page.dart';
 import 'package:llm_based_sat_app/widgets/custom_button.dart';
 import '/main.dart';
@@ -11,6 +13,9 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  // Firebase authentication service to use for authentication
+  final FirebaseAuthService _auth = FirebaseAuthService();
+
   // Form specific fields
   bool _agreeToTerms = false;
   final _formKey = GlobalKey<FormState>();
@@ -26,21 +31,6 @@ class _SignUpPageState extends State<SignUpPage> {
       return 'Passwords do not match';
     }
     return null;
-  }
-
-  // Function which will be called upon submitting the form; it checks that:
-  // - all form fields are valid
-  // - the terms have been agreed to before navigating to the main screen
-  void _submitForm() {
-    if (_formKey.currentState!.validate()) {
-      if (_agreeToTerms) {
-        // Navigate to the main screen
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => MainScreen()),
-        );
-      }
-    }
   }
 
   @override
@@ -126,7 +116,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 const SizedBox(height: 20),
                 CustomButton(
                   buttonText: "Sign Up",
-                  onPress: _submitForm,
+                  onPress: _signUp,
                   rightArrowPresent: true,
                 ),
                 // const Spacer(),
@@ -160,5 +150,32 @@ class _SignUpPageState extends State<SignUpPage> {
             )),
       ),
     );
+  }
+
+  // This function should be called when the user presses the sign up button
+  // It first checks that:
+  // - all form fields are valid
+  // - the terms have been agreed to before navigating to the main screen
+  // It will then update the database by using firebase's sign up with email and
+  // password method
+  void _signUp() async {
+    if (_formKey.currentState!.validate() && _agreeToTerms) {
+      // Navigate to the main screen
+      String email = _emailController.text;
+      String password = _passwordController.text;
+
+      User? user = await _auth.signUpWithEmailAndPassword(email, password);
+
+      if (user != null) {
+        print("User is successfully created");
+        Navigator.pushNamed(context, "/home");
+      } else {
+        print("Some error happened");
+      }
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MainScreen()),
+      );
+    }
   }
 }

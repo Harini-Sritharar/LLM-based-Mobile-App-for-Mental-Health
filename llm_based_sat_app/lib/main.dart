@@ -5,7 +5,6 @@ import '../screens/calendar_page.dart';
 import '../screens/courses_page.dart';
 import '../screens/home_page.dart';
 import '../screens/score_page.dart';
-import '../screens/profile_page.dart';
 import '../widgets/bottom_nav_bar.dart';
 import 'screens/exercise_page.dart';
 
