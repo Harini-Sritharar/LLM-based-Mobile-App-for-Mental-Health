@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:llm_based_sat_app/widgets/course_widgets/courses_empty_prerequisite.dart';
+import 'package:llm_based_sat_app/widgets/course_widgets/course_list_all_prerequisites.dart';
+import 'package:llm_based_sat_app/widgets/course_widgets/empty_pre_requisite.dart';
 
 class PreCourseList extends StatelessWidget {
   // Accepts three functions for each of the list items
@@ -47,7 +48,8 @@ class PreCourseList extends StatelessWidget {
                   if (prerequisites.isEmpty) 
                     EmptyPreRequisites(),
                   if (prerequisites.isNotEmpty)
-                    Text("works")
+                    ListAllPreRequisites(preRequisitesList: prerequisites),
+                    
                 ],
               )),
         ),
