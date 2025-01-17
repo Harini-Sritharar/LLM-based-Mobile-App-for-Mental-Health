@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 
 class PersonalInfoPage extends StatefulWidget {
-  const PersonalInfoPage({Key? key}) : super(key: key);
+  final Function(int) onItemTapped; // Receive function to update navbar index
+  final int selectedIndex; // Keep track of selected index
+  const PersonalInfoPage(
+      {Key? key, required this.onItemTapped, required this.selectedIndex})
+      : super(key: key);
 
   @override
   _PersonalInfoPageState createState() => _PersonalInfoPageState();
@@ -31,7 +35,10 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CustomAppBar(title: "Personal Profile"),
+              CustomAppBar(
+                  title: "Personal Profile",
+                  onItemTapped: widget.onItemTapped,
+                  selectedIndex: widget.selectedIndex),
               const SizedBox(height: 10),
               const Text(
                 "Personal Info",

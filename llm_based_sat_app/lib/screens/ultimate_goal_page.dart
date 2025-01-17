@@ -46,7 +46,11 @@ class _UltimateGoalPageState extends State<UltimateGoalPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CustomAppBar(title: "Ultimate Goal"),
+              CustomAppBar(
+                title: "Ultimate Goal",
+                onItemTapped: widget.onItemTapped,
+                selectedIndex: widget.selectedIndex,
+              ),
               const SizedBox(height: 10),
               const Text(
                 "Set Yourself an Ultimate Goal",

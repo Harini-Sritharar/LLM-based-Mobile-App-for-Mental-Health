@@ -25,7 +25,10 @@ class EditProfilePage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const CustomAppBar(title: "Personal Profile"),
+              CustomAppBar(
+                  title: "Personal Profile",
+                  onItemTapped: onItemTapped,
+                  selectedIndex: selectedIndex),
               const SizedBox(height: 10),
               const Text(
                 "Edit your Personal Profile",
@@ -38,10 +41,10 @@ class EditProfilePage extends StatelessWidget {
                 title: "Personal Info",
                 color: AppColours.secondaryBlueTextColor,
                 onTap: () {
-                    Navigator.push(
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => PersonalInfoPage(),
+                      builder: (context) => PersonalInfoPage(onItemTapped: onItemTapped, selectedIndex: selectedIndex),
                     ),
                   );
                   // Add navigation logic for Personal Info

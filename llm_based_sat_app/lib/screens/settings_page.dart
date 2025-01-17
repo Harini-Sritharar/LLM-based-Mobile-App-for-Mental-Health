@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:llm_based_sat_app/screens/notifications_page.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import '../widgets/main_layout.dart'; // Import MainLayout
@@ -26,7 +27,10 @@ class SettingsPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CustomAppBar(title: "Personal Profile"),
+            CustomAppBar(
+                title: "Personal Profile",
+                onItemTapped: onItemTapped,
+                selectedIndex: selectedIndex),
             SizedBox(height: 10),
             MenuItem(
               title: 'Notifications',

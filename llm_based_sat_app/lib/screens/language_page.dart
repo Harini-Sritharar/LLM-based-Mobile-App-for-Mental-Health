@@ -31,7 +31,10 @@ class _LanguagePageState extends State<LanguagePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CustomAppBar(title: "Available Language"),
+            CustomAppBar(
+                title: "Available Language",
+                onItemTapped: widget.onItemTapped,
+                selectedIndex: widget.selectedIndex),
             const SizedBox(height: 10),
             const Text(
               "Select your preferred language from below. Restart the app to apply changes.",

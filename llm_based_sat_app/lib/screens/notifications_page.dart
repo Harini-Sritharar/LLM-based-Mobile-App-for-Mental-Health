@@ -37,7 +37,10 @@ class _NotificationsPageState extends State<NotificationsPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CustomAppBar(title: "Notifications"),
+            CustomAppBar(
+                title: "Notifications",
+                onItemTapped: widget.onItemTapped,
+                selectedIndex: widget.selectedIndex),
             SizedBox(height: 10),
             Text(
               "Enable the notifications you want to receive.",

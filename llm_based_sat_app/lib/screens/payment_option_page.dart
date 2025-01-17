@@ -24,7 +24,7 @@ class PaymentOptionPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CustomAppBar(title: "Payment Option"),
+            CustomAppBar(title: "Payment Option", onItemTapped: onItemTapped, selectedIndex: selectedIndex),
             const Text(
               "Current Payment Method",
               style: TextStyle(

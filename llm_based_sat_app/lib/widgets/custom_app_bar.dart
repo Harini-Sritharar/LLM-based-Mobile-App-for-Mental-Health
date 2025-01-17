@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../../screens/profile_page.dart';
+
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final Color textColor;
   final VoidCallback? onBack;
+  final Function(int) onItemTapped; // Function to update navbar index
+  final int selectedIndex; // Current selected index
 
   const CustomAppBar({
     Key? key,
     required this.title,
     this.textColor = const Color(0xFF687078), // Default text color
     this.onBack,
+    required this.onItemTapped,
+    required this.selectedIndex,
   }) : super(key: key);
 
   @override
@@ -45,8 +51,17 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             colorFilter: ColorFilter.mode(textColor, BlendMode.srcIn),
           ),
           onPressed: () {
-            Navigator.pop(context);
-          }, // Define action if needed
+            // Navigate to the profile page with parameters
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ProfilePage(
+                  onItemTapped: onItemTapped,
+                  selectedIndex: selectedIndex,
+                ),
+              ),
+            );
+          },
         ),
       ],
       elevation: 0,

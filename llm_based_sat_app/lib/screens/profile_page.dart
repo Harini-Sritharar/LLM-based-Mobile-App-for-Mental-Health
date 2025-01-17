@@ -47,7 +47,7 @@ class ProfilePage extends StatelessWidget {
         child: Column(
           children: [
             /// Custom app bar for the profile page.
-            CustomAppBar(title: "Profile Settings"),
+            CustomAppBar(title: "Profile Settings", onItemTapped: onItemTapped, selectedIndex: selectedIndex),
 
             /// Spacer to add vertical space between the app bar and the profile avatar.
             SizedBox(height: 20),
