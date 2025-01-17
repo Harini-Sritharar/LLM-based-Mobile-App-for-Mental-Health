@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:llm_based_sat_app/screens/payment_option_page.dart';
+import 'package:llm_based_sat_app/screens/sign_in_page.dart';
 import '../widgets/main_layout.dart';
 import 'edit_profile.dart';
 import 'settings_page.dart';
@@ -122,8 +123,42 @@ class ProfilePage extends StatelessWidget {
                 }),
                 _buildMenuItem(
                     context, 'Invite Friends', 'assets/icons/send.svg', () {}),
-                _buildMenuItem(
-                    context, 'Logout', 'assets/icons/logout.svg', () {}),
+                _buildMenuItem(context, 'Logout', 'assets/icons/logout.svg',
+                    () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text("Confirm Logout"),
+                        content: Text("Are you sure you want to log out?"),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              // Close the dialog without logging out
+                              Navigator.of(context).pop();
+                            },
+                            child: Text("Cancel"),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              // Log out and navigate to SignInPage
+                              Navigator.of(context).pop(); // Close the dialog
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SignInPage()),
+                              );
+                            },
+                            child: const Text(
+                              "Logout",
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }),
               ],
             ),
           ),

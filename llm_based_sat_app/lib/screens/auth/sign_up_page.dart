@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/screens/sign_in_page.dart';
 import 'package:llm_based_sat_app/widgets/custom_button.dart';
 import '/main.dart';
 import '../../widgets/auth_widgets/circular_checkbox.dart';
@@ -138,6 +139,10 @@ class _SignUpPageState extends State<SignUpPage> {
                     GestureDetector(
                       onTap: () {
                         // Navigate to sign-in page
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SignInPage()));
                       },
                       child: const Text(
                         'SIGN IN',
