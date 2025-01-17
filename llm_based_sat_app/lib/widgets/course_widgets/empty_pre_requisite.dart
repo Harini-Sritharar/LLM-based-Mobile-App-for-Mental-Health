@@ -10,12 +10,16 @@ class EmptyPreRequisites extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return (Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-      Text("No other course needed", style: TextStyle(fontSize: 14)),
-      SizedBox(width: 80),
       SvgPicture.asset(
         'assets/icons/tick.svg',
         width: 36.0,
       ),
+      SvgPicture.asset(
+        'assets/icons/profile/book.svg',
+        width: 26.0,
+      ),
+      SizedBox(width: 8),
+      Text("No other course needed", style: TextStyle(fontSize: 16)),
     ]));
   }
 }

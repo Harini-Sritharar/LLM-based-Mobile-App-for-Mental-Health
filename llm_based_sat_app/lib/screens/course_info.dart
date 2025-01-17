@@ -71,10 +71,11 @@ class CourseInfo extends StatelessWidget {
                     "Self-attachment course allows you to practise the core exercises necessary for other courses. This course if important because you create a connection and an affectional bond with your childhood self. Self-attachment course allows you to practise the core exercises necessary for other courses. This course if important because you create a connection and an affectional bond with your childhood self."),
             const SizedBox(height: 40),
             PreCourseList(
-              prerequisites: ["Humour", "Creativity"],
+              prerequisites: [],
               onItem1Pressed: (BuildContext context) {},
               onItem2Pressed: (BuildContext context) {},
               onItem3Pressed: (BuildContext context) {},
+              watchedIntroductoryVideo: true,
             )
           ],
         ),

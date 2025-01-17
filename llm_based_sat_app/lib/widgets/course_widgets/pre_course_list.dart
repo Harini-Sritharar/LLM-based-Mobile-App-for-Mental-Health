@@ -3,12 +3,16 @@ import 'package:flutter_svg/svg.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/course_list_all_prerequisites.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/empty_pre_requisite.dart';
 
+// If watchedIntroductoryVideo is false or prerequisite is there or childhood photo is not uploaded then user cannot proceed to start exercise
+// TODO
+// Link up cache to check if watchedIntroductoryVideo is true for given id
 class PreCourseList extends StatelessWidget {
   // Accepts three functions for each of the list items
   final void Function(BuildContext) onItem1Pressed;
   final void Function(BuildContext) onItem2Pressed;
   final void Function(BuildContext) onItem3Pressed;
   final List<String> prerequisites;
+  final bool watchedIntroductoryVideo;
 
   const PreCourseList({
     Key? key,
@@ -16,6 +20,7 @@ class PreCourseList extends StatelessWidget {
     required this.onItem2Pressed,
     required this.onItem3Pressed,
     required this.prerequisites,
+    required this.watchedIntroductoryVideo,
   }) : super(key: key);
 
   @override
@@ -34,51 +39,67 @@ class PreCourseList extends StatelessWidget {
         ),
         const SizedBox(height: 10),
 
+        // Tasks yet to complete
         GestureDetector(
           onTap: () => onItem1Pressed(context),
           child: Padding(
               padding: const EdgeInsets.only(left: 16.0),
               child: Row(
                 children: [
-                  SvgPicture.asset(
-                    'assets/icons/profile/book.svg',
-                    width: 26.0,
-                  ),
-                  SizedBox(width: 8),
-                  if (prerequisites.isEmpty) 
-                    EmptyPreRequisites(),
+                  if (prerequisites.isEmpty) EmptyPreRequisites(),
                   if (prerequisites.isNotEmpty)
                     ListAllPreRequisites(preRequisitesList: prerequisites),
-                    
                 ],
               )),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 20),
 
-        // List item 2
+        // Watch Introductory Video
         GestureDetector(
-          onTap: () =>
-              onItem2Pressed(context), // Trigger the function for Item 2
-          child: const Padding(
-            padding: EdgeInsets.only(left: 16.0),
-            child: Text(
-              "Item 2",
-              style: TextStyle(fontSize: 16),
-            ),
-          ),
+          onTap: () {},
+          child: Padding(
+              padding: const EdgeInsets.only(left: 16.0),
+              child: Row(
+                children: [
+                  if (watchedIntroductoryVideo)
+                    SvgPicture.asset(
+                      'assets/icons/tick.svg',
+                      width: 36.0,
+                    ),
+                  const Icon(
+                    Icons.ondemand_video,
+                    color: Color(0xFF687078),
+                  ),
+                  const SizedBox(width: 8),
+                  const Text(
+                    "Watch Introductory Video",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ],
+              )),
         ),
-        const SizedBox(height: 8),
 
-        // List item 3
-        GestureDetector(
-          onTap: () =>
-              onItem3Pressed(context), // Trigger the function for Item 3
-          child: const Padding(
-            padding: EdgeInsets.only(left: 16.0),
-            child: Text(
-              "Item 3",
-              style: TextStyle(fontSize: 16),
-            ),
+        const SizedBox(height: 20),
+
+        // Upload childhood photos
+        Padding(
+          padding: const EdgeInsets.only(left: 2.0),
+          child: GestureDetector(
+            onTap: () {},
+            child: Padding(
+                padding: const EdgeInsets.only(left: 16.0),
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.image_rounded,
+                    ),
+                    const SizedBox(width: 8),
+                    const Text(
+                      "Upload childhood photos",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
+                )),
           ),
         ),
       ],
