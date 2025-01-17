@@ -2,30 +2,40 @@ import 'package:flutter/material.dart';
 import 'profile_page.dart';
 
 class CommunityPage extends StatelessWidget {
+  final Function(int) onItemTapped; // Required for navigation
+  final int selectedIndex;
+
+  const CommunityPage({super.key, required this.onItemTapped, required this.selectedIndex});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Community'),
+        title: const Text('Community'),
         actions: [
           IconButton(
-            icon: Icon(Icons.notifications),
+            icon: const Icon(Icons.notifications),
             onPressed: () {
-              // Handle notification click
+              // Handle notifications
             },
           ),
           IconButton(
-            icon: Icon(Icons.person),
+            icon: const Icon(Icons.person),
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ProfilePage()),
+                MaterialPageRoute(
+                  builder: (context) => ProfilePage(
+                    onItemTapped: onItemTapped, // Pass function
+                    selectedIndex: selectedIndex, // Pass index
+                  ),
+                ),
               );
             },
           ),
         ],
       ),
-      body: Center(
+      body: const Center(
         child: Text(
           'Community Page',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),

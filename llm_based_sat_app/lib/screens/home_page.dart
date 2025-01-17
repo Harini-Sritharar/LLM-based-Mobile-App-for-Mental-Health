@@ -2,30 +2,41 @@ import 'package:flutter/material.dart';
 import 'profile_page.dart';
 
 class HomePage extends StatelessWidget {
+  final Function(int) onItemTapped;
+  final int selectedIndex;
+
+  const HomePage(
+      {super.key, required this.onItemTapped, required this.selectedIndex});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home'),
+        title: const Text('Home'),
         actions: [
           IconButton(
-            icon: Icon(Icons.notifications),
+            icon: const Icon(Icons.notifications),
             onPressed: () {
-              // Handle notification click
+              // Handle notifications
             },
           ),
           IconButton(
-            icon: Icon(Icons.person),
+            icon: const Icon(Icons.person),
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ProfilePage()),
+                MaterialPageRoute(
+                  builder: (context) => ProfilePage(
+                    onItemTapped: onItemTapped,
+                    selectedIndex: selectedIndex,
+                  ),
+                ),
               );
             },
           ),
         ],
       ),
-      body: Center(
+      body: const Center(
         child: Text(
           'Home Page',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),

@@ -37,7 +37,7 @@ final List<ExerciseDataInterface> exerciseDataList = [
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => HomePage(),
+          builder: (context) => const ExercisePageCaller(id: "A_2"),
         ),
       );
     },

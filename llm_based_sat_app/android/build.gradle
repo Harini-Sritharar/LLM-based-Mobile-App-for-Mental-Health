@@ -1,7 +1,14 @@
+buildscript {
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.4.0' // Required for building Android projects
+        classpath 'com.google.gms:google-services:4.4.2' // Google Services plugin, required for integrating Firebase and other Google services
+    }
+}
+
 allprojects {
     repositories {
-        google()
-        mavenCentral()
+        google() // hosts dependencies for Android development and Firebase services
+        mavenCentral() // largest open source repository for Java and Android dependencies
     }
 }
 

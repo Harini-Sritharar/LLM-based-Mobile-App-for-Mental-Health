@@ -32,32 +32,49 @@ class _AssessmentPageState extends State<AssessmentPage> {
           children: [
             ExerciseStepLabel(step: 'Congratulations'),
             SizedBox(height: 8),
-            ExerciseDescription(description: 'You successfully completed Exercise A. You can now move on to the next exercise or back to the course page.'),
+            ExerciseDescription(
+                description:
+                    'You successfully completed Exercise A. You can now move on to the next exercise or back to the course page.'),
             SizedBox(height: 20),
             _buildSectionTitle('Session Info'),
             SizedBox(height: 8),
-            ExerciseDescription(description: 'Sessions: 4 completed out of 14 minimum'),
+            ExerciseDescription(
+                description: 'Sessions: 4 completed out of 14 minimum'),
             SizedBox(height: 8),
-            ExerciseDescription(description: 'Practice Time: 05 minutes and 23 seconds'),
+            ExerciseDescription(
+                description: 'Practice Time: 05 minutes and 23 seconds'),
             SizedBox(height: 20),
             _buildSectionTitle('Comments'),
             SizedBox(height: 8),
-            ExerciseReflectionBox('', hintText: 'Reflect on your experience...',),
+            ExerciseReflectionBox(
+              '',
+              hintText: 'Reflect on your experience...',
+            ),
             SizedBox(height: 20),
             _buildSectionTitle('Assessment'),
             SizedBox(height: 8),
-            ExerciseSliderQuestionWidget(question: '(A) Are you feeling better than before practising the exercise?'),
-            ExerciseSliderQuestionWidget(question: '(B) How helpful was this exercise?'),
+            ExerciseSliderQuestionWidget(
+                question:
+                    '(A) Are you feeling better than before practising the exercise?'),
+            ExerciseSliderQuestionWidget(
+                question: '(B) How helpful was this exercise?'),
             ExerciseSliderQuestionWidget(question: '(C) Rate this exercise.'),
             SizedBox(height: 30),
-            CustomButton(buttonText: 'Next Exercise', onPress: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));},
-              rightArrowPresent: true),
+            CustomButton(
+                buttonText: 'Next Exercise',
+                onPress: () {
+                  // Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+                },
+                rightArrowPresent: true),
             SizedBox(height: 30),
-            CustomButton(buttonText: 'Back to Course', onPress: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));},
-              backgroundColor: const Color(0xFFF2F9FF), textColor: Color(0xFF1C548C),),
-
+            CustomButton(
+              buttonText: 'Back to Course',
+              onPress: () {
+                // Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+              },
+              backgroundColor: const Color(0xFFF2F9FF),
+              textColor: Color(0xFF1C548C),
+            ),
             SizedBox(height: 30),
             ExerciseTimer()
           ],
