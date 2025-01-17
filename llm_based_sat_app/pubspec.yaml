@@ -92,6 +92,8 @@ flutter:
     - assets/icons/profile/security-safe.svg
     - assets/icons/profile/trash.svg
 
+    - assets/images/
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

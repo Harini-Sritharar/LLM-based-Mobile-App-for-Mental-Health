@@ -22,6 +22,10 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Navigation',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: Colors.white,
+        colorScheme: ColorScheme.fromSwatch(
+          backgroundColor: Colors.white,
+        ),
       ),
       // For now, the landing screen is the Sign In page
       home: SignInPage(),
