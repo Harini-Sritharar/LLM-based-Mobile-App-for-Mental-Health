@@ -25,17 +25,13 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const CustomAppBar(title: "Personal Profile"),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              CustomAppBar(title: "Personal Profile"),
               const SizedBox(height: 10),
               const Text(
                 "Personal Info",
