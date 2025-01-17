@@ -164,11 +164,12 @@ class _SignUpPageState extends State<SignUpPage> {
       String email = _emailController.text;
       String password = _passwordController.text;
 
-      User? user = await _auth.signUpWithEmailAndPassword(context, email, password);
+      User? user =
+          await _auth.signUpWithEmailAndPassword(context, email, password);
 
       if (user != null) {
         print("User is successfully created");
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => MainScreen()),
         );

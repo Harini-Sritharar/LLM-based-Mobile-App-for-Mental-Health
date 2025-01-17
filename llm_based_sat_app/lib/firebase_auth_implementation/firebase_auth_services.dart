@@ -23,6 +23,26 @@ class FirebaseAuthService {
     return null;
   }
 
+  Future<User?> signInWithEmailandPassword(
+      BuildContext context, String email, String password) async {
+    try {
+      UserCredential credential = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      return credential.user;
+    } on FirebaseAuthException catch (e) {
+      if (context.mounted) {
+        _handleFirebaseAuthError(context, e);
+      }
+    } catch (e) {
+      if (context.mounted) {
+        // Handle any other errors
+        _showSnackBar(
+            context, 'An unexpected error occurred. Please try again.');
+      }
+    }
+    return null;
+  }
+
   void _handleFirebaseAuthError(BuildContext context, FirebaseAuthException e) {
     switch (e.code) {
       case 'email-already-in-use':
@@ -32,9 +52,21 @@ class FirebaseAuthService {
       case 'invalid-email':
         _showSnackBar(context, 'The email address provided is not valid.');
         break;
+      case 'invalid-credential':
+        _showSnackBar(context, 'The email address or password is incorrect.');
+        break;
       case 'weak-password':
         _showSnackBar(context,
             'The password is too weak. Please use a stronger password.');
+        break;
+      case 'user-not-found':
+        _showSnackBar(context, 'No user found with this email address.');
+        break;
+      case 'wrong-password':
+        _showSnackBar(context, 'Incorrect password provided.');
+        break;
+      case 'user-disabled':
+        _showSnackBar(context, 'This account has been disabled.');
         break;
       default:
         _showSnackBar(context, 'An error occurred: ${e.message}');

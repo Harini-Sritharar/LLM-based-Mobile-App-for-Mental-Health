@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/main.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_up_page.dart';
 import 'package:llm_based_sat_app/widgets/auth_widgets/text_input_field.dart';
 import 'package:llm_based_sat_app/widgets/custom_button.dart';
+import 'package:llm_based_sat_app/firebase_auth_implementation/firebase_auth_services.dart';
 
 class SignInPage extends StatefulWidget {
   @override
@@ -10,9 +12,32 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
+  final FirebaseAuthService _auth = FirebaseAuthService();
+
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  void _signIn() async {
+    if (_formKey.currentState!.validate()) {
+      // Navigate to the main screen
+      String email = _emailController.text;
+      String password = _passwordController.text;
+
+      User? user =
+          await _auth.signInWithEmailandPassword(context, email, password);
+
+      if (user != null) {
+        print("User is successfully created");
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => MainScreen()),
+        );
+      } else {
+        print("Some error happened");
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,16 +115,7 @@ class _SignInPageState extends State<SignInPage> {
                     Center(
                         child: CustomButton(
                             buttonText: "Sign In",
-                            onPress: () {
-                              // The sign in logic goes here
-                              // For now we just navigate to the main screen
-                              if (_formKey.currentState!.validate()) {
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => MainScreen()));
-                              }
-                            },
+                            onPress: _signIn,
                             rightArrowPresent: true)),
                     const SizedBox(height: 20),
                     Center(
