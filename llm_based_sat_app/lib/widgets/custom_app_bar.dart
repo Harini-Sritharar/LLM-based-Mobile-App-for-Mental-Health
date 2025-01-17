@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../screens/profile_page.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final Color textColor;
   final VoidCallback? onBack;
+  final Function(int) onItemTapped; // Function to update navbar index
+  final int selectedIndex; // Current selected index
+  final bool backButton; // Optional parameter to control back button visibility
 
   const CustomAppBar({
     Key? key,
     required this.title,
     this.textColor = const Color(0xFF687078), // Default text color
     this.onBack,
+    required this.onItemTapped,
+    required this.selectedIndex,
+    this.backButton = true, // Default value is true
   }) : super(key: key);
 
   @override
@@ -23,10 +30,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       backgroundColor: Colors.transparent, // Keep the background clean
       iconTheme: IconThemeData(color: textColor),
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back),
-        onPressed: onBack ?? () => Navigator.pop(context), // Default behavior
-      ),
+      leading: backButton
+          ? IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed:
+                  onBack ?? () => Navigator.pop(context), // Default behavior
+            )
+          : null, // No back button if backButton is false
       actions: [
         IconButton(
           icon: SvgPicture.asset(
@@ -45,8 +55,20 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             colorFilter: ColorFilter.mode(textColor, BlendMode.srcIn),
           ),
           onPressed: () {
-            Navigator.pop(context);
-          }, // Define action if needed
+            // Check if the current route is ProfilePage
+            if (ModalRoute.of(context)?.settings.name != '/profile') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProfilePage(
+                    onItemTapped: onItemTapped,
+                    selectedIndex: selectedIndex,
+                  ),
+                  settings: const RouteSettings(name: '/profile'), // Assign a name to the route
+                ),
+              );
+            }
+          },
         ),
       ],
       elevation: 0,

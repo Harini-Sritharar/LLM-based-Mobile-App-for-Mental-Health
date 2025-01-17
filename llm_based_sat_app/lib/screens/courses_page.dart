@@ -1,39 +1,22 @@
 import 'package:flutter/material.dart';
 import 'profile_page.dart';
+import '../widgets/custom_app_bar.dart';
 
 class CoursesPage extends StatelessWidget {
   final Function(int) onItemTapped; // Required for bottom navigation
   final int selectedIndex; // Current tab index
 
-  const CoursesPage({super.key, required this.onItemTapped, required this.selectedIndex});
+  const CoursesPage(
+      {super.key, required this.onItemTapped, required this.selectedIndex});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Courses'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications),
-            onPressed: () {
-              // Handle notifications
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.person),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ProfilePage(
-                    onItemTapped: onItemTapped,
-                    selectedIndex: selectedIndex,
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
+      appBar: CustomAppBar(
+        title: "InvinciMind",
+        onItemTapped: onItemTapped,
+        selectedIndex: selectedIndex,
+        backButton: false,
       ),
       body: const Center(
         child: Text(

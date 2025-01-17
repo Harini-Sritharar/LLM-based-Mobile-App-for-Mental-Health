@@ -8,186 +8,182 @@ import 'settings_page.dart';
 import 'ultimate_goal_page.dart';
 import 'childhood_photos_page.dart';
 import '../widgets/custom_app_bar.dart';
+import '../theme/app_colours.dart';
+import '../widgets/menu_item.dart';
+
+/// A stateless widget that represents the Profile Page of the application.
+///
+/// This page includes a profile avatar, user information, and navigation options
+/// for various user-related actions such as editing the profile, accessing settings,
+/// viewing goals, and more.
+///
+/// The `ProfilePage` widget expects:
+/// - A callback function to handle bottom navigation (`onItemTapped`).
+/// - The currently selected index for the navigation bar (`selectedIndex`).
 
 class ProfilePage extends StatelessWidget {
-  static const Color primaryTextColor = Color(0xFF687078);
+  /// Callback function to handle bottom navigation updates.
+  final Function(int) onItemTapped;
 
-  final Function(int) onItemTapped; // Receive function to update navbar index
-  final int selectedIndex; // Keep track of selected index
+  /// The index of the currently selected navigation bar item.
+  final int selectedIndex;
 
-  const ProfilePage(
-      {super.key, required this.onItemTapped, required this.selectedIndex});
+  /// Constructor for the `ProfilePage` widget.
+  ///
+  /// - `onItemTapped`: A required function to handle navigation updates.
+  /// - `selectedIndex`: A required integer to track the selected navbar index.
+  const ProfilePage({
+    super.key,
+    required this.onItemTapped,
+    required this.selectedIndex,
+  });
 
   @override
   Widget build(BuildContext context) {
     return MainLayout(
-      selectedIndex: selectedIndex,
-      body: Column(
-        children: [
-          CustomAppBar(title: "Profile Page"),
-          SizedBox(height: 20),
-          CircleAvatar(
-            radius: 50,
-            backgroundColor: Color(0xFFCEDFF2),
-            child: Icon(Icons.person, size: 80, color: Color(0xFFF2F9FF)),
-          ),
-          const SizedBox(height: 10),
-          const Text(
-            'Neophytos Polydorou',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              color: primaryTextColor,
+      selectedIndex:
+          selectedIndex, // Pass the selected navbar index to MainLayout.
+      body: Container(
+        color: AppColours.backgroundColor, // Set background color for the page.
+        child: Column(
+          children: [
+            /// Custom app bar for the profile page.
+            CustomAppBar(title: "Profile Settings", onItemTapped: onItemTapped, selectedIndex: selectedIndex),
+
+            /// Spacer to add vertical space between the app bar and the profile avatar.
+            SizedBox(height: 20),
+
+            /// Profile avatar with a placeholder icon.
+            CircleAvatar(
+              radius: 50,
+              backgroundColor: AppColours.avatarBackgroundColor,
+              child: Icon(
+                Icons.person,
+                size: 80,
+                color: AppColours.avatarForegroundColor,
+              ),
             ),
-          ),
-          const Text(
-            'neophytos@invincimind.com',
-            style: TextStyle(
-              fontSize: 16,
-              color: primaryTextColor,
+            const SizedBox(height: 10),
+
+            /// Display the user's name.
+            const Text(
+              'Neophytos Polydorou',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: AppColours.primaryGreyTextColor,
+              ),
             ),
-          ),
-          const SizedBox(height: 20),
-          Expanded(
-            child: ListView(
-              children: [
-                _buildMenuItem(
-                  context,
-                  'Edit Profile',
-                  'assets/icons/user_edit.svg',
-                  () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EditProfilePage(
-                          onItemTapped: onItemTapped, // Pass function
-                          selectedIndex: selectedIndex, // Pass index
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                _buildMenuItem(
-                  context,
-                  'Settings',
-                  'assets/icons/setting-2.svg',
-                  () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SettingsPage(
-                          onItemTapped: onItemTapped, // Pass function
-                          selectedIndex: selectedIndex, // Pass index
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                _buildMenuItem(context, 'Ultimate Goal', 'assets/icons/cup.svg',
-                    () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => UltimateGoalPage(
-                        onItemTapped: onItemTapped, // Pass function
-                        selectedIndex: selectedIndex, // Pass index
-                      ),
-                    ),
-                  );
-                }),
-                _buildMenuItem(
-                    context, 'Childhood photos', 'assets/icons/gallery.svg',
-                    () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ChildhoodPhotosPage(
-                        onItemTapped: onItemTapped, // Pass function
-                        selectedIndex: selectedIndex, // Pass index
-                      ),
-                    ),
-                  );
-                }),
-                _buildMenuItem(
-                    context, 'Payment Option', 'assets/icons/empty-wallet.svg',
-                    () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => PaymentOptionPage(
-                        onItemTapped: onItemTapped, // Pass function
-                        selectedIndex: selectedIndex, // Pass index
-                      ),
-                    ),
-                  );
-                }),
-                _buildMenuItem(
-                    context, 'Invite Friends', 'assets/icons/send.svg', () {}),
-                _buildMenuItem(context, 'Logout', 'assets/icons/logout.svg',
-                    () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text("Confirm Logout"),
-                        content: Text("Are you sure you want to log out?"),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              // Close the dialog without logging out
-                              Navigator.of(context).pop();
-                            },
-                            child: Text("Cancel"),
+
+            /// Display the user's email address.
+            const Text(
+              'neophytos@invincimind.com',
+              style: TextStyle(
+                fontSize: 16,
+                color: AppColours.primaryGreyTextColor,
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            /// List of menu items for navigation to different pages.
+            Expanded(
+              child: ListView(
+                children: [
+                  MenuItem(
+                    title: "Edit Profile",
+                    icon: 'assets/icons/user_edit.svg',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EditProfilePage(
+                            onItemTapped: onItemTapped,
+                            selectedIndex: selectedIndex,
                           ),
-                          TextButton(
-                            onPressed: () {
-                              // Log out and navigate to SignInPage
-                              Navigator.of(context).pop(); // Close the dialog
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => SignInPage()),
-                              );
-                            },
-                            child: const Text(
-                              "Logout",
-                              style: TextStyle(color: Colors.red),
-                            ),
-                          ),
-                        ],
+                        ),
                       );
                     },
-                  );
-                }),
-              ],
+                  ),
+                  MenuItem(
+                    title: "Settings",
+                    icon: 'assets/icons/setting-2.svg',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SettingsPage(
+                            onItemTapped: onItemTapped,
+                            selectedIndex: selectedIndex,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  MenuItem(
+                    title: "Ultimate Goal",
+                    icon: 'assets/icons/cup.svg',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UltimateGoalPage(
+                            onItemTapped: onItemTapped,
+                            selectedIndex: selectedIndex,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  MenuItem(
+                    title: "Childhood Photos",
+                    icon: 'assets/icons/gallery.svg',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ChildhoodPhotosPage(
+                            onItemTapped: onItemTapped,
+                            selectedIndex: selectedIndex,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  MenuItem(
+                    title: "Payment Option",
+                    icon: 'assets/icons/empty-wallet.svg',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PaymentOptionPage(
+                            onItemTapped: onItemTapped,
+                            selectedIndex: selectedIndex,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  MenuItem(
+                    title: "Invite Friends",
+                    icon: 'assets/icons/send.svg',
+                    onTap: () {
+                      // Logic for inviting friends goes here.
+                    },
+                  ),
+                  MenuItem(
+                    title: "Logout",
+                    icon: 'assets/icons/logout.svg',
+                    onTap: () {
+                      // Logic for logging out goes here.
+                    },
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    );
-  }
-
-  // Helper function to build a menu item in the profile page.
-  // Takes in context, menu item string, icon and the event that should happen once the menu item iss tapped on.
-  Widget _buildMenuItem(
-      BuildContext context, String title, dynamic icon, VoidCallback onTap) {
-    return ListTile(
-      leading: (icon is String)
-          ? SvgPicture.asset(
-              icon,
-              width: 24,
-              height: 24,
-              colorFilter:
-                  const ColorFilter.mode(primaryTextColor, BlendMode.srcIn),
-            )
-          : Icon(icon, color: primaryTextColor),
-      title: Text(
-        title,
-        style: const TextStyle(fontSize: 18, color: primaryTextColor),
-      ),
-      trailing: const Icon(Icons.arrow_forward_ios,
-          size: 18, color: primaryTextColor),
-      onTap: onTap,
     );
   }
 }
