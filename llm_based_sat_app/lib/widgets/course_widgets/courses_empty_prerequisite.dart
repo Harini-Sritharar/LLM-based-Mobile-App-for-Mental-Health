@@ -1,0 +1,21 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+
+/* This widget is called from within the PreCourseList widget to handle the case when all prerequisites for a course have been completed. */
+class EmptyPreRequisites extends StatelessWidget {
+  const EmptyPreRequisites({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return (Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+      Text("No other course needed", style: TextStyle(fontSize: 14)),
+      SizedBox(width: 80),
+      SvgPicture.asset(
+        'assets/icons/tick.svg',
+        width: 36.0,
+      ),
+    ]));
+  }
+}

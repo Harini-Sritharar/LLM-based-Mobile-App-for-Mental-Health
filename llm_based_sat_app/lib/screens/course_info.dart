@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/course_exercise_duration.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/course_type_rating.dart';
+import 'package:llm_based_sat_app/widgets/course_widgets/pre_course_list.dart';
 import 'package:llm_based_sat_app/widgets/expandable_text.dart';
 
 class CourseInfo extends StatelessWidget {
@@ -47,7 +48,6 @@ class CourseInfo extends StatelessWidget {
           ),
         ],
       ),
-
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -63,9 +63,19 @@ class CourseInfo extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 14),
-            CourseExerciseDuration(exercises: "10 Exercises", duration: '2 weeks'),
+            CourseExerciseDuration(
+                exercises: "10 Exercises", duration: '2 weeks'),
             const SizedBox(height: 20),
-            ExpandableText(text: "Self-attachment course allows you to practise the core exercises necessary for other courses. This course if important because you create a connection and an affectional bond with your childhood self. Self-attachment course allows you to practise the core exercises necessary for other courses. This course if important because you create a connection and an affectional bond with your childhood self."),
+            ExpandableText(
+                text:
+                    "Self-attachment course allows you to practise the core exercises necessary for other courses. This course if important because you create a connection and an affectional bond with your childhood self. Self-attachment course allows you to practise the core exercises necessary for other courses. This course if important because you create a connection and an affectional bond with your childhood self."),
+            const SizedBox(height: 40),
+            PreCourseList(
+              prerequisites: [],
+              onItem1Pressed: (BuildContext context) {},
+              onItem2Pressed: (BuildContext context) {},
+              onItem3Pressed: (BuildContext context) {},
+            )
           ],
         ),
       ),

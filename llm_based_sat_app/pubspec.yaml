@@ -91,6 +91,7 @@ flutter:
     - assets/icons/profile/rotate-left.svg
     - assets/icons/profile/security-safe.svg
     - assets/icons/profile/trash.svg
+    - assets/icons/tick.svg
 
     - assets/images/
 
