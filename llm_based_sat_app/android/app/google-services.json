@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "128555328235",
+    "project_id": "llm-based-sat-app",
+    "storage_bucket": "llm-based-sat-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:128555328235:android:1258809a117affd2b9d4ae",
+        "android_client_info": {
+          "package_name": "com.example.llm_based_sat_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9ihVmKyo3AZXYdo06yk7j7jxgeVHlR10"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
