@@ -19,7 +19,7 @@ class ExerciseBottomMessage extends StatelessWidget {
     return Center(
       child: Text(
         messageText,
-        style: const TextStyle(fontSize: 16, color: Color(0xFF8F959B)),
+        style: const TextStyle(fontSize: 13, color: Color(0xFF8F959B)),
       ),
     );
   }
