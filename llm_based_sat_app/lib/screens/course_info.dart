@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/course_exercise_duration.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/course_type_rating.dart';
+import 'package:llm_based_sat_app/widgets/expandable_text.dart';
 
 class CourseInfo extends StatelessWidget {
   final Function(int) onItemTapped;
@@ -64,27 +65,7 @@ class CourseInfo extends StatelessWidget {
             const SizedBox(height: 14),
             CourseExerciseDuration(exercises: "10 Exercises", duration: '2 weeks'),
             const SizedBox(height: 20),
-            ListTile(
-              leading: const Icon(Icons.book),
-              title: const Text("Course Material"),
-              onTap: () {
-                // Navigate to course material widget
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.calendar_today),
-              title: const Text("Schedule"),
-              onTap: () {
-                // Navigate to schedule widget
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.group),
-              title: const Text("Instructors"),
-              onTap: () {
-                // Navigate to instructors widget
-              },
-            ),
+            ExpandableText(text: "Self-attachment course allows you to practise the core exercises necessary for other courses. This course if important because you create a connection and an affectional bond with your childhood self. Self-attachment course allows you to practise the core exercises necessary for other courses. This course if important because you create a connection and an affectional bond with your childhood self."),
           ],
         ),
       ),
