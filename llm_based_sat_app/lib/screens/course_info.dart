@@ -76,6 +76,7 @@ class CourseInfo extends StatelessWidget {
               onItem2Pressed: (BuildContext context) {},
               onItem3Pressed: (BuildContext context) {},
               watchedIntroductoryVideo: true,
+              childhoodPhotosUploaded: true,
             )
           ],
         ),

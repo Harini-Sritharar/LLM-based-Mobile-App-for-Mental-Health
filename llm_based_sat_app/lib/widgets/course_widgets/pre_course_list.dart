@@ -13,6 +13,7 @@ class PreCourseList extends StatelessWidget {
   final void Function(BuildContext) onItem3Pressed;
   final List<String> prerequisites;
   final bool watchedIntroductoryVideo;
+  final bool childhoodPhotosUploaded;
 
   const PreCourseList({
     Key? key,
@@ -21,6 +22,7 @@ class PreCourseList extends StatelessWidget {
     required this.onItem3Pressed,
     required this.prerequisites,
     required this.watchedIntroductoryVideo,
+    required this.childhoodPhotosUploaded,
   }) : super(key: key);
 
   @override
@@ -66,6 +68,7 @@ class PreCourseList extends StatelessWidget {
                       'assets/icons/tick.svg',
                       width: 36.0,
                     ),
+                  const SizedBox(width: 6),
                   const Icon(
                     Icons.ondemand_video,
                     color: Color(0xFF687078),
@@ -82,25 +85,28 @@ class PreCourseList extends StatelessWidget {
         const SizedBox(height: 20),
 
         // Upload childhood photos
-        Padding(
-          padding: const EdgeInsets.only(left: 2.0),
-          child: GestureDetector(
-            onTap: () {},
-            child: Padding(
-                padding: const EdgeInsets.only(left: 16.0),
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.image_rounded,
+        GestureDetector(
+          onTap: () {},
+          child: Padding(
+              padding: const EdgeInsets.only(left: 16.0),
+              child: Row(
+                children: [
+                  if (childhoodPhotosUploaded)
+                    SvgPicture.asset(
+                      'assets/icons/tick.svg',
+                      width: 36.0,
                     ),
-                    const SizedBox(width: 8),
-                    const Text(
-                      "Upload childhood photos",
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ],
-                )),
-          ),
+                  const SizedBox(width: 6),
+                  const Icon(
+                    Icons.image_rounded,
+                  ),
+                  const SizedBox(width: 8),
+                  const Text(
+                    "Upload childhood photos",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ],
+              )),
         ),
       ],
     );

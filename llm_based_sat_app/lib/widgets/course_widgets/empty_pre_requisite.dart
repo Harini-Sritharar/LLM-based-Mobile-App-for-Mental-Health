@@ -14,6 +14,7 @@ class EmptyPreRequisites extends StatelessWidget {
         'assets/icons/tick.svg',
         width: 36.0,
       ),
+      SizedBox(width: 4),
       SvgPicture.asset(
         'assets/icons/profile/book.svg',
         width: 26.0,
