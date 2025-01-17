@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:llm_based_sat_app/screens/payment_option_page.dart';
-import 'package:llm_based_sat_app/screens/sign_in_page.dart';
+import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
 import '../widgets/main_layout.dart';
 import 'edit_profile.dart';
 import 'settings_page.dart';

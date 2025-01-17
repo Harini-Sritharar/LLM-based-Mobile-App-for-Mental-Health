@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:llm_based_sat_app/firebase_auth_implementation/firebase_auth_services.dart';
-import 'package:llm_based_sat_app/screens/sign_in_page.dart';
-import 'package:llm_based_sat_app/widgets/custom_button.dart';
+import 'package:llm_based_sat_app/theme/app_colours.dart';
+import '/firebase_auth_implementation/firebase_auth_services.dart';
+import 'sign_in_page.dart';
 import '/main.dart';
+// Widgets
+import '../../widgets/custom_button.dart';
 import '../../widgets/auth_widgets/circular_checkbox.dart';
 import '../../widgets//auth_widgets/text_input_field.dart';
 
@@ -36,6 +38,8 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor:
+          AppColours.backgroundColor, // Matches the white background
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Form(
@@ -119,9 +123,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   onPress: _signUp,
                   rightArrowPresent: true,
                 ),
-                // const Spacer(),
                 const SizedBox(height: 40),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -138,7 +140,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         'SIGN IN',
                         style: TextStyle(
                           fontSize: 14,
-                          color: Color(0xFF1C548C),
+                          color: AppColours.customBlue,
                           decoration: TextDecoration.underline,
                         ),
                       ),
@@ -168,13 +170,10 @@ class _SignUpPageState extends State<SignUpPage> {
           await _auth.signUpWithEmailAndPassword(context, email, password);
 
       if (user != null) {
-        print("User is successfully created");
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => MainScreen()),
         );
-      } else {
-        print("Some error happened");
       }
     }
   }

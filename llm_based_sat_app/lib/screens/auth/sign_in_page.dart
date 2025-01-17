@@ -1,10 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:llm_based_sat_app/main.dart';
-import 'package:llm_based_sat_app/screens/auth/sign_up_page.dart';
-import 'package:llm_based_sat_app/widgets/auth_widgets/text_input_field.dart';
-import 'package:llm_based_sat_app/widgets/custom_button.dart';
-import 'package:llm_based_sat_app/firebase_auth_implementation/firebase_auth_services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import '/firebase_auth_implementation/firebase_auth_services.dart';
+import '/main.dart';
+import '/screens/auth/sign_up_page.dart';
+import '/theme/app_colours.dart';
+import '/widgets/auth_widgets/text_input_field.dart';
+import '/widgets/custom_button.dart';
 
 class SignInPage extends StatefulWidget {
   @override
@@ -28,13 +29,10 @@ class _SignInPageState extends State<SignInPage> {
           await _auth.signInWithEmailandPassword(context, email, password);
 
       if (user != null) {
-        print("User is successfully created");
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => MainScreen()),
         );
-      } else {
-        print("Some error happened");
       }
     }
   }
@@ -42,7 +40,8 @@ class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Matches the white background
+      backgroundColor:
+          AppColours.backgroundColor, // Matches the white background
       body: Center(
         child: Form(
             key: _formKey,
@@ -72,45 +71,17 @@ class _SignInPageState extends State<SignInPage> {
                       ),
                     ),
                     const SizedBox(height: 40),
-                    // TextField(
-                    //   decoration: InputDecoration(
-                    //     hintText: "Email",
-                    //     hintStyle: TextStyle(color: Colors.grey[500]),
-                    //     prefixIcon: Icon(Icons.email, color: Colors.grey[500]),
-                    //     filled: true,
-                    //     fillColor: Colors.blue[50], // Matches light blue background
-                    //     border: OutlineInputBorder(
-                    //       borderRadius: BorderRadius.circular(12),
-                    //       borderSide: BorderSide.none,
-                    //     ),
-                    //   ),
-                    // ),
                     TextInputField(
                         label: "Email",
                         icon: Icons.email,
                         isPassword: false,
                         controller: _emailController),
                     const SizedBox(height: 20),
-                    // TextField(
-                    //   obscureText: true,
-                    //   decoration: InputDecoration(
-                    //     hintText: "Password",
-                    //     hintStyle: TextStyle(color: Colors.grey[500]),
-                    //     prefixIcon: Icon(Icons.lock, color: Colors.grey[500]),
-                    //     filled: true,
-                    //     fillColor: Colors.blue[50], // Matches light blue background
-                    //     border: OutlineInputBorder(
-                    //       borderRadius: BorderRadius.circular(12),
-                    //       borderSide: BorderSide.none,
-                    //     ),
-                    //   ),
-                    // ),
                     TextInputField(
                         label: "Password",
                         icon: Icons.lock,
                         isPassword: true,
                         controller: _passwordController),
-
                     const SizedBox(height: 40),
                     Center(
                         child: CustomButton(
@@ -141,7 +112,7 @@ class _SignInPageState extends State<SignInPage> {
                           child: const Text(
                             "SIGN UP",
                             style: TextStyle(
-                              color: Colors.blue,
+                              color: AppColours.customBlue,
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
                               decoration: TextDecoration.underline,
