@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/screens/home_page.dart';
+import 'package:llm_based_sat_app/widgets/custom_button.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_reflectionBox.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_appBar.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_description.dart';
@@ -58,14 +60,21 @@ class _AssessmentPageState extends State<AssessmentPage> {
                 question: '(B) How helpful was this exercise?'),
             ExerciseSliderQuestionWidget(question: '(C) Rate this exercise.'),
             SizedBox(height: 30),
-            // CustomButton(buttonText: 'Next Exercise', onPress: () {
-            //   Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));},
-            //   rightArrowPresent: true),
-            // SizedBox(height: 30),
-            // CustomButton(buttonText: 'Back to Course', onPress: () {
-            //   Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));},
-            //   backgroundColor: const Color(0xFFF2F9FF), textColor: Color(0xFF1C548C),),
-
+            CustomButton(
+                buttonText: 'Next Exercise',
+                onPress: () {
+                  // Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+                },
+                rightArrowPresent: true),
+            SizedBox(height: 30),
+            CustomButton(
+              buttonText: 'Back to Course',
+              onPress: () {
+                // Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+              },
+              backgroundColor: const Color(0xFFF2F9FF),
+              textColor: Color(0xFF1C548C),
+            ),
             SizedBox(height: 30),
             ExerciseTimer()
           ],
