@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:llm_based_sat_app/main.dart';
-import 'package:llm_based_sat_app/screens/auth/sign_up_page.dart';
-import 'package:llm_based_sat_app/widgets/auth_widgets/text_input_field.dart';
-import 'package:llm_based_sat_app/widgets/custom_button.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import '/firebase_auth_implementation/firebase_auth_services.dart';
+import '/main.dart';
+import '/screens/auth/sign_up_page.dart';
+import '/theme/app_colours.dart';
+import '/widgets/auth_widgets/text_input_field.dart';
+import '/widgets/custom_button.dart';
 
 class SignInPage extends StatefulWidget {
   @override
@@ -10,22 +13,43 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
+  final FirebaseAuthService _auth = FirebaseAuthService();
+
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  void _signIn() async {
+    if (_formKey.currentState!.validate()) {
+      // Navigate to the main screen
+      String email = _emailController.text;
+      String password = _passwordController.text;
+
+      User? user =
+          await _auth.signInWithEmailandPassword(context, email, password);
+
+      if (user != null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => MainScreen()),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Matches the white background
+      backgroundColor:
+          AppColours.backgroundColor, // Matches the white background
       body: Center(
         child: Form(
             key: _formKey,
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                padding: const EdgeInsets.all(20.0),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Center(
                       child: Text(
@@ -47,59 +71,22 @@ class _SignInPageState extends State<SignInPage> {
                       ),
                     ),
                     const SizedBox(height: 40),
-                    // TextField(
-                    //   decoration: InputDecoration(
-                    //     hintText: "Email",
-                    //     hintStyle: TextStyle(color: Colors.grey[500]),
-                    //     prefixIcon: Icon(Icons.email, color: Colors.grey[500]),
-                    //     filled: true,
-                    //     fillColor: Colors.blue[50], // Matches light blue background
-                    //     border: OutlineInputBorder(
-                    //       borderRadius: BorderRadius.circular(12),
-                    //       borderSide: BorderSide.none,
-                    //     ),
-                    //   ),
-                    // ),
                     TextInputField(
                         label: "Email",
                         icon: Icons.email,
                         isPassword: false,
                         controller: _emailController),
                     const SizedBox(height: 20),
-                    // TextField(
-                    //   obscureText: true,
-                    //   decoration: InputDecoration(
-                    //     hintText: "Password",
-                    //     hintStyle: TextStyle(color: Colors.grey[500]),
-                    //     prefixIcon: Icon(Icons.lock, color: Colors.grey[500]),
-                    //     filled: true,
-                    //     fillColor: Colors.blue[50], // Matches light blue background
-                    //     border: OutlineInputBorder(
-                    //       borderRadius: BorderRadius.circular(12),
-                    //       borderSide: BorderSide.none,
-                    //     ),
-                    //   ),
-                    // ),
                     TextInputField(
                         label: "Password",
                         icon: Icons.lock,
                         isPassword: true,
                         controller: _passwordController),
-
                     const SizedBox(height: 40),
                     Center(
                         child: CustomButton(
                             buttonText: "Sign In",
-                            onPress: () {
-                              // The sign in logic goes here
-                              // For now we just navigate to the main screen
-                              if (_formKey.currentState!.validate()) {
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => MainScreen()));
-                              }
-                            },
+                            onPress: _signIn,
                             rightArrowPresent: true)),
                     const SizedBox(height: 20),
                     Center(
@@ -125,7 +112,7 @@ class _SignInPageState extends State<SignInPage> {
                           child: const Text(
                             "SIGN UP",
                             style: TextStyle(
-                              color: Colors.blue,
+                              color: AppColours.customBlue,
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
                               decoration: TextDecoration.underline,

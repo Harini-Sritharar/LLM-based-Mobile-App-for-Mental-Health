@@ -1,8 +1,23 @@
 import 'package:flutter/material.dart';
+import '/theme/app_colours.dart';
+/* CircularCheckbox is a widget that displays a circular checkbox that can be toggled on and off.
+
+Usage:
+CircularCheckbox(
+  initialValue: true,
+  onChanged: (value) {
+    print('Checkbox value: $value');
+  },
+)
+
+Parameters:
+- `initialValue`: The initial state of the checkbox.
+- `onChanged`: A callback function that is called when the checkbox is toggled. */
 
 class CircularCheckbox extends StatefulWidget {
-  final bool initialValue;
-  final ValueChanged<bool> onChanged;
+  final bool initialValue; // Initial state of the checkbox
+  final ValueChanged<bool>
+      onChanged; // Callback function when the checkbox is toggled
 
   const CircularCheckbox({
     Key? key,
@@ -14,14 +29,16 @@ class CircularCheckbox extends StatefulWidget {
 }
 
 class _CircularCheckboxState extends State<CircularCheckbox> {
-  late bool _isChecked;
+  late bool _isChecked; // State of the checkbox
 
   @override
+  // Initialize the state of the checkbox
   void initState() {
     super.initState();
     _isChecked = widget.initialValue;
   }
 
+  // Toggle the state of the checkbox
   void _toggleCheckbox() {
     setState(() {
       _isChecked = !_isChecked;
@@ -39,17 +56,18 @@ class _CircularCheckboxState extends State<CircularCheckbox> {
         decoration: BoxDecoration(
           shape: BoxShape.circle, // Makes the container circular
           color: _isChecked
-              ? Color(0xFFCEF2DE)
-              : Colors.grey[300], // Background color based on state
+              ? AppColours.checkboxBackgroundColor
+              : AppColours
+                  .checkboxUntickedBackgroundColor, // Background color based on state
           border: Border.all(
-            color: Color(0xFF1C548C), // Border color
+            color: AppColours.checkboxBorderColor, // Border color
             width: 2.0, // Border width
           ),
         ),
         child: _isChecked
             ? Icon(
                 Icons.check, // Checkmark icon when selected
-                color: Color(0xFF1C8E4C),
+                color: AppColours.checkboxCheckmarkColor,
                 size: 16.0,
               )
             : null, // Empty when unchecked
