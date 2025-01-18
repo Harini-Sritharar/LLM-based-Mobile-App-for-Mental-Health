@@ -1,5 +1,32 @@
 // This component gives a validated text input field with a label and an icon
 import 'package:flutter/material.dart';
+import '/theme/app_colours.dart';
+/* TextInputField is a widget that displays a validated text input field with a label and an icon.
+
+Usage:
+TextInputField(
+  label: 'Email',
+  icon: Icons.email,
+  isPassword: false,
+  controller: _emailController,
+  validator: (value) {
+    if (value == null || value.isEmpty) {
+      return 'Email cannot be empty';
+    }
+    if (!RegExp(emailPattern).hasMatch(value)) {
+      return 'Please enter a valid email';
+    }
+    return null;
+  },
+)
+
+Parameters:
+- `label`: The label to be displayed for the input field.
+- `icon`: The icon to be displayed for the input field.
+- `isPassword`: A boolean to determine if the input field is a password field.
+- `controller`: Controls the input field, used to get the value.
+- `validator`: An optional validator function that provides custom validation; if not 
+               provided, the default validator defined in the widget will be used instead. */
 
 class TextInputField extends StatelessWidget {
   // Regular Expression Pattern to validate the email
@@ -45,17 +72,20 @@ class TextInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-        controller: controller,
-        decoration: InputDecoration(
-          labelText: label,
-          prefixIcon: Icon(icon),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          filled: true,
-          fillColor: Colors.blue[50],
+      controller: controller,
+      style: TextStyle(color: AppColours.primaryGreyTextColor),
+      decoration: InputDecoration(
+        labelText: label,
+        prefixIcon: Icon(icon),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+          borderSide: BorderSide.none,
         ),
-        obscureText: isPassword, // hiding the input based on the label
-        validator: validator ?? _validateInput);
+        filled: true,
+        fillColor: AppColours.textFieldBackgroundColor,
+      ),
+      obscureText: isPassword, // hiding the input based on the label
+      // validator: validator ?? _validateInput)
+    );
   }
 }

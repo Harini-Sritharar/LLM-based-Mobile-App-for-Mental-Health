@@ -23,7 +23,10 @@ class ChildhoodPhotosPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CustomAppBar(title: "Personal Profile"),
+            CustomAppBar(
+                title: "Personal Profile",
+                onItemTapped: onItemTapped,
+                selectedIndex: selectedIndex),
             const Text(
               "Childhood photos",
               style: TextStyle(fontSize: 22, color: secondaryTextColor),

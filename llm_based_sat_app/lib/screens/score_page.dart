@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'profile_page.dart';
+import '../widgets/custom_app_bar.dart';
 
 class ScorePage extends StatelessWidget {
   final Function(int) onItemTapped;
@@ -11,30 +12,11 @@ class ScorePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Score'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications),
-            onPressed: () {
-              // Handle notifications
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.person),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ProfilePage(
-                    onItemTapped: onItemTapped,
-                    selectedIndex: selectedIndex,
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
+      appBar: CustomAppBar(
+        title: "InvinciMind",
+        onItemTapped: onItemTapped,
+        selectedIndex: selectedIndex,
+        backButton: false,
       ),
       body: const Center(
         child: Text(
