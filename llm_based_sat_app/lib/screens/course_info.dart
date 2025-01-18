@@ -72,10 +72,10 @@ class CourseInfo extends StatelessWidget {
             const SizedBox(height: 40),
             PreCourseList(
               prerequisites: [],
-              onItem1Pressed: (BuildContext context) {},
-              onItem2Pressed: (BuildContext context) {},
-              onItem3Pressed: (BuildContext context) {},
-              watchedIntroductoryVideo: false,
+              onUploadChildhoodPhotosPressed: (BuildContext context) {},
+              onWatchIntroductoryVideoPressed: (BuildContext context) {},
+              onStartCoursePressed: (BuildContext context) {},
+              watchedIntroductoryVideo: true,
               childhoodPhotosUploaded: true,
             )
           ],

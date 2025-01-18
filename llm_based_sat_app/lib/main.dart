@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/screens/sign_in_page.dart';
 import '../screens/community_page.dart';
 import '../screens/calendar_page.dart';
-import '../screens/courses_page.dart';
+import 'screens/courses.dart';
 import '../screens/home_page.dart';
 import '../screens/score_page.dart';
 import '../widgets/bottom_nav_bar.dart';
@@ -62,7 +62,7 @@ class _MainScreenState extends State<MainScreen> {
       CalendarPage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
       HomePage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
       ScorePage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
-      CoursesPage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
+      Courses(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
     ];
 
     return Scaffold(

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/screens/course_info.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/course_card.dart'; // Custom reusable widget for course cards
 
-class CoursesPage extends StatelessWidget {
+class Courses extends StatelessWidget {
   final Function(int) onItemTapped;
   final int selectedIndex;
 
-  const CoursesPage({
+  const Courses({
     Key? key,
     required this.onItemTapped,
     required this.selectedIndex,

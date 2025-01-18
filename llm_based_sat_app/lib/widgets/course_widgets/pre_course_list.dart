@@ -9,18 +9,18 @@ import 'package:llm_based_sat_app/widgets/custom_button.dart';
 // Link up cache to check if watchedIntroductoryVideo is true for given id
 class PreCourseList extends StatelessWidget {
   // Accepts three functions for each of the list items
-  final void Function(BuildContext) onItem1Pressed;
-  final void Function(BuildContext) onItem2Pressed;
-  final void Function(BuildContext) onItem3Pressed;
+  final void Function(BuildContext) onStartCoursePressed;
+  final void Function(BuildContext) onWatchIntroductoryVideoPressed;
+  final void Function(BuildContext) onUploadChildhoodPhotosPressed;
   final List<String> prerequisites;
   final bool watchedIntroductoryVideo;
   final bool childhoodPhotosUploaded;
 
   const PreCourseList({
     Key? key,
-    required this.onItem1Pressed,
-    required this.onItem2Pressed,
-    required this.onItem3Pressed,
+    required this.onStartCoursePressed,
+    required this.onWatchIntroductoryVideoPressed,
+    required this.onUploadChildhoodPhotosPressed,
     required this.prerequisites,
     required this.watchedIntroductoryVideo,
     required this.childhoodPhotosUploaded,
@@ -44,7 +44,6 @@ class PreCourseList extends StatelessWidget {
 
         // Tasks yet to complete
         GestureDetector(
-          onTap: () => onItem1Pressed(context),
           child: Padding(
               padding: const EdgeInsets.only(left: 16.0),
               child: Row(
