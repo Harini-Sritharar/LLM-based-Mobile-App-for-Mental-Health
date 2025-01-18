@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/models/chapter_exercise_interface.dart';
+import 'package:llm_based_sat_app/models/chapter_interface.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/course_page_chapter.dart';
 
 class CoursePage extends StatelessWidget {
   final String courseTitle;
-  final List chapters;
+  final List<ChapterInterface> chapters;
 
   const CoursePage({
     super.key,
@@ -78,45 +79,7 @@ class CoursePage extends StatelessWidget {
             // ...chapters.map((chapter) =>
             //   CoursePageChapter(chapterIndex: chapter., chapterTitle: chapterTitle, exercises: exercises)
             // )
-            CoursePageChapter(
-                chapterIndex: 1,
-                chapterTitle: "Companionate connection",
-                exercises: [
-                  ChapterExerciseInterface(
-                    letter: "A",
-                    title: "Initial Connection",
-                    practised: 3,
-                    total_sessions: 14,
-                    onButtonPress: (BuildContext context) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CoursePage(
-                            courseTitle: courseTitle,
-                            chapters: [],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                  ChapterExerciseInterface(
-                    letter: "A",
-                    title: "Initial Connection",
-                    practised: 3,
-                    total_sessions: 14,
-                    onButtonPress: (BuildContext context) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CoursePage(
-                            courseTitle: courseTitle,
-                            chapters: [],
-                          ),
-                        ),
-                      );
-                    },
-                  )
-                ])
+            ...chapters.map((chapter) => CoursePageChapter(chapter: chapter))
           ],
         ),
       ),

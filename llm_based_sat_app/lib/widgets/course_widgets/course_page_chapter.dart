@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:llm_based_sat_app/models/chapter_exercise_interface.dart';
+import 'package:llm_based_sat_app/models/chapter_interface.dart';
 
 class CoursePageChapter extends StatelessWidget {
-  final int chapterIndex;
-  final String chapterTitle;
-  final List<ChapterExerciseInterface> exercises;
+  final ChapterInterface chapter;
 
   const CoursePageChapter({
     super.key,
-    required this.chapterIndex,
-    required this.chapterTitle,
-    required this.exercises,
+    required this.chapter,
   });
 
   @override
@@ -23,7 +19,7 @@ class CoursePageChapter extends StatelessWidget {
         Row(
           children: [
             Text(
-              "Chapter $chapterIndex - ",
+              "Chapter ${chapter.chapterNumber} - ",
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
@@ -31,7 +27,7 @@ class CoursePageChapter extends StatelessWidget {
               ),
             ),
             Text(
-              chapterTitle,
+              chapter.chapterTitle,
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
@@ -44,7 +40,7 @@ class CoursePageChapter extends StatelessWidget {
         const SizedBox(height: 10),
 
         // Display dynamic list of exercises
-        ...exercises.map((exercise) => GestureDetector(
+        ...chapter.exercises.map((exercise) => GestureDetector(
               onTap: () => exercise.onButtonPress(context),
               child: Padding(
                 padding:
@@ -82,7 +78,7 @@ class CoursePageChapter extends StatelessWidget {
                     ),
                     Spacer(),
                     Text(
-                      "${exercise.practised} / ${exercise.total_sessions}",
+                      "${exercise.practised} / ${exercise.totalSessions}",
                       style: const TextStyle(
                         fontSize: 15,
                         color: Color(0xFF293138),
@@ -92,7 +88,7 @@ class CoursePageChapter extends StatelessWidget {
                       width: 10,
                     ),
                     // Display progress indicator or a check mark
-                    if (exercise.practised == exercise.total_sessions)
+                    if (exercise.practised == exercise.totalSessions)
                       SvgPicture.asset(
                         'assets/icons/tick.svg',
                         width: 36.0,

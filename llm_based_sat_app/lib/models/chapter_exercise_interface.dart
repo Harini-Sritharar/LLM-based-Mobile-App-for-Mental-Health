@@ -4,7 +4,7 @@ class ChapterExerciseInterface {
   final String letter;
   final String title;
   final int practised;
-  final int total_sessions;
+  final int totalSessions;
   final void Function(BuildContext) onButtonPress;
 
   // Constructor to initialize the parameters
@@ -12,7 +12,7 @@ class ChapterExerciseInterface {
     required this.letter,
     required this.title,
     required this.practised,
-    required this.total_sessions,
+    required this.totalSessions,
     required this.onButtonPress,
   });
 }
