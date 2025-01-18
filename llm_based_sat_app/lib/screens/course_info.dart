@@ -79,7 +79,7 @@ class CourseInfo extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const CoursePage(),
+                    builder: (context) => CoursePage(courseTitle: courseTitle, chapters: [],),
                   ),
                 );
               },

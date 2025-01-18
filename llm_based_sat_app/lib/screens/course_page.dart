@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/models/chapter_exercise_interface.dart';
+import 'package:llm_based_sat_app/widgets/course_widgets/course_page_chapter.dart';
 
 class CoursePage extends StatelessWidget {
+  final String courseTitle;
+  final List chapters;
+
   const CoursePage({
     super.key,
+    required this.courseTitle,
+    required this.chapters,
   });
 
   @override
@@ -11,7 +18,7 @@ class CoursePage extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text(
-          'Course Info',
+          'Course Page',
           style: TextStyle(color: Colors.black),
         ),
         centerTitle: true,
@@ -35,7 +42,83 @@ class CoursePage extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Text("Works"),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Course: $courseTitle",
+              style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w500,
+                  color: Color(0xFF062240)),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              "Complete the minimum number of sessions in each exercise to move to the next one.",
+            ),
+            const SizedBox(height: 24),
+            Row(
+              children: [
+                Text("Course exercises",
+                    style: TextStyle(
+                      fontSize: 18,
+                    )),
+                Spacer(),
+                Text(
+                  "Practised / Total Sessions",
+                  style: TextStyle(
+                    color: Color(0xFF687078),
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 24),
+            // ...chapters.map((chapter) =>
+            //   CoursePageChapter(chapterIndex: chapter., chapterTitle: chapterTitle, exercises: exercises)
+            // )
+            CoursePageChapter(
+                chapterIndex: 1,
+                chapterTitle: "Companionate connection",
+                exercises: [
+                  ChapterExerciseInterface(
+                    letter: "A",
+                    title: "Initial Connection",
+                    practised: 3,
+                    total_sessions: 14,
+                    onButtonPress: (BuildContext context) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CoursePage(
+                            courseTitle: courseTitle,
+                            chapters: [],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  ChapterExerciseInterface(
+                    letter: "A",
+                    title: "Initial Connection",
+                    practised: 3,
+                    total_sessions: 14,
+                    onButtonPress: (BuildContext context) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CoursePage(
+                            courseTitle: courseTitle,
+                            chapters: [],
+                          ),
+                        ),
+                      );
+                    },
+                  )
+                ])
+          ],
+        ),
       ),
     );
   }
