@@ -18,4 +18,5 @@ class AppColours {
   static const Color checkboxUntickedBackgroundColor = Color(0xFFE0E0E0);
 
   static const Color customBlue = Color(0xFF1C548C);
+  static const Color textFieldBackgroundColor = Color(0xFFF2F9FF);
 }
