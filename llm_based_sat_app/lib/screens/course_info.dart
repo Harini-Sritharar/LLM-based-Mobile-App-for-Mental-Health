@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/screens/course_page.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/course_exercise_duration.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/course_type_rating.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/pre_course_list.dart';
@@ -74,7 +75,14 @@ class CourseInfo extends StatelessWidget {
               prerequisites: [],
               onUploadChildhoodPhotosPressed: (BuildContext context) {},
               onWatchIntroductoryVideoPressed: (BuildContext context) {},
-              onStartCoursePressed: (BuildContext context) {},
+              onStartCoursePressed: (BuildContext context) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CoursePage(),
+                  ),
+                );
+              },
               watchedIntroductoryVideo: true,
               childhoodPhotosUploaded: true,
             )

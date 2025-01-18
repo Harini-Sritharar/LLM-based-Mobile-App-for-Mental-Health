@@ -126,7 +126,7 @@ class PreCourseList extends StatelessWidget {
           CustomButton(
               buttonText: "Start Course",
               onPress: () {
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+                onStartCoursePressed(context);
               },
               rightArrowPresent: true),
       ],
