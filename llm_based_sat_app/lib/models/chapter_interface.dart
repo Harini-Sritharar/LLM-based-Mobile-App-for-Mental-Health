@@ -4,11 +4,13 @@ class ChapterInterface {
   final int chapterNumber;
   final String chapterTitle;
   final List<ChapterExerciseInterface> exercises;
+  final bool isLocked;
   
 
   ChapterInterface({
     required this.chapterNumber,
     required this.chapterTitle,
     required this.exercises,
+    required this.isLocked,
   });
 }

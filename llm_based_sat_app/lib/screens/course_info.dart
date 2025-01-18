@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/models/chapter_exercise_interface.dart';
 import 'package:llm_based_sat_app/models/chapter_interface.dart';
 import 'package:llm_based_sat_app/screens/course_page.dart';
+import 'package:llm_based_sat_app/utils/exercise_page_caller.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/course_exercise_duration.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/course_type_rating.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/pre_course_list.dart';
@@ -101,14 +102,24 @@ class CourseInfo extends StatelessWidget {
     return [
       ChapterInterface(
           chapterNumber: 01,
+          isLocked: false,
           chapterTitle: "Companionate connection",
           exercises: [
             ChapterExerciseInterface(
-                letter: "A",
-                title: "Initial Connection",
-                practised: 3,
-                totalSessions: 14,
-                onButtonPress: (BuildContext context) {}),
+              letter: "A",
+              title: "Initial Connection",
+              practised: 3,
+              totalSessions: 14,
+              onButtonPress: (BuildContext context) {
+                // Navigate to ExercisePageCaller when the button is pressed
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ExercisePageCaller(id: "A_2"),
+                  ),
+                );
+              },
+            ),
             ChapterExerciseInterface(
                 letter: "B",
                 title: "Positive Recall",
@@ -122,17 +133,26 @@ class CourseInfo extends StatelessWidget {
                 totalSessions: 14,
                 onButtonPress: (BuildContext context) {})
           ]),
-
-          ChapterInterface(
+      ChapterInterface(
           chapterNumber: 02,
+          isLocked: true,
           chapterTitle: "Loving relationship",
           exercises: [
             ChapterExerciseInterface(
-                letter: "D",
-                title: "Affectionate Singing",
-                practised: 0,
-                totalSessions: 0,
-                onButtonPress: (BuildContext context) {}),
+              letter: "D",
+              title: "Affectionate Singing",
+              practised: 0,
+              totalSessions: 0,
+              onButtonPress: (BuildContext context) {
+                // Navigate to ExercisePageCaller when the button is pressed
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ExercisePageCaller(id: "A_2"),
+                  ),
+                );
+              },
+            ),
             ChapterExerciseInterface(
                 letter: "E",
                 title: "Expressing Love",
