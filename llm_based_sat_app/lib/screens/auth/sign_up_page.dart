@@ -43,113 +43,115 @@ class _SignUpPageState extends State<SignUpPage> {
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(height: 50),
-                const Text(
-                  'Sign up',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black54,
+          key: _formKey,
+          child: SingleChildScrollView(
+              child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 50),
+              const Text(
+                'Sign up',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black54,
+                ),
+              ),
+              const SizedBox(height: 30),
+              const Text(
+                'Getting Started...',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                'Create an Account to Continue with InvinciApp',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black54,
+                ),
+              ),
+              const SizedBox(height: 40),
+              TextInputField(
+                label: "Email",
+                icon: Icons.email,
+                isPassword: false,
+                controller: _emailController,
+              ),
+              const SizedBox(height: 20),
+              TextInputField(
+                label: "Password",
+                icon: Icons.lock,
+                isPassword: true,
+                controller: _passwordController,
+              ),
+              const SizedBox(height: 20),
+              TextInputField(
+                label: "Confirm Password",
+                icon: Icons.lock,
+                isPassword: true,
+                controller: _confirmPasswordController,
+                validator: _checkPasswordsMatch,
+              ),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  CircularCheckbox(
+                    initialValue: _agreeToTerms,
+                    onChanged: (bool value) {
+                      setState(() {
+                        _agreeToTerms = value;
+                      });
+                    },
                   ),
-                ),
-                const SizedBox(height: 30),
-                const Text(
-                  'Getting Started...',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                const Text(
-                  'Create an Account to Continue with InvinciApp',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black54,
-                  ),
-                ),
-                const SizedBox(height: 40),
-                TextInputField(
-                  label: "Email",
-                  icon: Icons.email,
-                  isPassword: false,
-                  controller: _emailController,
-                ),
-                const SizedBox(height: 20),
-                TextInputField(
-                  label: "Password",
-                  icon: Icons.lock,
-                  isPassword: true,
-                  controller: _passwordController,
-                ),
-                const SizedBox(height: 20),
-                TextInputField(
-                  label: "Confirm Password",
-                  icon: Icons.lock,
-                  isPassword: true,
-                  controller: _confirmPasswordController,
-                  validator: _checkPasswordsMatch,
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  children: [
-                    CircularCheckbox(
-                      initialValue: _agreeToTerms,
-                      onChanged: (bool value) {
-                        setState(() {
-                          _agreeToTerms = value;
-                        });
-                      },
+                  const SizedBox(
+                      width: 10), // Space between the checkbox and text
+                  Text(
+                    'Agree to Terms & Conditions',
+                    style: TextStyle(
+                      color: Colors.black,
                     ),
-                    const SizedBox(
-                        width: 10), // Space between the checkbox and text
-                    Text(
-                      'Agree to Terms & Conditions',
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              CustomButton(
+                buttonText: "Sign Up",
+                onPress: _signUp,
+                rightArrowPresent: true,
+              ),
+              const SizedBox(height: 40),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('Already have an Account? '),
+                  GestureDetector(
+                    onTap: () {
+                      // Navigate to sign-in page
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SignInPage()));
+                    },
+                    child: const Text(
+                      'SIGN IN',
                       style: TextStyle(
-                        color: Colors.black,
+                        fontSize: 14,
+                        color: AppColours.customBlue,
+                        decoration: TextDecoration.underline,
                       ),
                     ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                CustomButton(
-                  buttonText: "Sign Up",
-                  onPress: _signUp,
-                  rightArrowPresent: true,
-                ),
-                const SizedBox(height: 40),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text('Already have an Account? '),
-                    GestureDetector(
-                      onTap: () {
-                        // Navigate to sign-in page
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SignInPage()));
-                      },
-                      child: const Text(
-                        'SIGN IN',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: AppColours.customBlue,
-                          decoration: TextDecoration.underline,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-              ],
-            )),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+            ],
+          )),
+        ),
       ),
     );
   }
