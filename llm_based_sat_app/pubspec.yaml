@@ -93,6 +93,11 @@ flutter:
     - assets/icons/profile/trash.svg
     - assets/icons/tick.svg
 
+    - assets/images/self_attachment.png
+    - assets/images/creativity.png
+    - assets/images/humour.png
+    - assets/images/nature.png
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
