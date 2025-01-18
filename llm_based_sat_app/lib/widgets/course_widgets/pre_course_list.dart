@@ -69,6 +69,14 @@ class PreCourseList extends StatelessWidget {
                       'assets/icons/tick.svg',
                       width: 36.0,
                     ),
+                  if (!watchedIntroductoryVideo) const SizedBox(width: 5),
+                  if (!watchedIntroductoryVideo)
+                    Icon(
+                      Icons.warning_amber_outlined,
+                      color: Colors.amber,
+                      size: 26,
+                    ),
+                  if (!watchedIntroductoryVideo) const SizedBox(width: 6),
                   const SizedBox(width: 6),
                   const Icon(
                     Icons.ondemand_video,
