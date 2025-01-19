@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/screens/childhood_photos_page.dart';
+import 'package:llm_based_sat_app/screens/personal_profile_page.dart';
 import 'package:llm_based_sat_app/widgets/auth_widgets/text_input_field.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import 'package:llm_based_sat_app/widgets/custom_button.dart';
@@ -39,12 +40,8 @@ class _UploadProfilePicturePageState extends State<UploadProfilePicturePage> {
     // Save the username
     // Navigate to the next page
     if (_selectedImage != null && _usernameController.text.isNotEmpty) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ChildhoodPhotosPage(
-                  onItemTapped: widget.onItemTapped,
-                  selectedIndex: widget.selectedIndex)));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => PersonalProfilePage()));
     }
   }
 

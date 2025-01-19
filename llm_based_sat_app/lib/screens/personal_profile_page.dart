@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/main.dart';
 import 'package:llm_based_sat_app/screens/childhood_photos_page.dart';
+import 'package:llm_based_sat_app/screens/contact_details_page.dart';
 import 'package:llm_based_sat_app/screens/personal_info_page.dart';
+import 'package:llm_based_sat_app/screens/upload_profile_picture_page.dart';
 
 import '../widgets/auth_widgets/circular_checkbox.dart';
 import '../widgets/custom_button.dart';
@@ -77,6 +79,13 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
                 title: "Contact Details",
                 isCompleted: true,
                 onTap: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ContactDetailsPage(
+                                onItemTapped: (x) {},
+                                selectedIndex: 2,
+                              )));
                   // Navigate to Contact Details Screen
                 },
               ),
@@ -85,6 +94,14 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
                 title: "Profile Picture",
                 isCompleted: false,
                 onTap: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => UploadProfilePicturePage(
+                                onItemTapped: (int) {},
+                                selectedIndex: 2,
+                              )));
+
                   // Navigate to Profile Picture Screen
                 },
               ),

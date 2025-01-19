@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:llm_based_sat_app/screens/personal_profile_page.dart';
 import 'package:llm_based_sat_app/screens/upload_profile_picture_page.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/auth_widgets/text_input_field.dart';
@@ -38,12 +39,8 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
 
   void _saveContactDetails() {
     if (_formKey.currentState!.validate()) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => UploadProfilePicturePage(
-                  onItemTapped: widget.onItemTapped,
-                  selectedIndex: widget.selectedIndex)));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => PersonalProfilePage()));
     }
   }
 
