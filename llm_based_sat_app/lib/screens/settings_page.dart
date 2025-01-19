@@ -1,155 +1,113 @@
 import 'package:flutter/material.dart';
-import 'package:llm_based_sat_app/theme/app_colours.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import '../widgets/main_layout.dart'; // Import MainLayout
 
-class NotificationsPage extends StatefulWidget {
+class SettingsPage extends StatelessWidget {
   static const Color primaryTextColor = Color(0xFF687078);
   static const Color secondaryTextColor = Color(0xFF123659);
-  static const Color primaryButtonColor = Color(0xFFCEDFF2);
+  static const Color primaryButtonColor = Color(0xFF2F4A79);
   static const Color arrowColor = Color(0xFF1C548C);
 
   final Function(int) onItemTapped; // Receive function to update navbar index
   final int selectedIndex; // Keep track of selected index
 
-  NotificationsPage({required this.onItemTapped, required this.selectedIndex});
-
-  @override
-  _NotificationsPageState createState() => _NotificationsPageState();
-}
-
-class _NotificationsPageState extends State<NotificationsPage> {
-  // State variables for toggle switches
-  bool upcomingTasks = true;
-  bool missedTasks = true;
-  bool reminders = false;
-  bool dailyMotivation = true;
-  bool newCourses = false;
-  bool tips = false;
-  bool appUpdates = false;
-  bool specialOffers = true;
+  SettingsPage({required this.onItemTapped, required this.selectedIndex});
 
   @override
   Widget build(BuildContext context) {
     return MainLayout(
-      selectedIndex: widget.selectedIndex,
-      body: Container(
-        color: Colors.white, // Set background color to white
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+      selectedIndex: selectedIndex,
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CustomAppBar(title: "Personal Profile", onItemTapped: onItemTapped, selectedIndex: selectedIndex),
+            SizedBox(height: 10),
+            _buildSettingsItem(context, 'Notifications',
+                'assets/icons/profile/notification-bing.svg', () {}),
+            _buildSettingsItem(context, 'Security',
+                'assets/icons/profile/security-safe.svg', () {}),
+            _buildSettingsItem(context, 'Accessibility',
+                'assets/icons/profile/accessibility.svg', () {}),
+            _buildSettingsItem(context, 'Language',
+                'assets/icons/profile/language-circle.svg', () {}),
+            _buildSettingsItem(context, 'Terms & Conditions',
+                'assets/icons/profile/book.svg', () {}),
+            _buildSettingsItem(context, 'Help Centre',
+                'assets/icons/profile/message-question.svg', () {}),
+            _buildSettingsItem(context, 'Reset Setting',
+                'assets/icons/profile/rotate-left.svg', () {}),
+            _buildSettingsItem(context, 'Delete Account',
+                'assets/icons/profile/trash.svg', () {}),
+            SizedBox(height: 20),
+            _buildBackButton(context),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSettingsItem(
+      BuildContext context, String title, dynamic icon, VoidCallback onTap) {
+    return ListTile(
+      leading: (icon is String)
+          ? SvgPicture.asset(
+              icon,
+              width: 24,
+              height: 24,
+              colorFilter: ColorFilter.mode(primaryTextColor, BlendMode.srcIn),
+            )
+          : Icon(icon, color: primaryTextColor),
+      title: Text(
+        title,
+        style: TextStyle(fontSize: 18, color: primaryTextColor),
+      ),
+      trailing: Icon(Icons.arrow_forward_ios, size: 18, color: arrowColor),
+      onTap: onTap,
+    );
+  }
+
+  Widget _buildBackButton(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 10),
+      child: SizedBox(
+        width: double.infinity,
+        height: 60,
+        child: ElevatedButton(
+          onPressed: () => Navigator.pop(context),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Color(0xFF1C548C),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25),
+            ),
+          ),
+          child: Stack(
+            alignment: Alignment.center,
             children: [
-              CustomAppBar(
-                  title: "Notifications",
-                  onItemTapped: widget.onItemTapped,
-                  selectedIndex: widget.selectedIndex),
-              SizedBox(height: 10),
-              Text(
-                "Enable the notifications you want to receive.",
-                style: TextStyle(color: NotificationsPage.primaryTextColor),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      left: 20), // Adjust left padding if needed
+                  child: SvgPicture.asset(
+                    'assets/icons/back_icon.svg',
+                    width: 30,
+                    height: 30,
+                  ),
+                ),
               ),
-              SizedBox(height: 20),
-              // Notification toggles
-              Expanded(
-                child: ListView(
-                  children: [
-                    buildNotificationToggle(
-                      title: "Upcoming tasks",
-                      value: upcomingTasks,
-                      onChanged: (val) {
-                        setState(() {
-                          upcomingTasks = val;
-                        });
-                      },
-                    ),
-                    buildNotificationToggle(
-                      title: "Missed tasks",
-                      value: missedTasks,
-                      onChanged: (val) {
-                        setState(() {
-                          missedTasks = val;
-                        });
-                      },
-                    ),
-                    buildNotificationToggle(
-                      title: "Reminders",
-                      value: reminders,
-                      onChanged: (val) {
-                        setState(() {
-                          reminders = val;
-                        });
-                      },
-                    ),
-                    buildNotificationToggle(
-                      title: "Daily motivation",
-                      value: dailyMotivation,
-                      onChanged: (val) {
-                        setState(() {
-                          dailyMotivation = val;
-                        });
-                      },
-                    ),
-                    buildNotificationToggle(
-                      title: "New courses",
-                      value: newCourses,
-                      onChanged: (val) {
-                        setState(() {
-                          newCourses = val;
-                        });
-                      },
-                    ),
-                    buildNotificationToggle(
-                      title: "Tips",
-                      value: tips,
-                      onChanged: (val) {
-                        setState(() {
-                          tips = val;
-                        });
-                      },
-                    ),
-                    buildNotificationToggle(
-                      title: "App updates",
-                      value: appUpdates,
-                      onChanged: (val) {
-                        setState(() {
-                          appUpdates = val;
-                        });
-                      },
-                    ),
-                    buildNotificationToggle(
-                      title: "Special offers",
-                      value: specialOffers,
-                      onChanged: (val) {
-                        setState(() {
-                          specialOffers = val;
-                        });
-                      },
-                    ),
-                  ],
+              Center(
+                child: Text(
+                  "Back",
+                  style: TextStyle(fontSize: 18, color: Colors.white),
                 ),
               ),
             ],
           ),
         ),
       ),
-    );
-  }
-
-  // Helper method to build a notification toggle
-  Widget buildNotificationToggle({
-    required String title,
-    required bool value,
-    required Function(bool) onChanged,
-  }) {
-    return SwitchListTile(
-      title: Text(title, style: TextStyle(color: Color(0xFF687078))),
-      value: value,
-      onChanged: onChanged,
-      activeColor: Color(0xFF1C548C), // Thumb color when active
-      activeTrackColor: Color(0xFF687078), // Trail color when active
-      inactiveThumbColor: Colors.white, // Thumb color when inactive
-      inactiveTrackColor: Colors.white, // Trail color when inactive
     );
   }
 }
