@@ -4,6 +4,7 @@ import 'package:llm_based_sat_app/screens/auth/sign_up_page.dart';
 import 'package:llm_based_sat_app/screens/contact_details_page.dart';
 import 'package:llm_based_sat_app/screens/personal_info_page.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
+import 'package:llm_based_sat_app/widgets/profile_widgets/image_picker.dart';
 import '/screens/auth/sign_in_page.dart';
 import '/utils/exercise_page_caller.dart';
 import '../screens/community_page.dart';
@@ -34,8 +35,9 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           scaffoldBackgroundColor: AppColours.backgroundColor),
       // For now, the landing screen is the Sign In page
-      home: SignInPage(),
-      // home: ContactDetailsPage(onItemTapped: (x) => {}, selectedIndex: 0,) # for local testing
+      home: SignUpPage(),
+      // home: UploadProfilePicturePage(onItemTapped: (x) => {}, selectedIndex: 0,) // for local testing
+      // home:ImagePickerWidget()
     );
   }
 }

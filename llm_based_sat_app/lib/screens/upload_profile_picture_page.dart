@@ -1,9 +1,19 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/screens/childhood_photos_page.dart';
 import 'package:llm_based_sat_app/widgets/auth_widgets/text_input_field.dart';
+import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import 'package:llm_based_sat_app/widgets/custom_button.dart';
+import 'package:llm_based_sat_app/widgets/profile_widgets/image_picker.dart';
+import '';
 
 class UploadProfilePicturePage extends StatefulWidget {
+  final Function(int) onItemTapped; // Receive function to update navbar index
+  final int selectedIndex; // Keep track of selected index
+  const UploadProfilePicturePage(
+      {Key? key, required this.onItemTapped, required this.selectedIndex})
+      : super(key: key);
   @override
   _UploadProfilePicturePageState createState() =>
       _UploadProfilePicturePageState();
@@ -11,11 +21,31 @@ class UploadProfilePicturePage extends StatefulWidget {
 
 class _UploadProfilePicturePageState extends State<UploadProfilePicturePage> {
   final TextEditingController _usernameController = TextEditingController();
-
+  File? _selectedImage; // Holds the selected image
   @override
   void dispose() {
     _usernameController.dispose();
     super.dispose();
+  }
+
+  void _handleImagePicked(File? image) {
+    setState(() {
+      _selectedImage = image;
+    });
+  }
+
+  void _saveProfilePicture() {
+    // Save the profile picture
+    // Save the username
+    // Navigate to the next page
+    if (_selectedImage != null && _usernameController.text.isNotEmpty) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ChildhoodPhotosPage(
+                  onItemTapped: widget.onItemTapped,
+                  selectedIndex: widget.selectedIndex)));
+    }
   }
 
   @override
@@ -27,7 +57,11 @@ class _UploadProfilePicturePageState extends State<UploadProfilePicturePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 10),
+              CustomAppBar(
+                  title: "Personal Profile",
+                  onItemTapped: widget.onItemTapped,
+                  selectedIndex: widget.selectedIndex),
+              const SizedBox(height: 120),
               const Text(
                 "Profile Picture",
                 style: TextStyle(fontSize: 22, color: Color(0xFF687078)),
@@ -38,22 +72,16 @@ class _UploadProfilePicturePageState extends State<UploadProfilePicturePage> {
                 style: TextStyle(fontSize: 16, color: Color(0xFF687078)),
               ),
               const SizedBox(height: 20),
-              // TO DO : add the image picker (image_picker 1.1.2 ???)
+              Center(
+                  child: ImagePickerWidget(onImagePicked: _handleImagePicked)),
+              const SizedBox(height: 20),
               TextInputField(
                   label: "Username",
                   icon: Icons.person,
                   isPassword: false,
                   controller: _usernameController),
-              CustomButton(
-                  buttonText: "Save",
-                  onPress: () => {
-                        // TODO : Implement the save function
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) => ChildhoodPhotosPage())
-                        // Link to upload_profile_page
-                      })
+              const SizedBox(height: 20),
+              CustomButton(buttonText: "Save", onPress: _saveProfilePicture)
             ],
           ),
         ),
