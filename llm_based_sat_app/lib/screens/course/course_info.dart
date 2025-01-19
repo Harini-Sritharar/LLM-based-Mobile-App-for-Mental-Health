@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/models/chapter_exercise_interface.dart';
 import 'package:llm_based_sat_app/models/chapter_interface.dart';
-import 'package:llm_based_sat_app/screens/course_page.dart';
+import 'package:llm_based_sat_app/screens/course/course_page.dart';
 import 'package:llm_based_sat_app/utils/exercise_page_caller.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/course_exercise_duration.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/course_type_rating.dart';
