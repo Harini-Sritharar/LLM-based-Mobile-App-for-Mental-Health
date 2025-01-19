@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/firebase_profile.dart';
 import 'package:llm_based_sat_app/main.dart';
+import 'package:llm_based_sat_app/models/user_data_interface.dart';
 import 'package:llm_based_sat_app/screens/childhood_photos_page.dart';
 import 'package:llm_based_sat_app/screens/contact_details_page.dart';
 import 'package:llm_based_sat_app/screens/personal_info_page.dart';
@@ -15,6 +17,25 @@ class PersonalProfilePage extends StatefulWidget {
 
 class _PersonalProfilePageState extends State<PersonalProfilePage> {
   bool isVerified = false;
+  User_ user = User_();
+
+  void _finishProfile() {
+    // For Testing purposes
+    // user = User_(
+    //   firstname: "Harini",
+    //   surname: "Sritharar",
+    //   dob: "01/01/2000",
+    //   gender: "Female",
+    //   zipcode: "12345",
+    //   country: "UK",
+    //   phoneNumber: "1234567890",
+    //   profilePictureUrl: "https://www.google.com");
+    // Upload the profile to the database, at this point the user has completed their profile, so the user should have ALL fields filled
+    uploadUserProfileToFirebase(user);
+    // Navigate to the Main Screen upon finishing profile
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => MainScreen()));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -144,11 +165,7 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
               Center(
                 child: CustomButton(
                   buttonText: "Finish",
-                  onPress: () {
-                    // Navigate to the Main Screen upon finishing profile
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) => MainScreen()));
-                  },
+                  onPress: _finishProfile,
                   rightArrowPresent: false,
                 ),
               ),
