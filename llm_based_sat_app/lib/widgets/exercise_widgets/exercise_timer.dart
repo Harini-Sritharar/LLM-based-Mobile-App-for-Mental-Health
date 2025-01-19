@@ -34,7 +34,7 @@ class _ExerciseTimerState extends State<ExerciseTimer> {
       stopwatch.start();
     });
 
-  // Create a periodic timer to update the UI every 10ms
+    // Create a periodic timer to update the UI every 10ms
     timer = Timer.periodic(const Duration(milliseconds: 10), (Timer t) {
       if (mounted) {
         setState(() {});
@@ -45,6 +45,7 @@ class _ExerciseTimerState extends State<ExerciseTimer> {
   @override
   void dispose() {
     // Cancel the timer and stop the stopwatch when the widget is disposed
+    _resetCachedTimer();
     timer.cancel();
     stopwatch.stop();
     super.dispose();
@@ -173,5 +174,11 @@ class _ExerciseTimerState extends State<ExerciseTimer> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt('exercise_timer_elapsed',
         stopwatch.elapsedMilliseconds + offsetTimeMillis);
+  }
+
+  // Resets the cached timer to 0 and resets the stopwatch
+  Future<void> _resetCachedTimer() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('exercise_timer_elapsed', 0); // Reset cache
   }
 }

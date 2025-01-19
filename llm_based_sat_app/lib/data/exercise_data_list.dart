@@ -14,11 +14,12 @@ final List<ExerciseDataInterface> exerciseDataList = [
     buttonText: "Next Step",
     onButtonPress: (BuildContext context) {
       // Navigate to ExercisePageCaller when the button is pressed
-      Navigator.push(
+      Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
           builder: (context) => const ExercisePageCaller(id: "A_2"),
         ),
+        (route) => false, 
       );
     },
     rightArrowPresent: true,
@@ -34,11 +35,12 @@ final List<ExerciseDataInterface> exerciseDataList = [
     rightArrowPresent: true,
     onButtonPress: (BuildContext context) {
       // Navigate to ExercisePageCaller when the button is pressed
-      Navigator.push(
+      Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
           builder: (context) => const ExercisePageCaller(id: "A_2"),
         ),
+        (route) => false,
       );
     },
     messageText: "Leave and lose your progress. X",

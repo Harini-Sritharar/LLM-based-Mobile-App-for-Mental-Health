@@ -115,7 +115,7 @@ class CourseInfo extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const ExercisePageCaller(id: "A_2"),
+                    builder: (context) => const ExercisePageCaller(id: "A_1"),
                   ),
                 );
               },
