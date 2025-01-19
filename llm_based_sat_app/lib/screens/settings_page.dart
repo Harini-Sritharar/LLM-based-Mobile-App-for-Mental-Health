@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:llm_based_sat_app/screens/language_page.dart';
+import 'package:llm_based_sat_app/screens/notifications_page.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import '../widgets/main_layout.dart'; // Import MainLayout
 
@@ -23,16 +25,40 @@ class SettingsPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CustomAppBar(title: "Personal Profile", onItemTapped: onItemTapped, selectedIndex: selectedIndex),
+            CustomAppBar(
+                title: "Personal Profile",
+                onItemTapped: onItemTapped,
+                selectedIndex: selectedIndex),
             SizedBox(height: 10),
             _buildSettingsItem(context, 'Notifications',
-                'assets/icons/profile/notification-bing.svg', () {}),
+                'assets/icons/profile/notification-bing.svg', () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => NotificationsPage(
+                    onItemTapped: onItemTapped,
+                    selectedIndex: selectedIndex,
+                  ),
+                ),
+              );
+            }),
             _buildSettingsItem(context, 'Security',
                 'assets/icons/profile/security-safe.svg', () {}),
             _buildSettingsItem(context, 'Accessibility',
                 'assets/icons/profile/accessibility.svg', () {}),
-            _buildSettingsItem(context, 'Language',
-                'assets/icons/profile/language-circle.svg', () {}),
+            _buildSettingsItem(
+                context, 'Language', 'assets/icons/profile/language-circle.svg',
+                () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => LanguagePage(
+                    onItemTapped: onItemTapped,
+                    selectedIndex: selectedIndex,
+                  ),
+                ),
+              );
+            }),
             _buildSettingsItem(context, 'Terms & Conditions',
                 'assets/icons/profile/book.svg', () {}),
             _buildSettingsItem(context, 'Help Centre',
