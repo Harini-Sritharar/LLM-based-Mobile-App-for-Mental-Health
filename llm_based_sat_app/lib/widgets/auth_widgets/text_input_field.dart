@@ -74,21 +74,20 @@ class TextInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: controller,
-      style: TextStyle(color: AppColours.primaryGreyTextColor),
-      decoration: InputDecoration(
-        labelText: label,
-        prefixIcon: Icon(icon),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          borderSide: BorderSide.none,
+        controller: controller,
+        style: TextStyle(color: AppColours.primaryGreyTextColor),
+        decoration: InputDecoration(
+          labelText: label,
+          prefixIcon: Icon(icon),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            borderSide: BorderSide.none,
+          ),
+          filled: true,
+          fillColor: AppColours.textFieldBackgroundColor,
         ),
-        filled: true,
-        fillColor: AppColours.textFieldBackgroundColor,
-      ),
-      obscureText: isPassword, // hiding the input based on the label
-      enabled: enabled ?? true,
-      // validator: validator ?? _validateInput)
-    );
+        obscureText: isPassword, // hiding the input based on the label
+        enabled: enabled ?? true,
+        validator: validator);
   }
 }
