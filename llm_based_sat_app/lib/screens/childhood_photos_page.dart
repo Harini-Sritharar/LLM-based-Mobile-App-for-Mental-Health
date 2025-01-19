@@ -1,6 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:llm_based_sat_app/firebase_helpers.dart';
 import 'dart:io';
+import '../screens/auth/sign_in_page.dart';
 
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 
@@ -35,6 +38,7 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
     if (pickedFile != null) {
       setState(() {
         if (isFavourite) {
+          uploadPhoto(photoFile: File(pickedFile.path), userId: user!.uid , photoType: "Favourite");
           favouritePhotos.add(File(pickedFile.path));
         } else {
           nonFavouritePhotos.add(File(pickedFile.path));
@@ -144,7 +148,9 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
         width: double.infinity,
         height: 50,
         child: ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            
+          },
           style: ElevatedButton.styleFrom(
             backgroundColor: ChildhoodPhotosPage.primaryButtonColor,
             shape: RoundedRectangleBorder(
