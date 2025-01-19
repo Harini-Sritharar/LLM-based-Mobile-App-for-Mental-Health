@@ -40,6 +40,7 @@ dependencies:
   firebase_auth: ^5.4.0
   firebase_storage: ^12.4.0
   cloud_firestore: ^5.6.1
+  image_picker: ^0.8.7+4
 
 dev_dependencies:
   flutter_test:
@@ -84,7 +85,6 @@ flutter:
     - assets/icons/exercise_images/exercise_page_A_1.png
     - assets/icons/exercise_images/exercise_page_A_2.png
     - assets/icons/pause.png
-
 
     - assets/icons/profile/accessibility.svg
     - assets/icons/profile/book.svg
