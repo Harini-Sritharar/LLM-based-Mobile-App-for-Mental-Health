@@ -1,5 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/screens/auth/sign_up_page.dart';
+import 'package:llm_based_sat_app/screens/contact_details_page.dart';
+import 'package:llm_based_sat_app/screens/personal_info_page.dart';
+import 'package:llm_based_sat_app/theme/app_colours.dart';
 import '/screens/auth/sign_in_page.dart';
 import '/utils/exercise_page_caller.dart';
 import '../screens/community_page.dart';
@@ -27,10 +31,11 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Navigation',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+          primarySwatch: Colors.blue,
+          scaffoldBackgroundColor: AppColours.backgroundColor),
       // For now, the landing screen is the Sign In page
       home: SignInPage(),
+      // home: ContactDetailsPage(onItemTapped: (x) => {}, selectedIndex: 0,) # for local testing
     );
   }
 }
