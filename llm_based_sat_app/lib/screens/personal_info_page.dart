@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
+
+import '../theme/app_colours.dart';
+
+import '../widgets/auth_widgets/text_input_field.dart';
 
 class PersonalInfoPage extends StatefulWidget {
   final Function(int) onItemTapped; // Receive function to update navbar index
@@ -42,7 +47,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
               const SizedBox(height: 10),
               const Text(
                 "Personal Info",
-                style: TextStyle(fontSize: 22, color: Color(0xFF687078)),
+                style: TextStyle(fontSize: 22, color: AppColours.secondaryBlueTextColor)
               ),
               const SizedBox(height: 8),
               const Text(
@@ -50,10 +55,19 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                 style: TextStyle(fontSize: 16, color: Color(0xFF687078)),
               ),
               const SizedBox(height: 20),
-              _buildTextField("Name", _nameController),
+              TextInputField(
+                label: "Name",
+                icon: Icons.person,
+                isPassword: false,
+                controller: _nameController,
+              ),
               const SizedBox(height: 20),
-              _buildTextField("Surname", _surnameController),
-              const SizedBox(height: 20),
+              TextInputField(
+                label: "Surname",
+                icon: Icons.person_outline,
+                isPassword: false,
+                controller: _surnameController,
+              ),
               _buildDatePickerField(),
               const SizedBox(height: 20),
               _buildGenderDropdown(),
@@ -61,21 +75,6 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
               _buildSaveButton(),
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTextField(String label, TextEditingController controller) {
-    return TextField(
-      controller: controller,
-      decoration: InputDecoration(
-        labelText: label,
-        filled: true,
-        fillColor: const Color(0xFFD0E0F0),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide.none,
         ),
       ),
     );
