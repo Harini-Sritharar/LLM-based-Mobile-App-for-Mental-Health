@@ -11,6 +11,7 @@ import '../widgets/bottom_nav_bar.dart';
 import 'firebase_options.dart';
 
 void main() async {
+  print("Nilesh");
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,

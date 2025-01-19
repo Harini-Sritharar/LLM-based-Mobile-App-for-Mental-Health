@@ -8,27 +8,32 @@ Future<void> uploadPhoto({
   required String photoType,
 }) async {
   try {
-    // Generate a unique file name
+    // Generate a unique file name for the photo
     String fileName = "${DateTime.now().millisecondsSinceEpoch}_$userId.jpg";
+    print("Generated file name: $fileName");
 
-    // Upload the photo to Firebase Storage
+    // Get a reference to Firebase Storage
     FirebaseStorage storage = FirebaseStorage.instance;
     Reference storageRef = storage.ref().child("firebasephotos/$fileName");
+
+    // Upload the photo to Firebase Storage
     UploadTask uploadTask = storageRef.putFile(photoFile);
-
     TaskSnapshot snapshot = await uploadTask;
-    String photoUrl = await snapshot.ref.getDownloadURL();
 
-    // Add the photo data to Firestore
+    // Get the photo's download URL
+    String photoUrl = await snapshot.ref.getDownloadURL();
+    print("Photo uploaded successfully. URL: $photoUrl");
+
+    // Save the photo metadata to Firestore
     FirebaseFirestore firestore = FirebaseFirestore.instance;
-    await firestore.collection('YourCollectionName').add({
-      'Photo': photoUrl,
-      'PhotoType': photoType,
-      'userID': userId,
+    await firestore.collection('ChildhoodPhotos').add({
+      'photoUrl': photoUrl,
+      'photoType': photoType,
+      'userId': userId,
     });
 
-    //print("Photo uploaded and data saved successfully.");
+    print("Photo metadata saved to Firestore successfully.");
   } catch (e) {
-    //print("An error occurred: $e");
+    print("An error occurred: $e");
   }
 }
