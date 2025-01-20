@@ -49,29 +49,33 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   // Default page is home page (index 2)
   int _selectedIndex = 2;
+  bool photosLoaded = false;
 
   void initState() {
     super.initState();
     _selectedIndex = widget.initialIndex;
-    _loadInitialPhotos();
+    if (!photosLoaded) {
+      _loadInitialPhotos();
+      photosLoaded = true;
+    }
   }
 
   Future<void> _loadInitialPhotos() async {
-  try {
-    final favouritePhotoData =
-        await getPhotosByCategory(userId: user!.uid, category: "Favourite");
-    final nonFavouritePhotoData = await getPhotosByCategory(
-        userId: user!.uid, category: "Non-Favourite");
+    try {
+      final favouritePhotoData =
+          await getPhotosByCategory(userId: user!.uid, category: "Favourite");
+      final nonFavouritePhotoData = await getPhotosByCategory(
+          userId: user!.uid, category: "Non-Favourite");
 
-    setState(() {
-      favouritePhotos.addAll(favouritePhotoData);
-      nonFavouritePhotos.addAll(nonFavouritePhotoData);
-    });
-  } catch (e) {
-    // Handle errors, such as showing a message to the user
-    debugPrint("Error loading photos: $e");
+      setState(() {
+        favouritePhotos.addAll(favouritePhotoData);
+        nonFavouritePhotos.addAll(nonFavouritePhotoData);
+      });
+    } catch (e) {
+      // Handle errors, such as showing a message to the user
+      debugPrint("Error loading photos: $e");
+    }
   }
-}
 
   void _onItemTapped(int index) {
     setState(() {
