@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:llm_based_sat_app/screens/contact_details_page.dart';
 import 'package:llm_based_sat_app/screens/personal_info_page.dart';
+import 'package:llm_based_sat_app/screens/upload_profile_picture_page.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import '../widgets/custom_button.dart';
@@ -44,7 +46,9 @@ class EditProfilePage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => PersonalInfoPage(onItemTapped: onItemTapped, selectedIndex: selectedIndex),
+                      builder: (context) => PersonalInfoPage(
+                          onItemTapped: onItemTapped,
+                          selectedIndex: selectedIndex),
                     ),
                   );
                   // Add navigation logic for Personal Info
@@ -54,6 +58,14 @@ class EditProfilePage extends StatelessWidget {
                 title: "Contact Details",
                 color: AppColours.brandBluePlusTwo,
                 onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ContactDetailsPage(
+                          onItemTapped: onItemTapped,
+                          selectedIndex: selectedIndex),
+                    ),
+                  );
                   // Add navigation logic for Contact Details
                 },
               ),
@@ -61,6 +73,14 @@ class EditProfilePage extends StatelessWidget {
                 title: "Profile Picture",
                 color: AppColours.brandBluePlusTwo,
                 onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => UploadProfilePicturePage(
+                          onItemTapped: onItemTapped,
+                          selectedIndex: selectedIndex),
+                    ),
+                  );
                   // Add navigation logic for Profile Picture
                 },
               ),

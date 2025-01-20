@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
+import 'package:llm_based_sat_app/screens/personal_info_page.dart';
+import 'package:llm_based_sat_app/screens/personal_profile_page.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 
 class ChildhoodPhotosPage extends StatelessWidget {
@@ -17,27 +19,29 @@ class ChildhoodPhotosPage extends StatelessWidget {
     return Scaffold(
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CustomAppBar(
-                title: "Personal Profile",
-                onItemTapped: onItemTapped,
-                selectedIndex: selectedIndex),
-            const Text(
-              "Childhood photos",
-              style: TextStyle(fontSize: 22, color: AppColours.brandBluePlusTwo),
-            ),
-            const Text(
-              "Add favourite and non-favourite Photos of your Childhood",
-              style: TextStyle(fontSize: 14, color: AppColours.neutralGreyMinusOne),
-            ),
-            const SizedBox(height: 20),
-            _buildPhotoSection("Favourite photos"),
-            _buildPhotoSection("Non-Favourite photos"),
-            const SizedBox(height: 20),
-            _buildSaveButton(),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CustomAppBar(
+                  title: "Personal Profile",
+                  onItemTapped: onItemTapped,
+                  selectedIndex: selectedIndex),
+              const Text(
+                "Childhood photos",
+                style: TextStyle(fontSize: 22, color: AppColours.brandBluePlusTwo),
+              ),
+              const Text(
+                "Add favourite and non-favourite Photos of your Childhood",
+                style: TextStyle(fontSize: 14, color: AppColours.neutralGreyMinusOne),
+              ),
+              const SizedBox(height: 20),
+              _buildPhotoSection("Favourite photos"),
+              _buildPhotoSection("Non-Favourite photos"),
+              const SizedBox(height: 20),
+              _buildSaveButton(context),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -101,13 +105,17 @@ class ChildhoodPhotosPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSaveButton() {
+  Widget _buildSaveButton(BuildContext context) {
     return Center(
       child: SizedBox(
         width: double.infinity,
         height: 50,
         child: ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            // the save button should navigate back to the personal profile page
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => PersonalProfilePage()));
+          },
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColours.brandBlueMain,
             shape: RoundedRectangleBorder(
