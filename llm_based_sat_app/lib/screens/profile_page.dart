@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:llm_based_sat_app/main.dart';
 import 'package:llm_based_sat_app/screens/payment_option_page.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
 import '../widgets/main_layout.dart';
@@ -202,6 +203,8 @@ class ProfilePage extends StatelessWidget {
                                     MaterialPageRoute(
                                         builder: (context) => SignInPage()),
                                   );
+                                  favouritePhotos = [];
+                                  nonFavouritePhotos = [];
                                 },
                                 child: const Text(
                                   "Logout",

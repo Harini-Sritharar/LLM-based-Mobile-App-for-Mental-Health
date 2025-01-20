@@ -2,13 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:llm_based_sat_app/firebase_helpers.dart';
+import 'package:llm_based_sat_app/main.dart';
 import 'dart:io';
 import '../screens/auth/sign_in_page.dart';
 
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
-
-final List<Map<String, dynamic>> favouritePhotos = [];
-final List<Map<String, dynamic>> nonFavouritePhotos = [];
 
 class ChildhoodPhotosPage extends StatefulWidget {
   static const Color primaryTextColor = Color(0xFF687078);

@@ -12,6 +12,9 @@ import '../screens/score_page.dart';
 import '../widgets/bottom_nav_bar.dart';
 import 'firebase_options.dart';
 
+List<Map<String, dynamic>> favouritePhotos = [];
+List<Map<String, dynamic>> nonFavouritePhotos = [];
+
 void main() async {
   print("Nilesh");
   WidgetsFlutterBinding.ensureInitialized();
