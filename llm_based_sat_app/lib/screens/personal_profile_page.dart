@@ -20,18 +20,6 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
   User_ user = User_();
 
   void _finishProfile() {
-    // For Testing purposes
-    // user = User_(
-    //   firstname: "Harini",
-    //   surname: "Sritharar",
-    //   dob: "01/01/2000",
-    //   gender: "Female",
-    //   zipcode: "12345",
-    //   country: "UK",
-    //   phoneNumber: "1234567890",
-    //   profilePictureUrl: "https://www.google.com");
-    // Upload the profile to the database, at this point the user has completed their profile, so the user should have ALL fields filled
-    uploadUserProfileToFirebase(user);
     // Navigate to the Main Screen upon finishing profile
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => MainScreen()));
@@ -86,7 +74,7 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
                 isCompleted: true,
                 onTap: () {
                   // Navigate to Personal Info Screen
-                  Navigator.pushReplacement(
+                  Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => PersonalInfoPage(
@@ -100,7 +88,7 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
                 title: "Contact Details",
                 isCompleted: true,
                 onTap: () {
-                  Navigator.pushReplacement(
+                  Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => ContactDetailsPage(
@@ -115,7 +103,7 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
                 title: "Profile Picture",
                 isCompleted: false,
                 onTap: () {
-                  Navigator.pushReplacement(
+                  Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => UploadProfilePicturePage(
@@ -132,7 +120,7 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
                 isCompleted: false,
                 onTap: () {
                   // Navigate to Childhood Photos Screen
-                  Navigator.pushReplacement(
+                  Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => ChildhoodPhotosPage(

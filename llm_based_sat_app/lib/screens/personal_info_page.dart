@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:llm_based_sat_app/models/user_data_interface.dart';
-import 'package:llm_based_sat_app/screens/personal_profile_page.dart';
+import 'package:llm_based_sat_app/firebase_profile.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 
 class PersonalInfoPage extends StatefulWidget {
@@ -19,7 +18,6 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
   final TextEditingController _surnameController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
   String? _selectedGender;
-  final User_ user = User_();
 
   @override
   void dispose() {
@@ -153,14 +151,10 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
         height: 60,
         child: ElevatedButton(
           onPressed: () {
-            user.updateFirstName(_nameController.text);
-            user.updateSurname(_surnameController.text);
-            user.updateDob(_dobController.text);
-            user.updateGender(_selectedGender!);
-            // Save button functionality (to be implemented)
+            updatePersonalInfo(_nameController.text, _surnameController.text,
+                _dobController.text, _selectedGender!);
             // After info saved to database navigate back to personal profile page
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => PersonalProfilePage()));
+            Navigator.pop(context);
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFF1C548C),
