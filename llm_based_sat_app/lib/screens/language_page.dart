@@ -5,9 +5,6 @@ import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import '../widgets/custom_button.dart'; // Ensure the correct path to the CustomButton widget
 
 class LanguagePage extends StatefulWidget {
-  static const Color primaryTextColor = AppColours.neutralGreyMinusOne;
-  static const Color secondaryTextColor = AppColours.brandBluePlusTwo;
-
   final Function(int) onItemTapped;
   final int selectedIndex;
 
@@ -40,7 +37,7 @@ class _LanguagePageState extends State<LanguagePage> {
             const Text(
               "Select your preferred language from below. Restart the app to apply changes.",
               style:
-                  TextStyle(fontSize: 14, color: LanguagePage.primaryTextColor),
+                  TextStyle(fontSize: 14, color: AppColours.neutralGreyMinusOne),
             ),
             const SizedBox(height: 20),
             _buildLanguageOption("Arabic"),
@@ -80,12 +77,12 @@ class _LanguagePageState extends State<LanguagePage> {
                 _selectedLanguage = value!; // Update selected language
               });
             },
-            activeColor: LanguagePage.secondaryTextColor,
+            activeColor: AppColours.brandBluePlusTwo,
           ),
           Text(language,
               style: const TextStyle(
                 fontSize: 16,
-                color: LanguagePage.primaryTextColor,
+                color: AppColours.brandBluePlusTwo,
               )),
         ],
       ),

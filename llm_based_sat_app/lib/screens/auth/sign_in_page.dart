@@ -41,7 +41,7 @@ class _SignInPageState extends State<SignInPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor:
-          AppColours.backgroundColor, // Matches the white background
+          AppColours.white, // Matches the white background
       body: Center(
         child: Form(
             key: _formKey,
@@ -112,7 +112,7 @@ class _SignInPageState extends State<SignInPage> {
                           child: const Text(
                             "SIGN UP",
                             style: TextStyle(
-                              color: AppColours.customBlue,
+                              color: AppColours.brandBlueMinusFour,
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
                               decoration: TextDecoration.underline,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:llm_based_sat_app/screens/payment_option_page.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
 import '../widgets/main_layout.dart';
@@ -44,7 +43,7 @@ class ProfilePage extends StatelessWidget {
       selectedIndex:
           selectedIndex, // Pass the selected navbar index to MainLayout.
       body: Container(
-        color: AppColours.backgroundColor, // Set background color for the page.
+        color: AppColours.white, // Set background color for the page.
         child: Column(
           children: [
             /// Custom app bar for the profile page.
@@ -59,11 +58,11 @@ class ProfilePage extends StatelessWidget {
             /// Profile avatar with a placeholder icon.
             CircleAvatar(
               radius: 50,
-              backgroundColor: AppColours.avatarBackgroundColor,
+              backgroundColor: AppColours.brandBlueMinusThree,
               child: Icon(
                 Icons.person,
                 size: 80,
-                color: AppColours.avatarForegroundColor,
+                color: AppColours.brandBlueMinusFour,
               ),
             ),
             const SizedBox(height: 10),
@@ -74,7 +73,7 @@ class ProfilePage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
-                color: AppColours.primaryGreyTextColor,
+                color: AppColours.brandBluePlusTwo,
               ),
             ),
 
@@ -83,7 +82,7 @@ class ProfilePage extends StatelessWidget {
               'neophytos@invincimind.com',
               style: TextStyle(
                 fontSize: 16,
-                color: AppColours.primaryGreyTextColor,
+                color: AppColours.neutralGreyMinusOne,
               ),
             ),
             const SizedBox(height: 20),

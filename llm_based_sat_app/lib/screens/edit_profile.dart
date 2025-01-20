@@ -33,13 +33,13 @@ class EditProfilePage extends StatelessWidget {
               const Text(
                 "Edit your Personal Profile",
                 style: TextStyle(
-                    fontSize: 15, color: AppColours.primaryGreyTextColor),
+                    fontSize: 15, color: AppColours.neutralGreyMinusOne),
               ),
               const SizedBox(height: 20),
               // Use MenuItem widget here
               MenuItem(
                 title: "Personal Info",
-                color: AppColours.secondaryBlueTextColor,
+                color: AppColours.brandBluePlusTwo,
                 onTap: () {
                   Navigator.push(
                     context,
@@ -52,14 +52,14 @@ class EditProfilePage extends StatelessWidget {
               ),
               MenuItem(
                 title: "Contact Details",
-                color: AppColours.secondaryBlueTextColor,
+                color: AppColours.brandBluePlusTwo,
                 onTap: () {
                   // Add navigation logic for Contact Details
                 },
               ),
               MenuItem(
                 title: "Profile Picture",
-                color: AppColours.secondaryBlueTextColor,
+                color: AppColours.brandBluePlusTwo,
                 onTap: () {
                   // Add navigation logic for Profile Picture
                 },

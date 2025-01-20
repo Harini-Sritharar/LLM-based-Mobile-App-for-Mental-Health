@@ -4,9 +4,6 @@ import 'package:llm_based_sat_app/theme/app_colours.dart';
 import '../widgets/custom_app_bar.dart';
 
 class PaymentOptionPage extends StatelessWidget {
-  static const Color primaryTextColor = AppColours.neutralGreyMinusOne;
-  static const Color secondaryTextColor = AppColours.brandBluePlusTwo;
-
   final Function(int) onItemTapped;
   final int selectedIndex;
 
@@ -30,7 +27,7 @@ class PaymentOptionPage extends StatelessWidget {
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: primaryTextColor),
+                  color: AppColours.neutralGreyMinusOne),
             ),
             const SizedBox(height: 10),
             _buildCardWidget(),
@@ -41,9 +38,9 @@ class PaymentOptionPage extends StatelessWidget {
                     style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: secondaryTextColor)),
+                        color: AppColours.brandBluePlusTwo)),
                 SizedBox(width: 5),
-                Icon(Icons.info_outline, color: secondaryTextColor),
+                Icon(Icons.info_outline, color: AppColours.brandBluePlusTwo),
               ],
             ),
             const SizedBox(height: 10),
@@ -63,7 +60,7 @@ class PaymentOptionPage extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: secondaryTextColor,
+        color: AppColours.brandBluePlusTwo,
         borderRadius: BorderRadius.circular(15),
       ),
       child: Column(
