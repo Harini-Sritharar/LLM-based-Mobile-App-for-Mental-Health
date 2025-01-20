@@ -1,6 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/screens/assessment_page.dart';
+import 'package:llm_based_sat_app/screens/childhood_photos_page.dart';
 import 'package:llm_based_sat_app/screens/course/courses.dart';
+import 'package:llm_based_sat_app/screens/exercise_page.dart';
+import 'package:llm_based_sat_app/screens/notifications_page.dart';
+import 'package:llm_based_sat_app/screens/personal_info_page.dart';
+import 'package:llm_based_sat_app/screens/profile_page.dart';
 import '/screens/auth/sign_in_page.dart';
 import '../screens/community_page.dart';
 import '../screens/calendar_page.dart';
@@ -34,6 +40,8 @@ class MyApp extends StatelessWidget {
       ),
       // For now, the landing screen is the Sign In page
       home: SignInPage(),
+      // home: (onItemTapped: (x) => {}, selectedIndex: 0)
+      // home: PersonalInfoPage(onItemTapped: (x) => {}, selectedIndex: 0)
     );
   }
 }
