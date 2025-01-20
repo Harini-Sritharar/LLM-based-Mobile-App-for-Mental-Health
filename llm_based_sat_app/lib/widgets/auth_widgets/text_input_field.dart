@@ -40,13 +40,15 @@ class TextInputField extends StatelessWidget {
   final TextEditingController
       controller; // controls the input field, we can use this to get the value
   final String? Function(String?)? validator; // Optional validator
+  final bool? enabled;
   const TextInputField(
       {super.key,
       required this.label,
       required this.icon,
       required this.isPassword,
       required this.controller,
-      this.validator});
+      this.validator,
+      this.enabled});
 
   // Default validation function that provides default validation for email and password fields
   // Will be used if the validator is not provided
@@ -72,20 +74,20 @@ class TextInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: controller,
-      style: TextStyle(color: AppColours.primaryGreyTextColor),
-      decoration: InputDecoration(
-        labelText: label,
-        prefixIcon: Icon(icon),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          borderSide: BorderSide.none,
+        controller: controller,
+        style: TextStyle(color: AppColours.primaryGreyTextColor),
+        decoration: InputDecoration(
+          labelText: label,
+          prefixIcon: Icon(icon),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            borderSide: BorderSide.none,
+          ),
+          filled: true,
+          fillColor: AppColours.textFieldBackgroundColor,
         ),
-        filled: true,
-        fillColor: AppColours.textFieldBackgroundColor,
-      ),
-      obscureText: isPassword, // hiding the input based on the label
-      // validator: validator ?? _validateInput)
-    );
+        obscureText: isPassword, // hiding the input based on the label
+        enabled: enabled ?? true,
+        validator: validator);
   }
 }

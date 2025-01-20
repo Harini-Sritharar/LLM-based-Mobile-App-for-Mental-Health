@@ -42,4 +42,8 @@
             <data android:mimeType="text/plain"/>
         </intent>
     </queries>
+    <!-- Permissions to use your camera for the image picker package -->
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
 </manifest>
