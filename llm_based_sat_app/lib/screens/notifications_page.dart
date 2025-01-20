@@ -4,11 +4,6 @@ import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import '../widgets/main_layout.dart'; // Import MainLayout
 
 class NotificationsPage extends StatefulWidget {
-  static const Color primaryTextColor = Color(0xFF687078);
-  static const Color secondaryTextColor = AppColours.brandBluePlusTwo;
-  static const Color primaryButtonColor = Color(0xFFCEDFF2);
-  static const Color arrowColor = Color(0xFF1C548C);
-
   final Function(int) onItemTapped; // Receive function to update navbar index
   final int selectedIndex; // Keep track of selected index
 
@@ -45,7 +40,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
             SizedBox(height: 10),
             Text(
               "Enable the notifications you want to receive.",
-              style: TextStyle(color: NotificationsPage.primaryTextColor),
+              style: TextStyle(color: AppColours.neutralGreyMinusOne),
             ),
             SizedBox(height: 20),
             // Notification toggles
@@ -141,9 +136,9 @@ class _NotificationsPageState extends State<NotificationsPage> {
   }) {
     return SwitchListTile(
         title: Text(title,
-            style: TextStyle(color: NotificationsPage.primaryTextColor)),
+            style: TextStyle(color: AppColours.neutralGreyMinusOne)),
         value: value,
         onChanged: onChanged,
-        activeColor: NotificationsPage.primaryButtonColor);
+        activeColor: AppColours.brandBlueMinusThree);
   }
 }

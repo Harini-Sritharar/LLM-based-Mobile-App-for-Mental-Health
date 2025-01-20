@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/models/chapter_interface.dart';
+import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/course_page_chapter.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 
@@ -33,7 +34,7 @@ class CoursePage extends StatelessWidget {
               style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w500,
-                  color: Color(0xFF062240)),
+                  color: AppColours.brandBluePlusThree),
             ),
             const SizedBox(height: 10),
             Text(
@@ -50,7 +51,7 @@ class CoursePage extends StatelessWidget {
                 Text(
                   "Practised / Total Sessions",
                   style: TextStyle(
-                    color: Color(0xFF687078),
+                    color: AppColours.neutralGreyMinusOne,
                     fontSize: 14,
                   ),
                 ),

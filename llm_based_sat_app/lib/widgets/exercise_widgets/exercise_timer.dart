@@ -20,7 +20,7 @@ class _ExerciseTimerState extends State<ExerciseTimer> {
   late Timer timer; // A periodic timer to update the UI
 
   Color textColor = AppColours.brandBluePlusTwo; // Text color for timer
-  Color backgroundColor = const Color(0xFFCEDFF2); // Background color for timer
+  Color backgroundColor = AppColours.brandBlueMinusThree; // Background color for timer
 
   bool isPaused = false; // To track pause/resume state
   int offsetTimeMillis = 0; // Offset time to add to the stopwatch

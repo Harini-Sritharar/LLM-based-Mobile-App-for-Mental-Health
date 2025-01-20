@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 
 class PersonalInfoPage extends StatefulWidget {
@@ -42,12 +43,12 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
               const SizedBox(height: 10),
               const Text(
                 "Personal Info",
-                style: TextStyle(fontSize: 22, color: Color(0xFF687078)),
+                style: TextStyle(fontSize: 22, color: AppColours.neutralGreyMinusOne),
               ),
               const SizedBox(height: 8),
               const Text(
                 "Complete your Personal Information",
-                style: TextStyle(fontSize: 16, color: Color(0xFF687078)),
+                style: TextStyle(fontSize: 16, color: AppColours.neutralGreyMinusOne),
               ),
               const SizedBox(height: 20),
               _buildTextField("Name", _nameController),
@@ -72,7 +73,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
       decoration: InputDecoration(
         labelText: label,
         filled: true,
-        fillColor: const Color(0xFFD0E0F0),
+        fillColor: AppColours.brandBlueMinusFour,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
           borderSide: BorderSide.none,
@@ -88,7 +89,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
       decoration: InputDecoration(
         labelText: "Date of Birth",
         filled: true,
-        fillColor: const Color(0xFFD0E0F0),
+        fillColor: AppColours.brandBlueMinusFour,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
           borderSide: BorderSide.none,
@@ -118,7 +119,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        color: const Color(0xFFD0E0F0),
+        color: AppColours.brandBlueMinusFour,
         borderRadius: BorderRadius.circular(15),
       ),
       child: DropdownButtonFormField<String>(
@@ -153,7 +154,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
             // Save button functionality (to be implemented)
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF1C548C),
+            backgroundColor: AppColours.brandBlueMain,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(25),
             ),

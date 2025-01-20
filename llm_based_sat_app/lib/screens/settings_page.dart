@@ -8,11 +8,6 @@ import '../widgets/custom_button.dart';
 import './language_page.dart';
 
 class SettingsPage extends StatelessWidget {
-  static const Color primaryTextColor = Color(0xFF687078);
-  static const Color secondaryTextColor = AppColours.brandBluePlusTwo;
-  static const Color primaryButtonColor = Color(0xFF2F4A79);
-  static const Color arrowColor = Color(0xFF1C548C);
-
   final Function(int) onItemTapped; // Receive function to update navbar index
   final int selectedIndex; // Keep track of selected index
 
@@ -100,7 +95,7 @@ class SettingsPage extends StatelessWidget {
                 onPress: () => Navigator.pop(context),
                 leftArrowPresent: true,
                 rightArrowPresent: false,
-                backgroundColor: Color(0xFF1C548C),
+                backgroundColor: AppColours.brandBlueMain,
                 textColor: Colors.white,
               ),
             ),

@@ -3,8 +3,6 @@ import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 
 class ChildhoodPhotosPage extends StatelessWidget {
-  static const Color primaryButtonColor = Color(0xFF2F4A79);
-
   final Function(int) onItemTapped;
   final int selectedIndex;
 
@@ -111,7 +109,7 @@ class ChildhoodPhotosPage extends StatelessWidget {
         child: ElevatedButton(
           onPressed: () {},
           style: ElevatedButton.styleFrom(
-            backgroundColor: primaryButtonColor,
+            backgroundColor: AppColours.brandBlueMain,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(25),
             ),

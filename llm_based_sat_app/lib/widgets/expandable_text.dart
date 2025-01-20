@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/theme/app_colours.dart';
 
 /* A widget that displays a text with a "READ MORE" / "READ LESS" toggle functionality. It truncates the text to a maximum of 4 lines by default and expands to show the full text when toggled. 
 
@@ -30,7 +31,7 @@ class _ExpandableTextState extends State<ExpandableText> {
           widget.text,
           maxLines: isExpanded ? null : 4,
           overflow: isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
-          style: const TextStyle(fontSize: 13, color: Color(0xFF8F959B)),
+          style: const TextStyle(fontSize: 13, color: AppColours.neutralGreyMinusFour),
         ),
         const SizedBox(height: 4),
         InkWell(
@@ -42,7 +43,7 @@ class _ExpandableTextState extends State<ExpandableText> {
           child: Text(
             isExpanded ? "READ LESS" : "READ MORE",
             style: const TextStyle(
-              color: Color(0xFF1C548C),
+              color: AppColours.brandBlueMain,
               fontWeight: FontWeight.bold,
               decoration: TextDecoration.underline,
               fontSize: 13,

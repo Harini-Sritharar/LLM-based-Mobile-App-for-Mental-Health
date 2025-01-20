@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:llm_based_sat_app/theme/app_colours.dart';
 import '../screens/profile_page.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -13,7 +14,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({
     Key? key,
     required this.title,
-    this.textColor = const Color(0xFF687078), // Default text color
+    this.textColor = AppColours.neutralGreyMinusOne, // Default text color
     this.onBack,
     required this.onItemTapped,
     required this.selectedIndex,

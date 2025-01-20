@@ -4,9 +4,8 @@ import 'package:llm_based_sat_app/theme/app_colours.dart';
 import '../widgets/custom_app_bar.dart';
 
 class PaymentOptionPage extends StatelessWidget {
-  static const Color primaryTextColor = Color(0xFF687078);
+  static const Color primaryTextColor = AppColours.neutralGreyMinusOne;
   static const Color secondaryTextColor = AppColours.brandBluePlusTwo;
-  static const Color primaryButtonColor = Color(0xFF2F4A79);
 
   final Function(int) onItemTapped;
   final int selectedIndex;
@@ -114,7 +113,7 @@ class PaymentOptionPage extends StatelessWidget {
         child: ElevatedButton(
           onPressed: () {},
           style: ElevatedButton.styleFrom(
-            backgroundColor: primaryButtonColor,
+            backgroundColor: AppColours.brandBlueMain,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(25),
             ),

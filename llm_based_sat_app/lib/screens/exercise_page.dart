@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_appBar.dart';
 import '../widgets/exercise_widgets/exercise_bottom_message.dart';
 import '../widgets/custom_button.dart';
@@ -72,7 +73,7 @@ class ExercisePage extends StatelessWidget {
             right: 0,
             child: Divider(
               thickness: 0.5,
-              color: Color(0xFF8F959B),
+              color: AppColours.neutralGreyMinusFour,
             ),
           ),
 

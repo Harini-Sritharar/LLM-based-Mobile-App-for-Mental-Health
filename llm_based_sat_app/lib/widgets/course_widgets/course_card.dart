@@ -29,7 +29,7 @@ class CourseCard extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 16),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: const Color(0xFFF4F9FF), // Light blue background
+          color: AppColours.brandBlueMinusFour, 
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
@@ -68,7 +68,7 @@ class CourseCard extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     'Duration: $duration',
-                    style: const TextStyle(fontSize: 14, color: Color(0xFF32A666)),
+                    style: TextStyle(fontSize: 14, color: AppColours.supportingGreenMinusOne),
                   ),
                   const SizedBox(height: 4),
                   Row(

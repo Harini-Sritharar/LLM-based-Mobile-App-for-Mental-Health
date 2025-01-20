@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/course_list_all_prerequisites.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/empty_pre_requisite.dart';
 import 'package:llm_based_sat_app/widgets/custom_button.dart';
@@ -37,7 +38,7 @@ class PreCourseList extends StatelessWidget {
           style: TextStyle(
             fontSize: 19,
             fontWeight: FontWeight.w500,
-            color: Color(0xFF062240),
+            color: AppColours.brandBluePlusThree,
           ),
         ),
         const SizedBox(height: 10),
@@ -79,7 +80,7 @@ class PreCourseList extends StatelessWidget {
                   const SizedBox(width: 6),
                   const Icon(
                     Icons.ondemand_video,
-                    color: Color(0xFF687078),
+                    color: AppColours.neutralGreyMinusOne,
                   ),
                   const SizedBox(width: 8),
                   const Text(
