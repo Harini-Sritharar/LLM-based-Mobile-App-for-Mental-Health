@@ -167,9 +167,9 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
             // Perform deletion logic, such as updating favouritePhotos/nonFavouritePhotos
             // This part will depend on how you maintain the lists
             favouritePhotos.removeWhere(
-                (photo) => photo['fileName'] == photoData['fileName']);
+                (photo) => photo['photoName'] == photoData['photoName']);
             nonFavouritePhotos.removeWhere(
-                (photo) => photo['fileName'] == photoData['fileName']);
+                (photo) => photo['photoName'] == photoData['photoName']);
           });
         },
       ),
