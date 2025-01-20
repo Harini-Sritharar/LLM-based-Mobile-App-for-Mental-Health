@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:llm_based_sat_app/screens/notifications_page.dart';
+import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import '../widgets/main_layout.dart'; // Import MainLayout
 import '../widgets/menu_item.dart';
@@ -9,7 +9,7 @@ import './language_page.dart';
 
 class SettingsPage extends StatelessWidget {
   static const Color primaryTextColor = Color(0xFF687078);
-  static const Color secondaryTextColor = Color(0xFF123659);
+  static const Color secondaryTextColor = AppColours.brandBluePlusTwo;
   static const Color primaryButtonColor = Color(0xFF2F4A79);
   static const Color arrowColor = Color(0xFF1C548C);
 

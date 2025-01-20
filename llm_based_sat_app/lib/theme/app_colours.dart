@@ -19,4 +19,10 @@ class AppColours {
 
   static const Color customBlue = Color(0xFF1C548C);
   static const Color textFieldBackgroundColor = Color(0xFFF2F9FF);
+
+  static const Color brandBlueMinusOne = Color(0xFF326CA6);
+  static const Color brandBluePlusTwo = Color(0xFF123659);
+  static const Color supportingYellowMain = Color(0xFF8C7F1C);
+
+
 }

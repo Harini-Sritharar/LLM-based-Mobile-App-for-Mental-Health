@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 
 class ChildhoodPhotosPage extends StatelessWidget {
   static const Color primaryTextColor = Color(0xFF687078);
-  static const Color secondaryTextColor = Color(0xFF123659);
+  static const Color secondaryTextColor = AppColours.brandBluePlusTwo;
   static const Color primaryButtonColor = Color(0xFF2F4A79);
 
   final Function(int) onItemTapped;

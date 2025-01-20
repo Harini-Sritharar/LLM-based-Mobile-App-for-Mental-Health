@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/theme/app_colours.dart';
 
 class CourseCard extends StatelessWidget {
   final String imageUrl;
@@ -51,7 +52,7 @@ class CourseCard extends StatelessWidget {
                     courseType,
                     style: const TextStyle(
                       fontSize: 14,
-                      color: Color(0xFF8C7F1C),
+                      color: AppColours.supportingYellowMain,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -60,7 +61,7 @@ class CourseCard extends StatelessWidget {
                     courseTitle,
                     style: const TextStyle(
                       fontSize: 18,
-                      color: Color(0xFF123659),
+                      color: AppColours.brandBluePlusTwo,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -76,7 +77,7 @@ class CourseCard extends StatelessWidget {
                         '$rating',
                         style: const TextStyle(
                           fontSize: 14,
-                          color: Color(0xFF326CA6),
+                          color: AppColours.brandBlueMinusOne,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -85,7 +86,7 @@ class CourseCard extends StatelessWidget {
                       const SizedBox(width: 8),
                       Text(
                         '$ratingsCount ratings',
-                        style: const TextStyle(fontSize: 14, color: Color(0xFF326CA6)),
+                        style: const TextStyle(fontSize: 14, color: AppColours.brandBlueMinusOne),
                       ),
                     ],
                   ),

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import '../widgets/main_layout.dart'; // Import MainLayout
 
 class NotificationsPage extends StatefulWidget {
   static const Color primaryTextColor = Color(0xFF687078);
-  static const Color secondaryTextColor = Color(0xFF123659);
+  static const Color secondaryTextColor = AppColours.brandBluePlusTwo;
   static const Color primaryButtonColor = Color(0xFFCEDFF2);
   static const Color arrowColor = Color(0xFF1C548C);
 

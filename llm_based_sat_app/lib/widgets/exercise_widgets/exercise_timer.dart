@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,7 +19,7 @@ class _ExerciseTimerState extends State<ExerciseTimer> {
   late Stopwatch stopwatch; // The Stopwatch object to track elapsed time
   late Timer timer; // A periodic timer to update the UI
 
-  Color textColor = const Color(0xFF123659); // Text color for timer
+  Color textColor = AppColours.brandBluePlusTwo; // Text color for timer
   Color backgroundColor = const Color(0xFFCEDFF2); // Background color for timer
 
   bool isPaused = false; // To track pause/resume state
