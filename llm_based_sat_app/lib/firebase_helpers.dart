@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:path/path.dart' as path;
 
 Future<void> uploadPhoto({
   required File photoFile,
@@ -30,6 +31,7 @@ Future<void> uploadPhoto({
       'photoUrl': photoUrl,
       'photoType': photoType,
       'userId': userId,
+      'photoName': path.basename(photoFile.path),
     });
 
     print("Photo metadata saved to Firestore successfully.");
@@ -78,4 +80,31 @@ Future<void> removeUserDocuments({
   }
 }
 
+Future<List<Map<String, dynamic>>> getPhotosByCategory({
+  required String userId,
+  required String category,
+}) async {
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  try {
+    // Query Firestore to get photos by userId and category
+    QuerySnapshot querySnapshot = await firestore
+        .collection('ChildhoodPhotos') // Target the 'ChildhoodPhotos' collection
+        .where('userId', isEqualTo: userId) // Filter by userId
+        .where('photoType', isEqualTo: category) // Filter by category (favourite or non-favourite)
+        .get();
+
+    // Convert query results to a list of maps (each document as a map)
+    List<Map<String, dynamic>> photos = querySnapshot.docs.map((doc) {
+      return doc.data() as Map<String, dynamic>;
+    }).toList();
+
+    print("Fetched ${photos.length} ${category} photos for userId: $userId");
+
+    return photos;
+  } catch (e) {
+    print("Error fetching photos: $e");
+    return [];
+  }
+}
 
