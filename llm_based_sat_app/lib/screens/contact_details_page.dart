@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:llm_based_sat_app/models/user_data_interface.dart';
 import 'package:llm_based_sat_app/screens/personal_profile_page.dart';
 import 'package:llm_based_sat_app/screens/upload_profile_picture_page.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
@@ -24,7 +25,7 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
   final TextEditingController _countryController =
       TextEditingController(text: "United Kingdom");
   final TextEditingController _zipPostalController = TextEditingController();
-
+  final User_ user = User_();
   String?
       selectedCountryCode; // Stores the selected country's code -> can be used to convert to obtain the country's dial code
   String? mobileNumber; // Stores the mobile number input
@@ -39,6 +40,10 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
 
   void _saveContactDetails() {
     if (_formKey.currentState!.validate()) {
+      user.updateCountry(_countryController.text);
+      user.updateZipcode(_zipPostalController.text);
+      user.updatePhoneNumber(mobileNumber!);
+
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => PersonalProfilePage()));
     }
