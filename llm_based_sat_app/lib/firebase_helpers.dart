@@ -42,18 +42,20 @@ Future<void> uploadPhoto({
 
 
 Future<void> uploadPhotoListParallel({
-  required List<File> photoFiles,
+  required List<Map<String, dynamic>> photoDataList,
   required String userId,
   required String photoType,
 }) async {
-  await Future.wait(photoFiles.map((photoFile) {
+  await Future.wait(photoDataList.map((photoData) {
+    final file = File(photoData['photoUrl']);
     return uploadPhoto(
-      photoFile: photoFile,
+      photoFile: file,
       userId: userId,
       photoType: photoType,
     );
   }));
 }
+
 
 
 Future<void> removeUserDocuments({

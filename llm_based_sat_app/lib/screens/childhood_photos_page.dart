@@ -26,10 +26,32 @@ class ChildhoodPhotosPage extends StatefulWidget {
 }
 
 class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
-  final List<File> favouritePhotos = [];
-  final List<File> nonFavouritePhotos = [];
-
+  final List<Map<String, dynamic>> favouritePhotos = [];
+  final List<Map<String, dynamic>> nonFavouritePhotos = [];
   final ImagePicker _picker = ImagePicker();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadInitialPhotos();
+  }
+
+  Future<void> _loadInitialPhotos() async {
+    try {
+      final favouritePhotoData =
+          await getPhotosByCategory(userId: user!.uid, category: "Favourite");
+      final nonFavouritePhotoData = await getPhotosByCategory(
+          userId: user!.uid, category: "Non-Favourite");
+
+      setState(() {
+        favouritePhotos.addAll(favouritePhotoData);
+        nonFavouritePhotos.addAll(nonFavouritePhotoData);
+      });
+    } catch (e) {
+      // Handle errors, such as showing a message to the user
+      debugPrint("Error loading photos: $e");
+    }
+  }
 
   Future<void> _pickImage(bool isFavourite) async {
     final XFile? pickedFile =
@@ -37,11 +59,17 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
 
     if (pickedFile != null) {
       setState(() {
+        final photoData = {
+          'photoType': isFavourite ? "Favourite" : "Non-Favourite",
+          'photoUrl': pickedFile.path, // Temporary URL from the local file path
+          'photoName': pickedFile.name,
+          'userId': user!.uid
+        };
         if (isFavourite) {
           // uploadPhoto(photoFile: File(pickedFile.path), userId: user!.uid , photoType: "Favourite");
-          favouritePhotos.add(File(pickedFile.path));
+          favouritePhotos.add(photoData);
         } else {
-          nonFavouritePhotos.add(File(pickedFile.path));
+          nonFavouritePhotos.add(photoData);
         }
       });
     }
@@ -82,7 +110,8 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
     );
   }
 
-  Widget _buildPhotoSection(String title, List<File> photos, bool isFavourite) {
+  Widget _buildPhotoSection(
+      String title, List<Map<String, dynamic>> photos, bool isFavourite) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -105,27 +134,42 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
           ],
         ),
         const SizedBox(height: 10),
-        ...photos.map((photo) => _buildPhotoItem(photo)).toList(),
+        photos.isEmpty
+            ? const Center(
+                child: Text(
+                  "No photos available.",
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                ),
+              )
+            : Column(
+                children: photos
+                    .map((photoData) => _buildPhotoItem(photoData))
+                    .toList(),
+              ),
       ],
     );
   }
 
-  Widget _buildPhotoItem(File photo) {
+  Widget _buildPhotoItem(Map<String, dynamic> photoData) {
     return ListTile(
       leading: CircleAvatar(
-        backgroundImage: FileImage(photo),
+        backgroundImage: NetworkImage(photoData['photoUrl']),
         backgroundColor: Colors.grey[300],
       ),
-      title: const Text(
-        "Photo",
-        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+      title: Text(
+        photoData['photoName'] ?? "Unknown File",
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
       ),
       trailing: IconButton(
         icon: const Icon(Icons.delete, color: Colors.brown),
         onPressed: () {
           setState(() {
-            favouritePhotos.remove(photo);
-            nonFavouritePhotos.remove(photo);
+            // Perform deletion logic, such as updating favouritePhotos/nonFavouritePhotos
+            // This part will depend on how you maintain the lists
+            favouritePhotos.removeWhere(
+                (photo) => photo['fileName'] == photoData['fileName']);
+            nonFavouritePhotos.removeWhere(
+                (photo) => photo['fileName'] == photoData['fileName']);
           });
         },
       ),
@@ -139,16 +183,21 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
         height: 50,
         child: ElevatedButton(
           onPressed: () {
+            // Clear the existing photos in the database
             removeUserDocuments(
                 userId: user!.uid, collectionName: "ChildhoodPhotos");
+
+            // Upload the favourite and non-favourite photos
             uploadPhotoListParallel(
-                photoFiles: favouritePhotos,
-                userId: user!.uid,
-                photoType: "Favourite");
+              photoDataList: favouritePhotos,
+              userId: user!.uid,
+              photoType: "Favourite",
+            );
             uploadPhotoListParallel(
-                photoFiles: nonFavouritePhotos,
-                userId: user!.uid,
-                photoType: "Non-Favourite");
+              photoDataList: nonFavouritePhotos,
+              userId: user!.uid,
+              photoType: "Non-Favourite",
+            );
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: ChildhoodPhotosPage.primaryButtonColor,
