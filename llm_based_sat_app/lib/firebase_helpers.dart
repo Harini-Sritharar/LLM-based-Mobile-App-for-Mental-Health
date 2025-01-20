@@ -7,12 +7,9 @@ Future<void> uploadPhoto({
   required File photoFile,
   required String userId,
   required String photoType,
+  required String fileName,
 }) async {
   try {
-    // Generate a unique file name for the photo
-    String fileName = "${DateTime.now().millisecondsSinceEpoch}_$userId.jpg";
-    print("Generated file name: $fileName");
-
     // Get a reference to Firebase Storage
     FirebaseStorage storage = FirebaseStorage.instance;
     Reference storageRef = storage.ref().child("firebasephotos/$fileName");
@@ -23,7 +20,6 @@ Future<void> uploadPhoto({
 
     // Get the photo's download URL
     String photoUrl = await snapshot.ref.getDownloadURL();
-    print("Photo uploaded successfully. URL: $photoUrl");
 
     // Save the photo metadata to Firestore
     FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -31,32 +27,37 @@ Future<void> uploadPhoto({
       'photoUrl': photoUrl,
       'photoType': photoType,
       'userId': userId,
-      'photoName': path.basename(photoFile.path),
+      'photoName':
+          path.basename(photoFile.path), // Store the original file name
     });
 
-    print("Photo metadata saved to Firestore successfully.");
+    print("Photo uploaded successfully. URL: $photoUrl");
   } catch (e) {
-    print("An error occurred: $e");
+    print("An error occurred while uploading photo: $e");
   }
 }
-
 
 Future<void> uploadPhotoListParallel({
   required List<Map<String, dynamic>> photoDataList,
   required String userId,
   required String photoType,
 }) async {
-  await Future.wait(photoDataList.map((photoData) {
-    final file = File(photoData['photoUrl']);
-    return uploadPhoto(
-      photoFile: file,
+  await Future.wait(photoDataList.map((photoData) async {
+    final photoFile = File(photoData['photoUrl']); // Use the file's path here
+
+    // Generate a unique file name for the upload (to avoid overwriting files)
+    String fileName =
+        "${DateTime.now().millisecondsSinceEpoch}_${photoData['photoName']}";
+
+    // Upload the file with a unique name
+    await uploadPhoto(
+      photoFile: photoFile,
       userId: userId,
       photoType: photoType,
+      fileName: fileName, // Pass the unique file name
     );
   }));
 }
-
-
 
 Future<void> removeUserDocuments({
   required String userId,
@@ -76,7 +77,8 @@ Future<void> removeUserDocuments({
       await doc.reference.delete();
     }
 
-    print("All documents for userId: $userId in collection: $collectionName have been removed.");
+    print(
+        "All documents for userId: $userId in collection: $collectionName have been removed.");
   } catch (e) {
     print("Error removing documents for userId: $userId. Details: $e");
   }
@@ -91,9 +93,12 @@ Future<List<Map<String, dynamic>>> getPhotosByCategory({
   try {
     // Query Firestore to get photos by userId and category
     QuerySnapshot querySnapshot = await firestore
-        .collection('ChildhoodPhotos') // Target the 'ChildhoodPhotos' collection
+        .collection(
+            'ChildhoodPhotos') // Target the 'ChildhoodPhotos' collection
         .where('userId', isEqualTo: userId) // Filter by userId
-        .where('photoType', isEqualTo: category) // Filter by category (favourite or non-favourite)
+        .where('photoType',
+            isEqualTo:
+                category) // Filter by category (favourite or non-favourite)
         .get();
 
     // Convert query results to a list of maps (each document as a map)
@@ -109,4 +114,3 @@ Future<List<Map<String, dynamic>>> getPhotosByCategory({
     return [];
   }
 }
-
