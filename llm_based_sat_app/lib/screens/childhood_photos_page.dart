@@ -3,8 +3,6 @@ import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 
 class ChildhoodPhotosPage extends StatelessWidget {
-  static const Color primaryTextColor = Color(0xFF687078);
-  static const Color secondaryTextColor = AppColours.brandBluePlusTwo;
   static const Color primaryButtonColor = Color(0xFF2F4A79);
 
   final Function(int) onItemTapped;
@@ -19,7 +17,7 @@ class ChildhoodPhotosPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -30,11 +28,11 @@ class ChildhoodPhotosPage extends StatelessWidget {
                 selectedIndex: selectedIndex),
             const Text(
               "Childhood photos",
-              style: TextStyle(fontSize: 22, color: secondaryTextColor),
+              style: TextStyle(fontSize: 22, color: AppColours.brandBluePlusTwo),
             ),
             const Text(
               "Add favourite and non-favourite Photos of your Childhood",
-              style: TextStyle(fontSize: 14, color: primaryTextColor),
+              style: TextStyle(fontSize: 14, color: AppColours.neutralGreyMinusOne),
             ),
             const SizedBox(height: 20),
             _buildPhotoSection("Favourite photos"),
@@ -69,10 +67,10 @@ class ChildhoodPhotosPage extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: secondaryTextColor,
+                color: AppColours.brandBluePlusTwo,
               ),
             ),
-            const Icon(Icons.add, color: secondaryTextColor),
+            const Icon(Icons.add, color: AppColours.brandBluePlusTwo),
           ],
         ),
         const SizedBox(height: 10),
@@ -88,7 +86,7 @@ class ChildhoodPhotosPage extends StatelessWidget {
       leading: CircleAvatar(
         backgroundColor: Colors.grey[300],
         backgroundImage:
-            uploaded ? const AssetImage('assets/sample.jpg') : null,
+            uploaded ? const AssetImage('assets/images/nature.png') : null,
       ),
       title: Text(
         fileName,
