@@ -1,46 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:llm_based_sat_app/models/chapter_exercise_interface.dart';
 import 'package:llm_based_sat_app/models/chapter_interface.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/course_page_chapter.dart';
+import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 
 class CoursePage extends StatelessWidget {
   final String courseTitle;
   final List<ChapterInterface> chapters;
+  final Function(int) onItemTapped; // Function to update navbar index
+  final int selectedIndex; // Current selected index
 
   const CoursePage({
     super.key,
     required this.courseTitle,
     required this.chapters,
+    required this.onItemTapped,
+    required this.selectedIndex,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text(
-          'Course Page',
-          style: TextStyle(color: Colors.black),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications),
-            onPressed: () {
-              // Handle notification click
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.person),
-            onPressed: () {
-              // Navigate to profile page
-            },
-          ),
-        ],
-      ),
+      appBar: CustomAppBar(title: "Course Page", onItemTapped: onItemTapped, selectedIndex: selectedIndex),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
