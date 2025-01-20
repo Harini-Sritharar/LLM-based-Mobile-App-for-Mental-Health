@@ -7,6 +7,9 @@ import '../screens/auth/sign_in_page.dart';
 
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 
+final List<Map<String, dynamic>> favouritePhotos = [];
+final List<Map<String, dynamic>> nonFavouritePhotos = [];
+
 class ChildhoodPhotosPage extends StatefulWidget {
   static const Color primaryTextColor = Color(0xFF687078);
   static const Color secondaryTextColor = Color(0xFF123659);
@@ -26,32 +29,8 @@ class ChildhoodPhotosPage extends StatefulWidget {
 }
 
 class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
-  final List<Map<String, dynamic>> favouritePhotos = [];
-  final List<Map<String, dynamic>> nonFavouritePhotos = [];
+
   final ImagePicker _picker = ImagePicker();
-
-  @override
-  void initState() {
-    super.initState();
-    _loadInitialPhotos();
-  }
-
-  Future<void> _loadInitialPhotos() async {
-    try {
-      final favouritePhotoData =
-          await getPhotosByCategory(userId: user!.uid, category: "Favourite");
-      final nonFavouritePhotoData = await getPhotosByCategory(
-          userId: user!.uid, category: "Non-Favourite");
-
-      setState(() {
-        favouritePhotos.addAll(favouritePhotoData);
-        nonFavouritePhotos.addAll(nonFavouritePhotoData);
-      });
-    } catch (e) {
-      // Handle errors, such as showing a message to the user
-      debugPrint("Error loading photos: $e");
-    }
-  }
 
   Future<void> _pickImage(bool isFavourite) async {
     final XFile? pickedFile =

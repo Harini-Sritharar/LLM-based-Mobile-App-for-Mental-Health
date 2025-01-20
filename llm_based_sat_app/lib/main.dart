@@ -1,5 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/firebase_helpers.dart';
+import 'package:llm_based_sat_app/screens/childhood_photos_page.dart';
 import '/screens/auth/sign_in_page.dart';
 import '/utils/exercise_page_caller.dart';
 import '../screens/community_page.dart';
@@ -51,7 +53,25 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     _selectedIndex = widget.initialIndex;
+    _loadInitialPhotos();
   }
+
+  Future<void> _loadInitialPhotos() async {
+  try {
+    final favouritePhotoData =
+        await getPhotosByCategory(userId: user!.uid, category: "Favourite");
+    final nonFavouritePhotoData = await getPhotosByCategory(
+        userId: user!.uid, category: "Non-Favourite");
+
+    setState(() {
+      favouritePhotos.addAll(favouritePhotoData);
+      nonFavouritePhotos.addAll(nonFavouritePhotoData);
+    });
+  } catch (e) {
+    // Handle errors, such as showing a message to the user
+    debugPrint("Error loading photos: $e");
+  }
+}
 
   void _onItemTapped(int index) {
     setState(() {
