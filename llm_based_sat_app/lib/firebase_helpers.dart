@@ -37,3 +37,45 @@ Future<void> uploadPhoto({
     print("An error occurred: $e");
   }
 }
+
+
+Future<void> uploadPhotoListParallel({
+  required List<File> photoFiles,
+  required String userId,
+  required String photoType,
+}) async {
+  await Future.wait(photoFiles.map((photoFile) {
+    return uploadPhoto(
+      photoFile: photoFile,
+      userId: userId,
+      photoType: photoType,
+    );
+  }));
+}
+
+
+Future<void> removeUserDocuments({
+  required String userId,
+  required String collectionName,
+}) async {
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  try {
+    // Query all documents with the given userId
+    QuerySnapshot querySnapshot = await firestore
+        .collection(collectionName) // Target the specified collection
+        .where('userId', isEqualTo: userId)
+        .get();
+
+    // Iterate through the documents and delete them
+    for (QueryDocumentSnapshot doc in querySnapshot.docs) {
+      await doc.reference.delete();
+    }
+
+    print("All documents for userId: $userId in collection: $collectionName have been removed.");
+  } catch (e) {
+    print("Error removing documents for userId: $userId. Details: $e");
+  }
+}
+
+

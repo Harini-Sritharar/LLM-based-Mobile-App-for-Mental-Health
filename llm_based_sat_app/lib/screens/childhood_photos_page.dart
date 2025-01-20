@@ -38,7 +38,7 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
     if (pickedFile != null) {
       setState(() {
         if (isFavourite) {
-          uploadPhoto(photoFile: File(pickedFile.path), userId: user!.uid , photoType: "Favourite");
+          // uploadPhoto(photoFile: File(pickedFile.path), userId: user!.uid , photoType: "Favourite");
           favouritePhotos.add(File(pickedFile.path));
         } else {
           nonFavouritePhotos.add(File(pickedFile.path));
@@ -78,16 +78,6 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
             _buildSaveButton(),
           ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: widget.selectedIndex,
-        onTap: widget.onItemTapped,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.photo), label: "Photos"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.settings), label: "Settings"),
-        ],
       ),
     );
   }
@@ -149,7 +139,16 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
         height: 50,
         child: ElevatedButton(
           onPressed: () {
-            
+            removeUserDocuments(
+                userId: user!.uid, collectionName: "ChildhoodPhotos");
+            uploadPhotoListParallel(
+                photoFiles: favouritePhotos,
+                userId: user!.uid,
+                photoType: "Favourite");
+            uploadPhotoListParallel(
+                photoFiles: nonFavouritePhotos,
+                userId: user!.uid,
+                photoType: "Non-Favourite");
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: ChildhoodPhotosPage.primaryButtonColor,
