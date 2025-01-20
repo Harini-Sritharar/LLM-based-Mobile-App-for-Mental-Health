@@ -67,7 +67,8 @@ class Courses extends StatelessWidget {
                         MaterialPageRoute(
                           builder: (context) => CourseInfo(
                               onItemTapped: onItemTapped,
-                              selectedIndex: selectedIndex),
+                              selectedIndex: selectedIndex,
+                              courseType: "Core", rating: 4.2, courseTitle: 'Self-attachment',),
                         ),
                       );
                     },
@@ -85,8 +86,10 @@ class Courses extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => CourseInfo(
-                              onItemTapped: onItemTapped,
-                              selectedIndex: selectedIndex),
+                            onItemTapped: onItemTapped,
+                            selectedIndex: selectedIndex,
+                            courseType: 'Core', rating: 4.9, courseTitle: 'Humour',
+                          ),
                         ),
                       );
                     },
@@ -104,8 +107,10 @@ class Courses extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => CourseInfo(
-                              onItemTapped: onItemTapped,
-                              selectedIndex: selectedIndex),
+                            onItemTapped: onItemTapped,
+                            selectedIndex: selectedIndex,
+                            courseType: 'Advanced', rating: 3.9, courseTitle: 'Creativity',
+                          ),
                         ),
                       );
                     },
@@ -124,7 +129,8 @@ class Courses extends StatelessWidget {
                         MaterialPageRoute(
                           builder: (context) => CourseInfo(
                               onItemTapped: onItemTapped,
-                              selectedIndex: selectedIndex),
+                              selectedIndex: selectedIndex,
+                              courseType: "Advanced", rating: 4.5, courseTitle: 'Nature',),
                         ),
                       );
                     },

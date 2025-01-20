@@ -20,9 +20,9 @@ class CourseInfo extends StatelessWidget {
     super.key,
     required this.onItemTapped,
     required this.selectedIndex,
-    this.courseType = "Core",
-    this.rating = 4.2,
-    this.courseTitle = "Self-attachment",
+    required this.courseType,
+    required this.rating,
+    required this.courseTitle,
   });
 
   @override
