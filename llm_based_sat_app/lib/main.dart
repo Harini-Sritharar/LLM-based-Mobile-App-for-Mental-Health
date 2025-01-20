@@ -6,11 +6,10 @@ import 'package:llm_based_sat_app/screens/contact_details_page.dart';
 import 'package:llm_based_sat_app/screens/personal_info_page.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/profile_widgets/image_picker.dart';
+import 'package:llm_based_sat_app/screens/course/courses.dart';
 import '/screens/auth/sign_in_page.dart';
-import '/utils/exercise_page_caller.dart';
 import '../screens/community_page.dart';
 import '../screens/calendar_page.dart';
-import '../screens/courses_page.dart';
 import '../screens/home_page.dart';
 import '../screens/score_page.dart';
 import '../widgets/bottom_nav_bar.dart';
@@ -33,8 +32,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Navigation',
       theme: ThemeData(
-          primarySwatch: Colors.blue,
-          scaffoldBackgroundColor: AppColours.backgroundColor),
+        primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: Colors.white,
+        colorScheme: ColorScheme.fromSwatch(
+          backgroundColor: Colors.white,
+        ),
+      ),
       // For now, the landing screen is the Sign In page
       home: SignUpPage(),
       // home: UploadProfilePicturePage(onItemTapped: (x) => {}, selectedIndex: 0,) // for local testing
@@ -73,7 +76,7 @@ class _MainScreenState extends State<MainScreen> {
       CalendarPage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
       HomePage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
       ScorePage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
-      CoursesPage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
+      Courses(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
     ];
 
     return Scaffold(
@@ -87,18 +90,6 @@ class _MainScreenState extends State<MainScreen> {
           _onItemTapped(index);
         },
       ),
-
-      // TODO
-      // Remove after debugging
-      floatingActionButton: ElevatedButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const ExercisePageCaller(id: "A_1")),
-            );
-          },
-          child: const Icon(Icons.temple_buddhist)),
     );
   }
 }
