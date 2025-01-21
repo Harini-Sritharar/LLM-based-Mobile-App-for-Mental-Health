@@ -112,7 +112,7 @@ class _SignInPageState extends State<SignInPage> {
                           child: const Text(
                             "SIGN UP",
                             style: TextStyle(
-                              color: AppColours.brandBlueMinusFour,
+                              color: AppColours.brandBlueMain,
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
                               decoration: TextDecoration.underline,
