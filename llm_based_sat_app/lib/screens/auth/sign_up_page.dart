@@ -143,7 +143,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       'SIGN IN',
                       style: TextStyle(
                         fontSize: 14,
-                        color: AppColours.brandBlueMinusFour,
+                        color: AppColours.brandBlueMain,
                         decoration: TextDecoration.underline,
                       ),
                     ),
