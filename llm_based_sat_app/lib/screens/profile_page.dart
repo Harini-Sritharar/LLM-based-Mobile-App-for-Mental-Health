@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:llm_based_sat_app/firebase_helpers.dart';
 import 'package:llm_based_sat_app/main.dart';
 import 'package:llm_based_sat_app/screens/payment_option_page.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
@@ -69,20 +70,23 @@ class ProfilePage extends StatelessWidget {
             ),
             const SizedBox(height: 10),
 
-            /// Display the user's name.
-            const Text(
-              'Neophytos Polydorou',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: AppColours.primaryGreyTextColor,
-              ),
+            /// Display the user's name using a FutureBuilder.
+            FutureBuilder<String>(
+              future: getName(user!.uid), // Call the asynchronous function
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return buildText("Loading...");
+                } else if (snapshot.hasError) {
+                  return buildText("Error fetching name");
+                } else {
+                  return buildText(snapshot.data ?? "No name found");
+                }
+              },
             ),
-
             /// Display the user's email address.
-            const Text(
-              'neophytos@invincimind.com',
-              style: TextStyle(
+            Text(
+              user!.email ?? "No email provided",
+              style: const TextStyle(
                 fontSize: 16,
                 color: AppColours.primaryGreyTextColor,
               ),
@@ -225,4 +229,16 @@ class ProfilePage extends StatelessWidget {
       ),
     );
   }
+
+    Widget buildText(String text) {
+    return Text(
+      text,
+      style: const TextStyle(
+        fontSize: 22,
+        fontWeight: FontWeight.bold,
+        color: AppColours.primaryGreyTextColor,
+      ),
+    );
+  }
 }
+

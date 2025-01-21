@@ -2,6 +2,31 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:path/path.dart' as path;
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+Future<String> getName(String uid) async {
+  try {
+    // Reference to the Firestore collection
+    final collection = FirebaseFirestore.instance.collection('ChildhoodPhotos');
+
+    // Get the document for the user with the given UID
+    final snapshot = await collection.doc(uid).get();
+
+    // Check if the document exists and return the name
+    if (snapshot.exists) {
+      final name = snapshot.data()?['name'] as String?;
+      if (name != null && name.isNotEmpty) {
+        return name;
+      }
+    }
+    // Return a default value if the name is null or the document doesn't exist
+    return 'No Name Found';
+  } catch (e) {
+    // Handle errors and return a default value
+    print('Error fetching user name: $e');
+    return 'Error Fetching Name';
+  }
+}
 
 Future<void> uploadPhoto({
   required File photoFile,
