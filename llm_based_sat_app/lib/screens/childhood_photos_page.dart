@@ -5,18 +5,16 @@ import 'package:llm_based_sat_app/firebase_helpers.dart';
 import 'package:llm_based_sat_app/main.dart';
 import 'dart:io';
 import '../screens/auth/sign_in_page.dart';
-
 import 'package:llm_based_sat_app/screens/personal_info_page.dart';
 import 'package:llm_based_sat_app/screens/personal_profile_page.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 
+/// A StatefulWidget for managing and displaying childhood photos,
+/// categorized into favourite and non-favourite.
+/// Allows users to add, view, and delete photos and save the changes.
 class ChildhoodPhotosPage extends StatefulWidget {
-  static const Color primaryTextColor = Color(0xFF687078);
-  static const Color secondaryTextColor = Color(0xFF123659);
-  static const Color primaryButtonColor = Color(0xFF2F4A79);
-
-  final Function(int) onItemTapped;
-  final int selectedIndex;
+  final Function(int) onItemTapped; // Callback for bottom navigation bar taps.
+  final int selectedIndex; // Current selected index in the navigation bar.
 
   const ChildhoodPhotosPage({
     super.key,
@@ -29,9 +27,9 @@ class ChildhoodPhotosPage extends StatefulWidget {
 }
 
 class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
-
   final ImagePicker _picker = ImagePicker();
 
+  /// Method to pick an image from the gallery and categorize it as favourite or non-favourite.
   Future<void> _pickImage(bool isFavourite) async {
     final XFile? pickedFile =
         await _picker.pickImage(source: ImageSource.gallery);
@@ -40,12 +38,12 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
       setState(() {
         final photoData = {
           'photoType': isFavourite ? "Favourite" : "Non-Favourite",
-          'photoUrl': pickedFile.path, // Temporary URL from the local file path
-          'photoName': pickedFile.name,
-          'userId': user!.uid
+          'photoUrl': pickedFile.path, // Local file path (temporary URL).
+          'photoName': pickedFile.name, // File name of the photo.
+          'userId': user!.uid // User ID for associating with the database.
         };
+
         if (isFavourite) {
-          // uploadPhoto(photoFile: File(pickedFile.path), userId: user!.uid , photoType: "Favourite");
           favouritePhotos.add(photoData);
         } else {
           nonFavouritePhotos.add(photoData);
@@ -54,6 +52,7 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
     }
   }
 
+  /// Builds the main UI of the page.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,21 +66,21 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
                 title: "Personal Profile",
                 onItemTapped: widget.onItemTapped,
                 selectedIndex: widget.selectedIndex,
-            ),
+              ),
               const Text(
                 "Childhood photos",
                 style: TextStyle(
-                  fontSize: 22, color: ChildhoodPhotosPage.secondaryTextColor),
+                    fontSize: 22, color: AppColours.secondaryBlueTextColor),
               ),
               const Text(
                 "Add favourite and non-favourite Photos of your Childhood",
                 style: TextStyle(
-                  fontSize: 14, color: ChildhoodPhotosPage.primaryTextColor),
+                    fontSize: 14, color: AppColours.primaryGreyTextColor),
               ),
               const SizedBox(height: 20),
               _buildPhotoSection("Favourite photos", favouritePhotos, true),
               _buildPhotoSection(
-                "Non-Favourite photos", nonFavouritePhotos, false),
+                  "Non-Favourite photos", nonFavouritePhotos, false),
               const SizedBox(height: 20),
               _buildSaveButton(context),
             ],
@@ -91,6 +90,7 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
     );
   }
 
+  /// Builds a photo section (Favourite or Non-Favourite).
   Widget _buildPhotoSection(
       String title, List<Map<String, dynamic>> photos, bool isFavourite) {
     return Column(
@@ -104,12 +104,12 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: ChildhoodPhotosPage.secondaryTextColor,
+                color: AppColours.secondaryBlueTextColor,
               ),
             ),
             IconButton(
               icon: const Icon(Icons.add,
-                  color: ChildhoodPhotosPage.secondaryTextColor),
+                  color: AppColours.secondaryBlueTextColor),
               onPressed: () => _pickImage(isFavourite),
             ),
           ],
@@ -131,6 +131,7 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
     );
   }
 
+  /// Builds a single photo item with delete functionality.
   Widget _buildPhotoItem(Map<String, dynamic> photoData) {
     return ListTile(
       leading: CircleAvatar(
@@ -145,8 +146,7 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
         icon: const Icon(Icons.delete, color: Colors.brown),
         onPressed: () {
           setState(() {
-            // Perform deletion logic, such as updating favouritePhotos/nonFavouritePhotos
-            // This part will depend on how you maintain the lists
+            // Remove the photo from the respective list.
             favouritePhotos.removeWhere(
                 (photo) => photo['photoName'] == photoData['photoName']);
             nonFavouritePhotos.removeWhere(
@@ -157,6 +157,7 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
     );
   }
 
+  /// Builds the save button to upload photos to the database and navigate back.
   Widget _buildSaveButton(BuildContext context) {
     return Center(
       child: SizedBox(
@@ -164,11 +165,11 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
         height: 50,
         child: ElevatedButton(
           onPressed: () {
-            // Clear the existing photos in the database
+            // Remove existing photos from the database.
             removeUserDocuments(
                 userId: user!.uid, collectionName: "ChildhoodPhotos");
 
-            // Upload the favourite and non-favourite photos
+            // Upload the photos in parallel for both categories.
             uploadPhotoListParallel(
               photoDataList: favouritePhotos,
               userId: user!.uid,
@@ -179,12 +180,13 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
               userId: user!.uid,
               photoType: "Non-Favourite",
             );
-            // Navigate back to the personal profile page
+
+            // Navigate back to the personal profile page.
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => PersonalProfilePage()));
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: ChildhoodPhotosPage.primaryButtonColor,
+            backgroundColor: AppColours.forwardArrowColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(25),
             ),

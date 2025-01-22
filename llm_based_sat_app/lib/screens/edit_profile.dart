@@ -56,7 +56,7 @@ class EditProfilePage extends StatelessWidget {
             children: [
               // Custom app bar at the top of the page
               CustomAppBar(
-                title: "Personal Profile", // Title for the app bar
+                title: "Personal Profile",
                 onItemTapped:
                     onItemTapped, // Callback to update navigation index
                 selectedIndex: selectedIndex, // Currently selected index
@@ -69,9 +69,8 @@ class EditProfilePage extends StatelessWidget {
               const Text(
                 "Edit your Personal Profile",
                 style: TextStyle(
-                  fontSize: 15, // Font size for the text
-                  color: AppColours
-                      .primaryGreyTextColor, // Grey text color from theme
+                  fontSize: 15,
+                  color: AppColours.primaryGreyTextColor,
                 ),
               ),
 
@@ -79,18 +78,15 @@ class EditProfilePage extends StatelessWidget {
 
               // Menu item for navigating to the Personal Info page
               MenuItem(
-                title: "Personal Info", // Title displayed in the menu item
-                color:
-                    AppColours.secondaryBlueTextColor, // Text color from theme
+                title: "Personal Info",
+                color: AppColours.secondaryBlueTextColor,
                 onTap: () {
                   // Navigation to PersonalInfoPage
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => PersonalInfoPage(
-                          
                         onItemTapped: onItemTapped,
-                         
                         selectedIndex: selectedIndex,
                       ),
                     ),
@@ -100,9 +96,8 @@ class EditProfilePage extends StatelessWidget {
 
               // Menu item for navigating to Contact Details
               MenuItem(
-                title: "Contact Details", // Title displayed in the menu item
-                color:
-                    AppColours.secondaryBlueTextColor, // Text color from theme
+                title: "Contact Details",
+                color: AppColours.secondaryBlueTextColor,
                 onTap: () {
                   Navigator.push(
                     context,
@@ -112,15 +107,13 @@ class EditProfilePage extends StatelessWidget {
                           selectedIndex: selectedIndex),
                     ),
                   );
-                  // TODO: Implement navigation logic for Contact Details
                 },
               ),
 
               // Menu item for navigating to Profile Picture settings
               MenuItem(
-                title: "Profile Picture", // Title displayed in the menu item
-                color:
-                    AppColours.secondaryBlueTextColor, // Text color from theme
+                title: "Profile Picture",
+                color: AppColours.secondaryBlueTextColor,
                 onTap: () {
                   Navigator.push(
                     context,
@@ -130,7 +123,6 @@ class EditProfilePage extends StatelessWidget {
                           selectedIndex: selectedIndex),
                     ),
                   );
-                  // TODO: Implement navigation logic for Profile Picture
                 },
               ),
 
@@ -139,13 +131,12 @@ class EditProfilePage extends StatelessWidget {
 
               // Back button to return to the previous screen
               CustomButton(
-                buttonText: "Back", // Text displayed on the button
+                buttonText: "Back",
                 onPress: () => Navigator.pop(
                     context), // Closes the current screen and returns to the previous one
-                leftArrowPresent:
-                    true, // Displays a left-facing arrow on the button
-                rightArrowPresent: false, // No right-facing arrow on the button
-                textColor: Colors.white, // Text color for the button
+                leftArrowPresent: true,
+                rightArrowPresent: false,
+                textColor: Colors.white,
               ),
             ],
           ),

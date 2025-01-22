@@ -3,23 +3,29 @@ import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import '../widgets/main_layout.dart'; // Import MainLayout
 
+/// A StatefulWidget for managing and displaying notification settings.
+/// Allows users to enable or disable various types of notifications.
 class NotificationsPage extends StatefulWidget {
   static const Color primaryTextColor = Color(0xFF687078);
   static const Color secondaryTextColor = Color(0xFF123659);
   static const Color primaryButtonColor = Color(0xFFCEDFF2);
   static const Color arrowColor = Color(0xFF1C548C);
 
-  final Function(int) onItemTapped; // Receive function to update navbar index
-  final int selectedIndex; // Keep track of selected index
+  final Function(int)
+      onItemTapped; // Callback function to update the navbar index.
+  final int selectedIndex; // Current selected index in the navigation bar.
 
-  NotificationsPage({required this.onItemTapped, required this.selectedIndex});
+  NotificationsPage({
+    required this.onItemTapped,
+    required this.selectedIndex,
+  });
 
   @override
   _NotificationsPageState createState() => _NotificationsPageState();
 }
 
 class _NotificationsPageState extends State<NotificationsPage> {
-  // State variables for toggle switches
+  // State variables for managing the toggle switches.
   bool upcomingTasks = true;
   bool missedTasks = true;
   bool reminders = false;
@@ -29,32 +35,36 @@ class _NotificationsPageState extends State<NotificationsPage> {
   bool appUpdates = false;
   bool specialOffers = true;
 
+  /// Builds the main UI of the notifications page.
   @override
   Widget build(BuildContext context) {
     return MainLayout(
       selectedIndex: widget.selectedIndex,
       body: Container(
-        color: Colors.white, // Set background color to white
+        color: Colors.white, // Background color for the page.
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Custom app bar at the top of the page.
               CustomAppBar(
-                  title: "Notifications",
-                  onItemTapped: widget.onItemTapped,
-                  selectedIndex: widget.selectedIndex),
-              SizedBox(height: 10),
-              Text(
+                title: "Notifications",
+                onItemTapped: widget.onItemTapped,
+                selectedIndex: widget.selectedIndex,
+              ),
+              const SizedBox(height: 10),
+              // Instructional text for the user.
+              const Text(
                 "Enable the notifications you want to receive.",
                 style: TextStyle(color: NotificationsPage.primaryTextColor),
               ),
-              SizedBox(height: 20),
-              // Notification toggles
+              const SizedBox(height: 20),
+              // List of notification toggles.
               Expanded(
                 child: ListView(
                   children: [
-                    buildNotificationToggle(
+                    _buildNotificationToggle(
                       title: "Upcoming tasks",
                       value: upcomingTasks,
                       onChanged: (val) {
@@ -63,7 +73,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                         });
                       },
                     ),
-                    buildNotificationToggle(
+                    _buildNotificationToggle(
                       title: "Missed tasks",
                       value: missedTasks,
                       onChanged: (val) {
@@ -72,7 +82,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                         });
                       },
                     ),
-                    buildNotificationToggle(
+                    _buildNotificationToggle(
                       title: "Reminders",
                       value: reminders,
                       onChanged: (val) {
@@ -81,7 +91,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                         });
                       },
                     ),
-                    buildNotificationToggle(
+                    _buildNotificationToggle(
                       title: "Daily motivation",
                       value: dailyMotivation,
                       onChanged: (val) {
@@ -90,7 +100,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                         });
                       },
                     ),
-                    buildNotificationToggle(
+                    _buildNotificationToggle(
                       title: "New courses",
                       value: newCourses,
                       onChanged: (val) {
@@ -99,7 +109,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                         });
                       },
                     ),
-                    buildNotificationToggle(
+                    _buildNotificationToggle(
                       title: "Tips",
                       value: tips,
                       onChanged: (val) {
@@ -108,7 +118,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                         });
                       },
                     ),
-                    buildNotificationToggle(
+                    _buildNotificationToggle(
                       title: "App updates",
                       value: appUpdates,
                       onChanged: (val) {
@@ -117,7 +127,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                         });
                       },
                     ),
-                    buildNotificationToggle(
+                    _buildNotificationToggle(
                       title: "Special offers",
                       value: specialOffers,
                       onChanged: (val) {
@@ -136,20 +146,28 @@ class _NotificationsPageState extends State<NotificationsPage> {
     );
   }
 
-  // Helper method to build a notification toggle
-  Widget buildNotificationToggle({
+  /// Helper method to build a single notification toggle widget.
+  ///
+  /// [title]: The title of the toggle.
+  /// [value]: The current state of the toggle (on/off).
+  /// [onChanged]: Callback for when the toggle state changes.
+  Widget _buildNotificationToggle({
     required String title,
     required bool value,
     required Function(bool) onChanged,
   }) {
     return SwitchListTile(
-      title: Text(title, style: TextStyle(color: Color(0xFF687078))),
+      title: Text(
+        title,
+        style: const TextStyle(color: NotificationsPage.primaryTextColor),
+      ),
       value: value,
       onChanged: onChanged,
-      activeColor: Color(0xFF1C548C), // Thumb color when active
-      activeTrackColor: Color(0xFFCEDFF2), // Trail color when active
-      inactiveThumbColor: Color(0xFFB0BEC5), // Subtle gray thumb for inactive
-      inactiveTrackColor: Color(0xFFE0E0E0), // Light gray trail for inactive
+      activeColor: NotificationsPage.arrowColor, // Thumb color when active.
+      activeTrackColor:
+          NotificationsPage.primaryButtonColor, // Track color when active.
+      inactiveThumbColor: const Color(0xFFB0BEC5), // Thumb color when inactive.
+      inactiveTrackColor: const Color(0xFFE0E0E0), // Track color when inactive.
     );
   }
 }
