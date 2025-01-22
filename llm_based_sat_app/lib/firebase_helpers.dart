@@ -14,9 +14,14 @@ Future<String> getName(String uid) async {
 
     // Check if the document exists and return the name
     if (snapshot.exists) {
-      final name = snapshot.data()?['name'] as String?;
-      if (name != null && name.isNotEmpty) {
-        return name;
+      final firstName = snapshot.data()?['firstname'] as String?;
+      final surname = snapshot.data()?['surname'] as String?;
+
+      if (firstName != null &&
+          firstName.isNotEmpty &&
+          surname != null &&
+          surname.isNotEmpty) {
+        return firstName + " " + surname;
       }
     }
     // Return a default value if the name is null or the document doesn't exist

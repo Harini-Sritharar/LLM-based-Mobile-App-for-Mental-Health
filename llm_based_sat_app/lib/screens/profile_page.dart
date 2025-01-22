@@ -83,6 +83,7 @@ class ProfilePage extends StatelessWidget {
                 }
               },
             ),
+
             /// Display the user's email address.
             Text(
               user!.email ?? "No email provided",
@@ -230,7 +231,7 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-    Widget buildText(String text) {
+  Widget buildText(String text) {
     return Text(
       text,
       style: const TextStyle(
@@ -241,4 +242,3 @@ class ProfilePage extends StatelessWidget {
     );
   }
 }
-
