@@ -58,19 +58,42 @@ class ProfilePage extends StatelessWidget {
             /// Spacer to add vertical space between the app bar and the profile avatar.
             SizedBox(height: 20),
 
-            /// Profile avatar with a placeholder icon.
-            CircleAvatar(
-              radius: 50,
-              backgroundColor: AppColours.avatarBackgroundColor,
-              backgroundImage: NetworkImage(getProfilePictureUrl(user!.uid) as String),
-              onBackgroundImageError: (error, stackTrace) {
-                // Handle image loading errors here if needed
-                print('Error loading profile picture: $error');},
-              child: Icon(
-                Icons.person,
-                size: 80,
-                color: AppColours.avatarForegroundColor,
-              ),
+            /// Profile avatar with a placeholder icon or the profile picture.
+            FutureBuilder<String>(
+              future: getProfilePictureUrl(
+                  user!.uid), // Call the asynchronous function
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircleAvatar(
+                    radius: 50,
+                    backgroundColor: AppColours.avatarBackgroundColor,
+                    child:
+                        CircularProgressIndicator(), // Show a loading indicator
+                  );
+                } else if (snapshot.hasError ||
+                    snapshot.data == null ||
+                    snapshot.data!.isEmpty) {
+                  return CircleAvatar(
+                    radius: 50,
+                    backgroundColor: AppColours.avatarBackgroundColor,
+                    child: Icon(
+                      Icons.person, // Fallback icon for errors or empty URL
+                      size: 80,
+                      color: AppColours.avatarForegroundColor,
+                    ),
+                  );
+                } else {
+                  return CircleAvatar(
+                    radius: 50,
+                    backgroundColor: AppColours.avatarBackgroundColor,
+                    backgroundImage: NetworkImage(
+                        snapshot.data!), // Display the fetched image
+                    onBackgroundImageError: (error, stackTrace) {
+                      print('Error loading profile picture: $error');
+                    },
+                  );
+                }
+              },
             ),
             const SizedBox(height: 10),
 
