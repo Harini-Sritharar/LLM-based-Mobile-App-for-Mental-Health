@@ -6,6 +6,8 @@ import 'package:llm_based_sat_app/main.dart';
 import 'dart:io';
 import '../screens/auth/sign_in_page.dart';
 
+import 'package:llm_based_sat_app/screens/personal_info_page.dart';
+import 'package:llm_based_sat_app/screens/personal_profile_page.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 
 class ChildhoodPhotosPage extends StatefulWidget {
@@ -57,31 +59,33 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CustomAppBar(
-              title: "Personal Profile",
-              onItemTapped: widget.onItemTapped,
-              selectedIndex: widget.selectedIndex,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CustomAppBar(
+                title: "Personal Profile",
+                onItemTapped: widget.onItemTapped,
+                selectedIndex: widget.selectedIndex,
             ),
-            const Text(
-              "Childhood photos",
-              style: TextStyle(
+              const Text(
+                "Childhood photos",
+                style: TextStyle(
                   fontSize: 22, color: ChildhoodPhotosPage.secondaryTextColor),
-            ),
-            const Text(
-              "Add favourite and non-favourite Photos of your Childhood",
-              style: TextStyle(
+              ),
+              const Text(
+                "Add favourite and non-favourite Photos of your Childhood",
+                style: TextStyle(
                   fontSize: 14, color: ChildhoodPhotosPage.primaryTextColor),
-            ),
-            const SizedBox(height: 20),
-            _buildPhotoSection("Favourite photos", favouritePhotos, true),
-            _buildPhotoSection(
+              ),
+              const SizedBox(height: 20),
+              _buildPhotoSection("Favourite photos", favouritePhotos, true),
+              _buildPhotoSection(
                 "Non-Favourite photos", nonFavouritePhotos, false),
-            const SizedBox(height: 20),
-            _buildSaveButton(),
-          ],
+              const SizedBox(height: 20),
+              _buildSaveButton(context),
+            ],
+          ),
         ),
       ),
     );
@@ -153,7 +157,7 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
     );
   }
 
-  Widget _buildSaveButton() {
+  Widget _buildSaveButton(BuildContext context) {
     return Center(
       child: SizedBox(
         width: double.infinity,
@@ -175,6 +179,9 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
               userId: user!.uid,
               photoType: "Non-Favourite",
             );
+            // Navigate back to the personal profile page
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => PersonalProfilePage()));
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: ChildhoodPhotosPage.primaryButtonColor,

@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/screens/personal_info_page.dart';
+import 'package:llm_based_sat_app/screens/personal_profile_page.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 import '/firebase_auth_implementation/firebase_auth_services.dart';
 import 'sign_in_page.dart';
@@ -174,7 +176,7 @@ class _SignUpPageState extends State<SignUpPage> {
       if (user != null) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => MainScreen()),
+          MaterialPageRoute(builder: (context) => PersonalProfilePage()),
         );
       }
     }
