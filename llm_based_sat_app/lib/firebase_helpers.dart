@@ -33,6 +33,33 @@ Future<String> getName(String uid) async {
   }
 }
 
+
+Future<String> getProfilePictureUrl(String uid) async {
+  try {
+    // Reference to the Firestore collection
+    final collection = FirebaseFirestore.instance.collection('Profile');
+
+    // Get the document for the user with the given UID
+    final snapshot = await collection.doc(uid).get();
+
+    // Check if the document exists and return the profile picture URL
+    if (snapshot.exists) {
+      final profilePictureUrl = snapshot.data()?['profilePictureUrl'] as String?;
+
+      if (profilePictureUrl != null && profilePictureUrl.isNotEmpty) {
+        return profilePictureUrl;
+      }
+    }
+    // Return a default value if the URL is null or the document doesn't exist
+    return 'No Profile Picture Found';
+  } catch (e) {
+    // Handle errors and return a default value
+    print('Error fetching profile picture URL: $e');
+    return 'Error Fetching Profile Picture';
+  }
+}
+
+
 Future<void> uploadPhoto({
   required File photoFile,
   required String userId,

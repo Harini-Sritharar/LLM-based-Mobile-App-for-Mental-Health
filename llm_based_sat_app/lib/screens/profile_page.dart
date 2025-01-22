@@ -62,6 +62,10 @@ class ProfilePage extends StatelessWidget {
             CircleAvatar(
               radius: 50,
               backgroundColor: AppColours.avatarBackgroundColor,
+              backgroundImage: NetworkImage(getProfilePictureUrl(user!.uid) as String),
+              onBackgroundImageError: (error, stackTrace) {
+                // Handle image loading errors here if needed
+                print('Error loading profile picture: $error');},
               child: Icon(
                 Icons.person,
                 size: 80,
