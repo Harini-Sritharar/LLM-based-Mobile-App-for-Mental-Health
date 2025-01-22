@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       // For now, the landing screen is the Sign In page
-      home: SignUpPage(),
+      home: SignInPage(),
       // home: UploadProfilePicturePage(onItemTapped: (x) => {}, selectedIndex: 0,) // for local testing
       // home:ImagePickerWidget()
     );
@@ -58,6 +58,7 @@ class _MainScreenState extends State<MainScreen> {
   // Default page is home page (index 2)
   int _selectedIndex = 2;
 
+  @override
   void initState() {
     super.initState();
     _selectedIndex = widget.initialIndex;
