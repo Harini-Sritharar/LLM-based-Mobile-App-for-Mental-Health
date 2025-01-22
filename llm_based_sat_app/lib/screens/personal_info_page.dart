@@ -1,15 +1,34 @@
+/// This file defines the `PersonalInfoPage` widget, which allows users to
+/// input and update their personal information, including name, surname,
+/// date of birth, and gender. The updated information can be saved to the database.
+
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/firebase_profile.dart';
 import 'package:llm_based_sat_app/widgets/auth_widgets/text_input_field.dart';
+import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import 'package:llm_based_sat_app/widgets/custom_button.dart';
+import '../widgets/auth_widgets/text_input_field.dart';
 
+/// A stateful widget that represents the Personal Info page.
+/// This page allows users to enter and save their personal information.
 class PersonalInfoPage extends StatefulWidget {
-  final Function(int) onItemTapped; // Receive function to update navbar index
-  final int selectedIndex; // Keep track of selected index
-  const PersonalInfoPage(
-      {Key? key, required this.onItemTapped, required this.selectedIndex})
-      : super(key: key);
+  // Callback function to handle navigation bar item taps.
+  final Function(int) onItemTapped;
+
+  // The currently selected index in the navigation bar.
+  final int selectedIndex;
+
+  /// Constructor for `PersonalInfoPage`.
+  ///
+  /// Requires:
+  /// - [onItemTapped]: A function to handle navigation bar item taps.
+  /// - [selectedIndex]: The index of the currently selected item in the navigation bar.
+  const PersonalInfoPage({
+    Key? key,
+    required this.onItemTapped,
+    required this.selectedIndex,
+  }) : super(key: key);
 
   @override
   _PersonalInfoPageState createState() => _PersonalInfoPageState();
@@ -20,6 +39,8 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _surnameController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
+
+  // Selected gender value.
   String? _selectedGender;
 
   // @override
@@ -61,6 +82,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Custom app bar for navigation.
               CustomAppBar(
                 title: "Personal Profile",
                 onItemTapped: widget.onItemTapped,

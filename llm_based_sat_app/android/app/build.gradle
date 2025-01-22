@@ -1,11 +1,8 @@
 plugins {
     id 'com.android.application'
-    // START: FlutterFire Configuration
-    id 'com.google.gms.google-services'
-    // END: FlutterFire Configuration version '8.2.0'    
-    id "kotlin-android"
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
-    id "dev.flutter.flutter-gradle-plugin"
+    id 'com.google.gms.google-services' // Firebase plugin
+    id "kotlin-android" // Kotlin plugin for Android
+    id "dev.flutter.flutter-gradle-plugin" // Flutter Gradle plugin
 }
 
 def localProperties = new Properties()
@@ -27,20 +24,19 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace = "com.example.llm_based_sat_app"
-    compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    namespace = "com.example.llm_based_sat_app" // Replace with your app's package name
+    compileSdk = 34 // Use the latest stable version of the compile SDK
+    ndkVersion = "25.1.8937393"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = "1.8" // Set Kotlin JVM target to 1.8
+        jvmTarget = "1.8"
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.example.llm_based_sat_app"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
@@ -48,23 +44,30 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
+
+        // Enable MultiDex for larger apps
+        multiDexEnabled = true
     }
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.debug
+            signingConfig = signingConfigs.debug // Replace with release signing config for production
+            minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 }
 
 flutter {
-    source = "../.."
+    source = "../.." // Relative path to the Flutter module
 }
+
 dependencies {
     implementation platform('com.google.firebase:firebase-bom:33.7.0') // Firebase BOM
-    implementation("com.google.firebase:firebase-analytics") // Firebase Analytics (optional?)
+    implementation("com.google.firebase:firebase-analytics") // Firebase Analytics
+    implementation("com.google.firebase:firebase-storage") // Firebase Storage (if used for images)
+    implementation 'androidx.multidex:multidex:2.0.1' // MultiDex for large apps
 }
 
 apply plugin: 'com.google.gms.google-services' // Firebase plugin

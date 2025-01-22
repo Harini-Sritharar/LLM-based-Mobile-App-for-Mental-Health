@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:llm_based_sat_app/firebase_helpers.dart';
+import 'package:llm_based_sat_app/main.dart';
 import 'package:llm_based_sat_app/screens/payment_option_page.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
 import '../widgets/main_layout.dart';
@@ -56,32 +58,63 @@ class ProfilePage extends StatelessWidget {
             /// Spacer to add vertical space between the app bar and the profile avatar.
             SizedBox(height: 20),
 
-            /// Profile avatar with a placeholder icon.
-            CircleAvatar(
-              radius: 50,
-              backgroundColor: AppColours.avatarBackgroundColor,
-              child: Icon(
-                Icons.person,
-                size: 80,
-                color: AppColours.avatarForegroundColor,
-              ),
+            /// Profile avatar with a placeholder icon or the profile picture.
+            FutureBuilder<String>(
+              future: getProfilePictureUrl(
+                  user!.uid), // Call the asynchronous function
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircleAvatar(
+                    radius: 50,
+                    backgroundColor: AppColours.avatarBackgroundColor,
+                    child:
+                        CircularProgressIndicator(), // Show a loading indicator
+                  );
+                } else if (snapshot.hasError ||
+                    snapshot.data == null ||
+                    snapshot.data!.isEmpty) {
+                  return CircleAvatar(
+                    radius: 50,
+                    backgroundColor: AppColours.avatarBackgroundColor,
+                    child: Icon(
+                      Icons.person, // Fallback icon for errors or empty URL
+                      size: 80,
+                      color: AppColours.avatarForegroundColor,
+                    ),
+                  );
+                } else {
+                  return CircleAvatar(
+                    radius: 50,
+                    backgroundColor: AppColours.avatarBackgroundColor,
+                    backgroundImage: NetworkImage(
+                        snapshot.data!), // Display the fetched image
+                    onBackgroundImageError: (error, stackTrace) {
+                      print('Error loading profile picture: $error');
+                    },
+                  );
+                }
+              },
             ),
             const SizedBox(height: 10),
 
-            /// Display the user's name.
-            const Text(
-              'Neophytos Polydorou',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: AppColours.primaryGreyTextColor,
-              ),
+            /// Display the user's name using a FutureBuilder.
+            FutureBuilder<String>(
+              future: getName(user!.uid), // Call the asynchronous function
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return buildText("Loading...");
+                } else if (snapshot.hasError) {
+                  return buildText("Error fetching name");
+                } else {
+                  return buildText(snapshot.data ?? "No name found");
+                }
+              },
             ),
 
             /// Display the user's email address.
-            const Text(
-              'neophytos@invincimind.com',
-              style: TextStyle(
+            Text(
+              user!.email ?? "No email provided",
+              style: const TextStyle(
                 fontSize: 16,
                 color: AppColours.primaryGreyTextColor,
               ),
@@ -202,6 +235,8 @@ class ProfilePage extends StatelessWidget {
                                     MaterialPageRoute(
                                         builder: (context) => SignInPage()),
                                   );
+                                  favouritePhotos = [];
+                                  nonFavouritePhotos = [];
                                 },
                                 child: const Text(
                                   "Logout",
@@ -219,6 +254,17 @@ class ProfilePage extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget buildText(String text) {
+    return Text(
+      text,
+      style: const TextStyle(
+        fontSize: 22,
+        fontWeight: FontWeight.bold,
+        color: AppColours.primaryGreyTextColor,
       ),
     );
   }

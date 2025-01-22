@@ -1,27 +1,50 @@
+/// This file defines the `UltimateGoalPage` widget, which provides an interface for
+/// users to set their ultimate goal. The page is designed to encourage users to
+/// define socially useful goals that foster personal growth and self-development.
+
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
-import '../widgets/main_layout.dart'; // Import MainLayout
+import '../widgets/main_layout.dart';
 
+/// A stateful widget that represents the Ultimate Goal page.
+/// This page allows users to input their ultimate goal with a character limit.
 class UltimateGoalPage extends StatefulWidget {
-  final Function(int) onItemTapped; // Function to update navbar index
-  final int selectedIndex; // Keep track of selected index
+  // Callback function to handle navigation bar item taps.
+  final Function(int) onItemTapped;
 
-  const UltimateGoalPage(
-      {required this.onItemTapped, required this.selectedIndex, Key? key})
-      : super(key: key);
+  // The currently selected index in the navigation bar.
+  final int selectedIndex;
+
+  /// Constructor for `UltimateGoalPage`.
+  ///
+  /// Requires:
+  /// - [onItemTapped]: A function to handle navigation bar item taps.
+  /// - [selectedIndex]: The index of the currently selected item in the navigation bar.
+  const UltimateGoalPage({
+    required this.onItemTapped,
+    required this.selectedIndex,
+    Key? key,
+  }) : super(key: key);
 
   @override
   _UltimateGoalPageState createState() => _UltimateGoalPageState();
 }
 
 class _UltimateGoalPageState extends State<UltimateGoalPage> {
+  // Maximum number of characters allowed for the input.
   static const int maxCharacters = 250;
+
+  // Text editing controller for the input box.
   final TextEditingController _textController = TextEditingController();
+
+  // Remaining characters counter.
   int _remainingCharacters = maxCharacters;
 
   @override
   void initState() {
     super.initState();
+    // Update the remaining character count as the user types.
     _textController.addListener(() {
       setState(() {
         _remainingCharacters = maxCharacters - _textController.text.length;
@@ -31,6 +54,7 @@ class _UltimateGoalPageState extends State<UltimateGoalPage> {
 
   @override
   void dispose() {
+    // Dispose of the text controller to release resources.
     _textController.dispose();
     super.dispose();
   }
@@ -42,39 +66,46 @@ class _UltimateGoalPageState extends State<UltimateGoalPage> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: SingleChildScrollView(
-          // Wrap with SingleChildScrollView
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Custom app bar for the page.
               CustomAppBar(
                 title: "Ultimate Goal",
                 onItemTapped: widget.onItemTapped,
                 selectedIndex: widget.selectedIndex,
               ),
               const SizedBox(height: 10),
+              // Page title and description text.
               const Text(
                 "Set Yourself an Ultimate Goal",
-                style: TextStyle(fontSize: 22, color: Color(0xFF687078)),
+                style: TextStyle(
+                    fontSize: 22, color: AppColours.primaryGreyTextColor),
               ),
               const SizedBox(height: 20),
               const Text(
                 "Your goal should be a socially useful ideal that guides you towards growth and self-development to empower you in today’s world with our problems.",
-                style: TextStyle(fontSize: 16, color: Color(0xFF687078)),
+                style: TextStyle(
+                    fontSize: 16, color: AppColours.primaryGreyTextColor),
               ),
               const SizedBox(height: 10),
               const Text(
                 "It could be achievement in an academic, scientific, literary, philosophical, athletic, spiritual, professional, charitable, or a socially progressive manufacturing/commercial/business field.",
-                style: TextStyle(fontSize: 16, color: Color(0xFF687078)),
+                style: TextStyle(
+                    fontSize: 16, color: AppColours.primaryGreyTextColor),
               ),
               const SizedBox(height: 10),
               const Text(
                 "If we do not have a clear goal at the start of the program, you can refine it later.",
-                style: TextStyle(fontSize: 16, color: Color(0xFF687078)),
+                style: TextStyle(
+                    fontSize: 16, color: AppColours.primaryGreyTextColor),
               ),
               const SizedBox(height: 40),
+              // Input box for entering the ultimate goal.
               _buildInputBox(),
               const SizedBox(height: 40),
-              _buildSaveButton()
+              // Save button to save the entered goal.
+              _buildSaveButton(),
             ],
           ),
         ),
@@ -82,6 +113,9 @@ class _UltimateGoalPageState extends State<UltimateGoalPage> {
     );
   }
 
+  /// Builds the save button for the page.
+  ///
+  /// The button currently does not have an implementation for its functionality.
   Widget _buildSaveButton() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -90,7 +124,7 @@ class _UltimateGoalPageState extends State<UltimateGoalPage> {
         height: 60,
         child: ElevatedButton(
           onPressed: () {
-            // Save button functionality (to be implemented)
+            // Placeholder for save functionality.
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFF1C548C),
@@ -107,16 +141,20 @@ class _UltimateGoalPageState extends State<UltimateGoalPage> {
     );
   }
 
+  /// Builds the input box for entering the ultimate goal.
+  ///
+  /// Displays a counter showing the remaining character count.
   Widget _buildInputBox() {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFFD0E0F0), // Light blue background
-        borderRadius: BorderRadius.circular(15), // Rounded corners
+        color: const Color(0xFFD0E0F0), // Light blue background.
+        borderRadius: BorderRadius.circular(15), // Rounded corners.
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Label for the input box.
           const Text(
             "My ultimate goal is...",
             style: TextStyle(
@@ -125,16 +163,18 @@ class _UltimateGoalPageState extends State<UltimateGoalPage> {
             ),
           ),
           const SizedBox(height: 8),
+          // Text input field for the user to enter their goal.
           TextField(
             controller: _textController,
             maxLength: maxCharacters,
             maxLines: 5,
             decoration: const InputDecoration(
               border: InputBorder.none,
-              counterText: "", // Hide default counter
+              counterText: "", // Hide the default character counter.
             ),
             style: const TextStyle(fontSize: 16, color: Colors.black87),
           ),
+          // Display the remaining character count.
           Align(
             alignment: Alignment.bottomLeft,
             child: Padding(
