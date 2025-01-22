@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:llm_based_sat_app/firebase_helpers.dart';
 import 'package:llm_based_sat_app/main.dart';
+import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'dart:io';
 import '../screens/auth/sign_in_page.dart';
 import 'package:llm_based_sat_app/screens/personal_info_page.dart';
