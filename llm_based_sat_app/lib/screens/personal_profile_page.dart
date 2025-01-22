@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/firebase_profile.dart';
 import 'package:llm_based_sat_app/main.dart';
@@ -17,7 +19,30 @@ class PersonalProfilePage extends StatefulWidget {
 
 class _PersonalProfilePageState extends State<PersonalProfilePage> {
   bool isVerified = false;
-  User_ user = User_();
+  //User_ user = User_();
+
+  // Completion flags
+  bool _isPersonalInfoComplete = false;
+  bool _isContactDetailsComplete = false;
+  bool _isProfilePictureComplete = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchCompletionStatus();
+  }
+
+  Future<void> _fetchCompletionStatus() async {
+    bool personalInfoComplete = await isPersonalInfoComplete();
+    bool contactDetailsComplete = await isContactDetailsComplete();
+    bool profilePictureComplete = await isProfilePictureComplete();
+
+    setState(() {
+      _isPersonalInfoComplete = personalInfoComplete;
+      _isContactDetailsComplete = contactDetailsComplete;
+      _isProfilePictureComplete = profilePictureComplete;
+    });
+  }
 
   void _finishProfile() {
     // Navigate to the Main Screen upon finishing profile
@@ -26,7 +51,7 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -71,7 +96,7 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
               const SizedBox(height: 50),
               ProfileStepItem(
                 title: "Personal Info",
-                isCompleted: user.isPersonalInfoComplete(),
+                isCompleted: _isPersonalInfoComplete,
                 onTap: () {
                   // Navigate to Personal Info Screen
                   Navigator.push(
@@ -81,12 +106,13 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
                                 onItemTapped: (int) {},
                                 selectedIndex: 2,
                               )));
+                  _fetchCompletionStatus();
                 },
               ),
               const SizedBox(height: 24),
               ProfileStepItem(
                 title: "Contact Details",
-                isCompleted: user.isContactDetailsComplete(),
+                isCompleted: _isContactDetailsComplete,
                 onTap: () {
                   Navigator.push(
                       context,
@@ -96,12 +122,13 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
                                 selectedIndex: 2,
                               )));
                   // Navigate to Contact Details Screen
+                  _fetchCompletionStatus();
                 },
               ),
               const SizedBox(height: 24),
               ProfileStepItem(
                 title: "Profile Picture",
-                isCompleted: user.isPersonalInfoComplete(),
+                isCompleted: _isProfilePictureComplete,
                 onTap: () {
                   Navigator.push(
                       context,
@@ -112,6 +139,7 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
                               )));
 
                   // Navigate to Profile Picture Screen
+                  _fetchCompletionStatus();
                 },
               ),
               const SizedBox(height: 24),

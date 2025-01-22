@@ -45,3 +45,70 @@ Future<void> updateProfilePictureAndUsername(
     'profilePictureUrl': downloadUrl,
   });
 }
+
+Future<bool> isPersonalInfoComplete() async {
+  User? user = FirebaseAuth.instance.currentUser;
+  FirebaseFirestore db = FirebaseFirestore.instance;
+
+  try {
+    DocumentSnapshot profile =
+        await db.collection('Profile').doc(user!.uid).get();
+
+    if (profile.exists) {
+      return profile['firstname'] != null &&
+          profile['firstname'].toString().isNotEmpty &&
+          profile['surname'] != null &&
+          profile['surname'].toString().isNotEmpty &&
+          profile['dob'] != null &&
+          profile['dob'].toString().isNotEmpty &&
+          profile['gender'] != null &&
+          profile['gender'].toString().isNotEmpty;
+    }
+    return false;
+  } catch (e) {
+    print("Error checking personal info: $e");
+    return false;
+  }
+}
+
+Future<bool> isContactDetailsComplete() async {
+  User? user = FirebaseAuth.instance.currentUser;
+  FirebaseFirestore db = FirebaseFirestore.instance;
+
+  try {
+    DocumentSnapshot profile =
+        await db.collection('Profile').doc(user!.uid).get();
+
+    if (profile.exists) {
+      return profile['country'] != null &&
+          profile['country'].toString().isNotEmpty &&
+          profile['zipcode'] != null &&
+          profile['zipcode'].toString().isNotEmpty &&
+          profile['phoneNumber'] != null &&
+          profile['phoneNumber'].toString().isNotEmpty;
+    }
+    return false;
+  } catch (e) {
+    print("Error checking contact details: $e");
+    return false;
+  }
+}
+
+Future<bool> isProfilePictureComplete() async {
+  User? user = FirebaseAuth.instance.currentUser;
+  FirebaseFirestore db = FirebaseFirestore.instance;
+
+  try {
+    DocumentSnapshot profile =
+        await db.collection('Profile').doc(user!.uid).get();
+
+    if (profile.exists) {
+      return profile['profilePictureUrl'] != null &&
+          profile['profilePictureUrl'].toString().isNotEmpty;
+    }
+    return false;
+  } catch (e) {
+    print("Error checking profile picture: $e");
+    return false;
+  }
+}

@@ -58,6 +58,7 @@ class _MainScreenState extends State<MainScreen> {
   // Default page is home page (index 2)
   int _selectedIndex = 2;
 
+  @override
   void initState() {
     super.initState();
     _selectedIndex = widget.initialIndex;

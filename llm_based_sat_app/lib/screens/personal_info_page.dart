@@ -22,13 +22,13 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
   final TextEditingController _dobController = TextEditingController();
   String? _selectedGender;
 
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _surnameController.dispose();
-    _dobController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _nameController.dispose();
+  //   _surnameController.dispose();
+  //   _dobController.dispose();
+  //   super.dispose();
+  // }
 
   String? _validateNotEmpty(String? value, String fieldName) {
     if (value == null || value.isEmpty) {

@@ -52,6 +52,16 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
     return null;
   }
 
+  String? _validateMobileNumber(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Mobile number cannot be empty';
+    }
+    if (!RegExp(r'^\d{7,15}$').hasMatch(value)) {
+      return 'Mobile number must contain 7-15 digits only';
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,6 +129,8 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
                         },
                         keyboardType:
                             TextInputType.phone, // Ensures phone keyboard
+                        validator: (value) =>
+                            _validateMobileNumber(value?.number),
                         inputFormatters: [
                           FilteringTextInputFormatter
                               .digitsOnly, // Numeric input only
