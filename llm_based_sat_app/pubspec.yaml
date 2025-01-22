@@ -67,6 +67,7 @@ flutter:
     - assets/icons/calendar.svg
     - assets/icons/people.svg
     - assets/icons/diagram.svg
+    - assets/icons/menuitemicon.svg
 
     - assets/images/self_attachment.png
     - assets/images/creativity.png

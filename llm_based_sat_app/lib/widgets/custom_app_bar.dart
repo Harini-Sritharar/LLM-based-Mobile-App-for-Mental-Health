@@ -43,7 +43,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             'assets/icons/notification.svg',
             width: 28,
             height: 28,
-            colorFilter: ColorFilter.mode(textColor, BlendMode.srcIn),
           ),
           onPressed: () {}, // Define action if needed
         ),
@@ -64,7 +63,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     onItemTapped: onItemTapped,
                     selectedIndex: selectedIndex,
                   ),
-                  settings: const RouteSettings(name: '/profile'), // Assign a name to the route
+                  settings: const RouteSettings(
+                      name: '/profile'), // Assign a name to the route
                 ),
               );
             }

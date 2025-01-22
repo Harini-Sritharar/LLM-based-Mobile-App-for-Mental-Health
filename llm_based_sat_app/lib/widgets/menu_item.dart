@@ -14,7 +14,7 @@ class MenuItem extends StatelessWidget {
     required this.title,
     this.icon,
     required this.onTap,
-    this.color = AppColours.primaryGreyTextColor, // Default color
+    this.color = AppColours.secondaryBlueTextColor, // Default color
   });
 
   @override
@@ -40,10 +40,8 @@ class MenuItem extends StatelessWidget {
           color: color,
         ),
       ),
-      trailing: Icon(
-        Icons.arrow_forward_ios,
-        size: 18,
-        color: color,
+      trailing: SvgPicture.asset(
+        'assets/icons/menuitemicon.svg',
       ),
       onTap: onTap,
     );
