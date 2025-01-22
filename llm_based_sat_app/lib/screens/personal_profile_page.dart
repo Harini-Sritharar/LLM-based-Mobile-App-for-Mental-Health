@@ -71,7 +71,7 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
               const SizedBox(height: 50),
               ProfileStepItem(
                 title: "Personal Info",
-                isCompleted: true,
+                isCompleted: user.isPersonalInfoComplete(),
                 onTap: () {
                   // Navigate to Personal Info Screen
                   Navigator.push(
@@ -86,7 +86,7 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
               const SizedBox(height: 24),
               ProfileStepItem(
                 title: "Contact Details",
-                isCompleted: true,
+                isCompleted: user.isContactDetailsComplete(),
                 onTap: () {
                   Navigator.push(
                       context,
@@ -101,7 +101,7 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
               const SizedBox(height: 24),
               ProfileStepItem(
                 title: "Profile Picture",
-                isCompleted: false,
+                isCompleted: user.isPersonalInfoComplete(),
                 onTap: () {
                   Navigator.push(
                       context,
