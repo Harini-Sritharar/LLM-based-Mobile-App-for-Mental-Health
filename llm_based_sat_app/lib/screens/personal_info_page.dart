@@ -57,7 +57,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                 "Complete your Personal Information",
                 style: TextStyle(fontSize: 16, color: Color(0xFF687078)),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 40),
               TextInputField(
                 label: "Name",
                 icon: Icons.person,
@@ -71,6 +71,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                 isPassword: false,
                 controller: _surnameController,
               ),
+              const SizedBox(height: 20),
               _buildDatePickerField(),
               const SizedBox(height: 20),
               _buildGenderDropdown(),
@@ -90,12 +91,12 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
       decoration: InputDecoration(
         labelText: "Date of Birth",
         filled: true,
-        fillColor: const Color(0xFFD0E0F0),
+        fillColor: AppColours.textFieldBackgroundColor,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
           borderSide: BorderSide.none,
         ),
-        suffixIcon: IconButton(
+        prefixIcon: IconButton(
           icon: const Icon(Icons.calendar_today),
           onPressed: () async {
             DateTime? pickedDate = await showDatePicker(
@@ -120,7 +121,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        color: const Color(0xFFD0E0F0),
+        color: AppColours.textFieldBackgroundColor,
         borderRadius: BorderRadius.circular(15),
       ),
       child: DropdownButtonFormField<String>(
