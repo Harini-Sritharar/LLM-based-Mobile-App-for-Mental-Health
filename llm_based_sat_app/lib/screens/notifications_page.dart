@@ -148,8 +148,8 @@ class _NotificationsPageState extends State<NotificationsPage> {
       onChanged: onChanged,
       activeColor: Color(0xFF1C548C), // Thumb color when active
       activeTrackColor: Color(0xFFCEDFF2), // Trail color when active
-      inactiveThumbColor: Colors.white, // Thumb color when inactive
-      inactiveTrackColor: Colors.white, // Trail color when inactive
+      inactiveThumbColor: Color(0xFFB0BEC5), // Subtle gray thumb for inactive
+      inactiveTrackColor: Color(0xFFE0E0E0), // Light gray trail for inactive
     );
   }
 }

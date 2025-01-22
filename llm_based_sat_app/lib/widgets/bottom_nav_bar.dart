@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class BottomNavBar extends StatelessWidget {
   final int selectedIndex;
@@ -12,9 +13,11 @@ class BottomNavBar extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         border: Border(
-            top: BorderSide(
-                color: Colors.grey.shade300,
-                width: 1)), // Top border for contrast
+          top: BorderSide(
+            color: Colors.grey.shade300,
+            width: 1, // Top border for contrast
+          ),
+        ),
       ),
       child: BottomNavigationBar(
         currentIndex: selectedIndex,
@@ -25,15 +28,52 @@ class BottomNavBar extends StatelessWidget {
         selectedFontSize: 12,
         unselectedFontSize: 12,
         type: BottomNavigationBarType.fixed, // Ensures consistent spacing
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.people), label: 'Community'),
+        items: [
           BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_today), label: 'Calendar'),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+            icon: SvgPicture.asset(
+              'assets/icons/people.svg',
+              height: 24,
+              width: 24,
+              color: selectedIndex == 0 ? Colors.black : Colors.grey,
+            ),
+            label: 'Community',
+          ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.emoji_events), label: 'Score'),
+            icon: SvgPicture.asset(
+              'assets/icons/calendar.svg',
+              height: 24,
+              width: 24,
+              color: selectedIndex == 1 ? Colors.black : Colors.grey,
+            ),
+            label: 'Calendar',
+          ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.menu_book), label: 'Courses'),
+            icon: SvgPicture.asset(
+              'assets/icons/people.svg',
+              height: 24,
+              width: 24,
+              color: selectedIndex == 2 ? Colors.black : Colors.grey,
+            ),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: SvgPicture.asset(
+              'assets/icons/diagram.svg',
+              height: 24,
+              width: 24,
+              color: selectedIndex == 3 ? Colors.black : Colors.grey,
+            ),
+            label: 'Score',
+          ),
+          BottomNavigationBarItem(
+            icon: SvgPicture.asset(
+              'assets/icons/book.svg',
+              height: 24,
+              width: 24,
+              color: selectedIndex == 4 ? Colors.black : Colors.grey,
+            ),
+            label: 'Courses',
+          ),
         ],
       ),
     );

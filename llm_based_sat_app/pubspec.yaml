@@ -30,7 +30,6 @@ dependencies:
   intl_phone_field: ^3.2.0 # For phone number +country input
   image_picker: ^1.1.2
 
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -64,6 +63,10 @@ flutter:
     - assets/icons/profile/security-safe.svg
     - assets/icons/profile/trash.svg
     - assets/icons/tick.svg
+    - assets/icons/book.svg
+    - assets/icons/calendar.svg
+    - assets/icons/people.svg
+    - assets/icons/diagram.svg
 
     - assets/images/self_attachment.png
     - assets/images/creativity.png
