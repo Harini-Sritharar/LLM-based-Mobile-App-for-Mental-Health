@@ -7,7 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 Future<String> getName(String uid) async {
   try {
     // Reference to the Firestore collection
-    final collection = FirebaseFirestore.instance.collection('ChildhoodPhotos');
+    final collection = FirebaseFirestore.instance.collection('Profile');
 
     // Get the document for the user with the given UID
     final snapshot = await collection.doc(uid).get();
