@@ -51,54 +51,7 @@ class Courses extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Expanded(
-              child: ListView(
-                children: [
-                  CourseCard(
-                      imageUrl: 'assets/images/self_attachment.png',
-                      courseType: 'Core',
-                      courseTitle: 'Self-attachment',
-                      duration: '2 week',
-                      rating: 4.2,
-                      ratingsCount: 7830,
-                      onButtonPress: createOnButtonPress(
-                          courseTitle: "Self-attachment",
-                          courseType: "Core",
-                          rating: 4.2)),
-                  CourseCard(
-                      imageUrl: 'assets/images/humour.png',
-                      courseType: 'Core',
-                      courseTitle: 'Humour',
-                      duration: '6 week',
-                      rating: 4.9,
-                      ratingsCount: 560,
-                      onButtonPress: createOnButtonPress(
-                          courseTitle: "Humour",
-                          courseType: "Core",
-                          rating: 4.9)),
-                  CourseCard(
-                      imageUrl: 'assets/images/creativity.png',
-                      courseType: 'Advanced',
-                      courseTitle: 'Creativity',
-                      duration: '3 week',
-                      rating: 3.9,
-                      ratingsCount: 67,
-                      onButtonPress: createOnButtonPress(
-                          courseTitle: "Creativity",
-                          courseType: "Advanced",
-                          rating: 3.9)),
-                  CourseCard(
-                      imageUrl: 'assets/images/nature.png',
-                      courseType: 'Advanced',
-                      courseTitle: 'Nature',
-                      duration: '1 week',
-                      rating: 4.5,
-                      ratingsCount: 1496,
-                      onButtonPress: createOnButtonPress(
-                          courseTitle: "Nature",
-                          courseType: "Advanced",
-                          rating: 4.5)),
-                ],
-              ),
+              child: ListView(children: generateCourseCards()),
             ),
           ],
         ),
@@ -153,5 +106,60 @@ class Courses extends StatelessWidget {
         ),
       );
     };
+  }
+
+  /* Generates a list of `CourseCard` widgets dynamically based on course data. */
+  List<Widget> generateCourseCards() {
+    List<Map<String, dynamic>> courses = [
+      {
+        'imageUrl': 'assets/images/self_attachment.png',
+        'courseType': 'Core',
+        'courseTitle': 'Self-attachment',
+        'duration': '2 week',
+        'rating': 4.2,
+        'ratingsCount': 7830,
+      },
+      {
+        'imageUrl': 'assets/images/humour.png',
+        'courseType': 'Core',
+        'courseTitle': 'Humour',
+        'duration': '6 week',
+        'rating': 4.9,
+        'ratingsCount': 560,
+      },
+      {
+        'imageUrl': 'assets/images/creativity.png',
+        'courseType': 'Advanced',
+        'courseTitle': 'Creativity',
+        'duration': '3 week',
+        'rating': 3.9,
+        'ratingsCount': 67,
+      },
+      {
+        'imageUrl': 'assets/images/nature.png',
+        'courseType': 'Advanced',
+        'courseTitle': 'Nature',
+        'duration': '1 week',
+        'rating': 4.5,
+        'ratingsCount': 1496,
+      },
+    ];
+
+    // Generate a list of CourseCard widgets dynamically
+    return courses.map((course) {
+      return CourseCard(
+        imageUrl: course['imageUrl'],
+        courseType: course['courseType'],
+        courseTitle: course['courseTitle'],
+        duration: course['duration'],
+        rating: course['rating'],
+        ratingsCount: course['ratingsCount'],
+        onButtonPress: createOnButtonPress(
+          courseTitle: course['courseTitle'],
+          courseType: course['courseType'],
+          rating: course['rating'],
+        ),
+      );
+    }).toList();
   }
 }
