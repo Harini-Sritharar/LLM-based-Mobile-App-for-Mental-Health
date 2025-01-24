@@ -11,16 +11,52 @@ firebase_admin.initialize_app(cred)
 # Get Firestore client
 db = firestore.client()
 
-def upload_exercise_data_to_firestore(file_path):
-    # Load JSON data
-    with open(file_path, "r") as file:
-        exercise_data = json.load(file)
+def upload_course_structure_to_firestore(course_path, exercise_data_path):
+    """
+    Uploads the hierarchical course structure into Firestore.
+    Includes exercises as subdocuments inside the Exercises folder.
+    """
+    # Load exercise data from the exercise data file
+    with open(exercise_data_path, "r") as exercise_file:
+        exercise_data = json.load(exercise_file)
+    
+    # Load course data from the course structure file
+    with open(course_path, "r") as course_file:
+        course_data = json.load(course_file)
+    
+    for course_name, course_content in course_data.items():
+        print(f"Uploading course: {course_name}")
+        
+        # Create a Firestore document for the course
+        course_ref = db.collection("Courses").document(course_name)
+        course_ref.set({
+            "Aim": course_content.get("Aim", ""),
+            "Prerequisites": course_content.get("Prerequisites course tasks", [])
+        })
+        
+        # Add chapters
+        chapters = course_content.get("Chapters", {})
+        for chapter_name, chapter_content in chapters.items():
+            print(f"  Uploading chapter: {chapter_name}")
+            
+            # Create a subcollection for chapters
+            chapter_ref = course_ref.collection("Chapters").document(chapter_name)
+            chapter_ref.set({
+                "Aim": chapter_content.get("Aim", "")
+            })
+            
+            # Add exercises as subdocuments
+            exercises = chapter_content.get("Exercises", {})
+            for exercise_name in exercises:
+                if exercise_name in exercise_data:
+                    print(f"    Adding exercise: {exercise_name}")
+                    exercise_ref = chapter_ref.collection("Exercises").document(exercise_name)
+                    exercise_ref.set(exercise_data[exercise_name])
+                else:
+                    print(f"    Warning: Exercise {exercise_name} not found in exercise data.")
 
-    # Upload data to Firestore
-    for exercise_name, exercise_content in exercise_data.items():
-        exercise_ref = db.collection("Exercises").document(exercise_name)
-        exercise_ref.set(exercise_content)
-        print(f"Uploaded: {exercise_name}")
-
-# Call the function to upload data
-upload_exercise_data_to_firestore("../data/exercise_data.json")
+# Call the function with paths to the JSON files
+upload_course_structure_to_firestore(
+    "../data/courses_data.json",
+    "../data/exercise_data.json"
+)

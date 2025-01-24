@@ -1,0 +1,58 @@
+{
+    "Self-Attachment": {
+        "Aim": "To build a strong and compassionate connection with one's inner child, fostering emotional growth and self-regulation.",
+        "Prerequisites course tasks": [
+            "SAT introductory lessons",
+            "Select one happy and one unhappy photo (your most favourite to set as default selection for all exercises)"
+        ],
+        "Chapters": {
+            "Chapter 1": {
+                "Aim": "Connecting compassionately with our child",
+                "Exercises": [
+                    "Self-Attachment_1_A",
+                    "Self-Attachment_1_B",
+                    "Self-Attachment_1_C"
+                ]
+            },
+            "Chapter 2": {
+                "Aim": "",
+                "Exercises": [
+                    "Self-Attachment_2_D",
+                    "Self-Attachment_2_E",
+                    "Self-Attachment_2_F"
+                ]
+            },
+            "Chapter 3": {
+                "Aim": "",
+                "Exercises": [
+                    "Self-Attachment_3_G",
+                    "Self-Attachment_3_H",
+                    "Self-Attachment_3_I"
+                ]
+            },
+            "Chapter 4": {
+                "Aim": "",
+                "Exercises": [
+                    "Self-Attachment_4_J",
+                    "Self-Attachment_4_K"
+                ]
+            }
+        }
+    },
+    "Attachment Object Course (Advanced)": {
+        "Aim": "To transform your favourite childhood photo into a permanent, omnipresent attachment object that supports and comforts you.",
+        "Prerequisites course tasks": [
+            "Self-attachment course (core)"
+        ],
+        "Chapters": {
+            "Chapter 1": {
+                "Aim": "",
+                "Exercises": [
+                    "Attachment_1_A",
+                    "Attachment_1_B",
+                    "Attachment_1_C"
+                ]
+            }
+        }
+    }
+}
