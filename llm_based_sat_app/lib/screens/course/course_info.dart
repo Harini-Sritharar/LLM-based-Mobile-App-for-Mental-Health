@@ -50,6 +50,7 @@ class CourseInfo extends StatelessWidget {
                 exercises: "10 Exercises", duration: '2 weeks'),
             const SizedBox(height: 20),
             ExpandableText(
+              // Course Aim
                 text:
                     "Self-attachment course allows you to practise the core exercises necessary for other courses. This course if important because you create a connection and an affectional bond with your childhood self. Self-attachment course allows you to practise the core exercises necessary for other courses. This course if important because you create a connection and an affectional bond with your childhood self."),
             const SizedBox(height: 40),

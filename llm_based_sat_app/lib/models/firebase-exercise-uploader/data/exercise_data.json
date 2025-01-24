@@ -1,9 +1,11 @@
 {
     "Self-Attachment_1_A": {
+        "Exercise_title": "Initial Connection",
         "Exercise Information": {
             "Objective": "Distinguish between your Adult (thinking self), dominant in you when stress free, and your Child (emotional self), dominant in you when under undue stress. Also, recall your early years and emotional problems with parents and other significant figures in early childhood.",
             "Minimum practice time": "5 minutes",
-            "Minimum sessions": "14"
+            "Minimum sessions": "14",
+            "Total sessions": "14"
         },
         "Pre-exercise tasks": [
             "If this is not possible wear headphones."
@@ -20,13 +22,18 @@
         "After-exercise tasks": [
             "Answer some questions about the exercise [TODO: Ask Abbas what the questions can be]",
             "Write your comments about the exercise in the designated input box in the app."
+        ],
+        "Exercise Pages": [
+            "Self-Attachment_1_A_1"
         ]
     },
     "Self-Attachment_1_B": {
+        "Exercise_title": "Positive Recall",
         "Exercise Information": {
             "Objective": "Whatever the circumstance, imaginatively connect compassionately with your Child to have a warm attitude towards them and their emotional problems.",
             "Minimum practice time": "5 minutes",
-            "Minimum sessions": "14"
+            "Minimum sessions": "14",
+            "Total sessions": "14"
         },
         "Pre-exercise tasks": {},
         "Learning": {
@@ -45,10 +52,12 @@
         ]
     },
     "Self-Attachment_1_C": {
+        "Exercise_title": "Negative Recall",
         "Exercise Information": {
             "Objective": "Whatever the circumstance, imaginatively connect compassionately with your Child to have a warm attitude towards them and their emotional problems.",
             "Minimum practice time": "5 minutes",
-            "Minimum sessions": "14"
+            "Minimum sessions": "14",
+            "Total sessions": "14"
         },
         "Pre-exercise tasks": [],
         "Learning": {
@@ -65,10 +74,12 @@
         ]
     },
     "Self-Attachment_2_D": {
+        "Exercise_title": "Affectionate Singing",
         "Exercise Information": {
             "Objective": "Bonding passionately with our childhood self. The compassionate connection with the child is to be enhanced to a passionate bonding.",
             "Minimum practice time": "",
-            "Minimum sessions": ""
+            "Minimum sessions": "",
+            "Total sessions": ""
         },
         "Pre-exercise tasks": [
             "Set digital image as the background on your electronic devices on your phone, tablet and laptop.",
@@ -89,10 +100,12 @@
         ]
     },
     "Self-Attachment_2_E": {
+        "Exercise_title": "Expressing Love",
         "Exercise Information": {
             "Objective": "Expressing love and care for the child",
             "Minimum practice time": "",
-            "Minimum sessions": "10"
+            "Minimum sessions": "10",
+            "Total sessions": "10"
         },
         "Pre-exercise tasks": [
             "Write or formulate a sentence to express love and care for your child For example, 'I passionately love you and deeply care for you.'"
@@ -109,10 +122,12 @@
         ]
     },
     "Self-Attachment_2_F": {
+        "Exercise_title": "Vow to care",
         "Exercise Information": {
             "Objective": "Vowing to care for the child",
             "Minimum practice time": "",
-            "Minimum sessions": "4"
+            "Minimum sessions": "4",
+            "Total sessions": "4"
         },
         "Pre-exercise tasks": [
             "Write or formulate your vow For example, 'From now on, I will be a loving and caring parent to this child, always looking after them with my whole heart. I will do my best to support their health and emotional growth.'",
@@ -128,10 +143,12 @@
         "After-exercise tasks": []
     },
     "Self-Attachment_3_G": {
+        "Exercise_title": "Restoration",
         "Exercise Information": {
             "Objective": "Restoring your emotional world. Artistic re-creation of our emotional world.",
             "Minimum practice time": "5 minutes",
-            "Minimum sessions": ""
+            "Minimum sessions": "",
+            "Total sessions": ""
         },
         "Pre-exercise tasks": [],
         "Learning": {
@@ -146,10 +163,12 @@
         "After-exercise tasks": []
     },
     "Self-Attachment_3_H": {
+        "Exercise_title": "Joyful Love",
         "Exercise Information": {
             "Objective": "Maintaining a loving relationship with the child.",
             "Minimum practice time": "5 minutes",
-            "Minimum sessions": "14"
+            "Minimum sessions": "14",
+            "Total sessions": "14"
         },
         "Pre-exercise tasks": [
             "Choose some short phrase or write your own",
@@ -175,10 +194,12 @@
         "After-exercise tasks": []
     },
     "Self-Attachment_3_I": {
+        "Exercise_title": "Nature Bonding",
         "Exercise Information": {
             "Objective": "Creating zest for life.",
             "Minimum practice time": "5 minutes",
-            "Minimum sessions": "14"
+            "Minimum sessions": "14",
+            "Total sessions": "14"
         },
         "Pre-exercise tasks": [
             "Allow access to the camera"
@@ -196,10 +217,12 @@
         ]
     },
     "Self-Attachment_4_J": {
+        "Exercise_title": "",
         "Exercise Information": {
             "Objective": "Creating a bond with Nature",
             "Minimum practice time": "30 minutes",
-            "Minimum sessions": "1"
+            "Minimum sessions": "1",
+            "Total sessions": "1"
         },
         "Pre-exercise tasks": [
             "Plan a visit to the Nature e.g., local park, wood or forest on one day this week."
@@ -229,10 +252,12 @@
         ]
     },
     "Self-Attachment_4_K": {
+        "Exercise_title": "",
         "Exercise Information": {
             "Objective": "Seeing your favourite childhood image anywhere and everywhere",
             "Minimum practice time": "",
-            "Minimum sessions": "28"
+            "Minimum sessions": "28",
+            "Total sessions": "28"
         },
         "Pre-exercise tasks": [
             "Ensure your favourite 'happy' childhood photo is always the home screen on your phone"
@@ -247,10 +272,12 @@
         "After-exercise tasks": []
     },
     "Attachment_1_A": {
+        "Exercise_title": "",
         "Exercise Information": {
             "Objective": "Capacity to project your childhood photo",
             "Minimum practice time": "",
-            "Minimum sessions": ""
+            "Minimum sessions": "",
+            "Total sessions": ""
         },
         "Pre-exercise tasks": [],
         "Learning": {
@@ -265,10 +292,12 @@
         ]
     },
     "Attachment_1_B": {
+        "Exercise_title": "",
         "Exercise Information": {
             "Objective": "",
             "Minimum practice time": "",
-            "Minimum sessions": "Starting on day 4"
+            "Minimum sessions": "Starting on day 4",
+            "Total sessions": ""
         },
         "Pre-exercise tasks": [],
         "Learning": {
@@ -283,10 +312,12 @@
         ]
     },
     "Attachment_1_C": {
+        "Exercise_title": "",
         "Exercise Information": {
             "Objective": "",
             "Minimum practice time": "",
-            "Minimum sessions": ""
+            "Minimum sessions": "",
+            "Total sessions": "14"
         },
         "Pre-exercise tasks": [],
         "Learning": {

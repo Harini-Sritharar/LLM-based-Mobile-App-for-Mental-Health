@@ -2,6 +2,11 @@
     "Self-Attachment": {
         "Aim": "To build a strong and compassionate connection with one's inner child, fostering emotional growth and self-regulation.",
         "Course_type": "Core",
+        "Course_title": "Self-attachment",
+        "Rating": 4.2,
+        "Rating_Count": 7830,
+        "Duration": "2 weeks",
+        "Image_URL": "assets/images/self_attachment.png",
         "Prerequisites course tasks": [
             "SAT introductory lessons",
             "Select one happy and one unhappy photo (your most favourite to set as default selection for all exercises)"
@@ -9,6 +14,7 @@
         "Chapters": {
             "Chapter 1": {
                 "Aim": "Connecting compassionately with our child",
+                "Chapter_title": "Companionate connection",
                 "Exercises": [
                     "Self-Attachment_1_A",
                     "Self-Attachment_1_B",
@@ -17,6 +23,7 @@
             },
             "Chapter 2": {
                 "Aim": "",
+                "Chapter_title": "Loving relationship",
                 "Exercises": [
                     "Self-Attachment_2_D",
                     "Self-Attachment_2_E",
@@ -25,6 +32,7 @@
             },
             "Chapter 3": {
                 "Aim": "",
+                "Chapter_title": "Emotional world",
                 "Exercises": [
                     "Self-Attachment_3_G",
                     "Self-Attachment_3_H",
@@ -33,6 +41,7 @@
             },
             "Chapter 4": {
                 "Aim": "",
+                "Chapter_title": "",
                 "Exercises": [
                     "Self-Attachment_4_J",
                     "Self-Attachment_4_K"
@@ -43,12 +52,18 @@
     "Attachment Object Course": {
         "Aim": "To transform your favourite childhood photo into a permanent, omnipresent attachment object that supports and comforts you.",
         "Course_type": "Advanced",
+        "Course_title": "Nature",
+        "Rating": 4.5,
+        "Rating_Count": 1496,
+        "Duration": "1 weeks",
+        "Image_URL": "assets/images/nature.png",
         "Prerequisites course tasks": [
             "Self-attachment course (core)"
         ],
         "Chapters": {
             "Chapter 1": {
                 "Aim": "",
+                "Chapter_title": "",
                 "Exercises": [
                     "Attachment_1_A",
                     "Attachment_1_B",

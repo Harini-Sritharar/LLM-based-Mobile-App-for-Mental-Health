@@ -32,9 +32,14 @@ def upload_course_structure_to_firestore(course_path, exercise_data_path):
         course_ref.set({
             "Aim": course_content.get("Aim", ""),
             "Course_type": course_content.get("Course_type", ""),
+            "Course_title": course_content.get("Course_title", ""),
+            "Rating": course_content.get("Rating", ""),
+            "Rating_Count": course_content.get("Rating_Count", ""),
+            "Duration": course_content.get("Duration", ""),
+            "Image_URL": course_content.get("Image_URL", ""),
             "Prerequisites": course_content.get("Prerequisites course tasks", [])
         })
-        
+
         # Add chapters
         chapters = course_content.get("Chapters", {})
         for chapter_name, chapter_content in chapters.items():
@@ -44,6 +49,7 @@ def upload_course_structure_to_firestore(course_path, exercise_data_path):
             chapter_ref = course_ref.collection("Chapters").document(chapter_name)
             chapter_ref.set({
                 "Aim": chapter_content.get("Aim", ""),
+                "Chapter_title": chapter_content.get("Chapter_title", ""),
             })
 
             # Add exercises as subdocuments
