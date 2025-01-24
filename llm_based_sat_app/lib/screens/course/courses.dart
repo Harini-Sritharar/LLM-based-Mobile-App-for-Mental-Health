@@ -54,97 +54,49 @@ class Courses extends StatelessWidget {
               child: ListView(
                 children: [
                   CourseCard(
-                    imageUrl: 'assets/images/self_attachment.png',
-                    courseType: 'Core',
-                    courseTitle: 'Self-attachment',
-                    duration: '2 week',
-                    rating: 4.2,
-                    ratingsCount: 7830,
-                    onButtonPress: (BuildContext context) {
-                      // Navigate to ExercisePageCaller when the button is pressed
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CourseInfo(
-                            onItemTapped: onItemTapped,
-                            selectedIndex: selectedIndex,
-                            courseType: "Core",
-                            rating: 4.2,
-                            courseTitle: 'Self-attachment',
-                          ),
-                        ),
-                      );
-                    },
-                  ),
+                      imageUrl: 'assets/images/self_attachment.png',
+                      courseType: 'Core',
+                      courseTitle: 'Self-attachment',
+                      duration: '2 week',
+                      rating: 4.2,
+                      ratingsCount: 7830,
+                      onButtonPress: createOnButtonPress(
+                          courseTitle: "Self-attachment",
+                          courseType: "Core",
+                          rating: 4.2)),
                   CourseCard(
-                    imageUrl: 'assets/images/humour.png',
-                    courseType: 'Core',
-                    courseTitle: 'Humour',
-                    duration: '6 week',
-                    rating: 4.9,
-                    ratingsCount: 560,
-                    onButtonPress: (BuildContext context) {
-                      // Navigate to ExercisePageCaller when the button is pressed
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CourseInfo(
-                            onItemTapped: onItemTapped,
-                            selectedIndex: selectedIndex,
-                            courseType: 'Core',
-                            rating: 4.9,
-                            courseTitle: 'Humour',
-                          ),
-                        ),
-                      );
-                    },
-                  ),
+                      imageUrl: 'assets/images/humour.png',
+                      courseType: 'Core',
+                      courseTitle: 'Humour',
+                      duration: '6 week',
+                      rating: 4.9,
+                      ratingsCount: 560,
+                      onButtonPress: createOnButtonPress(
+                          courseTitle: "Humour",
+                          courseType: "Core",
+                          rating: 4.9)),
                   CourseCard(
-                    imageUrl: 'assets/images/creativity.png',
-                    courseType: 'Advanced',
-                    courseTitle: 'Creativity',
-                    duration: '3 week',
-                    rating: 3.9,
-                    ratingsCount: 67,
-                    onButtonPress: (BuildContext context) {
-                      // Navigate to ExercisePageCaller when the button is pressed
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CourseInfo(
-                            onItemTapped: onItemTapped,
-                            selectedIndex: selectedIndex,
-                            courseType: 'Advanced',
-                            rating: 3.9,
-                            courseTitle: 'Creativity',
-                          ),
-                        ),
-                      );
-                    },
-                  ),
+                      imageUrl: 'assets/images/creativity.png',
+                      courseType: 'Advanced',
+                      courseTitle: 'Creativity',
+                      duration: '3 week',
+                      rating: 3.9,
+                      ratingsCount: 67,
+                      onButtonPress: createOnButtonPress(
+                          courseTitle: "Creativity",
+                          courseType: "Advanced",
+                          rating: 3.9)),
                   CourseCard(
-                    imageUrl: 'assets/images/nature.png',
-                    courseType: 'Advanced',
-                    courseTitle: 'Nature',
-                    duration: '1 week',
-                    rating: 4.5,
-                    ratingsCount: 1496,
-                    onButtonPress: (BuildContext context) {
-                      // Navigate to ExercisePageCaller when the button is pressed
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CourseInfo(
-                            onItemTapped: onItemTapped,
-                            selectedIndex: selectedIndex,
-                            courseType: "Advanced",
-                            rating: 4.5,
-                            courseTitle: 'Nature',
-                          ),
-                        ),
-                      );
-                    },
-                  ),
+                      imageUrl: 'assets/images/nature.png',
+                      courseType: 'Advanced',
+                      courseTitle: 'Nature',
+                      duration: '1 week',
+                      rating: 4.5,
+                      ratingsCount: 1496,
+                      onButtonPress: createOnButtonPress(
+                          courseTitle: "Nature",
+                          courseType: "Advanced",
+                          rating: 4.5)),
                 ],
               ),
             ),
@@ -179,5 +131,27 @@ class Courses extends StatelessWidget {
         ],
       ),
     );
+  }
+
+/* Creates a dynamic `onButtonPress` function that navigates to the `CourseInfo` page with the specified parameters. */
+  void Function(BuildContext) createOnButtonPress({
+    required String courseTitle,
+    required String courseType,
+    required double rating,
+  }) {
+    return (BuildContext context) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CourseInfo(
+            onItemTapped: onItemTapped,
+            selectedIndex: selectedIndex,
+            courseType: courseType,
+            rating: rating,
+            courseTitle: courseTitle,
+          ),
+        ),
+      );
+    };
   }
 }
