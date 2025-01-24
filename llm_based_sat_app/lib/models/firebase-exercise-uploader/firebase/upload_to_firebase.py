@@ -31,6 +31,7 @@ def upload_course_structure_to_firestore(course_path, exercise_data_path):
         course_ref = db.collection("Courses").document(course_name)
         course_ref.set({
             "Aim": course_content.get("Aim", ""),
+            "Course_type": course_content.get("Course_type", ""),
             "Prerequisites": course_content.get("Prerequisites course tasks", [])
         })
         
@@ -42,9 +43,9 @@ def upload_course_structure_to_firestore(course_path, exercise_data_path):
             # Create a subcollection for chapters
             chapter_ref = course_ref.collection("Chapters").document(chapter_name)
             chapter_ref.set({
-                "Aim": chapter_content.get("Aim", "")
+                "Aim": chapter_content.get("Aim", ""),
             })
-            
+
             # Add exercises as subdocuments
             exercises = chapter_content.get("Exercises", {})
             for exercise_name in exercises:

@@ -1,6 +1,7 @@
 {
     "Self-Attachment": {
         "Aim": "To build a strong and compassionate connection with one's inner child, fostering emotional growth and self-regulation.",
+        "Course_type": "Core",
         "Prerequisites course tasks": [
             "SAT introductory lessons",
             "Select one happy and one unhappy photo (your most favourite to set as default selection for all exercises)"
@@ -39,8 +40,9 @@
             }
         }
     },
-    "Attachment Object Course (Advanced)": {
+    "Attachment Object Course": {
         "Aim": "To transform your favourite childhood photo into a permanent, omnipresent attachment object that supports and comforts you.",
+        "Course_type": "Advanced",
         "Prerequisites course tasks": [
             "Self-attachment course (core)"
         ],
