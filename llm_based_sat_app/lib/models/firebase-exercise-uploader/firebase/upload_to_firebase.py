@@ -2,35 +2,25 @@
 
 import json
 import firebase_admin
-from firebase_admin import credentials, storage
+from firebase_admin import credentials, firestore
 
-# Initialize Firebase Admin SDK
-cred = credentials.Certificate("../firebase/llm-based-sat-app-firebase-adminsdk-d18wo-071df6539f.json")
-firebase_admin.initialize_app(cred, {
-    "storageBucket": "llm-based-sat-app.firebasestorage.app"
-})
+# Initialize Firebase Admin SDK with Firestore
+cred = credentials.Certificate("./llm-based-sat-app-firebase-adminsdk-d18wo-071df6539f.json")
+firebase_admin.initialize_app(cred)
 
-# Reference to the Firebase Storage bucket
-bucket = storage.bucket()
+# Get Firestore client
+db = firestore.client()
 
-def upload_exercise_data(file_path, bucket):
+def upload_exercise_data_to_firestore(file_path):
     # Load JSON data
     with open(file_path, "r") as file:
         exercise_data = json.load(file)
-    
-    # Loop through each exercise and upload its structure
+
+    # Upload data to Firestore
     for exercise_name, exercise_content in exercise_data.items():
-        for section_name, section_content in exercise_content.items():
-            # Create a file path in Cloud Storage
-            cloud_path = f"Exercises/{exercise_name}/{section_name}.json"
-            
-            # Convert section content to JSON string
-            section_json = json.dumps(section_content, indent=4)
-            
-            # Upload the content to Cloud Storage
-            blob = bucket.blob(cloud_path)
-            blob.upload_from_string(section_json, content_type="application/json")
-            print(f"Uploaded: {cloud_path}")
+        exercise_ref = db.collection("Exercises").document(exercise_name)
+        exercise_ref.set(exercise_content)
+        print(f"Uploaded: {exercise_name}")
 
 # Call the function to upload data
-upload_exercise_data("exercise_data.json", bucket)
+upload_exercise_data_to_firestore("../data/exercise_data.json")
