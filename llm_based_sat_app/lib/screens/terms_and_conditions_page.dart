@@ -3,6 +3,9 @@
 /// scrollable list of sections and integrates with the bottom navigation bar.
 
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/theme/app_colours.dart';
+
+import '../widgets/custom_app_bar.dart';
 
 /// A stateless widget that represents the Terms and Conditions page.
 /// This page displays information about the terms and conditions of the application.
@@ -32,37 +35,17 @@ class TermsAndConditionsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       // AppBar with a back button, title, and notification icon.
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: arrowColor),
-          onPressed: () =>
-              Navigator.pop(context), // Navigate back to the previous page.
-        ),
-        title: Text(
-          "Terms & Conditions",
-          style: TextStyle(
-            color: headerTextColor,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.notifications, color: arrowColor),
-            onPressed: () {
-              // Add notification handling logic here.
-            },
-          ),
-        ],
-      ),
+
       // Main body containing the terms and conditions content.
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         child: ListView(
           children: [
+            CustomAppBar(
+              title: "Terms & Conditions",
+              onItemTapped: onItemTapped,
+              selectedIndex: selectedIndex,
+            ),
             // Example sections of terms and conditions.
             _buildSection(
               "Section 1.1",
@@ -74,21 +57,6 @@ class TermsAndConditionsPage extends StatelessWidget {
             ),
           ],
         ),
-      ),
-      // Bottom navigation bar for quick navigation to other pages.
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: selectedIndex,
-        onTap: onItemTapped, // Handle item taps to navigate between pages.
-        selectedItemColor: arrowColor,
-        unselectedItemColor: primaryTextColor,
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.group), label: "Community"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_today), label: "Calendar"),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.score), label: "Score"),
-          BottomNavigationBarItem(icon: Icon(Icons.book), label: "Courses"),
-        ],
       ),
     );
   }
@@ -107,9 +75,9 @@ class TermsAndConditionsPage extends StatelessWidget {
           Text(
             title,
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: headerTextColor,
+              color: AppColours.termsAndCondionsHeaderColor,
             ),
           ),
           SizedBox(height: 5),
@@ -117,8 +85,8 @@ class TermsAndConditionsPage extends StatelessWidget {
           Text(
             content,
             style: TextStyle(
-              fontSize: 14,
-              color: primaryTextColor,
+              fontSize: 17,
+              color: AppColours.termsAndConditionsContentColor,
               height: 1.5, // Line height for better readability.
             ),
           ),
