@@ -170,10 +170,11 @@ class _SignUpPageState extends State<SignUpPage> {
       String email = _emailController.text;
       String password = _passwordController.text;
 
-      User? user =
+      User? currentUser =
           await _auth.signUpWithEmailAndPassword(context, email, password);
 
-      if (user != null) {
+      if (currentUser != null) {
+        user = currentUser;
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => PersonalProfilePage()),
