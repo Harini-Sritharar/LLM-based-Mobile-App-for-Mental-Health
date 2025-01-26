@@ -39,9 +39,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _surnameController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
-
-  // Selected gender value.
-  String? _selectedGender;
+  final TextEditingController _genderController = TextEditingController();
 
   // @override
   // void dispose() {
@@ -65,7 +63,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
         _nameController.text,
         _surnameController.text,
         _dobController.text,
-        _selectedGender!,
+        _genderController.text,
       );
 
       // Navigate back
@@ -96,14 +94,17 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                   children: [
                     const Text(
                       "Personal Info",
-                      style: TextStyle(fontSize: 22, color: Color(0xFF687078)),
+                      style: TextStyle(
+                          fontSize: 28,
+                          color: AppColours.secondaryBlueTextColor),
                     ),
                     const SizedBox(height: 8),
                     const Text(
                       "Complete your Personal Information",
-                      style: TextStyle(fontSize: 16, color: Color(0xFF687078)),
+                      style: TextStyle(
+                          fontSize: 15, color: AppColours.primaryGreyTextColor),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 40),
                     TextInputField(
                       label: "Name",
                       icon: Icons.person,
@@ -149,35 +150,12 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                     ),
 
                     const SizedBox(height: 10),
-                    DropdownButtonFormField<String>(
-                      value: _selectedGender,
-                      decoration: InputDecoration(
-                        labelText: "Gender",
-                        filled: true,
-                        fillColor: const Color(0xFFD0E0F0),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                      hint: const Text("Select Gender"),
-                      items: ["Male", "Female", "Other"]
-                          .map((gender) => DropdownMenuItem(
-                                value: gender,
-                                child: Text(gender),
-                              ))
-                          .toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedGender = value;
-                        });
-                      },
-                      validator: (value) {
-                        if (value == null) {
-                          return "Gender cannot be empty";
-                        }
-                        return null;
-                      },
+                    TextInputField(
+                      label: "Gender",
+                      icon: Icons.person_outline,
+                      isPassword: false,
+                      controller: _genderController,
+                      validator: (value) => _validateNotEmpty(value, "Gender"),
                     ),
                     const SizedBox(height: 40),
                     CustomButton(

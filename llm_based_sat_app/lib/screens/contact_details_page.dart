@@ -79,20 +79,22 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
               Form(
                   key: _formKey,
                   child: SingleChildScrollView(
-                      child: Column(children: [
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
                     const Text(
                       "Contact Details",
                       style: TextStyle(
-                          fontSize: 22,
+                          fontSize: 28,
                           color: AppColours.secondaryBlueTextColor),
                     ),
                     const SizedBox(height: 8),
                     const Text(
                       "Complete your Contact Details",
                       style: TextStyle(
-                          fontSize: 16, color: AppColours.primaryGreyTextColor),
+                          fontSize: 15, color: AppColours.primaryGreyTextColor),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 40),
                     // TODO : Replace the map icon, globe doesn't exist in Icons
                     TextInputField(
                       label: "Country",
@@ -100,6 +102,14 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
                       isPassword: false,
                       controller: _countryController,
                       enabled: false,
+                    ),
+                    const SizedBox(height: 10),
+                    TextInputField(
+                      label: "Zip/Postal Code",
+                      icon: Icons.apartment,
+                      isPassword: false,
+                      controller: _zipPostalController,
+                      validator: _validateZipPostalCode,
                     ),
                     const SizedBox(height: 10),
                     IntlPhoneField(
@@ -135,14 +145,6 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
                           FilteringTextInputFormatter
                               .digitsOnly, // Numeric input only
                         ]),
-                    const SizedBox(height: 10),
-                    TextInputField(
-                      label: "Zip/Postal Code",
-                      icon: Icons.apartment,
-                      isPassword: false,
-                      controller: _zipPostalController,
-                      validator: _validateZipPostalCode,
-                    ),
                     const SizedBox(height: 10),
                     const SizedBox(height: 40),
                     CustomButton(
