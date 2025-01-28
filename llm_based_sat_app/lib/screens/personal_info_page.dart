@@ -9,6 +9,8 @@ import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import 'package:llm_based_sat_app/widgets/custom_button.dart';
 import '../widgets/auth_widgets/text_input_field.dart';
+import 'package:provider/provider.dart';
+import '../profile_notifier.dart';
 
 /// A stateful widget that represents the Personal Info page.
 /// This page allows users to enter and save their personal information.
@@ -66,6 +68,8 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
         _genderController.text,
       );
 
+      // Notify profile updates
+      Provider.of<ProfileNotifier>(context, listen: false).notifyProfileUpdated();
       // Navigate back
       Navigator.pop(context);
     }

@@ -16,6 +16,8 @@ import '../screens/home_page.dart';
 import '../screens/score_page.dart';
 import '../widgets/bottom_nav_bar.dart';
 import 'firebase_options.dart';
+import 'package:provider/provider.dart';
+import 'profile_notifier.dart';
 
 List<Map<String, dynamic>> favouritePhotos = [];
 List<Map<String, dynamic>> nonFavouritePhotos = [];
@@ -26,7 +28,12 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => ProfileNotifier(),
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
