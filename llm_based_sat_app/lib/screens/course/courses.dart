@@ -110,6 +110,8 @@ class Courses extends StatelessWidget {
 
   /* Generates a list of `CourseCard` widgets dynamically based on course data. */
   List<Widget> generateCourseCards() {
+    // TODO
+    // Use firebase helper funtion in lib/ to get data from firebase
     List<Map<String, dynamic>> courses = [
       {
         'imageUrl': 'assets/images/self_attachment.png',
