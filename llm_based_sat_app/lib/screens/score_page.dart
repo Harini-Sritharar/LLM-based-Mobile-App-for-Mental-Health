@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'profile_page.dart';
+import 'package:llm_based_sat_app/widgets/score_widgets/circular_progress_bar.dart';
 import '../widgets/custom_app_bar.dart';
 
 class ScorePage extends StatelessWidget {
@@ -19,10 +19,7 @@ class ScorePage extends StatelessWidget {
         backButton: false,
       ),
       body: const Center(
-        child: Text(
-          'Score Page',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),
+        child: CircularProgressBar(title: "Overall", percentage: 67),
       ),
     );
   }
