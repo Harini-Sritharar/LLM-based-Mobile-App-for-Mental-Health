@@ -14,17 +14,15 @@
             "Required learning": "Practise connecting with the child in both positive and negative emotions and learn to go back and forth between these opposite emotions.",
             "Optional learning": ""
         },
-        "Exercise Steps": {
-            "Step 1": "Look at your happy photo below. Recall positive childhood memories.",
-            "Step 2": "Look at your unhappy photo. Recall negative childhood memories.",
-            "Step 3": "Recall early relationships in the family."
-        },
+        "Exercise Steps": [
+            "Self-Attachment_1_A_1",
+            "Self-Attachment_1_A_2",
+            "Self-Attachment_1_A_3",
+            "Self-Attachment_1_A_Final"
+        ],
         "After-exercise tasks": [
             "Answer some questions about the exercise [TODO: Ask Abbas what the questions can be]",
             "Write your comments about the exercise in the designated input box in the app."
-        ],
-        "Exercise Pages": [
-            "Self-Attachment_1_A_1"
         ]
     },
     "Self-Attachment_1_B": {
@@ -40,13 +38,14 @@
             "Required learning": "",
             "Optional learning": ""
         },
-        "Exercise Steps": {
-            "Step 1": "Look at your happy photo. Close your eyes. Imagine the child in a happy state.",
-            "Step 2": "With your eyes closed, imagine that the child is near you.",
-            "Step 3": "Now imagine you are embracing the child.",
-            "Step 4": "Now imagine you are playing with the child, e.g. a game that you played as a child.",
-            "Step 5": "Now imagine you are dancing with the child."
-        },
+        "Exercise Steps": [
+            "Self-Attachment_1_B_1",
+            "Self-Attachment_1_B_2",
+            "Self-Attachment_1_B_3",
+            "Self-Attachment_1_B_4",
+            "Self-Attachment_1_B_5",
+            "Self-Attachment_1_B_Final"
+        ],
         "After-exercise tasks": [
             "Reflect on how you feel in each phase."
         ]
@@ -64,11 +63,12 @@
             "Required learning": "",
             "Optional learning": ""
         },
-        "Exercise Steps": {
-            "Step 1": "Look at your unhappy photo. Close your eyes. Imagine the child in an unhappy state.",
-            "Step 2": "With your eyes closed, imagine that the child is near you.",
-            "Step 3": "Now imagine you are embracing and consoling the child."
-        },
+        "Exercise Steps": [
+            "Self-Attachment_1_C_1",
+            "Self-Attachment_1_C_2",
+            "Self-Attachment_1_C_3",
+            "Self-Attachment_1_C_Final"
+        ],
         "After-exercise tasks": [
             "Reflect on how you feel in each phase."
         ]
@@ -90,11 +90,12 @@
             "Required learning": "As discovered by Freud, we are all born with a self-love he called primary narcissism. In SAT, we use this innate trend to fall in love with our child. The resulting emotional connection with the child resembles how parents are emotionally connected to their children. A good parent creates an emotional connection for their children. Parental bonding includes eye gazing, hand holding, caressing, singing, playing, smiling and laughing.",
             "Optional learning": "Love and affection for the Child: Dopamine is released in maternal or romantic love or love of a deity. Creating an affectional bond with the child through singing jolly love songs while looking at our favourite childhood photo releases dopamine in the brain’s reward centre. This leads to hope and motivation for carrying out the self-attachment protocols. The secretion of dopamine also leads to the secretion of serotonin, oxytocin, and vasopressin, which prepare us for active loving and taking care of the child. Communicating with the child - Speaking out loud: In the process of caring for the child, it is important to communicate by speaking out loud, to create an emotional bond with them and help them towards higher levels of emotional maturity. Even though we cannot see our child, the area of our brain that relates to long-term memories can hear our voice and recognize its kind content."
         },
-        "Exercise Steps": {
-            "Step 1": "While looking at the happy photo/avatar, sing the song, as a way to establish a deep emotional bond with the child in your mind.",
-            "Step 2": "Start quietly; then, over time, allow your voice to become louder while using more of your body (e.g. shaking your shoulders, hands, and lifting your eyebrows up and down).",
-            "Step 3": "Imagine that in this way, like a parent, you are having a loving, passionate dialogue and are joyfully dancing and playing with the child."
-        },
+        "Exercise Steps": [
+            "Self-Attachment_2_D_1",
+            "Self-Attachment_2_D_2",
+            "Self-Attachment_2_D_3",
+            "Self-Attachment_2_D_Final"
+        ],
         "After-exercise tasks": [
             "Diary"
         ]
@@ -114,9 +115,10 @@
             "Required learning": "It is crucially important to communicate loud with our child to establish an inner emotional connection with them. Talking aloud, constructively and affectionally with our child leads to a sense of agency vital for becoming empowered for emotion self-regulation.",
             "Optional learning": ""
         },
-        "Exercise Steps": {
-            "Step 1": "While genuinely smiling at the happy photo, speak out the selected sentence loudly and passionately while looking at your childhood photo or avatar."
-        },
+        "Exercise Steps": [
+            "Self-Attachment_2_E_1",
+            "Self-Attachment_2_E_Final"
+        ], 
         "After-exercise tasks": [
             "Diary"
         ]
@@ -137,9 +139,10 @@
             "Required learning": "You pledge to look after your childhood self as your own real child. This means that any time you feel any negative emotion, you associate it to your childhood self (unhappy photo) and care for them as your own child.",
             "Optional learning": ""
         },
-        "Exercise Steps": {
-            "Step 1": "You, as your adult self, begin with reading your pledge silently. Then, you confidently make your pledge to the child out loud."
-        },
+        "Exercise Steps": [
+            "Self-Attachment_2_F_1",
+            "Self-Attachment_2_F_Final"
+        ], 
         "After-exercise tasks": []
     },
     "Self-Attachment_3_G": {
@@ -155,11 +158,12 @@
             "Required learning": "House building is one of the first activities early humans undertook, and is one of the first games children engage with. Imagining and imaginatively building yourself a safe and secure home can provide you schematically with emotional shelter in the face of stress and challenges. In contrast, a derelict and shaky house can schematically represent a vulnerable inner emotional world that is easily disturbed by slightest environmental stress. Building a dream house is a symbol of building a new self.",
             "Optional learning": ""
         },
-        "Exercise Steps": {
-            "Step 1": "By looking at the picture of a house with some derelict parts, imagine that this is your emotional world. Think that renovating the house you are improving your emotional self.",
-            "Step 2": "Now, instead of the old derelict house, you will build a new house by click on the different derelict parts of the house to fix them. Your new magnificent house has strong pillars and structure withstanding any rough weather and disaster. The rooms of your new home and its garden are bright and colourful.",
-            "Step 3": "However, notice the unrestored basement/cellar of your new house. This part of the house contains your negative emotions. When suffering negative emotions, imagine that your child is trapped in the basement. Imagine you as the adult invite your child to leave the cellar by opening the door. Imagine that the child walks out and enters the bright rooms, and you embrace your child in reunion."
-        },
+        "Exercise Steps": [
+            "Self-Attachment_3_G_1",
+            "Self-Attachment_3_G_2",
+            "Self-Attachment_3_G_3",
+            "Self-Attachment_3_G_Final"
+        ], 
         "After-exercise tasks": []
     },
     "Self-Attachment_3_H": {
@@ -187,10 +191,11 @@
             "Required learning": "Like a real parent, saying a short phrase of affection, like 'My love', gently and repeatedly strengthens the internal connection to your Child. Singing your favourite song loudly and with the whole body to your child consolidates the bond.",
             "Optional learning": ""
         },
-        "Exercise Steps": {
-            "Step 1": "Say your chosen phrase slowly, out loud at least 5 times as you look at the happy photo.",
-            "Step 2": "Then sing your favourite chosen love song at least 5 times. As previously, increase your volume and begin to use your whole body."
-        },
+        "Exercise Steps": [
+            "Self-Attachment_3_H_1",
+            "Self-Attachment_3_H_2",
+            "Self-Attachment_3_H_Final"
+        ], 
         "After-exercise tasks": []
     },
     "Self-Attachment_3_I": {
@@ -208,9 +213,10 @@
             "Required learning": "If you are struggling with emotional problems, you can have a negative self-image. You can counter this by first imagining your happy child photo in the mirror and then by singing our favourite song to the child. This can eventually lead us to smile and laugh. By habituating ourselves to singing loud our favourite songs, we create an effective tool for emotion regulation: we can spontaneously start singing the song even if we are encountering emotional challenges, which will then help us switch to a better mood.",
             "Optional learning": ""
         },
-        "Exercise Steps": {
-            "Step 1": "While looking at yourself through the front camera, imagine your image to be that of the child, then begin to loudly sing your previously chosen song. As previously, increase your volume and begin to use your whole body. [twice now]"
-        },
+        "Exercise Steps": [
+            "Self-Attachment_3_I_1",
+            "Self-Attachment_3_I_Final"
+        ],
         "After-exercise tasks": [
             "Do this as many times as possible in different circumstances during the day, such as while on the way to work or while cooking dinner, to integrate them into your new life.",
             "Act like a professional singer, list several jolly love songs and go out of your way to sing them out loud wherever and whenever you can, in the house, when walking outdoors etc"
@@ -243,10 +249,11 @@
                 "According to social psychologists informed by attachment theory, great religions can provide an attachment figure/object for the devout practitioner with some similarities between their relationship to their deities and that of a child to their parents."
             ]
         },
-        "Exercise Steps": {
-            "Step 1": "Go to your planned visit in Nature. Spend at least 5 minutes admiring a tree, attempting to appreciate its real beauty as you have never previously experienced.",
-            "Step 2": "Repeat this process, including with other aspects of nature (e.g. sky, stars, plants, birds, rivers, sea, your favourite animal), until you feel you have developed an attachment to nature that helps regulate your emotions."
-        },
+        "Exercise Steps": [
+            "Self-Attachment_4_J_1",
+            "Self-Attachment_4_J_2",
+            "Self-Attachment_4_J_Final"
+        ],
         "After-exercise tasks": [
             "Plan more visits to Nature"
         ]
@@ -266,9 +273,10 @@
             "Required learning": "",
             "Optional learning": ""
         },
-        "Exercise Steps": {
-            "Step 1": "Unlock your phone and sing your favourite jolly/love song as soon as you see your childhood image."
-        },
+        "Exercise Steps": [
+            "Self-Attachment_4_K_1",
+            "Self-Attachment_4_K_Final"
+        ],
         "After-exercise tasks": []
     },
     "Attachment_1_A": {
@@ -284,9 +292,10 @@
             "Required learning": "Acquire the capacity to experience a partial visualization of the photo, projected on any object in your view focusing on notable features of the photo. Eventually, it can be done without looking at your photo.",
             "Optional learning": ""
         },
-        "Exercise Steps": {
-            "Step 1": "Try to project and partially/vaguely imagine your childhood photo expanded on rectangular objects such as windows and doors."
-        },
+        "Exercise Steps": [
+            "Attachment_1_A_1",
+            "Attachment_1_A_Final"
+        ],
         "After-exercise tasks": [
             "Repeat this step as many times a day as possible, habituating yourself to the experience."
         ]
@@ -304,9 +313,10 @@
             "Required learning": "Once we succeed in this attempt and become habituated to project your favourite photo all around, our child photo becomes a secure attachment object for us, comforting us when stressed and enabling us to regulate our emotions.",
             "Optional learning": ""
         },
-        "Exercise Steps": {
-            "Step 1": "Try to project and partially/vaguely imagine your childhood photo expanded on any object in your view, potentially on all natural and inanimate objects., e.g., trees, clouds."
-        },
+        "Exercise Steps": [
+            "Attachment_1_B_1",
+            "Attachment_1_B_Final"
+        ],
         "After-exercise tasks": [
             "Repeat this step as many times a day as possible, habituating yourself to the experience."
         ]
@@ -324,9 +334,10 @@
             "Required learning": "Multiple copies of your projected or imagined child photo provides you a protective shield against stressful situations and a secure base for conducting all your daily activities. Having your adult self emotionally bonded with and supported your child, the roles become reversed with the projected child photo on objects acting as a secure attachment object for us. In the long term, this practice will help us maintain our connection to self-attachment and therefore help us retain the positive benefits of all the exercises.",
             "Optional learning": ""
         },
-        "Exercise Steps": {
-            "Step 1": "Imagine the favourite childhood photo in multiple copies on objects all around you."
-        },
+        "Exercise Steps": [
+            "Attachment_1_C_1",
+            "Attachment_1_C_Final"
+        ],
         "After-exercise tasks": []
     }
 }

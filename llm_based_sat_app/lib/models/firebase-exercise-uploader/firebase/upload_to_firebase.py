@@ -11,7 +11,7 @@ firebase_admin.initialize_app(cred)
 # Get Firestore client
 db = firestore.client()
 
-def upload_course_structure_to_firestore(course_path, exercise_data_path):
+def upload_course_structure_to_firestore(course_path, exercise_data_path, steps_data_path):
     """
     Uploads the hierarchical course structure into Firestore.
     Includes exercises as subdocuments inside the Exercises folder.
@@ -19,6 +19,10 @@ def upload_course_structure_to_firestore(course_path, exercise_data_path):
     # Load exercise data from the exercise data file
     with open(exercise_data_path, "r") as exercise_file:
         exercise_data = json.load(exercise_file)
+
+    # Load steps data from the steps data file
+    with open(steps_data_path, "r") as steps_file:
+        steps_data = json.load(steps_file)
     
     # Load course data from the course structure file
     with open(course_path, "r") as course_file:
@@ -52,18 +56,31 @@ def upload_course_structure_to_firestore(course_path, exercise_data_path):
                 "Chapter_title": chapter_content.get("Chapter_title", ""),
             })
 
-            # Add exercises as subdocuments
+            # Add exercises and their steps as subdocuments
             exercises = chapter_content.get("Exercises", {})
             for exercise_name in exercises:
                 if exercise_name in exercise_data:
                     print(f"    Adding exercise: {exercise_name}")
                     exercise_ref = chapter_ref.collection("Exercises").document(exercise_name)
+
+                    # Set exercise data
                     exercise_ref.set(exercise_data[exercise_name])
+
+                    # Add steps for the exercise
+                    step_ids = exercise_data[exercise_name].get("Exercise Steps", [])
+                    for step_id in step_ids:
+                        if step_id in steps_data:
+                            print(f"      Adding step: {step_id}")
+                            step_ref = exercise_ref.collection("Steps").document(step_id)
+                            step_ref.set(steps_data[step_id])
+                        else:
+                            print(f"      Warning: Step {step_id} not found in steps data.")
                 else:
                     print(f"    Warning: Exercise {exercise_name} not found in exercise data.")
 
 # Call the function with paths to the JSON files
 upload_course_structure_to_firestore(
     "../data/courses_data.json",
-    "../data/exercise_data.json"
+    "../data/exercise_data.json",
+    "../data/steps_data.json"
 )
