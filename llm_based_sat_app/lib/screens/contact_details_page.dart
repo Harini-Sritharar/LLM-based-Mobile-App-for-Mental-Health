@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:llm_based_sat_app/models/user_data_interface.dart';
-import 'package:llm_based_sat_app/screens/personal_profile_page.dart';
-import 'package:llm_based_sat_app/screens/upload_profile_picture_page.dart';
+import 'package:llm_based_sat_app/firebase_profile.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/auth_widgets/text_input_field.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
@@ -25,7 +23,6 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
   final TextEditingController _countryController =
       TextEditingController(text: "United Kingdom");
   final TextEditingController _zipPostalController = TextEditingController();
-  final User_ user = User_();
   String?
       selectedCountryCode; // Stores the selected country's code -> can be used to convert to obtain the country's dial code
   String? mobileNumber; // Stores the mobile number input
@@ -40,12 +37,9 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
 
   void _saveContactDetails() {
     if (_formKey.currentState!.validate()) {
-      user.updateCountry(_countryController.text);
-      user.updateZipcode(_zipPostalController.text);
-      user.updatePhoneNumber(mobileNumber!);
-
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => PersonalProfilePage()));
+      updateContactDetails(
+          _countryController.text, _zipPostalController.text, mobileNumber!);
+      Navigator.pop(context);
     }
   }
 
@@ -54,6 +48,16 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
   String? _validateZipPostalCode(String? value) {
     if (value == null || value.isEmpty) {
       return 'Zip/Postal Code cannot be empty';
+    }
+    return null;
+  }
+
+  String? _validateMobileNumber(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Mobile number cannot be empty';
+    }
+    if (!RegExp(r'^\d{7,15}$').hasMatch(value)) {
+      return 'Mobile number must contain 7-15 digits only';
     }
     return null;
   }
@@ -125,6 +129,8 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
                         },
                         keyboardType:
                             TextInputType.phone, // Ensures phone keyboard
+                        validator: (value) =>
+                            _validateMobileNumber(value?.number),
                         inputFormatters: [
                           FilteringTextInputFormatter
                               .digitsOnly, // Numeric input only

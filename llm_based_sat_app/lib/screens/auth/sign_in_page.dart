@@ -7,6 +7,8 @@ import '/theme/app_colours.dart';
 import '/widgets/auth_widgets/text_input_field.dart';
 import '/widgets/custom_button.dart';
 
+User? user;
+
 class SignInPage extends StatefulWidget {
   @override
   _SignInPageState createState() => _SignInPageState();
@@ -25,8 +27,7 @@ class _SignInPageState extends State<SignInPage> {
       String email = _emailController.text;
       String password = _passwordController.text;
 
-      User? user =
-          await _auth.signInWithEmailandPassword(context, email, password);
+      user = await _auth.signInWithEmailandPassword(context, email, password);
 
       if (user != null) {
         Navigator.pushReplacement(

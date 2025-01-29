@@ -1,8 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:llm_based_sat_app/models/user_data_interface.dart';
-import 'package:llm_based_sat_app/screens/personal_profile_page.dart';
+import 'package:llm_based_sat_app/firebase_profile.dart';
 import 'package:llm_based_sat_app/widgets/auth_widgets/text_input_field.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import 'package:llm_based_sat_app/widgets/custom_button.dart';
@@ -22,7 +21,6 @@ class UploadProfilePicturePage extends StatefulWidget {
 class _UploadProfilePicturePageState extends State<UploadProfilePicturePage> {
   final TextEditingController _usernameController = TextEditingController();
   File? _selectedImage; // Holds the selected image
-  User_ user = User_();
   @override
   void dispose() {
     _usernameController.dispose();
@@ -39,18 +37,10 @@ class _UploadProfilePicturePageState extends State<UploadProfilePicturePage> {
     // Save the profile picture
     // Save the username
     // Navigate to the next page
-    // if (_selectedImage != null && _usernameController.text.isNotEmpty) {
-    //   user.updateProfilePictureUrl(_selectedImage!.path);
-    //   user.updateUsername(_usernameController.text);
-    //   Navigator.push(context,
-    //       MaterialPageRoute(builder: (context) => PersonalProfilePage()));
-    // }
-
-    if (_usernameController.text.isNotEmpty) {
-      user.updateProfilePictureUrl('test');
-      user.updateUsername(_usernameController.text);
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => PersonalProfilePage()));
+    if (_selectedImage != null && _usernameController.text.isNotEmpty) {
+      updateProfilePictureAndUsername(
+          _selectedImage!, _usernameController.text);
+      Navigator.pop(context);
     }
   }
 

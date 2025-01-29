@@ -1,13 +1,13 @@
 class User_ {
-  late String firstname; // first name
-  late String surname; // last name
-  late String dob; // date of birth
-  late String gender;
-  late String zipcode;
-  late String country;
-  late String phoneNumber;
-  late String profilePictureUrl;
-  late String username;
+  String firstname = ''; // first name
+  String surname = ''; // last name
+  String dob = ''; // date of birth
+  String gender = '';
+  String zipcode = '';
+  String country = '';
+  String phoneNumber = '';
+  String profilePictureUrl = '';
+  String username = '';
 
   // Private constructor
   User_._internal();
@@ -20,7 +20,7 @@ class User_ {
   }
 
   // Add methods to set or get user data
-    void updateFirstName(String name) {
+  void updateFirstName(String name) {
     firstname = name;
   }
 
@@ -54,5 +54,20 @@ class User_ {
 
   void updateUsername(String name) {
     username = name;
+  }
+
+  bool isPersonalInfoComplete() {
+    return firstname.isNotEmpty &&
+        surname.isNotEmpty &&
+        dob.isNotEmpty &&
+        gender.isNotEmpty;
+  }
+
+  bool isContactDetailsComplete() {
+    return country.isNotEmpty && zipcode.isNotEmpty && phoneNumber.isNotEmpty;
+  }
+
+  bool isProfilePictureComplete() {
+    return profilePictureUrl.isNotEmpty;
   }
 }
