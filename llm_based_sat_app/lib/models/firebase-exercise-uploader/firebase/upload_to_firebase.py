@@ -35,6 +35,7 @@ def upload_course_structure_to_firestore(course_path, exercise_data_path, steps_
         course_ref = db.collection("Courses").document(course_name)
         course_ref.set({
             "Aim": course_content.get("Aim", ""),
+            "Subscription": course_content.get("Subscription", ""),
             "Course_type": course_content.get("Course_type", ""),
             "Course_title": course_content.get("Course_title", ""),
             "Rating": course_content.get("Rating", ""),
