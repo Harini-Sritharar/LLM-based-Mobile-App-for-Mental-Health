@@ -4,9 +4,13 @@ import 'dart:math';
 class CircularProgressBar extends StatelessWidget {
   final double percentage;
   final String title;
+  final bool inMiddle;
 
   const CircularProgressBar(
-      {super.key, required this.percentage, required this.title});
+      {super.key,
+      required this.percentage,
+      required this.title,
+      required this.inMiddle});
 
   @override
   Widget build(BuildContext context) {
@@ -14,29 +18,37 @@ class CircularProgressBar extends StatelessWidget {
       tween: Tween(begin: 0, end: percentage),
       duration: const Duration(seconds: 1),
       builder: (context, value, child) {
-        return CustomPaint(
-          painter: ProgressPainter(value / 100),
-          child: SizedBox(
-            width: 150,
-            height: 150,
-            child: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(fontSize: 16, color: Colors.grey),
-                  ),
-                  Text(
-                    "${value.toInt()}%",
-                    style: const TextStyle(
-                        fontSize: 22, fontWeight: FontWeight.bold),
-                  ),
-                ],
+        return Column(children: [
+          if (!inMiddle) // Show title ABOVE the progress bar if inMiddle is false
+            Text(
+              title,
+            ),
+          SizedBox(height: 8),
+          CustomPaint(
+            painter: ProgressPainter(value / 100),
+            child: SizedBox(
+              width: 150,
+              height: 150,
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (inMiddle)
+                      Text(
+                        title,
+                        style: TextStyle(fontSize: 16, color: Colors.grey),
+                      ),
+                    Text(
+                      "${value.toInt()}%",
+                      style: const TextStyle(
+                          fontSize: 22, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        );
+          )
+        ]);
       },
     );
   }
