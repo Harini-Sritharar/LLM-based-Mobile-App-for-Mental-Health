@@ -1,8 +1,13 @@
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as path;
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'models/firebase-exercise-uploader/interface/chapter_interface.dart';
+import 'models/firebase-exercise-uploader/interface/course_interface.dart';
+import 'models/firebase-exercise-uploader/interface/exercise_interface.dart';
 
 Future<String> getName(String uid) async {
   try {
@@ -33,7 +38,6 @@ Future<String> getName(String uid) async {
   }
 }
 
-
 Future<String> getProfilePictureUrl(String uid) async {
   try {
     // Reference to the Firestore collection
@@ -44,7 +48,8 @@ Future<String> getProfilePictureUrl(String uid) async {
 
     // Check if the document exists and return the profile picture URL
     if (snapshot.exists) {
-      final profilePictureUrl = snapshot.data()?['profilePictureUrl'] as String?;
+      final profilePictureUrl =
+          snapshot.data()?['profilePictureUrl'] as String?;
 
       if (profilePictureUrl != null && profilePictureUrl.isNotEmpty) {
         return profilePictureUrl;
@@ -59,6 +64,101 @@ Future<String> getProfilePictureUrl(String uid) async {
   }
 }
 
+Future<List<Course>> getAllCourses() async {
+  try {
+    // Fetch all courses
+    final querySnapshot =
+        await FirebaseFirestore.instance.collection('Courses').get();
+
+    // Fetch chapters and exercises for each course
+    final List<Course> courses = [];
+
+    // Loop through each course document
+    for (var doc in querySnapshot.docs) {
+      // Convert course data
+      final course = Course.fromFirestore(doc.id, doc.data());
+
+      // Fetch chapters for this course
+      final chaptersSnapshot = await FirebaseFirestore.instance
+          .collection('Courses')
+          .doc(doc.id)
+          .collection('Chapters')
+          .get();
+
+      // List to store all chapters
+      final List<Chapter> chapters = [];
+
+      // Loop through each chapter document
+      for (var chapterDoc in chaptersSnapshot.docs) {
+        // Convert chapter data
+        final chapter = Chapter.fromFirestore(chapterDoc.id, chapterDoc.data());
+
+        // Fetch exercises for this chapter
+        final exercisesSnapshot = await FirebaseFirestore.instance
+            .collection('Courses')
+            .doc(doc.id)
+            .collection('Chapters')
+            .doc(chapterDoc.id)
+            .collection('Exercises')
+            .get();
+
+        // List to store all exercises
+        final List<Exercise> exercises = exercisesSnapshot.docs.map((exerciseDoc) {
+          return Exercise.fromFirestore(exerciseDoc.id, exerciseDoc.data());
+        }).toList();
+
+        // Attach exercises to chapter
+        final chapterWithExercises = chapter.withExercises(exercises);
+
+        // Add the chapter to the list
+        chapters.add(chapterWithExercises);
+      }
+
+      // Now that all chapters and exercises are fetched, add course to the list
+      courses.add(Course(
+        id: course.id,
+        title: course.title,
+        rating: course.rating,
+        duration: course.duration,
+        ratingCount: course.ratingCount,
+        imageUrl: course.imageUrl,
+        aim: course.aim,
+        subscription: course.subscription,
+        courseType: course.courseType,
+        prerequisites: course.prerequisites,
+        chapters: chapters,
+      ));
+    }
+
+    return courses;
+  } catch (e) {
+    print('Error fetching courses with chapters and exercises: $e');
+    return [];
+  }
+}
+
+
+Future<List<Map<String, dynamic>>> getCoursesTrial() async {
+  try {
+    // Reference to the Firestore collection
+    final collection = FirebaseFirestore.instance.collection('Courses');
+
+    // Get all documents from the collection
+    final querySnapshot = await collection.get();
+
+    // Extract the documents as a list of maps
+    final courses = querySnapshot.docs.map((doc) => doc.data()).toList();
+
+    // Return the list of courses
+    return courses;
+  } catch (e) {
+    // Handle errors and return an empty list
+    if (kDebugMode) {
+      print('Error fetching courses: $e');
+    }
+    return [];
+  }
+}
 
 Future<void> uploadPhoto({
   required File photoFile,

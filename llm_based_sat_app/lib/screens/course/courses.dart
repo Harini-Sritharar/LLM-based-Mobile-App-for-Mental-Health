@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/firebase_helpers.dart';
+import 'package:llm_based_sat_app/models/firebase-exercise-uploader/interface/course_interface.dart';
 import 'package:llm_based_sat_app/screens/course/course_info.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/course_card.dart'; // Custom reusable widget for course cards
 
@@ -51,7 +53,24 @@ class Courses extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Expanded(
-              child: ListView(children: generateCourseCards()),
+              child: FutureBuilder<List<Widget>>(
+                future: generateCourseCards(), // Call the async method here
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    // Show a loading indicator while waiting for data
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    // Handle errors
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    // Handle the case where there is no data
+                    return Center(child: Text('No courses found.'));
+                  }
+
+                  // Return the ListView with the generated widgets
+                  return ListView(children: snapshot.data!);
+                },
+              ),
             ),
           ],
         ),
@@ -109,9 +128,23 @@ class Courses extends StatelessWidget {
   }
 
   /* Generates a list of `CourseCard` widgets dynamically based on course data. */
-  List<Widget> generateCourseCards() {
+  Future<List<CourseCard>> generateCourseCards() async {
     // TODO
     // Use firebase helper funtion in lib/ to get data from firebase
+    List<Course> coursesDatabase = await getAllCourses();
+
+    if (coursesDatabase.isEmpty) {
+      print("No course found");
+    } else {
+      for (final course in coursesDatabase) {
+        for (final chapter in course.chapters) {
+          // for (final exercise in chapter.exercises) {
+          //   // TODO for step and finalStep then use it in app
+          // }
+        }
+      }
+    }
+
     List<Map<String, dynamic>> courses = [
       {
         'imageUrl': 'assets/images/self_attachment.png',

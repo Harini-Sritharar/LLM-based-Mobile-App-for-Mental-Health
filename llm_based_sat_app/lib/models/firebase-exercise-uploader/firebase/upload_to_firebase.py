@@ -1,5 +1,8 @@
 #!/usr/bin/env python3.12
 
+# TODO
+# Make interface of data input from firebase with comments explaining the type of data seen and various options
+
 import json
 import firebase_admin
 from firebase_admin import credentials, firestore
