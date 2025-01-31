@@ -1,9 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/screens/assessment_page.dart';
 import 'package:llm_based_sat_app/screens/personal_profile_page.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_up_page.dart';
 import 'package:llm_based_sat_app/screens/contact_details_page.dart';
 import 'package:llm_based_sat_app/screens/personal_info_page.dart';
+import 'package:llm_based_sat_app/screens/questionnaire_assessments_page';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/profile_widgets/image_picker.dart';
 import 'package:llm_based_sat_app/screens/course/courses.dart';
@@ -45,7 +47,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       // For now, the landing screen is the Sign In page
-      home: SignInPage(),
+      home: SignUpPage(),
       // home: UploadProfilePicturePage(onItemTapped: (x) => {}, selectedIndex: 0,) // for local testing
       // home:ImagePickerWidget()
     );

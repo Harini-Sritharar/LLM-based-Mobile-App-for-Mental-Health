@@ -1,0 +1,83 @@
+import 'package:flutter/material.dart';
+
+class QuestionnaireAssessmentsPage extends StatefulWidget {
+  @override
+  _QuestionnaireAssessmentsPageState createState() => _QuestionnaireAssessmentsPageState();
+}
+
+class _QuestionnaireAssessmentsPageState extends State<QuestionnaireAssessmentsPage> {
+  final List<String> questionnaires = [
+    "GAD-7 (Anxiety)",
+    "PHQ-9 (Depression)",
+    "PWB (Wellbeing)",
+    "SOCS-S (Self-Compassion)",
+    "CPC-12R (Psychological Capital)",
+    "ERQ_R (Reappraisal)",
+    "ERQ_S (Suppression)"
+  ];
+
+  final Set<String> completedQuestionnaires = {};
+
+  void completeQuestionnaire(String questionnaire) {
+    setState(() {
+      completedQuestionnaires.add(questionnaire);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Assessments"),
+      ),
+      body: ListView.builder(
+        itemCount: questionnaires.length,
+        itemBuilder: (context, index) {
+          final questionnaire = questionnaires[index];
+          final isCompleted = completedQuestionnaires.contains(questionnaire);
+
+          return ListTile(
+            title: Text(questionnaire),
+            trailing: isCompleted ? Icon(Icons.check, color: Colors.green) : null,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => QuestionnairePage(
+                    title: questionnaire,
+                    onComplete: () => completeQuestionnaire(questionnaire),
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+}
+
+class QuestionnairePage extends StatelessWidget {
+  final String title;
+  final VoidCallback onComplete;
+
+  const QuestionnairePage({required this.title, required this.onComplete});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(title),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            onComplete();
+            Navigator.pop(context);
+          },
+          child: Text("Submit Answers"),
+        ),
+      ),
+    );
+  }
+}
