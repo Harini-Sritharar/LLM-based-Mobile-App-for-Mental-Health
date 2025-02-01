@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:llm_based_sat_app/firebase_profile.dart';
@@ -26,6 +28,27 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
   String?
       selectedCountryCode; // Stores the selected country's code -> can be used to convert to obtain the country's dial code
   String? mobileNumber; // Stores the mobile number input
+
+   @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  void _loadUserData() async {
+  User? user = FirebaseAuth.instance.currentUser;
+  if (user != null) {
+    DocumentSnapshot doc =
+        await FirebaseFirestore.instance.collection('Profile').doc(user.uid).get();
+    if (doc.exists) {
+      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+      setState(() {
+        _countryController.text = data['country'] ?? '';
+        _zipPostalController.text = data['zipcode'] ?? '';
+      });
+    }
+  }
+  }
 
   @override
   void dispose() {
@@ -61,6 +84,7 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
     }
     return null;
   }
+
 
   @override
   Widget build(BuildContext context) {
