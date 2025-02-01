@@ -30,6 +30,7 @@ dependencies:
   intl_phone_field: ^3.2.0 # For phone number +country input
   image_picker: ^1.1.2
   file_picker: ^8.1.7
+  provider: ^6.1.2
 
 dev_dependencies:
   flutter_test:
