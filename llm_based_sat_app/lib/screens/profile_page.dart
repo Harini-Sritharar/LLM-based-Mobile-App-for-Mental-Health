@@ -6,6 +6,7 @@ import 'package:llm_based_sat_app/screens/payment_option_page.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
 import '../widgets/main_layout.dart';
 import 'edit_profile.dart';
+import 'manage_plan_page.dart';
 import 'settings_page.dart';
 import 'ultimate_goal_page.dart';
 import 'childhood_photos_page.dart';
@@ -160,6 +161,21 @@ class ProfilePage extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => ChildhoodPhotosPage(
+                            onItemTapped: onItemTapped,
+                            selectedIndex: selectedIndex,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  MenuItem(
+                    title: "Manage Plan",
+                    icon: 'assets/icons/empty-wallet.svg',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ManagePlanPage(
                             onItemTapped: onItemTapped,
                             selectedIndex: selectedIndex,
                           ),
