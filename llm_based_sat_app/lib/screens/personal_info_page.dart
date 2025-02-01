@@ -11,21 +11,13 @@ import 'package:llm_based_sat_app/widgets/custom_button.dart';
 import '../widgets/auth_widgets/text_input_field.dart';
 import 'package:provider/provider.dart';
 import '../profile_notifier.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-/// A stateful widget that represents the Personal Info page.
-/// This page allows users to enter and save their personal information.
 class PersonalInfoPage extends StatefulWidget {
-  // Callback function to handle navigation bar item taps.
   final Function(int) onItemTapped;
-
-  // The currently selected index in the navigation bar.
   final int selectedIndex;
 
-  /// Constructor for `PersonalInfoPage`.
-  ///
-  /// Requires:
-  /// - [onItemTapped]: A function to handle navigation bar item taps.
-  /// - [selectedIndex]: The index of the currently selected item in the navigation bar.
   const PersonalInfoPage({
     Key? key,
     required this.onItemTapped,
@@ -43,13 +35,28 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
   final TextEditingController _dobController = TextEditingController();
   final TextEditingController _genderController = TextEditingController();
 
-  // @override
-  // void dispose() {
-  //   _nameController.dispose();
-  //   _surnameController.dispose();
-  //   _dobController.dispose();
-  //   super.dispose();
-  // }
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  void _loadUserData() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      DocumentSnapshot doc =
+          await FirebaseFirestore.instance.collection('Profile').doc(user.uid).get();
+      if (doc.exists) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        setState(() {
+          _nameController.text = data['firstname'] ?? '';
+          _surnameController.text = data['surname'] ?? '';
+          _dobController.text = data['dob'] ?? '';
+          _genderController.text = data['gender'] ?? '';
+        });
+      }
+    }
+  }
 
   String? _validateNotEmpty(String? value, String fieldName) {
     if (value == null || value.isEmpty) {
@@ -60,7 +67,6 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
 
   void _savePersonalInfo() {
     if (_formKey.currentState!.validate()) {
-      // Save data to the database
       updatePersonalInfo(
         _nameController.text,
         _surnameController.text,
@@ -68,9 +74,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
         _genderController.text,
       );
 
-      // Notify profile updates
       Provider.of<ProfileNotifier>(context, listen: false).notifyProfileUpdated();
-      // Navigate back
       Navigator.pop(context);
     }
   }
@@ -84,7 +88,6 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Custom app bar for navigation.
               CustomAppBar(
                 title: "Personal Profile",
                 onItemTapped: widget.onItemTapped,
@@ -125,7 +128,6 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                       validator: (value) => _validateNotEmpty(value, "Surname"),
                     ),
                     const SizedBox(height: 10),
-                    // Date of Birth
                     GestureDetector(
                       onTap: () async {
                         DateTime? pickedDate = await showDatePicker(
@@ -152,7 +154,6 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 10),
                     TextInputField(
                       label: "Gender",

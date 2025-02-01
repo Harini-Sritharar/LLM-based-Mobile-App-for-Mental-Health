@@ -33,6 +33,28 @@ Future<String> getName(String uid) async {
   }
 }
 
+Future<String> getTier(String uid) async {
+  try {
+    // Reference to the Firestore collection
+    final collection = FirebaseFirestore.instance.collection('Profile');
+
+    // Get the document for the user with the given UID
+    final snapshot = await collection.doc(uid).get();
+
+    // Check if the document exists and return the name
+    if (snapshot.exists) {
+      final tier = snapshot.data()?['tier'] as String?;
+
+      if (tier != null && tier.isNotEmpty) return tier;
+    }
+    // Return a default value if the name is null or the document doesn't exist
+    return 'free';
+  } catch (e) {
+    // Handle errors and return a default value
+    print('Error fetching tier $e');
+    return 'Error Fetching Tier';
+  }
+}
 
 Future<String> getProfilePictureUrl(String uid) async {
   try {
@@ -44,7 +66,8 @@ Future<String> getProfilePictureUrl(String uid) async {
 
     // Check if the document exists and return the profile picture URL
     if (snapshot.exists) {
-      final profilePictureUrl = snapshot.data()?['profilePictureUrl'] as String?;
+      final profilePictureUrl =
+          snapshot.data()?['profilePictureUrl'] as String?;
 
       if (profilePictureUrl != null && profilePictureUrl.isNotEmpty) {
         return profilePictureUrl;
@@ -58,7 +81,6 @@ Future<String> getProfilePictureUrl(String uid) async {
     return 'Error Fetching Profile Picture';
   }
 }
-
 
 Future<void> uploadPhoto({
   required File photoFile,
@@ -78,12 +100,11 @@ Future<void> uploadPhoto({
     // Get the photo's download URL
     String photoUrl = await snapshot.ref.getDownloadURL();
 
-    // Save the photo metadata to Firestore
+    // Save the photo metadata to Firestore with userId as the document ID
     FirebaseFirestore firestore = FirebaseFirestore.instance;
-    await firestore.collection('ChildhoodPhotos').add({
+    await firestore.collection('ChildhoodPhotos').doc(userId).set({
       'photoUrl': photoUrl,
       'photoType': photoType,
-      'userId': userId,
       'photoName':
           path.basename(photoFile.path), // Store the original file name
     });
@@ -116,6 +137,7 @@ Future<void> uploadPhotoListParallel({
   }));
 }
 
+// Remove all user documents from a given collection
 Future<void> removeUserDocuments({
   required String userId,
   required String collectionName,

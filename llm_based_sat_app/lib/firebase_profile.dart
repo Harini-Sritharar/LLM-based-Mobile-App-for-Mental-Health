@@ -10,12 +10,25 @@ Future<void> updatePersonalInfo(
     String firstname, String surname, String dob, String gender) async {
   User? user = FirebaseAuth.instance.currentUser;
   FirebaseFirestore db = FirebaseFirestore.instance;
-  await db.collection('Profile').doc(user!.uid).update({
+
+  if (user == null) return;
+
+  DocumentReference userDoc = db.collection('Profile').doc(user.uid);
+  DocumentSnapshot docSnapshot = await userDoc.get();
+
+  String tier = "free"; // Default tier
+  if (docSnapshot.exists) {
+    // Preserve existing tier if user exists
+    tier = (docSnapshot.data() as Map<String, dynamic>)['tier'] ?? "free";
+  }
+
+  await userDoc.set({
     'firstname': firstname,
     'surname': surname,
     'dob': dob,
-    'gender': gender
-  });
+    'gender': gender,
+    'tier': tier,
+  }, SetOptions(merge: true)); // Merging ensures we don’t overwrite other fields
 }
 
 Future<void> updateContactDetails(
