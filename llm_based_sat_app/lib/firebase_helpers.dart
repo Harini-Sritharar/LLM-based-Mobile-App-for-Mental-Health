@@ -8,6 +8,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'models/firebase-exercise-uploader/interface/chapter_interface.dart';
 import 'models/firebase-exercise-uploader/interface/course_interface.dart';
 import 'models/firebase-exercise-uploader/interface/exercise_interface.dart';
+import 'models/firebase-exercise-uploader/interface/final_step_interface.dart';
+import 'models/firebase-exercise-uploader/interface/step_interface.dart';
 
 Future<String> getName(String uid) async {
   try {
@@ -103,9 +105,48 @@ Future<List<Course>> getAllCourses() async {
             .get();
 
         // List to store all exercises
-        final List<Exercise> exercises = exercisesSnapshot.docs.map((exerciseDoc) {
-          return Exercise.fromFirestore(exerciseDoc.id, exerciseDoc.data());
-        }).toList();
+        final List<Exercise> exercises = [];
+
+        // Loop through each exercise document
+        for (var exerciseDoc in exercisesSnapshot.docs) {
+          // Convert exercise data
+          final exercise = Exercise.fromFirestore(
+              exerciseDoc.id, exerciseDoc.data());
+
+          // Fetch steps for this exercise
+          final stepsSnapshot = await FirebaseFirestore.instance
+              .collection('Courses')
+              .doc(doc.id)
+              .collection('Chapters')
+              .doc(chapterDoc.id)
+              .collection('Exercises')
+              .doc(exerciseDoc.id)
+              .collection('Steps')
+              .get();
+
+          // List to store steps
+          final List<Step> exerciseSteps = [];
+          FinalStep? finalStep;
+
+          // Loop through each step document
+          for (var stepDoc in stepsSnapshot.docs) {
+            final stepData = stepDoc.data();
+            if (stepDoc.id.endsWith("Final")) {
+              finalStep = FinalStep.fromFirestore(stepDoc.id, stepData);
+            } else {
+              exerciseSteps.add(Step.fromFirestore(stepDoc.id, stepData));
+            }
+          }
+
+          // Attach steps and final step to exercise
+          final exerciseWithSteps = exercise.withStepsAndFinalStep(
+            exerciseSteps,
+            finalStep!,
+          );
+
+          // Add the exercise to the list
+          exercises.add(exerciseWithSteps);
+        }
 
         // Attach exercises to chapter
         final chapterWithExercises = chapter.withExercises(exercises);
@@ -132,7 +173,7 @@ Future<List<Course>> getAllCourses() async {
 
     return courses;
   } catch (e) {
-    print('Error fetching courses with chapters and exercises: $e');
+    print('Error fetching courses with chapters, exercises, and steps: $e');
     return [];
   }
 }

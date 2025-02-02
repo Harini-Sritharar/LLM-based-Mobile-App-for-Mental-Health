@@ -9,13 +9,11 @@ class FinalStep {
     required this.assessmentQuestions,
   });
 
-  factory FinalStep.fromMap(Map<String, dynamic> map) {
+  factory FinalStep.fromFirestore(String id, Map<String, dynamic> data) {
     return FinalStep(
-      stepTitle: map['Step_title'] ?? '',
-      description: map['Description'] ?? '',
-      assessmentQuestions: (map['Assessment_questions'] as List<dynamic>)
-          .map((e) => e as String)
-          .toList(),
+      stepTitle: data['Step_title'],
+      description: data['Description'],
+      assessmentQuestions: List<String>.from(data['Assessment_questions'] ?? []),
     );
   }
 }

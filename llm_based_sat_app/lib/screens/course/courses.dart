@@ -138,9 +138,10 @@ class Courses extends StatelessWidget {
     } else {
       for (final course in coursesDatabase) {
         for (final chapter in course.chapters) {
-          // for (final exercise in chapter.exercises) {
+          for (final exercise in chapter.exercises) {
+            print(exercise.exerciseFinalStep!.assessmentQuestions.length);
           //   // TODO for step and finalStep then use it in app
-          // }
+          }
         }
       }
     }

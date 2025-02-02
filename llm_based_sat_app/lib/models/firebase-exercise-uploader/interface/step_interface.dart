@@ -11,12 +11,12 @@ class Step {
     this.footerText = "",
   });
 
-  factory Step.fromMap(Map<String, dynamic> map) {
+  factory Step.fromFirestore(String id, Map<String, dynamic> data) {
     return Step(
-      stepTitle: map['Step_title'] ?? '',
-      description: map['Description'] ?? '',
-      additionalDetails: map['Additional Details'] ?? '',
-      footerText: map['Footer_text'] ?? '',
+      stepTitle: data['Step_title'],
+      description: data['Description'],
+      additionalDetails: data['Additional Details'],
+      footerText: data['Footer_text'],
     );
   }
 }
