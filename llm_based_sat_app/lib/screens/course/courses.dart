@@ -59,12 +59,38 @@ class Courses extends StatelessWidget {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     // Show a loading indicator while waiting for data
                     return Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    // Handle errors
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty || snapshot.hasError) {
                     // Handle the case where there is no data
-                    return Center(child: Text('No courses found.'));
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.error_outline,
+                            color: Colors.redAccent,
+                            size: 60,
+                          ),
+                          SizedBox(height: 16),
+                          Text(
+                            'We’re having issues fetching courses.',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            'Please try again in a bit. If the issue persists, contact our team for assistance.',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    );
                   }
 
                   // Return the ListView with the generated widgets
@@ -129,73 +155,36 @@ class Courses extends StatelessWidget {
 
   /* Generates a list of `CourseCard` widgets dynamically based on course data. */
   Future<List<CourseCard>> generateCourseCards() async {
-    // TODO
-    // Use firebase helper funtion in lib/ to get data from firebase
-    List<Course> coursesDatabase = await getAllCourses();
+    try {
+      // Fetch courses from the database
+      List<Course> coursesDatabase = await getAllCourses();
 
-    if (coursesDatabase.isEmpty) {
-      print("No course found");
-    } else {
-      for (final course in coursesDatabase) {
-        for (final chapter in course.chapters) {
-          for (final exercise in chapter.exercises) {
-            print(exercise.exerciseFinalStep!.assessmentQuestions.length);
-          //   // TODO for step and finalStep then use it in app
-          }
-        }
+      // Handle the case where no courses are found
+      if (coursesDatabase.isEmpty) {
+        print("No courses found in the database.");
+        return []; // Return an empty list if no courses are found
       }
+
+      // Generate CourseCard widgets for each course
+      return coursesDatabase.map((course) {
+        return CourseCard(
+          imageUrl: course.imageUrl,
+          courseType: course.courseType,
+          courseTitle: course.title,
+          duration: course.duration,
+          rating: course.rating,
+          ratingsCount: course.ratingCount,
+          onButtonPress: createOnButtonPress(
+            courseTitle: course.title,
+            courseType: course.courseType,
+            rating: course.rating,
+          ),
+        );
+      }).toList();
+    } catch (e) {
+      // Log and handle errors
+      print("Error while generating course cards: $e");
+      return []; // Return an empty list in case of an error
     }
-
-    List<Map<String, dynamic>> courses = [
-      {
-        'imageUrl': 'assets/images/self_attachment.png',
-        'courseType': 'Core',
-        'courseTitle': 'Self-attachment',
-        'duration': '2 week',
-        'rating': 4.2,
-        'ratingsCount': 7830,
-      },
-      {
-        'imageUrl': 'assets/images/humour.png',
-        'courseType': 'Core',
-        'courseTitle': 'Humour',
-        'duration': '6 week',
-        'rating': 4.9,
-        'ratingsCount': 560,
-      },
-      {
-        'imageUrl': 'assets/images/creativity.png',
-        'courseType': 'Advanced',
-        'courseTitle': 'Creativity',
-        'duration': '3 week',
-        'rating': 3.9,
-        'ratingsCount': 67,
-      },
-      {
-        'imageUrl': 'assets/images/nature.png',
-        'courseType': 'Advanced',
-        'courseTitle': 'Nature',
-        'duration': '1 week',
-        'rating': 4.5,
-        'ratingsCount': 1496,
-      },
-    ];
-
-    // Generate a list of CourseCard widgets dynamically
-    return courses.map((course) {
-      return CourseCard(
-        imageUrl: course['imageUrl'],
-        courseType: course['courseType'],
-        courseTitle: course['courseTitle'],
-        duration: course['duration'],
-        rating: course['rating'],
-        ratingsCount: course['ratingsCount'],
-        onButtonPress: createOnButtonPress(
-          courseTitle: course['courseTitle'],
-          courseType: course['courseType'],
-          rating: course['rating'],
-        ),
-      );
-    }).toList();
   }
 }
