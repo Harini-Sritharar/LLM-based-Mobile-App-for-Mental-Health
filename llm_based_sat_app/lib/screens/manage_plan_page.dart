@@ -50,17 +50,17 @@ class _ManagePlanPageState extends State<ManagePlanPage> {
                 children: [
                   _buildPlanCard(
                     title: "Free Tier",
-                    price: "\£0/month",
+                    price: "£0/month",
                     benefits: [
                       "Basic access to all core features without any cost.",
-                      "Access to core courses. ",
+                      "Access to core courses.",
                       "Community support through forums and help sections.",
                     ],
                     color: Colors.grey.shade200,
                   ),
                   _buildPlanCard(
                     title: "Monthly Plan",
-                    price: "\£9.99/month",
+                    price: "£10.00/month",
                     benefits: [
                       "Unlimited access to all courses with no restrictions.",
                       "Priority support with faster response times.",
@@ -68,10 +68,11 @@ class _ManagePlanPageState extends State<ManagePlanPage> {
                     ],
                     color: Colors.blue.shade100,
                     showButton: true,
+                    amount: 10, // Charge £10
                   ),
                   _buildPlanCard(
                     title: "Yearly Plan",
-                    price: "\£99.99/year",
+                    price: "£100.00/year",
                     benefits: [
                       "All benefits from the monthly plan at a discounted rate.",
                       "Even more storage for long-term users.",
@@ -80,6 +81,7 @@ class _ManagePlanPageState extends State<ManagePlanPage> {
                     ],
                     color: Colors.green.shade100,
                     showButton: true,
+                    amount: 100, // Charge £100
                   ),
                 ],
               ),
@@ -111,6 +113,7 @@ class _ManagePlanPageState extends State<ManagePlanPage> {
     required List<String> benefits,
     required Color color,
     bool showButton = false,
+    int amount = 0, // Default to free
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -158,9 +161,14 @@ class _ManagePlanPageState extends State<ManagePlanPage> {
                   padding: const EdgeInsets.only(top: 16.0),
                   child: Center(
                     child: ElevatedButton(
-                      onPressed: () {
-                        print("shouldprint");
-                        StripeService.instance.makePayment();
+                      onPressed: () async {
+                        print("Go Premium button pressed for $title");
+                        try {
+                          await StripeService.instance.makePayment(amount);
+                          print("Payment process started for $amount GBP");
+                        } catch (e) {
+                          print("Payment error: $e");
+                        }
                       },
                       child: const Text("Go Premium"),
                     ),
