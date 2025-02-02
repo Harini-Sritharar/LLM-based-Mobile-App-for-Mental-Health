@@ -1,5 +1,13 @@
 import 'package:flutter/material.dart';
 
+/** 
+ * QuestionnaireAssessmentsPage - A UI page for handling mental health questionnaires
+ * 
+ * This page consists of a list of seven questionnaires for the user to complete.
+ * Once the user completes all the questionnaires, an overall score should be 
+ * calculated and dynamically update the scores on the score page.
+*/
+
 class QuestionnaireAssessmentsPage extends StatefulWidget {
   @override
   _QuestionnaireAssessmentsPageState createState() =>
@@ -8,6 +16,7 @@ class QuestionnaireAssessmentsPage extends StatefulWidget {
 
 class _QuestionnaireAssessmentsPageState
     extends State<QuestionnaireAssessmentsPage> {
+  /// List of questionnaires with names and descriptions.
   final List<Map<String, dynamic>> questionnaires = [
     {'name': 'GAD-7', 'description': 'Anxiety'},
     {'name': 'PHQ-9', 'description': 'Depression'},
@@ -18,8 +27,10 @@ class _QuestionnaireAssessmentsPageState
     {'name': 'ERQ_S', 'description': 'Suppression'},
   ];
 
+  /// Tracks completed questionnaires
   Set<String> completedQuestionnaires = {};
 
+  /// Function to mark a questionnaire as completed
   void completeQuestionnaire(String name) {
     setState(() {
       completedQuestionnaires.add(name);
@@ -44,6 +55,8 @@ class _QuestionnaireAssessmentsPageState
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 10),
+
+            /// Displays progress based on completed questionnaires.
             LinearProgressIndicator(
               value: completedQuestionnaires.length / questionnaires.length,
               backgroundColor: Colors.grey[300],
