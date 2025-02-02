@@ -75,19 +75,17 @@ Future<DateTime> getTierExpiry(String uid) async {
       } else {
         // Handle the case where tier_expiry is not found, for "free" tier
         // Setting a default far future date for free tier
-        return DateTime(2100, 1, 1); 
+        return DateTime(2100, 1, 1);
       }
     }
     // If the document doesn't exist or there's no expiry, return the default far future date
-    return DateTime(2100, 1, 1); 
+    return DateTime(2100, 1, 1);
   } catch (e) {
     // Handle errors and return a default far future date
     print('Error fetching tier expiry: $e');
     return DateTime(2100, 1, 1); // Default far future date on error
   }
 }
-
-
 
 Future<void> setTier(String uid, String tier) async {
   try {
@@ -97,11 +95,14 @@ Future<void> setTier(String uid, String tier) async {
     // Initialize expiryDate based on the tier
     DateTime expiryDate;
     if (tier == 'monthly') {
-      expiryDate = DateTime.now().add(Duration(days: 30)); // 30 days for monthly
+      expiryDate =
+          DateTime.now().add(Duration(days: 30)); // 30 days for monthly
     } else if (tier == 'yearly') {
-      expiryDate = DateTime.now().add(Duration(days: 365)); // 365 days for yearly
+      expiryDate =
+          DateTime.now().add(Duration(days: 365)); // 365 days for yearly
     } else if (tier == 'free') {
-      expiryDate = DateTime(2100, 1, 1); // Set expiry far in the future for free tier
+      expiryDate =
+          DateTime(2100, 1, 1); // Set expiry far in the future for free tier
     } else {
       throw Exception('Invalid tier type');
     }
@@ -110,7 +111,8 @@ Future<void> setTier(String uid, String tier) async {
     await collection.doc(uid).set(
       {
         'tier': tier,
-        'tier_expiry': Timestamp.fromDate(expiryDate), // Store expiry date for all tiers
+        'tier_expiry':
+            Timestamp.fromDate(expiryDate), // Store expiry date for all tiers
       },
       SetOptions(merge: true), // Merge to avoid overwriting other fields
     );
@@ -120,7 +122,6 @@ Future<void> setTier(String uid, String tier) async {
     print('Error setting tier: $e');
   }
 }
-
 
 Future<String> getProfilePictureUrl(String uid) async {
   try {
@@ -146,61 +147,6 @@ Future<String> getProfilePictureUrl(String uid) async {
     print('Error fetching profile picture URL: $e');
     return 'Error Fetching Profile Picture';
   }
-}
-
-Future<void> uploadPhoto({
-  required File photoFile,
-  required String userId,
-  required String photoType,
-  required String fileName,
-}) async {
-  try {
-    // Get a reference to Firebase Storage
-    FirebaseStorage storage = FirebaseStorage.instance;
-    Reference storageRef = storage.ref().child("firebasephotos/$fileName");
-
-    // Upload the photo to Firebase Storage
-    UploadTask uploadTask = storageRef.putFile(photoFile);
-    TaskSnapshot snapshot = await uploadTask;
-
-    // Get the photo's download URL
-    String photoUrl = await snapshot.ref.getDownloadURL();
-
-    // Save the photo metadata to Firestore with userId as the document ID
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-    await firestore.collection('ChildhoodPhotos').doc(userId).set({
-      'photoUrl': photoUrl,
-      'photoType': photoType,
-      'photoName':
-          path.basename(photoFile.path), // Store the original file name
-    });
-
-    print("Photo uploaded successfully. URL: $photoUrl");
-  } catch (e) {
-    print("An error occurred while uploading photo: $e");
-  }
-}
-
-Future<void> uploadPhotoListParallel({
-  required List<Map<String, dynamic>> photoDataList,
-  required String userId,
-  required String photoType,
-}) async {
-  await Future.wait(photoDataList.map((photoData) async {
-    final photoFile = File(photoData['photoUrl']); // Use the file's path here
-
-    // Generate a unique file name for the upload (to avoid overwriting files)
-    String fileName =
-        "${DateTime.now().millisecondsSinceEpoch}_${photoData['photoName']}";
-
-    // Upload the file with a unique name
-    await uploadPhoto(
-      photoFile: photoFile,
-      userId: userId,
-      photoType: photoType,
-      fileName: fileName, // Pass the unique file name
-    );
-  }));
 }
 
 // Remove all user documents from a given collection
@@ -229,33 +175,36 @@ Future<void> removeUserDocuments({
   }
 }
 
-Future<List<Map<String, dynamic>>> getPhotosByCategory({
-  required String userId,
-  required String category,
-}) async {
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-
+Future<List<String>> getFavouritePhotos(String uid) async {
   try {
-    // Query Firestore to get photos by userId and category
-    QuerySnapshot querySnapshot = await firestore
-        .collection(
-            'ChildhoodPhotos') // Target the 'ChildhoodPhotos' collection
-        .where('userId', isEqualTo: userId) // Filter by userId
-        .where('photoType',
-            isEqualTo:
-                category) // Filter by category (favourite or non-favourite)
-        .get();
-
-    // Convert query results to a list of maps (each document as a map)
-    List<Map<String, dynamic>> photos = querySnapshot.docs.map((doc) {
-      return doc.data() as Map<String, dynamic>;
-    }).toList();
-
-    print("Fetched ${photos.length} ${category} photos for userId: $userId");
-
-    return photos;
+    final snapshot =
+        await FirebaseFirestore.instance.collection('Profile').doc(uid).get();
+    if (snapshot.exists) {
+      final List<dynamic>? photos = snapshot.data()?['favouritePhotos'];
+      if (photos != null) {
+        return photos.cast<String>();
+      }
+    }
+    return [];
   } catch (e) {
-    print("Error fetching photos: $e");
+    print('Error fetching favourite photos: $e');
+    return [];
+  }
+}
+
+Future<List<String>> getNonFavouritePhotos(String uid) async {
+  try {
+    final snapshot =
+        await FirebaseFirestore.instance.collection('Profile').doc(uid).get();
+    if (snapshot.exists) {
+      final List<dynamic>? photos = snapshot.data()?['nonFavouritePhotos'];
+      if (photos != null) {
+        return photos.cast<String>();
+      }
+    }
+    return [];
+  } catch (e) {
+    print('Error fetching non-favourite photos: $e');
     return [];
   }
 }

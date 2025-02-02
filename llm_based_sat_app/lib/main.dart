@@ -21,8 +21,6 @@ import 'firebase_options.dart';
 import 'package:provider/provider.dart';
 import 'profile_notifier.dart';
 
-List<Map<String, dynamic>> favouritePhotos = [];
-List<Map<String, dynamic>> nonFavouritePhotos = [];
 
 void main() async {
   await _setup();
@@ -83,28 +81,8 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     _selectedIndex = widget.initialIndex;
-    if (!photosLoaded) {
-      _loadInitialPhotos();
-      photosLoaded = true;
-    }
   }
 
-  Future<void> _loadInitialPhotos() async {
-    try {
-      final favouritePhotoData =
-          await getPhotosByCategory(userId: user!.uid, category: "Favourite");
-      final nonFavouritePhotoData = await getPhotosByCategory(
-          userId: user!.uid, category: "Non-Favourite");
-
-      setState(() {
-        favouritePhotos.addAll(favouritePhotoData);
-        nonFavouritePhotos.addAll(nonFavouritePhotoData);
-      });
-    } catch (e) {
-      // Handle errors, such as showing a message to the user
-      debugPrint("Error loading photos: $e");
-    }
-  }
 
   void _onItemTapped(int index) {
     setState(() {

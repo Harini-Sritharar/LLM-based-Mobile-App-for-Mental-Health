@@ -230,8 +230,6 @@ class ProfilePage extends StatelessWidget {
                                     MaterialPageRoute(
                                         builder: (context) => SignInPage()),
                                   );
-                                  favouritePhotos = [];
-                                  nonFavouritePhotos = [];
                                 },
                                 child: const Text(
                                   "Logout",
