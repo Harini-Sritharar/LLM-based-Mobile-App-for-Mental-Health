@@ -116,7 +116,7 @@ class CourseInfo extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (context) => ExerciseInfoPage(
-                    onItemTapped: onItemTapped, selectedIndex: selectedIndex),
+                    exercise: exercise, onItemTapped: onItemTapped, selectedIndex: selectedIndex, ),
               ),
             );
           },

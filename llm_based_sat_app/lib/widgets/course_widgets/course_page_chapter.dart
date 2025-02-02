@@ -72,7 +72,8 @@ class CoursePageChapter extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: chapter.isLocked
                             ? AppColours.neutralGreyMinusThree
-                            : AppColours.brandBlueMinusThree, // Background color
+                            : AppColours
+                                .brandBlueMinusThree, // Background color
                         borderRadius: BorderRadius.circular(10),
                       ),
                       alignment: Alignment.center,
