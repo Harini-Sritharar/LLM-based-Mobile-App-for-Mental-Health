@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/widgets/expandable_text.dart';
 
 /* This widget is called from within the PreCourseList widget to handle the case when all prerequisites for a course have not been completed.
 
@@ -18,11 +19,26 @@ class ListAllPreRequisites extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Yet to complete:", style: TextStyle(fontSize: 18, color: Colors.red, fontWeight: FontWeight.w600)),
-        for (var preReq in preRequisitesList)
-          Row(children: [
-            Text(preReq, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-          ])
+        Text(
+          "Yet to complete:",
+          style: TextStyle(fontSize: 18, color: Colors.red, fontWeight: FontWeight.w600),
+        ),
+        const SizedBox(height: 8), // Add some space between title and list of prerequisites
+        Wrap(
+          spacing: 8.0, // Space between items
+          runSpacing: 4.0, // Space between lines
+          children: preRequisitesList.map((preReq) {
+            return Container(
+              constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width - 32), // Ensure text is not wider than screen width
+              child: Text(
+                preReq,
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                overflow: TextOverflow.clip, // Avoid overflow if text is too long
+                softWrap: true,  // Allow text to wrap to the next line
+              ),
+            );
+          }).toList(),
+        ),
       ],
     );
   }
