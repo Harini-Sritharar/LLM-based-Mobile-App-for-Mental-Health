@@ -7,6 +7,7 @@ import 'package:llm_based_sat_app/widgets/custom_button.dart';
 
 // If watchedIntroductoryVideo is false or prerequisite is there or childhood photo is not uploaded then user cannot proceed to start exercise
 // TODO
+// Provide option to upload childhood photo and link to watch introductory video
 // Link up cache to check if watchedIntroductoryVideo is true for given id
 class PreCourseList extends StatelessWidget {
   // Accepts three functions for each of the list items

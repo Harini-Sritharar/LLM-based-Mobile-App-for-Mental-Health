@@ -54,7 +54,7 @@ class Courses extends StatelessWidget {
             const SizedBox(height: 16),
             Expanded(
               child: FutureBuilder<List<Widget>>(
-                future: generateCourseCards(), // Call the async method here
+                future: generateCourseCards(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     // Show a loading indicator while waiting for data
@@ -92,7 +92,6 @@ class Courses extends StatelessWidget {
                       ),
                     );
                   }
-
                   // Return the ListView with the generated widgets
                   return ListView(children: snapshot.data!);
                 },
@@ -133,20 +132,16 @@ class Courses extends StatelessWidget {
 
 /* Creates a dynamic `onButtonPress` function that navigates to the `CourseInfo` page with the specified parameters. */
   void Function(BuildContext) createOnButtonPress({
-    required String courseTitle,
-    required String courseType,
-    required double rating,
+    required Course course,
   }) {
     return (BuildContext context) {
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => CourseInfo(
+            course: course,
             onItemTapped: onItemTapped,
             selectedIndex: selectedIndex,
-            courseType: courseType,
-            rating: rating,
-            courseTitle: courseTitle,
           ),
         ),
       );
@@ -175,9 +170,7 @@ class Courses extends StatelessWidget {
           rating: course.rating,
           ratingsCount: course.ratingCount,
           onButtonPress: createOnButtonPress(
-            courseTitle: course.title,
-            courseType: course.courseType,
-            rating: course.rating,
+            course: course,
           ),
         );
       }).toList();

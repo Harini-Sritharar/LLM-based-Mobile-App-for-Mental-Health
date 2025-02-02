@@ -2,6 +2,7 @@ import 'package:llm_based_sat_app/models/firebase-exercise-uploader/interface/fi
 import 'package:llm_based_sat_app/models/firebase-exercise-uploader/interface/step_interface.dart';
 
 class Exercise {
+  final String id;
   final String exerciseTitle;
   final String objective;
   final String minimumPracticeTime;
@@ -15,6 +16,7 @@ class Exercise {
   final List<String> afterExerciseTasks;
 
   Exercise({
+    required this.id,
     required this.exerciseTitle,
     required this.objective,
     required this.minimumPracticeTime,
@@ -31,11 +33,12 @@ class Exercise {
   // Factory method to create an Exercise from Firestore data
   factory Exercise.fromFirestore(String id, Map<String, dynamic> data) {
     return Exercise(
+      id: id,
       exerciseTitle: data['Exercise_title'] ?? '',
       objective: data['Objective'] ?? '',
       minimumPracticeTime: data['Minimum practice time'],
       minimumSessions: data['Minimum sessions'],
-      totalSessions: data['Total sessions'],
+      totalSessions: data['Total sessions'] ?? '0',
       preExerciseTasks: List<String>.from(data['Pre-Exercise Tasks'] ?? []),
       requiredLearning: List<String>.from(data['Required learning'] ?? []),
       optionalLearning: List<String>.from(data['Optional learning'] ?? []),
@@ -46,6 +49,7 @@ class Exercise {
   // Method to attach steps and final step to an exercise
   Exercise withStepsAndFinalStep(List<Step> steps, FinalStep finalStep) {
     return Exercise(
+      id: id,
       exerciseTitle: exerciseTitle,
       objective: objective,
       minimumPracticeTime: minimumPracticeTime,
