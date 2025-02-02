@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:llm_based_sat_app/firebase_helpers.dart';
 import 'package:llm_based_sat_app/services/stripe_service.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 import '../widgets/main_layout.dart';
@@ -21,6 +23,29 @@ class ManagePlanPage extends StatefulWidget {
 class _ManagePlanPageState extends State<ManagePlanPage> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
+  String? _currentTier;
+  DateTime? _expiryDate;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserTier();
+  }
+
+  Future<void> _fetchUserTier() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    String? tier = await getTier(user.uid);
+    DateTime? expiryDate = tier == "monthly" || tier == "yearly"
+        ? await getTierExpiry(user.uid)
+        : null; // Don't fetch expiry for free tier
+
+    setState(() {
+      _currentTier = tier;
+      _expiryDate = expiryDate;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +82,7 @@ class _ManagePlanPageState extends State<ManagePlanPage> {
                       "Community support through forums and help sections.",
                     ],
                     color: Colors.grey.shade200,
+                    tierName: "free",
                   ),
                   _buildPlanCard(
                     title: "Monthly Plan",
@@ -67,8 +93,9 @@ class _ManagePlanPageState extends State<ManagePlanPage> {
                       "Exclusive content and early feature releases for subscribers.",
                     ],
                     color: Colors.blue.shade100,
-                    showButton: true,
-                    amount: 10, // Charge £10
+                    showButton:
+                        _currentTier != "monthly" && _currentTier != "yearly",
+                    tierName: "monthly",
                   ),
                   _buildPlanCard(
                     title: "Yearly Plan",
@@ -79,9 +106,10 @@ class _ManagePlanPageState extends State<ManagePlanPage> {
                       "Early access to new and experimental features.",
                       "Premium support with dedicated assistance.",
                     ],
-                    color: Colors.green.shade100,
-                    showButton: true,
-                    amount: 100, // Charge £100
+                    color: Colors.blue.shade300,
+                    showButton:
+                        _currentTier != "monthly" && _currentTier != "yearly",
+                    tierName: "yearly",
                   ),
                 ],
               ),
@@ -113,14 +141,22 @@ class _ManagePlanPageState extends State<ManagePlanPage> {
     required List<String> benefits,
     required Color color,
     bool showButton = false,
-    int amount = 0, // Default to free
+    required String tierName,
   }) {
+    bool isActiveTier = _currentTier == tierName;
+    bool showExpiry = isActiveTier &&
+        (tierName == "monthly" || tierName == "yearly") &&
+        _expiryDate != null;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Card(
         color: color,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16.0),
+          side: isActiveTier
+              ? const BorderSide(color: Colors.orange, width: 3)
+              : BorderSide.none,
         ),
         elevation: 6,
         child: Padding(
@@ -156,6 +192,19 @@ class _ManagePlanPageState extends State<ManagePlanPage> {
                     .map((benefit) => _buildBenefitItem(benefit))
                     .toList(),
               ),
+              if (showExpiry)
+                Padding(
+                  padding: const EdgeInsets.only(top: 16.0),
+                  child: Center(
+                    child: Text(
+                      "Expires on: ${_expiryDate!.toLocal().toString().split(' ')[0]}",
+                      style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red),
+                    ),
+                  ),
+                ),
               if (showButton)
                 Padding(
                   padding: const EdgeInsets.only(top: 16.0),
@@ -163,12 +212,8 @@ class _ManagePlanPageState extends State<ManagePlanPage> {
                     child: ElevatedButton(
                       onPressed: () async {
                         print("Go Premium button pressed for $title");
-                        try {
-                          await StripeService.instance.makePayment(amount);
-                          print("Payment process started for $amount GBP");
-                        } catch (e) {
-                          print("Payment error: $e");
-                        }
+                        int amount = tierName == "monthly" ? 10 : 100;
+                        await StripeService.instance.makePayment(amount);
                       },
                       child: const Text("Go Premium"),
                     ),
