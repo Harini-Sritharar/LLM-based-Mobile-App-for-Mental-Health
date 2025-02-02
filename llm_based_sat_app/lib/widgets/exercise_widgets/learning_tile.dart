@@ -21,7 +21,7 @@ class LearningTile extends StatelessWidget {
       title: Text(
         title,
         style: const TextStyle(
-          fontSize: 17, 
+          fontSize: 17,
           fontWeight: FontWeight.w400,
           color: Color(0xFF123659),
           fontFamily: 'Roboto',
@@ -34,9 +34,8 @@ class LearningTile extends StatelessWidget {
           builder: (BuildContext context) {
             return AlertDialog(
               title: Text(subject),
-              content: Text(content),
-              actions: <Widget>[
-              ],
+              content: SingleChildScrollView(child: Text(content)),
+              actions: <Widget>[],
             );
           },
         );
