@@ -27,11 +27,12 @@ class ListAllPreRequisites extends StatelessWidget {
         Wrap(
           spacing: 8.0, // Space between items
           runSpacing: 4.0, // Space between lines
+          direction: Axis.vertical,
           children: preRequisitesList.map((preReq) {
             return Container(
-              constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width - 32), // Ensure text is not wider than screen width
+              constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width - 60), // Ensure text is not wider than screen width
               child: Text(
-                preReq,
+                "- $preReq",
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
                 overflow: TextOverflow.clip, // Avoid overflow if text is too long
                 softWrap: true,  // Allow text to wrap to the next line
