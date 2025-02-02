@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/services/stripe_service.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 import '../widgets/main_layout.dart';
 import '../widgets/custom_app_bar.dart';
@@ -66,6 +67,7 @@ class _ManagePlanPageState extends State<ManagePlanPage> {
                       "Exclusive content and early feature releases for subscribers.",
                     ],
                     color: Colors.blue.shade100,
+                    showButton: true,
                   ),
                   _buildPlanCard(
                     title: "Yearly Plan",
@@ -77,6 +79,7 @@ class _ManagePlanPageState extends State<ManagePlanPage> {
                       "Premium support with dedicated assistance.",
                     ],
                     color: Colors.green.shade100,
+                    showButton: true,
                   ),
                 ],
               ),
@@ -107,6 +110,7 @@ class _ManagePlanPageState extends State<ManagePlanPage> {
     required String price,
     required List<String> benefits,
     required Color color,
+    bool showButton = false,
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -149,6 +153,19 @@ class _ManagePlanPageState extends State<ManagePlanPage> {
                     .map((benefit) => _buildBenefitItem(benefit))
                     .toList(),
               ),
+              if (showButton)
+                Padding(
+                  padding: const EdgeInsets.only(top: 16.0),
+                  child: Center(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        print("shouldprint");
+                        StripeService.instance.makePayment();
+                      },
+                      child: const Text("Go Premium"),
+                    ),
+                  ),
+                ),
             ],
           ),
         ),
