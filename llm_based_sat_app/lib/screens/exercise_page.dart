@@ -10,7 +10,6 @@ import '../widgets/exercise_widgets/exercise_timer.dart';
 
 // TODO
 // Potentially save user data temporarily then later in a database as they progress through the exercises
-// Figure how to pass timer between exercise pages
 class ExercisePage extends StatelessWidget {
   final String heading;
   final String step;
