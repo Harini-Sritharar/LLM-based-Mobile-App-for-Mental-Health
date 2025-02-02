@@ -1,5 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:llm_based_sat_app/consts.dart';
 import 'package:llm_based_sat_app/screens/personal_profile_page.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_up_page.dart';
 import 'package:llm_based_sat_app/screens/contact_details_page.dart';
@@ -23,7 +25,7 @@ List<Map<String, dynamic>> favouritePhotos = [];
 List<Map<String, dynamic>> nonFavouritePhotos = [];
 
 void main() async {
-  print("Nilesh");
+  await _setup();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -34,6 +36,11 @@ void main() async {
       child: MyApp(),
     ),
   );
+}
+
+Future<void> _setup() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Stripe.publishableKey = stripePublishableKey;
 }
 
 class MyApp extends StatelessWidget {
