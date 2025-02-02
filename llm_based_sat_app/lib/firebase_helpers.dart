@@ -56,6 +56,39 @@ Future<String> getTier(String uid) async {
   }
 }
 
+Future<DateTime> getTierExpiry(String uid) async {
+  try {
+    // Reference to the Firestore collection
+    final collection = FirebaseFirestore.instance.collection('Profile');
+
+    // Get the document for the user with the given UID
+    final snapshot = await collection.doc(uid).get();
+
+    // Check if the document exists
+    if (snapshot.exists) {
+      // Get the tier_expiry field from the document
+      final tierExpiryTimestamp = snapshot.data()?['tier_expiry'] as Timestamp?;
+
+      if (tierExpiryTimestamp != null) {
+        // Return the expiry date as DateTime
+        return tierExpiryTimestamp.toDate();
+      } else {
+        // Handle the case where tier_expiry is not found, for "free" tier
+        // Setting a default far future date for free tier
+        return DateTime(2100, 1, 1); 
+      }
+    }
+    // If the document doesn't exist or there's no expiry, return the default far future date
+    return DateTime(2100, 1, 1); 
+  } catch (e) {
+    // Handle errors and return a default far future date
+    print('Error fetching tier expiry: $e');
+    return DateTime(2100, 1, 1); // Default far future date on error
+  }
+}
+
+
+
 Future<void> setTier(String uid, String tier) async {
   try {
     // Reference to the Firestore collection
