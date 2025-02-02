@@ -61,13 +61,28 @@ Future<void> setTier(String uid, String tier) async {
     // Reference to the Firestore collection
     final collection = FirebaseFirestore.instance.collection('Profile');
 
-    // Update the user's tier in Firestore
+    // Initialize expiryDate based on the tier
+    DateTime expiryDate;
+    if (tier == 'monthly') {
+      expiryDate = DateTime.now().add(Duration(days: 30)); // 30 days for monthly
+    } else if (tier == 'yearly') {
+      expiryDate = DateTime.now().add(Duration(days: 365)); // 365 days for yearly
+    } else if (tier == 'free') {
+      expiryDate = DateTime(2100, 1, 1); // Set expiry far in the future for free tier
+    } else {
+      throw Exception('Invalid tier type');
+    }
+
+    // Update the user's tier and expiry date in Firestore
     await collection.doc(uid).set(
-      {'tier': tier},
+      {
+        'tier': tier,
+        'tier_expiry': Timestamp.fromDate(expiryDate), // Store expiry date for all tiers
+      },
       SetOptions(merge: true), // Merge to avoid overwriting other fields
     );
 
-    print('Tier updated successfully to $tier');
+    print('Tier updated successfully to $tier with expiry on $expiryDate');
   } catch (e) {
     print('Error setting tier: $e');
   }

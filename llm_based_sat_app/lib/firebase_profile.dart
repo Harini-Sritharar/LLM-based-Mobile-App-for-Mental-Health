@@ -22,8 +22,8 @@ Future<void> updatePersonalInfo(
   if (docSnapshot.exists) {
     // Preserve existing tier if user exists
     tier = (docSnapshot.data() as Map<String, dynamic>)['tier'] ?? "free";
-    favouritePhotos =
-        (docSnapshot.data() as Map<String, dynamic>)['favouritePhotos'] ?? [];
+    favouritePhotos = (docSnapshot.data() as Map<String, dynamic>)['favouritePhotos'] ?? [];
+    nonfavouritePhotos = (docSnapshot.data() as Map<String, dynamic>)['nonfavouritePhotos'] ?? [];
   }
 
   await userDoc.set(
@@ -33,6 +33,8 @@ Future<void> updatePersonalInfo(
         'dob': dob,
         'gender': gender,
         'tier': tier,
+        'favouritePhotos' : favouritePhotos,
+        'nonfavouritePhotos' : nonfavouritePhotos
       },
       SetOptions(
           merge: true)); // Merging ensures we don’t overwrite other fields
