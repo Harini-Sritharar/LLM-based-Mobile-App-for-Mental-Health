@@ -56,6 +56,24 @@ Future<String> getTier(String uid) async {
   }
 }
 
+Future<void> setTier(String uid, String tier) async {
+  try {
+    // Reference to the Firestore collection
+    final collection = FirebaseFirestore.instance.collection('Profile');
+
+    // Update the user's tier in Firestore
+    await collection.doc(uid).set(
+      {'tier': tier},
+      SetOptions(merge: true), // Merge to avoid overwriting other fields
+    );
+
+    print('Tier updated successfully to $tier');
+  } catch (e) {
+    print('Error setting tier: $e');
+  }
+}
+
+
 Future<String> getProfilePictureUrl(String uid) async {
   try {
     // Reference to the Firestore collection
