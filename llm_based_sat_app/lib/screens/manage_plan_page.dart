@@ -106,7 +106,7 @@ class _ManagePlanPageState extends State<ManagePlanPage> {
                       "Early access to new and experimental features.",
                       "Premium support with dedicated assistance.",
                     ],
-                    color: Colors.blue.shade300,
+                    color: Color(0xFF91a0f0),
                     showButton:
                         _currentTier != "monthly" && _currentTier != "yearly",
                     tierName: "yearly",
@@ -205,6 +205,7 @@ class _ManagePlanPageState extends State<ManagePlanPage> {
                     ),
                   ),
                 ),
+              const Spacer(), // Pushes the button to the bottom
               if (showButton)
                 Padding(
                   padding: const EdgeInsets.only(top: 16.0),
