@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:llm_based_sat_app/firebase_profile.dart';
@@ -26,6 +28,27 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
   String?
       selectedCountryCode; // Stores the selected country's code -> can be used to convert to obtain the country's dial code
   String? mobileNumber; // Stores the mobile number input
+
+   @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  void _loadUserData() async {
+  User? user = FirebaseAuth.instance.currentUser;
+  if (user != null) {
+    DocumentSnapshot doc =
+        await FirebaseFirestore.instance.collection('Profile').doc(user.uid).get();
+    if (doc.exists) {
+      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+      setState(() {
+        _countryController.text = data['country'] ?? '';
+        _zipPostalController.text = data['zipcode'] ?? '';
+      });
+    }
+  }
+  }
 
   @override
   void dispose() {
@@ -62,6 +85,7 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
     return null;
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,20 +103,22 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
               Form(
                   key: _formKey,
                   child: SingleChildScrollView(
-                      child: Column(children: [
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
                     const Text(
                       "Contact Details",
                       style: TextStyle(
-                          fontSize: 22,
+                          fontSize: 28,
                           color: AppColours.secondaryBlueTextColor),
                     ),
                     const SizedBox(height: 8),
                     const Text(
                       "Complete your Contact Details",
                       style: TextStyle(
-                          fontSize: 16, color: AppColours.primaryGreyTextColor),
+                          fontSize: 15, color: AppColours.primaryGreyTextColor),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 40),
                     // TODO : Replace the map icon, globe doesn't exist in Icons
                     TextInputField(
                       label: "Country",
@@ -100,6 +126,14 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
                       isPassword: false,
                       controller: _countryController,
                       enabled: false,
+                    ),
+                    const SizedBox(height: 10),
+                    TextInputField(
+                      label: "Zip/Postal Code",
+                      icon: Icons.apartment,
+                      isPassword: false,
+                      controller: _zipPostalController,
+                      validator: _validateZipPostalCode,
                     ),
                     const SizedBox(height: 10),
                     IntlPhoneField(
@@ -135,14 +169,6 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
                           FilteringTextInputFormatter
                               .digitsOnly, // Numeric input only
                         ]),
-                    const SizedBox(height: 10),
-                    TextInputField(
-                      label: "Zip/Postal Code",
-                      icon: Icons.apartment,
-                      isPassword: false,
-                      controller: _zipPostalController,
-                      validator: _validateZipPostalCode,
-                    ),
                     const SizedBox(height: 10),
                     const SizedBox(height: 40),
                     CustomButton(

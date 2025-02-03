@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:llm_based_sat_app/firebase_helpers.dart';
-import 'package:llm_based_sat_app/main.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'dart:io';
 import '../screens/auth/sign_in_page.dart';
@@ -10,12 +10,9 @@ import 'package:llm_based_sat_app/screens/personal_info_page.dart';
 import 'package:llm_based_sat_app/screens/personal_profile_page.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 
-/// A StatefulWidget for managing and displaying childhood photos,
-/// categorized into favourite and non-favourite.
-/// Allows users to add, view, and delete photos and save the changes.
 class ChildhoodPhotosPage extends StatefulWidget {
-  final Function(int) onItemTapped; // Callback for bottom navigation bar taps.
-  final int selectedIndex; // Current selected index in the navigation bar.
+  final Function(int) onItemTapped;
+  final int selectedIndex;
 
   const ChildhoodPhotosPage({
     super.key,
@@ -29,31 +26,120 @@ class ChildhoodPhotosPage extends StatefulWidget {
 
 class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
   final ImagePicker _picker = ImagePicker();
+  List<String> favouritePhotos = [];
+  List<String> nonFavouritePhotos = [];
+  List<String> localFavouritePhotos = [];
+  List<String> localNonFavouritePhotos = [];
+  List<String> deletedFavouritePhotos = [];
+  List<String> deletedNonFavouritePhotos = [];
+  bool isSaving = false;
 
-  /// Method to pick an image from the gallery and categorize it as favourite or non-favourite.
+  @override
+  void initState() {
+    super.initState();
+    _loadStoredPhotos();
+  }
+
+  Future<void> _loadStoredPhotos() async {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    DocumentSnapshot snapshot =
+        await FirebaseFirestore.instance.collection('Profile').doc(uid).get();
+    setState(() {
+      favouritePhotos =
+          List<String>.from(snapshot.get('favouritePhotos') ?? []);
+      nonFavouritePhotos =
+          List<String>.from(snapshot.get('nonFavouritePhotos') ?? []);
+    });
+  }
+
   Future<void> _pickImage(bool isFavourite) async {
     final XFile? pickedFile =
         await _picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
       setState(() {
-        final photoData = {
-          'photoType': isFavourite ? "Favourite" : "Non-Favourite",
-          'photoUrl': pickedFile.path, // Local file path (temporary URL).
-          'photoName': pickedFile.name, // File name of the photo.
-          'userId': user!.uid // User ID for associating with the database.
-        };
-
         if (isFavourite) {
-          favouritePhotos.add(photoData);
+          localFavouritePhotos.add(pickedFile.path);
         } else {
-          nonFavouritePhotos.add(photoData);
+          localNonFavouritePhotos.add(pickedFile.path);
         }
       });
     }
   }
 
-  /// Builds the main UI of the page.
+  Future<String> _uploadImage(File imageFile) async {
+    try {
+      String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+      Reference ref =
+          FirebaseStorage.instance.ref().child('childhood_photos/$fileName');
+      await ref.putFile(imageFile);
+      return await ref.getDownloadURL();
+    } catch (e) {
+      print('Error uploading image: $e');
+      return '';
+    }
+  }
+
+  Future<void> _savePhotos() async {
+    if (isSaving) return; // Prevent multiple presses
+    setState(() => isSaving = true);
+
+    try {
+      String uid = FirebaseAuth.instance.currentUser!.uid;
+      DocumentReference userDoc =
+          FirebaseFirestore.instance.collection('Profile').doc(uid);
+
+      // Retrieve current stored photos from Firestore
+      DocumentSnapshot snapshot = await userDoc.get();
+      List<String> storedFavouritePhotos =
+          List<String>.from(snapshot.get('favouritePhotos') ?? []);
+      List<String> storedNonFavouritePhotos =
+          List<String>.from(snapshot.get('nonFavouritePhotos') ?? []);
+
+      // Upload new local photos
+      List<String> uploadedFavouritePhotos = [];
+      List<String> uploadedNonFavouritePhotos = [];
+
+      for (String path in localFavouritePhotos) {
+        String url = await _uploadImage(File(path));
+        if (url.isNotEmpty) uploadedFavouritePhotos.add(url);
+      }
+      for (String path in localNonFavouritePhotos) {
+        String url = await _uploadImage(File(path));
+        if (url.isNotEmpty) uploadedNonFavouritePhotos.add(url);
+      }
+
+      // Remove deleted photos from stored lists
+      storedFavouritePhotos
+          .removeWhere((url) => deletedFavouritePhotos.contains(url));
+      storedNonFavouritePhotos
+          .removeWhere((url) => deletedNonFavouritePhotos.contains(url));
+
+      // Merge uploaded and stored photos
+      storedFavouritePhotos.addAll(uploadedFavouritePhotos);
+      storedNonFavouritePhotos.addAll(uploadedNonFavouritePhotos);
+
+      // Update Firestore
+      await userDoc.set({
+        'favouritePhotos': storedFavouritePhotos,
+        'nonFavouritePhotos': storedNonFavouritePhotos,
+      }, SetOptions(merge: true));
+
+      setState(() {
+        favouritePhotos = storedFavouritePhotos;
+        nonFavouritePhotos = storedNonFavouritePhotos;
+        localFavouritePhotos.clear();
+        localNonFavouritePhotos.clear();
+        deletedFavouritePhotos.clear();
+        deletedNonFavouritePhotos.clear();
+      });
+    } catch (e) {
+      print('Error saving photos: $e');
+    } finally {
+      setState(() => isSaving = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,11 +165,12 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
                     fontSize: 14, color: AppColours.primaryGreyTextColor),
               ),
               const SizedBox(height: 20),
-              _buildPhotoSection("Favourite photos", favouritePhotos, true),
-              _buildPhotoSection(
-                  "Non-Favourite photos", nonFavouritePhotos, false),
+              _buildPhotoSection("Favourite photos", favouritePhotos,
+                  localFavouritePhotos, true),
+              _buildPhotoSection("Non-Favourite photos", nonFavouritePhotos,
+                  localNonFavouritePhotos, false),
               const SizedBox(height: 20),
-              _buildSaveButton(context),
+              _buildSaveButton(),
             ],
           ),
         ),
@@ -91,111 +178,88 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
     );
   }
 
-  /// Builds a photo section (Favourite or Non-Favourite).
-  Widget _buildPhotoSection(
-      String title, List<Map<String, dynamic>> photos, bool isFavourite) {
+  Widget _buildPhotoSection(String title, List<String> networkPhotos,
+      List<String> localPhotos, bool isFavourite) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: AppColours.secondaryBlueTextColor,
-              ),
-            ),
+            Text(title,
+                style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blueGrey)),
             IconButton(
-              icon: const Icon(Icons.add,
-                  color: AppColours.secondaryBlueTextColor),
-              onPressed: () => _pickImage(isFavourite),
-            ),
+                icon: const Icon(Icons.add, color: Colors.blueGrey),
+                onPressed: () => _pickImage(isFavourite)),
           ],
         ),
         const SizedBox(height: 10),
-        photos.isEmpty
-            ? const Center(
-                child: Text(
-                  "No photos available.",
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
-                ),
-              )
-            : Column(
-                children: photos
-                    .map((photoData) => _buildPhotoItem(photoData))
-                    .toList(),
-              ),
+        Column(
+          children: [
+            ...networkPhotos
+                .map((url) => _buildPhotoItem(url, true, isFavourite))
+                .toList(),
+            ...localPhotos
+                .map((path) => _buildPhotoItem(path, false, isFavourite))
+                .toList(),
+          ],
+        ),
       ],
     );
   }
 
-  /// Builds a single photo item with delete functionality.
-  Widget _buildPhotoItem(Map<String, dynamic> photoData) {
+  Widget _buildPhotoItem(String photo, bool isNetwork, bool isFavourite) {
     return ListTile(
       leading: CircleAvatar(
-        backgroundImage: NetworkImage(photoData['photoUrl']),
+        backgroundImage: isNetwork
+            ? NetworkImage(photo)
+            : FileImage(File(photo)) as ImageProvider,
         backgroundColor: Colors.grey[300],
-      ),
-      title: Text(
-        photoData['photoName'] ?? "Unknown File",
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
       ),
       trailing: IconButton(
         icon: const Icon(Icons.delete, color: Colors.brown),
         onPressed: () {
           setState(() {
-            // Remove the photo from the respective list.
-            favouritePhotos.removeWhere(
-                (photo) => photo['photoName'] == photoData['photoName']);
-            nonFavouritePhotos.removeWhere(
-                (photo) => photo['photoName'] == photoData['photoName']);
+            if (isNetwork) {
+              if (isFavourite) {
+                deletedFavouritePhotos.add(photo);
+                favouritePhotos.remove(photo);
+              } else {
+                deletedNonFavouritePhotos.add(photo);
+                nonFavouritePhotos.remove(photo);
+              }
+            } else {
+              if (isFavourite) {
+                localFavouritePhotos.remove(photo);
+              } else {
+                localNonFavouritePhotos.remove(photo);
+              }
+            }
           });
         },
       ),
     );
   }
 
-  /// Builds the save button to upload photos to the database and navigate back.
-  Widget _buildSaveButton(BuildContext context) {
+  Widget _buildSaveButton() {
     return Center(
       child: SizedBox(
         width: double.infinity,
         height: 50,
         child: ElevatedButton(
-          onPressed: () {
-            // Remove existing photos from the database.
-            removeUserDocuments(
-                userId: user!.uid, collectionName: "ChildhoodPhotos");
-
-            // Upload the photos in parallel for both categories.
-            uploadPhotoListParallel(
-              photoDataList: favouritePhotos,
-              userId: user!.uid,
-              photoType: "Favourite",
-            );
-            uploadPhotoListParallel(
-              photoDataList: nonFavouritePhotos,
-              userId: user!.uid,
-              photoType: "Non-Favourite",
-            );
-
-            // Navigate back to the personal profile page.
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => PersonalProfilePage()));
-          },
+          onPressed: isSaving ? null : _savePhotos,
           style: ElevatedButton.styleFrom(
-            backgroundColor: AppColours.forwardArrowColor,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25),
-            ),
+            backgroundColor: Colors.blue,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
           ),
-          child: const Text(
-            "Save",
-            style: TextStyle(fontSize: 18, color: Colors.white),
-          ),
+          child: isSaving
+              ? const CircularProgressIndicator(color: Colors.white)
+              : const Text("Save",
+                  style: TextStyle(fontSize: 18, color: Colors.white)),
         ),
       ),
     );

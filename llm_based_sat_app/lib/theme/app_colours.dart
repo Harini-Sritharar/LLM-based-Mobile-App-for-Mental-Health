@@ -11,9 +11,13 @@ class AppColours {
   static const Color avatarForegroundColor = Color(0xFFF2F9FF);
   static const Color forwardArrowColor = Color(0xFF2F4A79);
 
+  static const Color termsAndCondionsHeaderColor = Color(0xFF293138);
+  static const Color termsAndConditionsContentColor = Color(0xFF191C1F);
+
   // Checkbox Widget
   static const Color checkboxBackgroundColor = Color(0xFFCEF2DE);
-  static const Color checkboxBorderColor = Color(0xFF1C548C); // is this the button blue color?
+  static const Color checkboxBorderColor =
+      Color(0xFF1C548C); // is this the button blue color?
   static const Color checkboxCheckmarkColor = Color(0xFF1C8E4C);
   static const Color checkboxUntickedBackgroundColor = Color(0xFFE0E0E0);
 
