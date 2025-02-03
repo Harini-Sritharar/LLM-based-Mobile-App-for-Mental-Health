@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class SliderQuestion extends StatelessWidget{
+class SliderQuestion extends StatelessWidget {
   final String title;
   final int minValue;
-  final int maxValue; 
+  final int maxValue;
   final void Function(int) onChanged;
   final int value;
   const SliderQuestion({
@@ -34,7 +34,7 @@ class SliderQuestion extends StatelessWidget{
           min: minValue.toDouble(),
           max: maxValue.toDouble(),
           onChanged: (newValue) => onChanged(newValue.toInt()),
-          activeColor: const Color(0xFF8C7F1C),
+          activeColor: Colors.blue,
           inactiveColor: const Color(0xFFD3D3D3),
         ),
         Row(

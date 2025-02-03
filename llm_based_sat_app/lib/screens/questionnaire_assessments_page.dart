@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/screens/questionnaire_page.dart';
+import 'package:llm_based_sat_app/widgets/assessment_widgets/slider_question.dart';
 
-/** 
- * QuestionnaireAssessmentsPage - A UI page for handling mental health questionnaires
- * 
- * This page consists of a list of seven questionnaires for the user to complete.
- * Once the user completes all the questionnaires, an overall score should be 
- * calculated and dynamically update the scores on the score page.
-*/
+/// QuestionnaireAssessmentsPage - A UI page for handling mental health questionnaires
+///
+/// This page consists of a list of six questionnaires for the user to complete.
+/// Once the user completes all the questionnaires, an overall score should be
+/// calculated and dynamically update the scores on the score page.
 
 class QuestionnaireAssessmentsPage extends StatefulWidget {
+  const QuestionnaireAssessmentsPage({super.key});
+
   @override
   _QuestionnaireAssessmentsPageState createState() =>
       _QuestionnaireAssessmentsPageState();
@@ -23,14 +25,13 @@ class _QuestionnaireAssessmentsPageState
     {'name': 'PWB', 'description': 'Wellbeing'},
     {'name': 'SOCS-S', 'description': 'Self-Compassion'},
     {'name': 'CPC-12R', 'description': 'Psychological Capital'},
-    {'name': 'ERQ_R', 'description': 'Reappraisal'},
-    {'name': 'ERQ_S', 'description': 'Suppression'},
+    {'name': 'ERQ', 'description': 'Reappraisal and Suppression'},
   ];
 
-  /// Tracks completed questionnaires
+  /// Tracks completed questionnaires.
   Set<String> completedQuestionnaires = {};
 
-  /// Function to mark a questionnaire as completed
+  /// Marks a questionnaire as completed.
   void completeQuestionnaire(String name) {
     setState(() {
       completedQuestionnaires.add(name);
@@ -105,33 +106,6 @@ class _QuestionnaireAssessmentsPageState
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class QuestionnairePage extends StatelessWidget {
-  final String questionnaireName;
-  final Function(String) onComplete;
-
-  QuestionnairePage(
-      {required this.questionnaireName, required this.onComplete});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(questionnaireName),
-        backgroundColor: Colors.blueAccent,
-      ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            onComplete(questionnaireName);
-            Navigator.pop(context);
-          },
-          child: Text("Submit Answers"),
         ),
       ),
     );
