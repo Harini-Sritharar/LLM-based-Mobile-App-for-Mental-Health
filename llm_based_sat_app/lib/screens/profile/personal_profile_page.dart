@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/firebase/firebase_profile.dart';
 import 'package:llm_based_sat_app/main.dart';
 import 'package:llm_based_sat_app/screens/profile/childhood_photos_page.dart';
-import 'package:llm_based_sat_app/screens/profile/contact_details_page.dart';
 import 'package:llm_based_sat_app/screens/profile/personal_info_page.dart';
 import 'package:llm_based_sat_app/screens/profile/upload_profile_picture_page.dart';
 
 import '../../widgets/auth_widgets/circular_checkbox.dart';
 import '../../widgets/custom_button.dart';
+import 'contact_details_page.dart';
 
 class PersonalProfilePage extends StatefulWidget {
   @override

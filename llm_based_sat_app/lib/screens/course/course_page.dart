@@ -4,7 +4,10 @@ import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/course_page_chapter.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 
+import '../../models/firebase-exercise-uploader/interface/course_interface.dart';
+
 class CoursePage extends StatelessWidget {
+  final Course course;
   final String courseTitle;
   final List<ChapterInterface> chapters;
   final Function(int) onItemTapped; // Function to update navbar index
@@ -12,6 +15,7 @@ class CoursePage extends StatelessWidget {
 
   const CoursePage({
     super.key,
+    required this.course,
     required this.courseTitle,
     required this.chapters,
     required this.onItemTapped,
@@ -61,6 +65,7 @@ class CoursePage extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 24),
+
               Expanded(
                 // Using Expanded to take remaining space for the scrollable list
                 child: SingleChildScrollView(

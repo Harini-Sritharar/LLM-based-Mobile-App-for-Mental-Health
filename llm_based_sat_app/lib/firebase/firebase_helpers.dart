@@ -1,4 +1,10 @@
+import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
+import 'package:path/path.dart' as path;
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../models/firebase-exercise-uploader/interface/chapter_interface.dart';
 import '../models/firebase-exercise-uploader/interface/course_interface.dart';
 import '../models/firebase-exercise-uploader/interface/exercise_interface.dart';
@@ -33,7 +39,6 @@ Future<String> getName(String uid) async {
     return 'Error Fetching Name';
   }
 }
-
 Future<String> getTier(String uid) async {
   try {
     // Reference to the Firestore collection
@@ -150,6 +155,159 @@ Future<String> getProfilePictureUrl(String uid) async {
   }
 }
 
+/* Fetches the course progress for a specific user and course ID.
+The output for the attribute "Chapter_Exercise_Step" is returned 
+in the format: ["Chapter/Exercise/Step"] */
+Future<List?> getUserCourseProgress(String uid, String courseId) async {
+  try {
+    // Reference to the user's course_progress subcollection
+    final collection = FirebaseFirestore.instance
+        .collection('Profile')
+        .doc(uid)
+        .collection('course_progress');
+
+    // Fetch all documents in the course_progress subcollection
+    final querySnapshot = await collection.get();
+
+    // Iterate through the documents to find the matching course by ID
+    for (final doc in querySnapshot.docs) {
+      if (doc.id.trim() == courseId.trim()) {
+        // Return the "Chapter_Exercise_Step" attribute if found
+        final chapterExerciseStep = doc.data()['Chapter_Exercise_Step'] as List?;
+        return chapterExerciseStep; // Return the value if it exists
+      }
+    }
+
+    // Return null if no matching course is found
+    return null;
+  } catch (e) {
+    // Handle errors and print them
+    print('Error fetching course progress: $e');
+    return null;
+  }
+}
+
+/* Updates the course progress for a specific user and course ID by adding a new
+"Chapter_Exercise_Step" entry to the existing list. */
+Future<void> updateUserCourseProgress(String uid, String courseId, String newChapterExerciseStep, String previousSession) async {
+  try {
+    // Reference to the user's course_progress subcollection
+    final collection = FirebaseFirestore.instance
+        .collection('Profile')
+        .doc(uid)
+        .collection('course_progress');
+
+    // Fetch the document for the given course ID
+    final docRef = collection.doc(courseId);
+
+    // Get the document snapshot
+    final docSnapshot = await docRef.get();
+
+    // Check if the document exists
+    if (docSnapshot.exists) {
+      // Fetch the current "Chapter_Exercise_Step" list from the document
+      List? currentChapterExerciseStep = docSnapshot.data()?['Chapter_Exercise_Step'];
+
+      // If the list is null, initialize it as an empty list
+      currentChapterExerciseStep ??= [];
+
+      // Add the new element to the list if not already present and also delete the previous session
+      currentChapterExerciseStep.remove(previousSession);
+      if (!currentChapterExerciseStep.contains(newChapterExerciseStep)) {
+        currentChapterExerciseStep.add(newChapterExerciseStep);
+      }
+
+      // Update the document with the new list
+      await docRef.update({
+        'Chapter_Exercise_Step': currentChapterExerciseStep,
+      });
+
+      print('User progress updated successfully');
+    } else {
+      // If the document doesn't exist, create a new document with the given courseId and new progress
+      print('Creating entry for new course ID');
+      
+      await docRef.set({
+        'Chapter_Exercise_Step': [newChapterExerciseStep], // Initialize with the new entry
+      });
+
+      print('New course entry created and progress added');
+    }
+  } catch (e) {
+    // Handle errors and print them
+    print('Error updating course progress: $e');
+  }
+}
+
+/* Function to get if Introductory video is watched for given user and course */
+Future<bool> getIntroductoryVideoWatched(String uid, String courseId) async {
+  try {
+    // Reference to the user's course_progress subcollection
+    final collection = FirebaseFirestore.instance
+        .collection('Profile')
+        .doc(uid)
+        .collection('course_progress');
+
+    // Fetch all documents in the course_progress subcollection
+    final querySnapshot = await collection.get();
+
+    // Iterate through the documents to find the matching course by ID
+    for (final doc in querySnapshot.docs) {
+      if (doc.id.trim() == courseId.trim()) {
+        // Return the "Introductory_video_watched" attribute if found
+        bool introductoryVideoWatched = doc.data()['Introductory_video_watched'];
+        return introductoryVideoWatched; // Return the value if it exists
+      }
+    }
+
+    // Return null if no matching course is found
+    return false;
+  } catch (e) {
+    // Handle errors and print them
+    print('Error fetching course progress: $e');
+    return false;
+  }
+}
+
+/* Updates the 'Introductory_video_watched' parameter for a given user. */
+Future<void> updateWatchedIntroductoryVideo(String uid, String courseId, bool watchedVideo) async {
+  try {
+    // Reference to the user's course_progress subcollection
+    final collection = FirebaseFirestore.instance
+        .collection('Profile')
+        .doc(uid)
+        .collection('course_progress');
+
+    // Fetch the document for the given course ID
+    final docRef = collection.doc(courseId);
+
+    // Get the document snapshot
+    final docSnapshot = await docRef.get();
+
+    // Check if the document exists
+    if (docSnapshot.exists) {
+      // Update the document with the new valye
+      await docRef.update({
+        'Introductory_video_watched': watchedVideo,
+      });
+
+      print('Introductory_video_watched updated successfully');
+    } else {
+      // If the document doesn't exist, create a new document with the given courseId and Introductory_video_watched
+      print('Creating entry for new course ID');
+      
+      await docRef.set({
+        'Introductory_video_watched': watchedVideo, // Initialize with the new entry
+      });
+
+      print('New course entry created and Introductory_video_watched added');
+    }
+  } catch (e) {
+    // Handle errors and print them
+    print('Error updating Introductory_video_watched: $e');
+  }
+}
+
 /* Function to get all courses from firebase as a List of Courses */
 Future<List<Course>> getAllCourses() async {
   try {
@@ -195,8 +353,8 @@ Future<List<Course>> getAllCourses() async {
         // Loop through each exercise document
         for (var exerciseDoc in exercisesSnapshot.docs) {
           // Convert exercise data
-          final exercise =
-              Exercise.fromFirestore(exerciseDoc.id, exerciseDoc.data());
+          final exercise = Exercise.fromFirestore(
+              exerciseDoc.id, exerciseDoc.data());
 
           // Fetch steps for this exercise
           final stepsSnapshot = await FirebaseFirestore.instance
@@ -262,6 +420,7 @@ Future<List<Course>> getAllCourses() async {
     return [];
   }
 }
+
 
 // Remove all user documents from a given collection
 Future<void> removeUserDocuments({

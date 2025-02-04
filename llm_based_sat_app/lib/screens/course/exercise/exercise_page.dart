@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_appBar.dart';
+import '../../../models/firebase-exercise-uploader/interface/exercise_interface.dart';
 import '../../../widgets/exercise_widgets/exercise_bottom_message.dart';
 import '../../../widgets/custom_button.dart';
 import '../../../widgets/exercise_widgets/exercise_description.dart';
@@ -8,8 +9,20 @@ import '../../../widgets/exercise_widgets/exercise_image.dart';
 import '../../../widgets/exercise_widgets/exercise_step_label.dart';
 import '../../../widgets/exercise_widgets/exercise_timer.dart';
 
-// TODO
-// Potentially save user data temporarily then later in a database as they progress through the exercises
+/* This file defines the `ExercisePage` widget, a stateless page that displays details about a specific exercise and allows users to interact with it. The pageincludes features such as an exercise description, step label, image, timer, and custom button functionality. 
+
+Parameters:
+- `heading` (String): The title of the exercise displayed in the app bar.
+- `step` (String): The current step or label for the exercise workflow.
+- `description` (String): A detailed description of the exercise.
+- `imageUrl` (String): URL for the exercise image to be displayed on the page.
+- `buttonText` (String): Text displayed on the custom action button.
+- `onButtonPress` (void Function(BuildContext)): Callback function triggered when the custom button is pressed. It takes the current `BuildContext` as input.
+- `rightArrowPresent` (bool): Indicates whether a right arrow should appear on the custom button.
+- `messageText` (String): A bottom message text providing additional exercise info.
+- `exercise` (Exercise): The `Exercise` model containing exercise-specific details, such as duration, progress, and metadata. */
+
+
 class ExercisePage extends StatelessWidget {
   final String heading;
   final String step;
@@ -19,6 +32,7 @@ class ExercisePage extends StatelessWidget {
   final void Function(BuildContext) onButtonPress;
   final bool rightArrowPresent;
   final String messageText;
+  final Exercise exercise;
 
   const ExercisePage({
     super.key,
@@ -30,6 +44,7 @@ class ExercisePage extends StatelessWidget {
     required this.onButtonPress,
     required this.rightArrowPresent,
     required this.messageText,
+    required this.exercise,
   });
 
   @override
@@ -77,12 +92,12 @@ class ExercisePage extends StatelessWidget {
           ),
 
           // Timer
-          const Positioned(
+          Positioned(
             bottom: 16.0,
             left: 0,
             right: 0,
             child: Center(
-              child: ExerciseTimer(),
+              child: ExerciseTimer(exercise: exercise,),
             ),
           ),
         ],

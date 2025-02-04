@@ -27,6 +27,7 @@ class ExerciseAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       centerTitle: true,
+      automaticallyImplyLeading: false,
     );
   }
 

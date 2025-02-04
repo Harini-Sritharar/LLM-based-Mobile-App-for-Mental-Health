@@ -1,5 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../../firebase/firebase_auth_services.dart';
 import '/main.dart';
 import '/screens/auth/sign_up_page.dart';
@@ -41,7 +41,8 @@ class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColours.white, // Matches the white background
+      backgroundColor:
+          AppColours.white, // Matches the white background
       body: Center(
         child: Form(
             key: _formKey,

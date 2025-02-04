@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/screens/profile/personal_info_page.dart';
 import 'package:llm_based_sat_app/screens/profile/personal_profile_page.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 import '../../firebase/firebase_auth_services.dart';
 import 'sign_in_page.dart';
+import '/main.dart';
 // Widgets
 import '../../widgets/custom_button.dart';
 import '../../widgets/auth_widgets/circular_checkbox.dart';
@@ -38,7 +40,8 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColours.white, // Matches the white background
+      backgroundColor:
+          AppColours.white, // Matches the white background
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Form(

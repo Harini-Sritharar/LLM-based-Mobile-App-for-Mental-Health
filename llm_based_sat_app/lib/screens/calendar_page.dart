@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'profile/profile_page.dart';
 import '../widgets/custom_app_bar.dart';
 
 class CalendarPage extends StatelessWidget {

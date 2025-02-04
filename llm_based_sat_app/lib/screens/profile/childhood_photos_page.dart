@@ -4,7 +4,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:io';
+import '../auth/sign_in_page.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
+import 'package:llm_based_sat_app/screens/profile/personal_info_page.dart';
+import 'package:llm_based_sat_app/screens/profile/personal_profile_page.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 
 class ChildhoodPhotosPage extends StatefulWidget {
@@ -45,7 +48,7 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
       favouritePhotos =
           List<String>.from(snapshot.get('favouritePhotos') ?? []);
       nonFavouritePhotos =
-          List<String>.from(snapshot.get('nonfavouritePhotos') ?? []);
+          List<String>.from(snapshot.get('nonFavouritePhotos') ?? []);
     });
   }
 
@@ -153,13 +156,11 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
               ),
               const Text(
                 "Childhood photos",
-                style:
-                    TextStyle(fontSize: 22, color: AppColours.brandBluePlusTwo),
+                style: TextStyle(fontSize: 22, color: AppColours.brandBluePlusTwo),
               ),
               const Text(
                 "Add favourite and non-favourite Photos of your Childhood",
-                style: TextStyle(
-                    fontSize: 14, color: AppColours.neutralGreyMinusOne),
+                style: TextStyle(fontSize: 14, color: AppColours.neutralGreyMinusOne),
               ),
               const SizedBox(height: 20),
               _buildPhotoSection("Favourite photos", favouritePhotos,

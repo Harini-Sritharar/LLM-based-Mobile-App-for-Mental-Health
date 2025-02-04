@@ -6,8 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/firebase/firebase_profile.dart';
 import 'package:llm_based_sat_app/widgets/auth_widgets/text_input_field.dart';
+import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import 'package:llm_based_sat_app/widgets/custom_button.dart';
+import '../../widgets/auth_widgets/text_input_field.dart';
 import 'package:provider/provider.dart';
 import '../../utils/profile_notifier.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -43,10 +45,8 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
   void _loadUserData() async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      DocumentSnapshot doc = await FirebaseFirestore.instance
-          .collection('Profile')
-          .doc(user.uid)
-          .get();
+      DocumentSnapshot doc =
+          await FirebaseFirestore.instance.collection('Profile').doc(user.uid).get();
       if (doc.exists) {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
         setState(() {
@@ -75,8 +75,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
         _genderController.text,
       );
 
-      Provider.of<ProfileNotifier>(context, listen: false)
-          .notifyProfileUpdated();
+      Provider.of<ProfileNotifier>(context, listen: false).notifyProfileUpdated();
       Navigator.pop(context);
     }
   }
@@ -104,7 +103,8 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                     const Text(
                       "Personal Info",
                       style: TextStyle(
-                          fontSize: 28, color: AppColours.neutralGreyMinusOne),
+                          fontSize: 28,
+                          color: AppColours.neutralGreyMinusOne),
                     ),
                     const SizedBox(height: 8),
                     const Text(
