@@ -60,6 +60,7 @@ class Courses extends StatelessWidget {
                     duration: '2 week',
                     rating: 4.2,
                     ratingsCount: 7830,
+                    isLocked: false,
                     onButtonPress: (BuildContext context) {
                       // Navigate to ExercisePageCaller when the button is pressed
                       Navigator.push(
@@ -79,6 +80,7 @@ class Courses extends StatelessWidget {
                     duration: '6 week',
                     rating: 4.9,
                     ratingsCount: 560,
+                    isLocked: false,
                     onButtonPress: (BuildContext context) {
                       // Navigate to ExercisePageCaller when the button is pressed
                       Navigator.push(
@@ -98,6 +100,7 @@ class Courses extends StatelessWidget {
                     duration: '3 week',
                     rating: 3.9,
                     ratingsCount: 67,
+                    isLocked: true,
                     onButtonPress: (BuildContext context) {
                       // Navigate to ExercisePageCaller when the button is pressed
                       Navigator.push(
@@ -117,6 +120,7 @@ class Courses extends StatelessWidget {
                     duration: '1 week',
                     rating: 4.5,
                     ratingsCount: 1496,
+                    isLocked: true,
                     onButtonPress: (BuildContext context) {
                       // Navigate to ExercisePageCaller when the button is pressed
                       Navigator.push(
