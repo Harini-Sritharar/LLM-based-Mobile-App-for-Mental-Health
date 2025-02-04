@@ -1,5 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/firebase_messaging_service.dart';
 import 'package:llm_based_sat_app/screens/personal_profile_page.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_up_page.dart';
 import 'package:llm_based_sat_app/screens/contact_details_page.dart';
@@ -20,12 +22,26 @@ import 'firebase_options.dart';
 List<Map<String, dynamic>> favouritePhotos = [];
 List<Map<String, dynamic>> nonFavouritePhotos = [];
 
+Future<void> _backgroundHandler(RemoteMessage message) async {
+  print('Handling a background message: ${message.messageId}');
+}
+
 void main() async {
-  print("Nilesh");
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+    // Request permission for notifications
+  await FirebaseMessaging.instance.requestPermission(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+
+  FirebaseMessaging.onBackgroundMessage(_backgroundHandler);
+  final firebaseMessagingService = FirebaseMessagingService();
+  await firebaseMessagingService.initialize();
   runApp(const MyApp());
 }
 
@@ -122,3 +138,5 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 }
+
+
