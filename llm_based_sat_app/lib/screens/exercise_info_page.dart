@@ -1,23 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/screens/course/courses.dart';
+import 'package:llm_based_sat_app/screens/exercise_page.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/utils/exercise_page_caller.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import 'package:llm_based_sat_app/widgets/custom_button.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/learning_tile.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/checkbox_tile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../data/cache_manager.dart';
 import '../models/firebase-exercise-uploader/interface/exercise_interface.dart';
 
-class ExerciseInfoPage extends StatelessWidget {
+class ExerciseInfoPage extends StatefulWidget {
   final Exercise exercise;
   final Function(int) onItemTapped; // Function to update navbar index
   final int selectedIndex; // Current selected index
 
-  const ExerciseInfoPage(
-      {Key? key,
-      required this.exercise,
-      required this.onItemTapped,
-      required this.selectedIndex});
+  const ExerciseInfoPage({
+    Key? key,
+    required this.exercise,
+    required this.onItemTapped,
+    required this.selectedIndex,
+  }) : super(key: key);
+
+  @override
+  _ExerciseInfoPageState createState() => _ExerciseInfoPageState();
+}
+
+class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
+  @override
+  void dispose() {
+    print("Widget removed from the widget tree");
+  }
 
   void showDialogBox(BuildContext context, String title, String content) {
     showDialog(
@@ -64,8 +79,8 @@ class ExerciseInfoPage extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
           title: 'Self-attachment',
-          onItemTapped: onItemTapped,
-          selectedIndex: selectedIndex),
+          onItemTapped: widget.onItemTapped,
+          selectedIndex: widget.selectedIndex),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -73,7 +88,7 @@ class ExerciseInfoPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Exercise ${exercise.id.substring(exercise.id.length - 1)}",
+              "Exercise ${widget.exercise.id.substring(widget.exercise.id.length - 1)}",
               style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w500,
@@ -127,7 +142,7 @@ class ExerciseInfoPage extends StatelessWidget {
                   title: 'Aim',
                   icon: Icons.lightbulb,
                   subject: 'Aim',
-                  content: exercise.objective,
+                  content: widget.exercise.objective,
                 ),
                 LearningTile(
                   title: 'Theory',
@@ -169,7 +184,7 @@ class ExerciseInfoPage extends StatelessWidget {
                         border: Border.all(color: Color(0xFF123659)),
                       ),
                       child: Text(
-                        exercise.minimumPracticeTime,
+                        widget.exercise.minimumPracticeTime,
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -218,7 +233,7 @@ class ExerciseInfoPage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const ExercisePageCaller(id: "A_2"),
+                      builder: (context) => getExerciseStep(),
                     ),
                   );
                 },
@@ -235,11 +250,11 @@ class ExerciseInfoPage extends StatelessWidget {
   getLearning() {
     String learning = "";
     String currentLetter = 'a';
-    for (final pointer in exercise.requiredLearning) {
+    for (final pointer in widget.exercise.requiredLearning) {
       learning = "$learning ($currentLetter) $pointer\n\n";
       currentLetter = incrementLetter(currentLetter);
     }
-    for (final pointer in exercise.optionalLearning) {
+    for (final pointer in widget.exercise.optionalLearning) {
       learning = "$learning ($currentLetter) $pointer\n\n";
       currentLetter = incrementLetter(currentLetter);
     }
@@ -272,10 +287,65 @@ class ExerciseInfoPage extends StatelessWidget {
   getSteps() {
     String steps = "";
     int count = 1;
-    for (final step in exercise.exerciseSteps) {
+    for (final step in widget.exercise.exerciseSteps) {
       steps = "$steps ($count) ${step.stepTitle}\n\n";
       count++;
     }
     return steps;
+  }
+
+  String getExerciseLetter(String input) {
+    // Use split to find the last letter between underscores
+    List<String> parts = input.split('_');
+
+    // Check if the string is valid and has enough parts
+    if (parts.length > 2) {
+      String secondLast = parts[parts.length - 2];
+
+      // Ensure it's a single letter (in case of invalid input)
+      if (RegExp(r'^[A-Za-z]$').hasMatch(secondLast)) {
+        return secondLast;
+      }
+    }
+    throw ArgumentError("No valid letter found between underscores.");
+  }
+
+  Widget getExerciseStep() {
+    final currentExerciseStep = widget.exercise.exerciseSteps[0];
+    final header = "Exercise ${getExerciseLetter(currentExerciseStep.id)}";
+
+    int currentStep =
+        CacheManager.getValue(widget.exercise.id) ?? 1; // Default to 1st step
+    print("Current step: $currentStep");
+    CacheManager.setValue(widget.exercise.id, currentStep + 1);
+
+    return ExercisePage(
+      heading: header,
+      step: currentExerciseStep.stepTitle,
+      description: currentExerciseStep.description,
+      imageUrl: currentExerciseStep.imageUrl,
+      buttonText: currentStep < widget.exercise.exerciseSteps.length
+          ? "Next Step"
+          : "Finish Exercise",
+      onButtonPress: (BuildContext context) async {
+        if (currentStep < widget.exercise.exerciseSteps.length + 1000) {
+          // Save the next step in cache
+          // await _saveCurrentStep(currentStep + 1);
+          // Navigate to the next step
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => getExerciseStep(),
+            ),
+          );
+        } else {
+          // Reset the cache when exercise is completed
+          CacheManager.removeValue(widget.exercise.id);
+          Navigator.pop(context); // Exit the exercise
+        }
+      },
+      rightArrowPresent: true,
+      messageText: currentExerciseStep.footerText,
+    );
   }
 }
