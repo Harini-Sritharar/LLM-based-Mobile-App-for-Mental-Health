@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       // For now, the landing screen is the Sign In page
-      home: QuestionnaireAssessmentsPage(),
+      home: SignInPage(),
       // home: UploadProfilePicturePage(onItemTapped: (x) => {}, selectedIndex: 0,) // for local testing
       // home:ImagePickerWidget()
     );
@@ -105,7 +105,8 @@ class _MainScreenState extends State<MainScreen> {
     final List<Widget> pages = [
       CommunityPage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
       CalendarPage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
-      HomePage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
+      QuestionnaireAssessmentsPage(),
+      //HomePage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
       ScorePage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
       Courses(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
     ];

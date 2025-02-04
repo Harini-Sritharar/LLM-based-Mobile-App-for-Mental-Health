@@ -33,6 +33,7 @@ class SliderQuestion extends StatelessWidget {
           value: value.toDouble(),
           min: minValue.toDouble(),
           max: maxValue.toDouble(),
+          divisions: maxValue,
           onChanged: (newValue) => onChanged(newValue.toInt()),
           activeColor: Colors.blue,
           inactiveColor: const Color(0xFFD3D3D3),

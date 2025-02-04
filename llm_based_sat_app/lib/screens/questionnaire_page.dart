@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:llm_based_sat_app/firebase_profile.dart';
 import 'package:llm_based_sat_app/widgets/assessment_widgets/slider_question.dart';
 
 /// A stateful widget representing an individual questionnaire page.
@@ -168,6 +169,8 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
+                  saveQuestionnaireResponse(
+                      widget.questionnaireName, responses);
                   widget.onComplete(widget.questionnaireName);
                   Navigator.pop(context);
                 },

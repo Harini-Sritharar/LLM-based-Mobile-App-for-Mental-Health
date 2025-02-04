@@ -1,5 +1,6 @@
 // TODO: will need to move all the firebase calls to one place perhaps?
 
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -14,7 +15,8 @@ Future<void> updatePersonalInfo(
     'firstname': firstname,
     'surname': surname,
     'dob': dob,
-    'gender': gender
+    'gender': gender,
+    'completedQuestionnaires': [],
   });
 }
 
@@ -44,6 +46,52 @@ Future<void> updateProfilePictureAndUsername(
     'username': username,
     'profilePictureUrl': downloadUrl,
   });
+}
+
+/// Saves questionnaire responses to Firestore
+Future<void> saveQuestionnaireResponse(
+    String name, Map<int, int> answers) async {
+  User? user = FirebaseAuth.instance.currentUser;
+  FirebaseFirestore db = FirebaseFirestore.instance;
+
+  if (user == null) {
+    print("User not logged in");
+    return;
+  }
+
+  DocumentReference userDoc = db.collection('Profile').doc(user.uid);
+  CollectionReference responsesRef = userDoc.collection('responses');
+
+  // Store the questionnaire response
+  await responsesRef.doc().set({
+    'name': name,
+    'timestamp': FieldValue.serverTimestamp(),
+    'answers':
+        answers.map((key, value) => MapEntry(key.toString(), value.toString())),
+  });
+
+  // Check if all required questionnaires are completed
+  DocumentSnapshot userSnapshot = await userDoc.get();
+  // Ensure completedQuestionnaires exists
+  List<String> completedQuestionnaires = [];
+  if (userSnapshot.exists && userSnapshot.data() != null) {
+    var data = userSnapshot.data() as Map<String, dynamic>;
+    if (data.containsKey('completedQuestionnaires')) {
+      completedQuestionnaires =
+          List<String>.from(data['completedQuestionnaires']);
+    }
+  }
+
+  if (!completedQuestionnaires.contains(name)) {
+    completedQuestionnaires.add(name);
+  }
+
+  await userDoc.update({'completedQuestionnaires': completedQuestionnaires});
+
+  // // Recalculate overall score if all questionnaires are completed
+  // if (completedQuestionnaires.length == 6) {
+  //   await recalculateScores(user.uid);
+  // }
 }
 
 Future<bool> isPersonalInfoComplete() async {
