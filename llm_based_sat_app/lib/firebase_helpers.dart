@@ -155,6 +155,7 @@ Future<String> getProfilePictureUrl(String uid) async {
   }
 }
 
+/* Function to get all courses from firebase as a List of Courses */
 Future<List<Course>> getAllCourses() async {
   try {
     // Fetch all courses
@@ -268,27 +269,6 @@ Future<List<Course>> getAllCourses() async {
 }
 
 
-Future<List<Map<String, dynamic>>> getCoursesTrial() async {
-  try {
-    // Reference to the Firestore collection
-    final collection = FirebaseFirestore.instance.collection('Courses');
-
-    // Get all documents from the collection
-    final querySnapshot = await collection.get();
-
-    // Extract the documents as a list of maps
-    final courses = querySnapshot.docs.map((doc) => doc.data()).toList();
-
-    // Return the list of courses
-    return courses;
-  } catch (e) {
-    // Handle errors and return an empty list
-    if (kDebugMode) {
-      print('Error fetching courses: $e');
-    }
-    return [];
-  }
-}
 // Remove all user documents from a given collection
 Future<void> removeUserDocuments({
   required String userId,
