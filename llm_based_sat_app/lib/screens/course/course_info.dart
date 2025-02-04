@@ -36,7 +36,8 @@ class CourseInfo extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CourseTypeRating(courseType: course.courseType, rating: course.rating),
+            CourseTypeRating(
+                courseType: course.courseType, rating: course.rating),
             const SizedBox(height: 10),
             Text(
               course.title,
@@ -116,7 +117,10 @@ class CourseInfo extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (context) => ExerciseInfoPage(
-                    exercise: exercise, onItemTapped: onItemTapped, selectedIndex: selectedIndex, ),
+                  exercise: exercise,
+                  onItemTapped: onItemTapped,
+                  selectedIndex: selectedIndex,
+                ),
               ),
             );
           },
