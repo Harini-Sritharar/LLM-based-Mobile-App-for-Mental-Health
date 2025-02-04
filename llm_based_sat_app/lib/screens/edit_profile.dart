@@ -69,9 +69,7 @@ class EditProfilePage extends StatelessWidget {
               const Text(
                 "Edit your Personal Profile",
                 style: TextStyle(
-                  fontSize: 15,
-                  color: AppColours.primaryGreyTextColor,
-                ),
+                    fontSize: 15, color: AppColours.neutralGreyMinusOne),
               ),
 
               const SizedBox(height: 20), // Vertical spacing before menu items
@@ -79,7 +77,7 @@ class EditProfilePage extends StatelessWidget {
               // Menu item for navigating to the Personal Info page
               MenuItem(
                 title: "Personal Info",
-                color: AppColours.secondaryBlueTextColor,
+                color: AppColours.brandBluePlusTwo,
                 onTap: () {
                   // Navigation to PersonalInfoPage
                   Navigator.push(
@@ -97,7 +95,7 @@ class EditProfilePage extends StatelessWidget {
               // Menu item for navigating to Contact Details
               MenuItem(
                 title: "Contact Details",
-                color: AppColours.secondaryBlueTextColor,
+                color: AppColours.brandBluePlusTwo,
                 onTap: () {
                   Navigator.push(
                     context,
@@ -113,7 +111,7 @@ class EditProfilePage extends StatelessWidget {
               // Menu item for navigating to Profile Picture settings
               MenuItem(
                 title: "Profile Picture",
-                color: AppColours.secondaryBlueTextColor,
+                color: AppColours.brandBluePlusTwo,
                 onTap: () {
                   Navigator.push(
                     context,

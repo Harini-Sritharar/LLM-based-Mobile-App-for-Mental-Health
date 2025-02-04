@@ -3,6 +3,7 @@
 /// fields for entering card details, as well as a button to update the payment method.
 
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/theme/app_colours.dart';
 
 import '../theme/app_colours.dart';
 import '../widgets/custom_app_bar.dart';
@@ -45,10 +46,9 @@ class PaymentOptionPage extends StatelessWidget {
             const Text(
               "Current Payment Method",
               style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: AppColours.primaryGreyTextColor,
-              ),
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: AppColours.neutralGreyMinusOne),
             ),
             const SizedBox(height: 10),
             _buildCardWidget(), // Displays the current card details.
@@ -56,16 +56,13 @@ class PaymentOptionPage extends StatelessWidget {
             // Section for updating the payment method.
             Row(
               children: const [
-                Text(
-                  "Update Payment Method",
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: AppColours.secondaryBlueTextColor),
-                ),
+                Text("Update Payment Method",
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: AppColours.brandBluePlusTwo)),
                 SizedBox(width: 5),
-                Icon(Icons.info_outline,
-                    color: AppColours.secondaryBlueTextColor),
+                Icon(Icons.info_outline, color: AppColours.brandBluePlusTwo),
               ],
             ),
             const SizedBox(height: 10),
@@ -87,7 +84,7 @@ class PaymentOptionPage extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColours.secondaryBlueTextColor,
+        color: AppColours.brandBluePlusTwo,
         borderRadius: BorderRadius.circular(15),
       ),
       child: Column(
@@ -154,7 +151,7 @@ class PaymentOptionPage extends StatelessWidget {
             // Placeholder for update action.
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: AppColours.forwardArrowColor,
+            backgroundColor: AppColours.brandBlueMain,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(25),
             ),

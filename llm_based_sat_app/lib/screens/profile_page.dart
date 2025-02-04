@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:llm_based_sat_app/firebase_helpers.dart';
 import 'package:llm_based_sat_app/main.dart';
 import 'package:llm_based_sat_app/screens/payment_option_page.dart';
@@ -31,7 +30,7 @@ class ProfilePage extends StatelessWidget {
     return MainLayout(
       selectedIndex: selectedIndex,
       body: Container(
-        color: AppColours.backgroundColor,
+        color: AppColours.white,
         child: Column(
           children: [
             CustomAppBar(
@@ -98,7 +97,7 @@ class ProfilePage extends StatelessWidget {
               user!.email ?? "No email provided",
               style: const TextStyle(
                 fontSize: 16,
-                color: AppColours.primaryGreyTextColor,
+                color: AppColours.neutralGreyMinusOne,
               ),
             ),
             const SizedBox(height: 20),
@@ -257,7 +256,7 @@ class ProfilePage extends StatelessWidget {
       style: const TextStyle(
         fontSize: 22,
         fontWeight: FontWeight.bold,
-        color: AppColours.primaryGreyTextColor,
+        color: AppColours.neutralGreyMinusOne,
       ),
     );
   }

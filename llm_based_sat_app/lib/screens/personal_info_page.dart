@@ -3,6 +3,7 @@
 /// date of birth, and gender. The updated information can be saved to the database.
 
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/firebase_profile.dart';
 import 'package:llm_based_sat_app/widgets/auth_widgets/text_input_field.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
@@ -103,13 +104,13 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                       "Personal Info",
                       style: TextStyle(
                           fontSize: 28,
-                          color: AppColours.secondaryBlueTextColor),
+                          color: AppColours.neutralGreyMinusOne),
                     ),
                     const SizedBox(height: 8),
                     const Text(
                       "Complete your Personal Information",
                       style: TextStyle(
-                          fontSize: 15, color: AppColours.primaryGreyTextColor),
+                          fontSize: 15, color: AppColours.neutralGreyMinusOne),
                     ),
                     const SizedBox(height: 40),
                     TextInputField(

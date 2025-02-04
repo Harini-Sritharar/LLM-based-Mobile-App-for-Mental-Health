@@ -79,26 +79,22 @@ class _UltimateGoalPageState extends State<UltimateGoalPage> {
               // Page title and description text.
               const Text(
                 "Set Yourself an Ultimate Goal",
-                style: TextStyle(
-                    fontSize: 22, color: AppColours.primaryGreyTextColor),
+                style: TextStyle(fontSize: 22, color: AppColours.neutralGreyMinusOne),
               ),
               const SizedBox(height: 20),
               const Text(
                 "Your goal should be a socially useful ideal that guides you towards growth and self-development to empower you in today’s world with our problems.",
-                style: TextStyle(
-                    fontSize: 16, color: AppColours.primaryGreyTextColor),
+                style: TextStyle(fontSize: 16, color: AppColours.neutralGreyMinusOne),
               ),
               const SizedBox(height: 10),
               const Text(
                 "It could be achievement in an academic, scientific, literary, philosophical, athletic, spiritual, professional, charitable, or a socially progressive manufacturing/commercial/business field.",
-                style: TextStyle(
-                    fontSize: 16, color: AppColours.primaryGreyTextColor),
+                style: TextStyle(fontSize: 16, color: AppColours.neutralGreyMinusOne),
               ),
               const SizedBox(height: 10),
               const Text(
                 "If we do not have a clear goal at the start of the program, you can refine it later.",
-                style: TextStyle(
-                    fontSize: 16, color: AppColours.primaryGreyTextColor),
+                style: TextStyle(fontSize: 16, color: AppColours.neutralGreyMinusOne),
               ),
               const SizedBox(height: 40),
               // Input box for entering the ultimate goal.
@@ -127,7 +123,7 @@ class _UltimateGoalPageState extends State<UltimateGoalPage> {
             // Placeholder for save functionality.
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF1C548C),
+            backgroundColor: AppColours.brandBlueMain,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(25),
             ),
@@ -148,8 +144,8 @@ class _UltimateGoalPageState extends State<UltimateGoalPage> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFFD0E0F0), // Light blue background.
-        borderRadius: BorderRadius.circular(15), // Rounded corners.
+        color: AppColours.brandBlueMinusThree, // Light blue background
+        borderRadius: BorderRadius.circular(15), // Rounded corners
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

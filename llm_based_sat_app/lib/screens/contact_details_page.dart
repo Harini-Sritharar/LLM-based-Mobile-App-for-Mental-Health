@@ -110,13 +110,13 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
                       "Contact Details",
                       style: TextStyle(
                           fontSize: 28,
-                          color: AppColours.secondaryBlueTextColor),
+                          color: AppColours.brandBluePlusTwo),
                     ),
                     const SizedBox(height: 8),
                     const Text(
                       "Complete your Contact Details",
                       style: TextStyle(
-                          fontSize: 15, color: AppColours.primaryGreyTextColor),
+                          fontSize: 15, color: AppColours.neutralGreyMinusOne),
                     ),
                     const SizedBox(height: 40),
                     // TODO : Replace the map icon, globe doesn't exist in Icons
@@ -140,7 +140,7 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
                         decoration: InputDecoration(
                           labelText: 'Mobile Number',
                           filled: true,
-                          fillColor: AppColours.textFieldBackgroundColor,
+                          fillColor: AppColours.brandBlueMinusFour,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
                             borderSide: BorderSide.none,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/theme/app_colours.dart';
 
 class ExerciseSliderQuestionWidget extends StatefulWidget {
   final String question;
@@ -44,7 +45,7 @@ class _ExerciseSliderQuestionWidgetState extends State<ExerciseSliderQuestionWid
                 min: 1,
                 max: 5,
                 divisions: 4,
-                activeColor: const Color(0xFF1C548C), // Blue slider color
+                activeColor: AppColours.brandBlueMain, // Blue slider color
                 inactiveColor: Colors.grey[300],
                 label: _currentValue.round().toString(),
                 onChanged: (double value) {
@@ -58,7 +59,7 @@ class _ExerciseSliderQuestionWidgetState extends State<ExerciseSliderQuestionWid
               _currentValue.round().toString(),
               style: TextStyle(
                 fontSize: 16,
-                color: const Color(0xFF1C548C), // Blue text color
+                color: AppColours.brandBlueMain, // Blue text color
                 fontWeight: FontWeight.bold,
               ),
             ),
