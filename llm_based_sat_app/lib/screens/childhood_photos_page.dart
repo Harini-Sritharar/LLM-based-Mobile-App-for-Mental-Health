@@ -48,7 +48,7 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
       favouritePhotos =
           List<String>.from(snapshot.get('favouritePhotos') ?? []);
       nonFavouritePhotos =
-          List<String>.from(snapshot.get('nonFavouritePhotos') ?? []);
+          List<String>.from(snapshot.get('nonfavouritePhotos') ?? []);
     });
   }
 
