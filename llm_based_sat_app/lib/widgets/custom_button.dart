@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/theme/app_colours.dart';
 
 /* CustomButton is a customizable button widget that allows for either left or right arrow icons to be displayed alongside the button text.
 
@@ -39,7 +40,7 @@ class CustomButton extends StatelessWidget {
       this.rightArrowPresent = false,
       this.leftArrowPresent = false,
       this.backgroundColor =
-          const Color(0xFF1C548C), // Default background color
+          AppColours.brandBlueMain, // Default background color
       this.textColor = Colors.white})
       : assert(!(rightArrowPresent && leftArrowPresent),
             'Only one of rightArrowPresent or leftArrowPresent can be true.');
@@ -79,7 +80,7 @@ class CustomButton extends StatelessWidget {
                 ),
                 child: const Icon(
                   Icons.chevron_left,
-                  color: Color(0xFF1C548C), // Dark blue icon color
+                  color: AppColours.brandBlueMain, // Dark blue icon color
                   size: 40,
                 ),
               ),
@@ -107,7 +108,7 @@ class CustomButton extends StatelessWidget {
                 ),
                 child: const Icon(
                   Icons.chevron_right,
-                  color: Color(0xFF1C548C), // Dark blue icon color
+                  color: AppColours.brandBlueMain, // Dark blue icon color
                   size: 40,
                 ),
               ),

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/firebase_profile.dart';
+import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/auth_widgets/text_input_field.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import 'package:llm_based_sat_app/widgets/custom_button.dart';
@@ -60,12 +61,14 @@ class _UploadProfilePicturePageState extends State<UploadProfilePicturePage> {
               const SizedBox(height: 120),
               const Text(
                 "Profile Picture",
-                style: TextStyle(fontSize: 22, color: Color(0xFF687078)),
+                style: TextStyle(
+                    fontSize: 28, color: AppColours.secondaryBlueTextColor),
               ),
               const SizedBox(height: 8),
               const Text(
                 "Add a picture of yourself",
-                style: TextStyle(fontSize: 16, color: Color(0xFF687078)),
+                style: TextStyle(
+                    fontSize: 15, color: AppColours.primaryGreyTextColor),
               ),
               const SizedBox(height: 20),
               Center(

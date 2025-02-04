@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/models/chapter_interface.dart';
+import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/course_page_chapter.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 
@@ -20,50 +21,59 @@ class CoursePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: CustomAppBar(title: "Course Page", onItemTapped: onItemTapped, selectedIndex: selectedIndex),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Course: $courseTitle",
-              style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w500,
-                  color: Color(0xFF062240)),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              "Complete the minimum number of sessions in each exercise to move to the next one.",
-            ),
-            const SizedBox(height: 24),
-            Row(
-              children: [
-                Text("Course exercises",
+        backgroundColor: Colors.white,
+        appBar: CustomAppBar(
+            title: "Course Page",
+            onItemTapped: onItemTapped,
+            selectedIndex: selectedIndex),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Course: $courseTitle",
+                style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w500,
+                    color: AppColours.brandBluePlusThree),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                "Complete the minimum number of sessions in each exercise to move to the next one.",
+              ),
+              const SizedBox(height: 24),
+              Row(
+                children: [
+                  Text("Course exercises",
+                      style: TextStyle(
+                        fontSize: 18,
+                      )),
+                  Spacer(),
+                  Text(
+                    "Practised / Total Sessions",
                     style: TextStyle(
-                      fontSize: 18,
-                    )),
-                Spacer(),
-                Text(
-                  "Practised / Total Sessions",
-                  style: TextStyle(
-                    color: Color(0xFF687078),
-                    fontSize: 14,
+                      color: AppColours.neutralGreyMinusOne,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+
+              Expanded(
+                // Using Expanded to take remaining space for the scrollable list
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: chapters
+                        .map((chapter) => CoursePageChapter(chapter: chapter))
+                        .toList(), // Convert map result to a List of widgets
                   ),
                 ),
-              ],
-            ),
-            const SizedBox(height: 24),
-            // ...chapters.map((chapter) =>
-            //   CoursePageChapter(chapterIndex: chapter., chapterTitle: chapterTitle, exercises: exercises)
-            // )
-            ...chapters.map((chapter) => CoursePageChapter(chapter: chapter))
-          ],
-        ),
-      ),
-    );
+              ),
+            ],
+          ),
+        ));
   }
 }
