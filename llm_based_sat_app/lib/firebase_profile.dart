@@ -90,12 +90,10 @@ Future<void> saveQuestionnaireResponse(
 
   // Recalculate overall score if all questionnaires are completed
   if (completedQuestionnaires.length == 6) {
-    print(" length 6 ");
     await recalculateScores(user.uid);
   }
 }
 
-/// Recalculates the overall score and subscale scores
 Future<void> recalculateScores(String userId) async {
   Map<String, int> subScores = {
     'GAD-7': 0,
@@ -115,7 +113,10 @@ Future<void> recalculateScores(String userId) async {
       Map<String, String>.from(data['completedQuestionnaires']);
 
   // Iterate through each completed questionnaire in the map
-  completedQuestionnaires.forEach((name, docId) async {
+  for (var entry in completedQuestionnaires.entries) {
+    String name = entry.key;
+    String docId = entry.value;
+
     DocumentSnapshot responseSnapshot =
         await userDoc.collection('responses').doc(docId).get();
     var responseData = responseSnapshot.data() as Map<String, dynamic>;
@@ -125,24 +126,24 @@ Future<void> recalculateScores(String userId) async {
     if (name == 'ERQ') {
       int ERQ_R = 0;
       int ERQ_S = 0;
-      answers.forEach((i, score) {
-        if ([1, 3, 5, 7, 8, 10].contains(i)) {
-          ERQ_R += int.parse(score);
+      for (var i in answers.keys) {
+        int score = int.parse(answers[i]!);
+        if ([1, 3, 5, 7, 8, 10].contains(int.parse(i))) {
+          ERQ_R += score;
         } else {
-          ERQ_S += int.parse(score);
+          ERQ_S += score;
         }
-      });
-      subScores.update('ERQ_R', (value) => ERQ_R);
-      subScores.update('ERQ_S', (value) => ERQ_S);
+      }
+      subScores['ERQ_R'] = ERQ_R;
+      subScores['ERQ_S'] = ERQ_S;
     } else {
       int tempScore = 0;
-      // Iterate through each set of response to add up the score for individual questionnaires
-      answers.forEach((_, score) {
+      for (var score in answers.values) {
         tempScore += int.parse(score);
-      });
-      subScores.update(name, (value) => tempScore);
+      }
+      subScores[name] = tempScore;
     }
-  });
+  }
 
   double mentalHealthScore =
       1 - (0.5 * ((subScores['GAD-7']! / 21) + (subScores['PHQ-9']! / 27)));
@@ -151,8 +152,7 @@ Future<void> recalculateScores(String userId) async {
       0.25 * subScores['CPC-12R']! +
       0.1 * (subScores['ERQ_R']! + (28 - subScores['ERQ_S']!)));
 
-  double overallScore = (mentalHealthScore + weightedScore) / 2;
-
+  double overallScore = ((mentalHealthScore + weightedScore) / 2);
   // Save the new scores
   await userDoc.update({'overallScore': overallScore, 'calculatedScore': true});
 

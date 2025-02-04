@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:llm_based_sat_app/screens/questionnaire_page.dart';
+import 'package:llm_based_sat_app/screens/questionnaire/questionnaire_page.dart';
 import 'package:llm_based_sat_app/widgets/assessment_widgets/slider_question.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 
@@ -27,7 +27,7 @@ class _QuestionnaireAssessmentsPageState
     {'name': 'SOCS-S', 'description': 'Self-Compassion'},
     {'name': 'CPC-12R', 'description': 'Psychological Capital'},
     {'name': 'ERQ', 'description': 'Reappraisal and Suppression'},
-  ];
+  ];                   
 
   /// Tracks completed questionnaires.
   Set<String> completedQuestionnaires = {};

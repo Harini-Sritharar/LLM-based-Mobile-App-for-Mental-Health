@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:llm_based_sat_app/firebase_profile.dart';
 import 'package:llm_based_sat_app/widgets/assessment_widgets/slider_question.dart';
 
@@ -26,6 +25,7 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
   @override
   Widget build(BuildContext context) {
     List<String> questions;
+    String description = "";
 
     /// Defines valid response ranges for each questionnaire.
     Map<String, Map<String, int>> questionnaireRanges = {
@@ -50,6 +50,8 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
         "Becoming easily annoyed or irritable.",
         "Feeling afraid as if something awful might happen."
       ];
+      description =
+          "Over the last 2 weeks, how often have you been bothered by the following problems; with 0 being not at all and 3 being nearly every day?";
     } else if (widget.questionnaireName == 'PHQ-9') {
       questions = [
         "Little interest or pleasure in doing things.",
@@ -62,6 +64,8 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
         "Moving or speaking so slowly that other people could have noticed. Or the opposite—being so fidgety or restless that you have been moving around a lot more than usual.",
         "Thoughts that you would be better off dead, or thoughts of hurting yourself in some way."
       ];
+      description =
+          "Over the last 2 weeks, how often have you been bothered by any of the following problems; with 0 being not at all and 3 being nearly every day?";
     } else if (widget.questionnaireName == 'PWB') {
       questions = [
         "I like most parts of my personality.",
@@ -83,6 +87,8 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
         "I have confidence in my own opinions, even if they are different from the way most other people think.",
         "I judge myself by what I think is important, not by the values of what others think is important."
       ];
+      description =
+          "Please indicate how much you agree with each of the following statements; with 1 being strongly agree and 7 being strongly disagree.";
     } else if (widget.questionnaireName == 'SOCS-S') {
       questions = [
         "I'm good at recognising when I'm feeling distressed.",
@@ -106,6 +112,8 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
         "When I'm upset, I can let the emotions be there without feeling overwhelmed.",
         "When I’m upset, I do my best to take care of myself."
       ];
+      description =
+          "Below are statements describing how you might relate to yourself. Please indicate how true the following statements are of you from 1 being not at all true to 5 being always true).";
     } else if (widget.questionnaireName == 'CPC-12R') {
       questions = [
         "I am looking forward to the life ahead of me.",
@@ -121,6 +129,8 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
         "Failure does not discourage me.",
         "I tend to bounce back quickly after serious life difficulties."
       ];
+      description =
+          "Please indicate how much you agree with each of the following statements; with 1 being strongly disagree and 6 being strongly agree.";
     } else if (widget.questionnaireName == 'ERQ') {
       questions = [
         "When I want to feel more positive emotion (such as joy or amusement), I change what I'm thinking about.",
@@ -134,6 +144,8 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
         "When I am feeling negative emotions, I make sure not to express them.",
         "When I want to feel less negative emotion, I change the way I'm thinking about the situation."
       ];
+      description =
+          "Please indicate how much you agree with each of the following statements; with 1 being strongly disagree and 7 being strongly agree.";
     } else {
       questions = [
         "Question 1",
@@ -148,6 +160,10 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              Text(
+                description,
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
               ...questions.asMap().entries.map((entry) {
                 int index = entry.key;
                 String question = entry.value;
