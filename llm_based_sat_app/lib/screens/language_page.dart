@@ -4,6 +4,7 @@ import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 
 import '../theme/app_colours.dart';
 import '../widgets/custom_button.dart';
+import '../widgets/main_layout.dart';
 
 /// A StatefulWidget that allows users to select their preferred language from a predefined list.
 /// The selected language is displayed and stored for potential future use.
@@ -27,7 +28,8 @@ class _LanguagePageState extends State<LanguagePage> {
   /// Builds the UI for the language selection page.
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return MainLayout(
+      selectedIndex: widget.selectedIndex,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
@@ -35,7 +37,7 @@ class _LanguagePageState extends State<LanguagePage> {
           children: [
             // Custom app bar at the top of the page.
             CustomAppBar(
-                title: "Available Language",
+                title: "Language",
                 onItemTapped: widget.onItemTapped,
                 selectedIndex: widget.selectedIndex),
             const SizedBox(height: 10),

@@ -5,34 +5,20 @@ import 'package:llm_based_sat_app/screens/payment_option_page.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
 import '../widgets/main_layout.dart';
 import 'edit_profile.dart';
+import 'manage_plan_page.dart';
 import 'settings_page.dart';
 import 'ultimate_goal_page.dart';
 import 'childhood_photos_page.dart';
 import '../widgets/custom_app_bar.dart';
 import '../theme/app_colours.dart';
 import '../widgets/menu_item.dart';
-
-/// A stateless widget that represents the Profile Page of the application.
-///
-/// This page includes a profile avatar, user information, and navigation options
-/// for various user-related actions such as editing the profile, accessing settings,
-/// viewing goals, and more.
-///
-/// The `ProfilePage` widget expects:
-/// - A callback function to handle bottom navigation (`onItemTapped`).
-/// - The currently selected index for the navigation bar (`selectedIndex`).
+import 'package:provider/provider.dart';
+import '../profile_notifier.dart';
 
 class ProfilePage extends StatelessWidget {
-  /// Callback function to handle bottom navigation updates.
   final Function(int) onItemTapped;
-
-  /// The index of the currently selected navigation bar item.
   final int selectedIndex;
 
-  /// Constructor for the `ProfilePage` widget.
-  ///
-  /// - `onItemTapped`: A required function to handle navigation updates.
-  /// - `selectedIndex`: A required integer to track the selected navbar index.
   const ProfilePage({
     super.key,
     required this.onItemTapped,
@@ -42,75 +28,71 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MainLayout(
-      selectedIndex:
-          selectedIndex, // Pass the selected navbar index to MainLayout.
+      selectedIndex: selectedIndex,
       body: Container(
-        color: AppColours.white, // Set background color for the page.
+        color: AppColours.white,
         child: Column(
           children: [
-            /// Custom app bar for the profile page.
             CustomAppBar(
-                title: "Profile Settings",
-                onItemTapped: onItemTapped,
-                selectedIndex: selectedIndex),
-
-            /// Spacer to add vertical space between the app bar and the profile avatar.
-            SizedBox(height: 20),
-
-            /// Profile avatar with a placeholder icon or the profile picture.
-            FutureBuilder<String>(
-              future: getProfilePictureUrl(
-                  user!.uid), // Call the asynchronous function
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircleAvatar(
-                    radius: 50,
-                    backgroundColor: AppColours.brandBlueMinusThree,
-                    child:
-                        CircularProgressIndicator(), // Show a loading indicator
-                  );
-                } else if (snapshot.hasError ||
-                    snapshot.data == null ||
-                    snapshot.data!.isEmpty) {
-                  return CircleAvatar(
-                    radius: 50,
-                    backgroundColor: AppColours.brandBlueMinusThree,
-                    child: Icon(
-                      Icons.person, // Fallback icon for errors or empty URL
-                      size: 80,
-                      color: AppColours.brandBlueMinusFour,
-                    ),
-                  );
-                } else {
-                  return CircleAvatar(
-                    radius: 50,
-                    backgroundColor: AppColours.brandBlueMinusThree,
-                    backgroundImage: NetworkImage(
-                        snapshot.data!), // Display the fetched image
-                    onBackgroundImageError: (error, stackTrace) {
-                      print('Error loading profile picture: $error');
-                    },
-                  );
-                }
+              title: "Profile Settings",
+              onItemTapped: onItemTapped,
+              selectedIndex: selectedIndex,
+            ),
+            const SizedBox(height: 20),
+            Consumer<ProfileNotifier>(
+              builder: (context, profileNotifier, child) {
+                return FutureBuilder<String>(
+                  future: getProfilePictureUrl(user!.uid),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircleAvatar(
+                        radius: 50,
+                        backgroundColor: AppColours.avatarBackgroundColor,
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (snapshot.hasError ||
+                        snapshot.data == null ||
+                        snapshot.data!.isEmpty) {
+                      return CircleAvatar(
+                        radius: 50,
+                        backgroundColor: AppColours.avatarBackgroundColor,
+                        child: Icon(
+                          Icons.person,
+                          size: 80,
+                          color: AppColours.avatarForegroundColor,
+                        ),
+                      );
+                    } else {
+                      return CircleAvatar(
+                        radius: 50,
+                        backgroundColor: AppColours.avatarBackgroundColor,
+                        backgroundImage: NetworkImage(snapshot.data!),
+                        onBackgroundImageError: (error, stackTrace) {
+                          print('Error loading profile picture: $error');
+                        },
+                      );
+                    }
+                  },
+                );
               },
             ),
             const SizedBox(height: 10),
-
-            /// Display the user's name using a FutureBuilder.
-            FutureBuilder<String>(
-              future: getName(user!.uid), // Call the asynchronous function
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return buildText("Loading...");
-                } else if (snapshot.hasError) {
-                  return buildText("Error fetching name");
-                } else {
-                  return buildText(snapshot.data ?? "No name found");
-                }
+            Consumer<ProfileNotifier>(
+              builder: (context, profileNotifier, child) {
+                return FutureBuilder<String>(
+                  future: getName(user!.uid),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return buildText("Loading...");
+                    } else if (snapshot.hasError) {
+                      return buildText("Error fetching name");
+                    } else {
+                      return buildText(snapshot.data ?? "No name found");
+                    }
+                  },
+                );
               },
             ),
-
-            /// Display the user's email address.
             Text(
               user!.email ?? "No email provided",
               style: const TextStyle(
@@ -119,8 +101,6 @@ class ProfilePage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-
-            /// List of menu items for navigation to different pages.
             Expanded(
               child: ListView(
                 children: [
@@ -136,7 +116,10 @@ class ProfilePage extends StatelessWidget {
                             selectedIndex: selectedIndex,
                           ),
                         ),
-                      );
+                      ).then((_) {
+                        // Notify profile updates when returning to this page
+                        context.read<ProfileNotifier>().notifyProfileUpdated();
+                      });
                     },
                   ),
                   MenuItem(
@@ -185,6 +168,21 @@ class ProfilePage extends StatelessWidget {
                     },
                   ),
                   MenuItem(
+                    title: "Manage Plan",
+                    icon: 'assets/icons/empty-wallet.svg',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ManagePlanPage(
+                            onItemTapped: onItemTapped,
+                            selectedIndex: selectedIndex,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  MenuItem(
                     title: "Payment Option",
                     icon: 'assets/icons/empty-wallet.svg',
                     onTap: () {
@@ -219,23 +217,18 @@ class ProfilePage extends StatelessWidget {
                             actions: [
                               TextButton(
                                 onPressed: () {
-                                  // Close the dialog without logging out
                                   Navigator.of(context).pop();
                                 },
                                 child: Text("Cancel"),
                               ),
                               TextButton(
                                 onPressed: () {
-                                  // Log out and navigate to SignInPage
-                                  Navigator.of(context)
-                                      .pop(); // Close the dialog
+                                  Navigator.of(context).pop();
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => SignInPage()),
                                   );
-                                  favouritePhotos = [];
-                                  nonFavouritePhotos = [];
                                 },
                                 child: const Text(
                                   "Logout",

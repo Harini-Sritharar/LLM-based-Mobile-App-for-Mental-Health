@@ -10,6 +10,7 @@ import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 
 import '../widgets/main_layout.dart';
+import 'help_centre_page.dart';
 import 'terms_and_conditions_page.dart';
 
 /// A stateless widget that represents the Settings page.
@@ -106,7 +107,17 @@ class SettingsPage extends StatelessWidget {
               context,
               'Help Centre',
               'assets/icons/profile/message-question.svg',
-              () {},
+              () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HelpCentrePage(
+                      onItemTapped: onItemTapped,
+                      selectedIndex: selectedIndex,
+                    ),
+                  ),
+                );
+              },
             ),
             _buildSettingsItem(
               context,
