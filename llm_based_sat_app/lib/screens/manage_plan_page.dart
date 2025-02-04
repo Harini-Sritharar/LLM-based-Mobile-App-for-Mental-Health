@@ -215,6 +215,8 @@ class _ManagePlanPageState extends State<ManagePlanPage> {
                         print("Go Premium button pressed for $title");
                         int amount = tierName == "monthly" ? 10 : 100;
                         await StripeService.instance.makePayment(amount);
+                        await _fetchUserTier();
+                        setState(() {});
                       },
                       child: const Text("Go Premium"),
                     ),
