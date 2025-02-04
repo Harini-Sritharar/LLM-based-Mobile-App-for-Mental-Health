@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/screens/questionnaire_page.dart';
 import 'package:llm_based_sat_app/widgets/assessment_widgets/slider_question.dart';
+import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 
 /// QuestionnaireAssessmentsPage - A UI page for handling mental health questionnaires
 ///
@@ -41,11 +42,17 @@ class _QuestionnaireAssessmentsPageState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Assessments"),
-        centerTitle: true,
-        backgroundColor: Colors.blueAccent,
+      appBar: CustomAppBar(
+        title: "Assessments",
+        onItemTapped: (x) {},
+        selectedIndex: 0,
+        backButton: false,
       ),
+      // AppBar(
+      //   title: Text("Assessments"),
+      //   centerTitle: true,
+      //   backgroundColor: Colors.blueAccent,
+      // ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
