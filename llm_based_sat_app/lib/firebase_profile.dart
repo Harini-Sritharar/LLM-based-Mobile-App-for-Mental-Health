@@ -154,9 +154,7 @@ Future<void> recalculateScores(String userId) async {
   double overallScore = (mentalHealthScore + weightedScore) / 2;
 
   // Save the new scores
-  await userDoc.update({
-    'overallScore': overallScore,
-  });
+  await userDoc.update({'overallScore': overallScore, 'calculatedScore': true});
 
   print("Scores updated successfully!");
 }
