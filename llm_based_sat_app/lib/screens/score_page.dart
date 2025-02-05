@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/firebase_profile.dart';
 import 'package:llm_based_sat_app/widgets/score_widgets/circular_progress_bar.dart';
 import 'package:llm_based_sat_app/widgets/score_widgets/progress_row.dart';
 import 'package:llm_based_sat_app/widgets/score_widgets/score_graph.dart';
 import '../widgets/custom_app_bar.dart';
 
-class ScorePage extends StatelessWidget {
+class ScorePage extends StatefulWidget {
   final Function(int) onItemTapped;
   final int selectedIndex;
 
-  const ScorePage(
+  ScorePage(
       {super.key, required this.onItemTapped, required this.selectedIndex});
 
+  @override
+  _ScorePageState createState() => _ScorePageState();
+}
+
+class _ScorePageState extends State<ScorePage> {
   static const progressDataTop = [
     {"percentage": 67.0, "title": "Positive Emotions"},
     {"percentage": 67.0, "title": "Engagement"},
@@ -39,20 +45,32 @@ class ScorePage extends StatelessWidget {
     "Aug",
     "Sept"
   ];
+  double overallScore = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadOverallScore();
+  }
+
+  Future<void> _loadOverallScore() async {
+    overallScore = await getOverallScore();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: CustomAppBar(
           title: "InvinciMind",
-          onItemTapped: onItemTapped,
-          selectedIndex: selectedIndex,
+          onItemTapped: widget.onItemTapped,
+          selectedIndex: widget.selectedIndex,
           backButton: false,
         ),
         body: SingleChildScrollView(
           child: Column(children: [
             CircularProgressBar(
-                percentage: 67, title: "Overall", inMiddle: true),
+                percentage: overallScore, title: "Overall", inMiddle: true),
             ProgressRow(progressData: progressDataTop),
             ProgressRow(progressData: progressDataBottom),
             ScoreGraph(scores: scores, months: months),

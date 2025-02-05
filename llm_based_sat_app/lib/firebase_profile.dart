@@ -159,6 +159,20 @@ Future<void> recalculateScores(String userId) async {
   print("Scores updated successfully!");
 }
 
+Future<double> getOverallScore() async {
+  User? user = FirebaseAuth.instance.currentUser;
+  FirebaseFirestore db = FirebaseFirestore.instance;
+
+  try {
+    DocumentSnapshot userSnapshot =
+        await db.collection('Profile').doc(user!.uid).get();
+    var data = userSnapshot.data() as Map<String, dynamic>;
+    return data['overallScore'];
+  } catch (e) {
+    return 0.0;
+  }
+}
+
 Future<bool> isPersonalInfoComplete() async {
   User? user = FirebaseAuth.instance.currentUser;
   FirebaseFirestore db = FirebaseFirestore.instance;
