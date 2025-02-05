@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/screens/assessment_page.dart';
 import 'package:llm_based_sat_app/screens/course/courses.dart';
 import 'package:llm_based_sat_app/screens/exercise_page.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
@@ -11,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/cache_manager.dart';
 import '../models/firebase-exercise-uploader/interface/exercise_interface.dart';
+import '../utils/exercise_helper_functions.dart';
 
 class ExerciseInfoPage extends StatefulWidget {
   final Exercise exercise;
@@ -294,58 +296,84 @@ class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
     return steps;
   }
 
-  String getExerciseLetter(String input) {
-    // Use split to find the last letter between underscores
-    List<String> parts = input.split('_');
-
-    // Check if the string is valid and has enough parts
-    if (parts.length > 2) {
-      String secondLast = parts[parts.length - 2];
-
-      // Ensure it's a single letter (in case of invalid input)
-      if (RegExp(r'^[A-Za-z]$').hasMatch(secondLast)) {
-        return secondLast;
-      }
-    }
-    throw ArgumentError("No valid letter found between underscores.");
-  }
-
   Widget getExerciseStep() {
-    final currentExerciseStep = widget.exercise.exerciseSteps[0];
-    final header = "Exercise ${getExerciseLetter(currentExerciseStep.id)}";
-
     int currentStep =
         CacheManager.getValue(widget.exercise.id) ?? 1; // Default to 1st step
     print("Current step: $currentStep");
     CacheManager.setValue(widget.exercise.id, currentStep + 1);
 
-    return ExercisePage(
-      heading: header,
-      step: currentExerciseStep.stepTitle,
-      description: currentExerciseStep.description,
-      imageUrl: currentExerciseStep.imageUrl,
-      buttonText: currentStep < widget.exercise.exerciseSteps.length
-          ? "Next Step"
-          : "Finish Exercise",
-      onButtonPress: (BuildContext context) async {
-        if (currentStep < widget.exercise.exerciseSteps.length + 1000) {
-          // Save the next step in cache
-          // await _saveCurrentStep(currentStep + 1);
-          // Navigate to the next step
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => getExerciseStep(),
-            ),
-          );
-        } else {
-          // Reset the cache when exercise is completed
-          CacheManager.removeValue(widget.exercise.id);
-          Navigator.pop(context); // Exit the exercise
-        }
-      },
-      rightArrowPresent: true,
-      messageText: currentExerciseStep.footerText,
-    );
+    if (currentStep < widget.exercise.exerciseSteps.length) {
+      final currentExerciseStep = widget.exercise
+          .exerciseSteps[currentStep - 1]; // currentStep - 1 since 0 indexed
+      final header = "Exercise ${getExerciseLetter(currentExerciseStep.id)}";
+
+      return ExercisePage(
+        heading: header,
+        step: currentExerciseStep.stepTitle,
+        description: currentExerciseStep.description,
+        imageUrl: currentExerciseStep.imageUrl,
+        buttonText: currentStep < widget.exercise.exerciseSteps.length
+            ? "Next Step"
+            : "Finish Exercise",
+        onButtonPress: (BuildContext context) async {
+          if (currentStep < widget.exercise.exerciseSteps.length + 1000) {
+            // Save the next step in cache
+            // await _saveCurrentStep(currentStep + 1);
+            // Navigate to the next step
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => getExerciseStep(),
+              ),
+            );
+          } else {
+            // Reset the cache when exercise is completed
+            CacheManager.removeValue(widget.exercise.id);
+            Navigator.pop(context); // Exit the exercise
+          }
+        },
+        rightArrowPresent: true,
+        messageText: currentExerciseStep.footerText,
+      );
+    } else {
+      // Final Step - Show Assessment Page
+      CacheManager.removeValue(widget.exercise.id); // Reset cache
+      return FutureBuilder<String>(
+        future: getElapsedTime(), // Fetch elapsed time
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text("Error: ${snapshot.error}"));
+          } else {
+            final elapsedTime = snapshot.data ?? "Elapsed time unavailable";
+            return AssessmentPage(
+              exercise: widget.exercise,
+              elapsedTime: elapsedTime,
+            );
+          }
+        },
+      );
+    }
+  }
+
+  Future<String> getElapsedTime() async {
+    final prefs = await SharedPreferences.getInstance();
+    int time = prefs.getInt('exercise_timer_elapsed') ?? 0;
+
+    if (_formatMinutes(time) == "00") {
+      return "Elapsed Time: ${_formatSeconds(time)} seconds";
+    }
+    return "Elapsed Time: ${_formatMinutes(time)} minutes ${_formatSeconds(time)} seconds";
+  }
+
+  String _formatMinutes(int milliseconds) {
+    final minutes = milliseconds ~/ 60000;
+    return minutes.toString().padLeft(2, '0');
+  }
+
+  String _formatSeconds(int milliseconds) {
+    final seconds = (milliseconds ~/ 1000) % 60;
+    return seconds.toString().padLeft(2, '0');
   }
 }

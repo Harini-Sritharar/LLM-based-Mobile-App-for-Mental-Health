@@ -8,8 +8,18 @@ import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_description.
 import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_sliderQuestion.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_step_label.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_timer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../models/firebase-exercise-uploader/interface/exercise_interface.dart';
+import '../utils/exercise_helper_functions.dart';
 
 class AssessmentPage extends StatefulWidget {
+  final Exercise exercise;
+  final String elapsedTime;
+
+  const AssessmentPage(
+      {super.key, required this.exercise, required this.elapsedTime});
+
   @override
   _AssessmentPageState createState() => _AssessmentPageState();
 }
@@ -24,7 +34,8 @@ class _AssessmentPageState extends State<AssessmentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: ExerciseAppBar(
-        title: 'Exercise A',
+        title:
+            "Exercise ${getExerciseLetter(widget.exercise.exerciseFinalStep!.id)}",
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -35,15 +46,16 @@ class _AssessmentPageState extends State<AssessmentPage> {
             SizedBox(height: 8),
             ExerciseDescription(
                 description:
-                    'You successfully completed Exercise A. You can now move on to the next exercise or back to the course page.'),
+                    'You successfully completed Exercise ${getExerciseLetter(widget.exercise.exerciseFinalStep!.id)}. You can now move on to the next exercise or back to the course page.'),
             SizedBox(height: 20),
             _buildSectionTitle('Session Info'),
             SizedBox(height: 8),
             ExerciseDescription(
+                // TODO
+                // What does sessions mean here
                 description: 'Sessions: 4 completed out of 14 minimum'),
             SizedBox(height: 8),
-            ExerciseDescription(
-                description: 'Practice Time: 05 minutes and 23 seconds'),
+            ExerciseDescription(description: widget.elapsedTime),
             SizedBox(height: 20),
             _buildSectionTitle('Comments'),
             SizedBox(height: 8),
@@ -76,8 +88,6 @@ class _AssessmentPageState extends State<AssessmentPage> {
               backgroundColor: AppColours.brandBlueMinusFour,
               textColor: AppColours.brandBlueMain,
             ),
-            SizedBox(height: 30),
-            ExerciseTimer()
           ],
         ),
       ),
