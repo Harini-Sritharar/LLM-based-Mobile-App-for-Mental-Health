@@ -9,17 +9,26 @@ import '../screens/calendar_page.dart';
 import '../screens/score_page.dart';
 import '../widgets/bottom_nav_bar.dart';
 import 'firebase_options.dart';
-
-List<Map<String, dynamic>> favouritePhotos = [];
-List<Map<String, dynamic>> nonFavouritePhotos = [];
+import 'package:provider/provider.dart';
+import 'profile_notifier.dart';
 
 void main() async {
-  print("Nilesh");
+  await _setup();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => ProfileNotifier(),
+      child: MyApp(),
+    ),
+  );
+}
+
+Future<void> _setup() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Stripe.publishableKey = stripePublishableKey;
 }
 
 class MyApp extends StatelessWidget {
@@ -41,6 +50,7 @@ class MyApp extends StatelessWidget {
       home: SignInPage(),
       // home: UploadProfilePicturePage(onItemTapped: (x) => {}, selectedIndex: 0,) // for local testing
       // home:ImagePickerWidget()
+      // home: Courses(onItemTapped: (x) => {}, selectedIndex: 0)
     );
   }
 }
@@ -62,27 +72,6 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     _selectedIndex = widget.initialIndex;
-    if (!photosLoaded) {
-      _loadInitialPhotos();
-      photosLoaded = true;
-    }
-  }
-
-  Future<void> _loadInitialPhotos() async {
-    try {
-      final favouritePhotoData =
-          await getPhotosByCategory(userId: user!.uid, category: "Favourite");
-      final nonFavouritePhotoData = await getPhotosByCategory(
-          userId: user!.uid, category: "Non-Favourite");
-
-      setState(() {
-        favouritePhotos.addAll(favouritePhotoData);
-        nonFavouritePhotos.addAll(nonFavouritePhotoData);
-      });
-    } catch (e) {
-      // Handle errors, such as showing a message to the user
-      debugPrint("Error loading photos: $e");
-    }
   }
 
   void _onItemTapped(int index) {

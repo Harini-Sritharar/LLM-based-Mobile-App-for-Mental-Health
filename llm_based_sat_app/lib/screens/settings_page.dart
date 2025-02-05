@@ -6,31 +6,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:llm_based_sat_app/screens/language_page.dart';
 import 'package:llm_based_sat_app/screens/notifications_page.dart';
+import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 
 import '../widgets/main_layout.dart';
+import 'help_centre_page.dart';
 import 'terms_and_conditions_page.dart';
 
 /// A stateless widget that represents the Settings page.
 /// This page allows users to navigate to various configuration and information sections.
 class SettingsPage extends StatelessWidget {
-  // Color constants used throughout the page.
+// Color constants used throughout the page.
   static const Color primaryTextColor = Color(0xFF687078);
   static const Color secondaryTextColor = Color(0xFF123659);
   static const Color primaryButtonColor = Color(0xFF2F4A79);
   static const Color arrowColor = Color(0xFF1C548C);
+  final Function(int) onItemTapped; // Receive function to update navbar index
+  final int selectedIndex; // Keep track of selected index
 
-  // Callback function to handle navigation when items in the app bar are tapped.
-  final Function(int) onItemTapped;
-
-  // The currently selected index in the navigation bar.
-  final int selectedIndex;
-
-  /// Constructor for `SettingsPage`.
-  ///
-  /// Requires:
-  /// - [onItemTapped]: A function to handle navigation item taps.
-  /// - [selectedIndex]: The index of the currently selected item in the navigation bar.
   SettingsPage({required this.onItemTapped, required this.selectedIndex});
 
   @override
@@ -114,7 +107,17 @@ class SettingsPage extends StatelessWidget {
               context,
               'Help Centre',
               'assets/icons/profile/message-question.svg',
-              () {},
+              () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HelpCentrePage(
+                      onItemTapped: onItemTapped,
+                      selectedIndex: selectedIndex,
+                    ),
+                  ),
+                );
+              },
             ),
             _buildSettingsItem(
               context,

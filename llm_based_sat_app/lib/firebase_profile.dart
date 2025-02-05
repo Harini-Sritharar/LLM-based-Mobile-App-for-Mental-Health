@@ -1,4 +1,10 @@
 // TODO: will need to move all the firebase calls to one place perhaps?
+// TODO
+// For each user have a progress collection in database which defines which all courses/ exercises/steps they have gone till and the timer data as well.
+// TODO
+// Upload childhood photos already exists so perform a check to see if user has any photos uploaded for Pre-course-task.
+// Watch Introductory video - figure a way to show video to user ... maybe through youtube API? and track if user has seen it to display tick mark
+// Worry about cache after all tasks are done to ensure only 1 call is made to firebase.
 
 import 'dart:ffi';
 import 'dart:io';
@@ -11,13 +17,37 @@ Future<void> updatePersonalInfo(
     String firstname, String surname, String dob, String gender) async {
   User? user = FirebaseAuth.instance.currentUser;
   FirebaseFirestore db = FirebaseFirestore.instance;
-  await db.collection('Profile').doc(user!.uid).update({
-    'firstname': firstname,
-    'surname': surname,
-    'dob': dob,
-    'gender': gender,
-    'completedQuestionnaires': [],
-  });
+
+  if (user == null) return;
+
+  DocumentReference userDoc = db.collection('Profile').doc(user.uid);
+  DocumentSnapshot docSnapshot = await userDoc.get();
+
+  String tier = "free"; // Default tier
+  List<String> favouritePhotos = [];
+  List<String> nonfavouritePhotos = [];
+  if (docSnapshot.exists) {
+    // Preserve existing tier if user exists
+    tier = (docSnapshot.data() as Map<String, dynamic>)['tier'] ?? "free";
+    favouritePhotos =
+        (docSnapshot.data() as Map<String, dynamic>)['favouritePhotos'] ?? [];
+    nonfavouritePhotos =
+        (docSnapshot.data() as Map<String, dynamic>)['nonfavouritePhotos'] ??
+            [];
+  }
+
+  await userDoc.set(
+      {
+        'firstname': firstname,
+        'surname': surname,
+        'dob': dob,
+        'gender': gender,
+        'tier': tier,
+        'favouritePhotos': favouritePhotos,
+        'nonfavouritePhotos': nonfavouritePhotos
+      },
+      SetOptions(
+          merge: true)); // Merging ensures we don’t overwrite other fields
 }
 
 Future<void> updateContactDetails(

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 
 import '../theme/app_colours.dart';
 import '../widgets/custom_button.dart';
+import '../widgets/main_layout.dart';
 
 /// A StatefulWidget that allows users to select their preferred language from a predefined list.
 /// The selected language is displayed and stored for potential future use.
@@ -26,7 +28,8 @@ class _LanguagePageState extends State<LanguagePage> {
   /// Builds the UI for the language selection page.
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return MainLayout(
+      selectedIndex: widget.selectedIndex,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
@@ -34,15 +37,15 @@ class _LanguagePageState extends State<LanguagePage> {
           children: [
             // Custom app bar at the top of the page.
             CustomAppBar(
-                title: "Available Language",
+                title: "Language",
                 onItemTapped: widget.onItemTapped,
                 selectedIndex: widget.selectedIndex),
             const SizedBox(height: 10),
             // Instructional text for the user.
             const Text(
               "Select your preferred language from below. Restart the app to apply changes.",
-              style: TextStyle(
-                  fontSize: 14, color: AppColours.primaryGreyTextColor),
+              style:
+                  TextStyle(fontSize: 14, color: AppColours.neutralGreyMinusOne),
             ),
             const SizedBox(height: 20),
             // Language options for the user to select.
@@ -88,14 +91,13 @@ class _LanguagePageState extends State<LanguagePage> {
                 _selectedLanguage = value!; // Update selected language.
               });
             },
-            activeColor: AppColours
-                .secondaryBlueTextColor, // Custom color for active state.
+            activeColor: AppColours.brandBluePlusTwo,
           ),
           // Display the name of the language.
           Text(language,
               style: const TextStyle(
                 fontSize: 16,
-                color: AppColours.primaryGreyTextColor,
+                color: AppColours.brandBluePlusTwo,
               )),
         ],
       ),

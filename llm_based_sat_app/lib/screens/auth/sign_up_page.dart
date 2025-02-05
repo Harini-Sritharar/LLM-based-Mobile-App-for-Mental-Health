@@ -41,7 +41,7 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor:
-          AppColours.backgroundColor, // Matches the white background
+          AppColours.white, // Matches the white background
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Form(
@@ -143,7 +143,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       'SIGN IN',
                       style: TextStyle(
                         fontSize: 14,
-                        color: AppColours.customBlue,
+                        color: AppColours.brandBlueMain,
                         decoration: TextDecoration.underline,
                       ),
                     ),
@@ -170,10 +170,11 @@ class _SignUpPageState extends State<SignUpPage> {
       String email = _emailController.text;
       String password = _passwordController.text;
 
-      User? user =
+      User? currentUser =
           await _auth.signUpWithEmailAndPassword(context, email, password);
 
-      if (user != null) {
+      if (currentUser != null) {
+        user = currentUser;
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => PersonalProfilePage()),

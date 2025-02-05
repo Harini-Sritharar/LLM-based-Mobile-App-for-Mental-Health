@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/theme/app_colours.dart';
 
 class ExerciseDescription extends StatelessWidget {
   final String description;
@@ -19,13 +20,13 @@ class ExerciseDescription extends StatelessWidget {
         // Add bold word
         textSpans.add(TextSpan(
           text: '$word ',
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xFF293138)),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: AppColours.neutralGreyPlusOne),
         ));
       } else {
         // Add regular word
         textSpans.add(TextSpan(
           text: '$word ',
-          style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 15, color: Color(0xFF293138)),
+          style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 15, color: AppColours.neutralGreyPlusOne),
         ));
       }
     }
