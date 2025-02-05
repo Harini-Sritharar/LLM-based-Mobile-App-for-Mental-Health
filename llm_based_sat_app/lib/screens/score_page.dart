@@ -17,17 +17,6 @@ class ScorePage extends StatefulWidget {
 }
 
 class _ScorePageState extends State<ScorePage> {
-  static const progressDataTop = [
-    {"percentage": 67.0, "title": "Positive Emotions"},
-    {"percentage": 67.0, "title": "Engagement"},
-    {"percentage": 67.0, "title": "Relationships"},
-  ];
-
-  static const progressDataBottom = [
-    {"percentage": 67.0, "title": "Meaning"},
-    {"percentage": 67.0, "title": "Accomplishment"},
-  ];
-
   // Example dynamic data
   static const List<List<double>> scores = [
     [10, 30, 50, 70, 85, 90, 95], // Line 1 (e.g., Engagement)
@@ -46,24 +35,57 @@ class _ScorePageState extends State<ScorePage> {
     "Sept"
   ];
   double overallScore = 0.0;
+  Map<String, double> subScores = {
+    "Resilience": 0.0,
+    "Self-efficacy": 0.0,
+    "Personal growth": 0.0,
+    "Self-Acceptance": 0.0,
+    "Alleviating suffering": 0.0,
+  };
 
   @override
   void initState() {
     super.initState();
-    _loadOverallScore();
+    _loadScores();
   }
 
-  Future<void> _loadOverallScore() async {
+  void _onTabSelected(int index) {
+    widget.onItemTapped(index);
+    if (index == widget.selectedIndex) {
+      print("ScorePage tab selected, reloading scores...");
+      _loadScores();
+    }
+  }
+
+  Future<void> _loadScores() async {
+    print("fetching overall score");
     overallScore = await getOverallScore();
+    subScores = await getSubScores();
     setState(() {});
+    print("overall score $overallScore");
   }
 
   @override
   Widget build(BuildContext context) {
+    _loadScores();
+    // Split subScores into top 3 and bottom 2
+    List<Map<String, dynamic>> progressDataTop = [
+      {"percentage": subScores["Resilience"]!, "title": "Resilience"},
+      {"percentage": subScores["Self-efficacy"]!, "title": "Self-efficacy"},
+      {"percentage": subScores["Personal growth"]!, "title": "Personal growth"},
+    ];
+
+    List<Map<String, dynamic>> progressDataBottom = [
+      {"percentage": subScores["Self-Acceptance"]!, "title": "Self-Acceptance"},
+      {
+        "percentage": subScores["Alleviating suffering"]!,
+        "title": "Alleviating suffering"
+      },
+    ];
     return Scaffold(
         appBar: CustomAppBar(
           title: "InvinciMind",
-          onItemTapped: widget.onItemTapped,
+          onItemTapped: _onTabSelected,
           selectedIndex: widget.selectedIndex,
           backButton: false,
         ),

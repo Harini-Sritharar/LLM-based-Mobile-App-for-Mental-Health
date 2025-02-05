@@ -98,7 +98,7 @@ Future<void> saveQuestionnaireResponse(
 }
 
 Future<void> recalculateSubScores(String userId) async {
-  Map<String, int> calculatedSubScores = {
+  Map<String, double> calculatedSubScores = {
     'Resilience': 0,
     'Self-efficacy': 0,
     'Personal growth': 0,
@@ -128,31 +128,40 @@ Future<void> recalculateSubScores(String userId) async {
 
     if (name == 'CPC-12R') {
       // answers map key starts at index 0
-      calculatedSubScores['Resilience'] = int.parse(answers['9'] ?? '0') +
-          int.parse(answers['10'] ?? '0') +
-          int.parse(answers['11'] ?? '0');
+      calculatedSubScores['Resilience'] = 100 *
+          (int.parse(answers['9'] ?? '0') +
+              int.parse(answers['10'] ?? '0') +
+              int.parse(answers['11'] ?? '0')) /
+          18;
 
-      calculatedSubScores['Self-efficacy'] = int.parse(answers['6'] ?? '0') +
-          int.parse(answers['7'] ?? '0') +
-          int.parse(answers['8'] ?? '0');
+      calculatedSubScores['Self-efficacy'] = 100 *
+          (int.parse(answers['6'] ?? '0') +
+              int.parse(answers['7'] ?? '0') +
+              int.parse(answers['8'] ?? '0')) /
+          18;
     }
 
     if (name == 'PWB') {
-      calculatedSubScores['Personal growth'] = int.parse(answers['10'] ?? '0') +
-          int.parse(answers['11'] ?? '0') +
-          int.parse(answers['13'] ?? '0');
+      calculatedSubScores['Personal growth'] = 100 *
+          (int.parse(answers['10'] ?? '0') +
+              int.parse(answers['11'] ?? '0') +
+              int.parse(answers['13'] ?? '0')) /
+          21;
 
-      calculatedSubScores['Self-Acceptance'] = int.parse(answers['0'] ?? '0') +
-          int.parse(answers['1'] ?? '0') +
-          int.parse(answers['4'] ?? '0');
+      calculatedSubScores['Self-Acceptance'] = 100 *
+          (int.parse(answers['0'] ?? '0') +
+              int.parse(answers['1'] ?? '0') +
+              int.parse(answers['4'] ?? '0')) /
+          21;
     }
 
     if (name == 'SOCS-S') {
-      calculatedSubScores['Acting to alleviate suffering'] =
-          int.parse(answers['4'] ?? '0') +
+      calculatedSubScores['Acting to alleviate suffering'] = 100 *
+          (int.parse(answers['4'] ?? '0') +
               int.parse(answers['9'] ?? '0') +
               int.parse(answers['14'] ?? '0') +
-              int.parse(answers['19'] ?? '0');
+              int.parse(answers['19'] ?? '0')) /
+          20;
     }
   }
 
@@ -240,6 +249,36 @@ Future<double> getOverallScore() async {
     return data['overallScore'];
   } catch (e) {
     return 0.0;
+  }
+}
+
+Future<Map<String, double>> getSubScores() async {
+  User? user = FirebaseAuth.instance.currentUser;
+  FirebaseFirestore db = FirebaseFirestore.instance;
+
+  try {
+    DocumentSnapshot userSnapshot =
+        await db.collection('Profile').doc(user!.uid).get();
+    var data = userSnapshot.data() as Map<String, dynamic>;
+
+    return {
+      "Resilience": (data['subScores']?['Resilience'] ?? 0.0).toDouble(),
+      "Self-efficacy": (data['subScores']?['Self-efficacy'] ?? 0.0).toDouble(),
+      "Personal growth":
+          (data['subScores']?['Personal growth'] ?? 0.0).toDouble(),
+      "Self-Acceptance":
+          (data['subScores']?['Self-Acceptance'] ?? 0.0).toDouble(),
+      "Alleviating suffering":
+          (data['subScores']?['Alleviating suffering'] ?? 0.0).toDouble(),
+    };
+  } catch (e) {
+    return {
+      "Resilience": 0.0,
+      "Self-efficacy": 0.0,
+      "Personal growth": 0.0,
+      "Self-Acceptance": 0.0,
+      "Alleviating suffering": 0.0,
+    };
   }
 }
 
