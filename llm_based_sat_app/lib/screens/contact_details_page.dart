@@ -43,7 +43,7 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
     if (doc.exists) {
       Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
       setState(() {
-        _countryController.text = data['country'] ?? '';
+        _countryController.text = data['country'] ?? 'United Kingdom';
         _zipPostalController.text = data['zipcode'] ?? '';
       });
     }

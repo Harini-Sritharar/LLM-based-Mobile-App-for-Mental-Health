@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:llm_based_sat_app/firebase_profile.dart';
+import 'package:llm_based_sat_app/firebase_score.dart';
 import 'package:llm_based_sat_app/widgets/score_widgets/circular_progress_bar.dart';
 import 'package:llm_based_sat_app/widgets/score_widgets/progress_row.dart';
 import 'package:llm_based_sat_app/widgets/score_widgets/score_graph.dart';
