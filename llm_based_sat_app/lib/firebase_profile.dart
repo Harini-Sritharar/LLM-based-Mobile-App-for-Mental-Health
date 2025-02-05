@@ -88,10 +88,80 @@ Future<void> saveQuestionnaireResponse(
 
   await userDoc.update({'completedQuestionnaires': completedQuestionnaires});
 
+  // Always recalculate sub scores when a questionnaire is completed
+  await recalculateSubScores(user.uid);
+
   // Recalculate overall score if all questionnaires are completed
   if (completedQuestionnaires.length == 6) {
     await recalculateScores(user.uid);
   }
+}
+
+Future<void> recalculateSubScores(String userId) async {
+  Map<String, int> calculatedSubScores = {
+    'Resilience': 0,
+    'Self-efficacy': 0,
+    'Personal growth': 0,
+    'Self-Acceptance': 0,
+    'Acting to alleviate suffering': 0,
+  };
+
+  FirebaseFirestore db = FirebaseFirestore.instance;
+  DocumentReference userDoc = db.collection('Profile').doc(userId);
+
+  DocumentSnapshot userSnapshot = await userDoc.get();
+  var data = userSnapshot.data() as Map<String, dynamic>;
+  Map<String, String> completedQuestionnaires =
+      Map<String, String>.from(data['completedQuestionnaires']);
+
+  // Iterate through each completed questionnaire in the map
+  for (var entry in completedQuestionnaires.entries) {
+    String name = entry.key;
+    String docId = entry.value;
+
+    DocumentSnapshot responseSnapshot =
+        await userDoc.collection('responses').doc(docId).get();
+    var responseData = responseSnapshot.data() as Map<String, dynamic>;
+    // Get the answers
+    Map<String, String> answers =
+        Map<String, String>.from(responseData['answers']);
+
+    if (name == 'CPC-12R') {
+      // answers map key starts at index 0
+      calculatedSubScores['Resilience'] = int.parse(answers['9'] ?? '0') +
+          int.parse(answers['10'] ?? '0') +
+          int.parse(answers['11'] ?? '0');
+
+      calculatedSubScores['Self-efficacy'] = int.parse(answers['6'] ?? '0') +
+          int.parse(answers['7'] ?? '0') +
+          int.parse(answers['8'] ?? '0');
+    }
+
+    if (name == 'PWB') {
+      calculatedSubScores['Personal growth'] = int.parse(answers['10'] ?? '0') +
+          int.parse(answers['11'] ?? '0') +
+          int.parse(answers['13'] ?? '0');
+
+      calculatedSubScores['Self-Acceptance'] = int.parse(answers['0'] ?? '0') +
+          int.parse(answers['1'] ?? '0') +
+          int.parse(answers['4'] ?? '0');
+    }
+
+    if (name == 'SOCS-S') {
+      calculatedSubScores['Acting to alleviate suffering'] =
+          int.parse(answers['4'] ?? '0') +
+              int.parse(answers['9'] ?? '0') +
+              int.parse(answers['14'] ?? '0') +
+              int.parse(answers['19'] ?? '0');
+    }
+  }
+
+  // Save the new sub scores to Firestore
+  await userDoc.update({
+    'subScores': calculatedSubScores,
+  });
+
+  print("Sub scores updated successfully!");
 }
 
 Future<void> recalculateScores(String userId) async {
