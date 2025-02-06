@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:llm_based_sat_app/screens/home_page.dart';
+import 'package:llm_based_sat_app/main.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/custom_button.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_reflectionBox.dart';
@@ -7,9 +7,6 @@ import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_appBar.dart'
 import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_description.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_sliderQuestion.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_step_label.dart';
-import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_timer.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import '../models/firebase-exercise-uploader/interface/exercise_interface.dart';
 import '../utils/exercise_helper_functions.dart';
 
@@ -74,16 +71,14 @@ class _AssessmentPageState extends State<AssessmentPage> {
             ExerciseSliderQuestionWidget(question: '(C) Rate this exercise.'),
             SizedBox(height: 30),
             CustomButton(
-                buttonText: 'Next Exercise',
-                onPress: () {
-                  // Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
-                },
-                rightArrowPresent: true),
-            SizedBox(height: 30),
-            CustomButton(
               buttonText: 'Back to Course',
               onPress: () {
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MainScreen(
+                              initialIndex: 4,
+                            )));
               },
               backgroundColor: AppColours.brandBlueMinusFour,
               textColor: AppColours.brandBlueMain,
