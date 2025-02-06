@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:llm_based_sat_app/firebase_helpers.dart';
+import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/custom_button.dart';
 import 'package:llm_based_sat_app/widgets/main_layout.dart';
@@ -71,7 +75,53 @@ class _HelpCentrePageState extends State<HelpCentrePage> {
             if (_selectedFiles.isNotEmpty) _buildSelectedFilesList(),
 
             SizedBox(height: 30),
-            CustomButton(buttonText: "Submit", onPress: () {}),
+            CustomButton(
+              buttonText: "Submit",
+              onPress: () async {
+                if (_textController.text.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Please describe your issue.")),
+                  );
+                  return;
+                }
+                try {
+                  // Show a loading indicator (optional).
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Submitting your issue...")),
+                  );
+                  // Upload each file and collect their URLs.
+                  List<String> uploadedUrls = [];
+                  for (String filePath in _selectedFiles) {
+                    File file = File(filePath);
+                    String fileName = filePath.split('/').last;
+                    String uploadedUrl = await uploadPhoto(
+                      file,
+                      'reported_issues/${DateTime.now().millisecondsSinceEpoch}_$fileName',
+                    );
+                    uploadedUrls.add(uploadedUrl);
+                  }
+                  // Save the issue to Firestore.
+                  await saveReportedIssue(
+                    userId: user!.uid, // Replace with the actual user ID.
+                    issue: _textController.text,
+                    mediaURLs: uploadedUrls,
+                  );
+                  // Clear fields and notify the user.
+                  setState(() {
+                    _textController.clear();
+                    _selectedFiles.clear();
+                  });
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Issue submitted successfully!")),
+                  );
+                } catch (e) {
+                  // Handle errors and notify the user.
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Error submitting issue: $e")),
+                  );
+                }
+              },
+            ),
           ],
         ),
       ),

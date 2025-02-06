@@ -250,3 +250,46 @@ Future<String> getUltimateGoal(String uid) async {
     return 'Error Fetching Goal';
   }
 }
+
+/// Uploads a photo to Firebase Storage and returns the download URL.
+/// Helper function to be used by childhoodPhotos and helpCentre
+Future<String> uploadPhoto(File file, String filePath) async {
+  try {
+    final storageReference = FirebaseStorage.instance.ref().child(filePath);
+    final uploadTask = await storageReference.putFile(file);
+    final downloadUrl = await storageReference.getDownloadURL();
+    return downloadUrl;
+  } catch (e) {
+    print("Error uploading photo: $e");
+    rethrow;
+  }
+}
+
+/// Saves a reported issue with the media file being uploaded to Firebase Storage.
+Future<void> saveReportedIssue({
+  required String userId,
+  required String issue,
+  required List<String> mediaURLs,
+}) async {
+  try {
+    // Generate a unique file path for the media file
+    final String filePath =
+        'reported_issues/${DateTime.now().millisecondsSinceEpoch}_${userId}.jpg';
+
+    // Reference to the ReportedIssues collection
+    CollectionReference reportedIssues =
+        FirebaseFirestore.instance.collection('ReportedIssues');
+
+    // Add the reported issue to Firestore with the uploaded media URL
+    await reportedIssues.add({
+      'userID': userId, // The ID of the user reporting the issue
+      'issue': issue, // The issue description
+      'media': mediaURLs, // The uploaded media URL list
+    });
+
+    print("Reported issue saved successfully.");
+  } catch (e) {
+    print("Error saving reported issue: $e");
+    rethrow;
+  }
+}
