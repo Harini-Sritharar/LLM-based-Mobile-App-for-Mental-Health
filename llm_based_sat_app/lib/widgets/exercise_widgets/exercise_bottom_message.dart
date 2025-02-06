@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:llm_based_sat_app/main.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
+
+import '../../main.dart';
 
 /* ExerciseBottomMessage is a widget that displays a cautionary message to the user and when clicked directs the user to the Courses page.
 
