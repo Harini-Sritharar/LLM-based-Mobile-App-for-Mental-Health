@@ -10,6 +10,15 @@ import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_step_label.d
 import '../models/firebase-exercise-uploader/interface/exercise_interface.dart';
 import '../utils/exercise_helper_functions.dart';
 
+/* The `AssessmentPage` is a widget that displays the final assessment and reflection section after completing an exercise. It provides information about the session, allows the user to rate the exercise, and offers an option to navigate back to the courses page.
+
+## Parameters:
+- `exercise`: An instance of the `Exercise` model, which contains information about the exercise, including the final step details (`exerciseFinalStep`).
+- `elapsedTime`: A string representation of the time spent on the exercise eg., "Elapsed Time: 5 minutes 20 seconds").
+ 
+## Notes:
+- Ensure that the `Exercise` object passed to the page contains the `exerciseFinalStep` property, as it is used to generate the title and description.
+- The `elapsedTime` parameter should be a pre-formatted string that clearly represents the total time spent. */
 class AssessmentPage extends StatefulWidget {
   final Exercise exercise;
   final String elapsedTime;
