@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/screens/assessment_page.dart';
-import 'package:llm_based_sat_app/screens/course/courses.dart';
 import 'package:llm_based_sat_app/screens/exercise_page.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
-import 'package:llm_based_sat_app/utils/exercise_page_caller.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import 'package:llm_based_sat_app/widgets/custom_button.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/learning_tile.dart';
@@ -32,9 +30,11 @@ class ExerciseInfoPage extends StatefulWidget {
 
 class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
   @override
-  void dispose() {
-    print("Widget removed from the widget tree");
-  }
+void dispose() {  
+  // Removes current step from cache so user must reset exercise
+  CacheManager.removeValue(widget.exercise.id);
+  super.dispose();
+}
 
   void showDialogBox(BuildContext context, String title, String content) {
     showDialog(
@@ -302,7 +302,7 @@ class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
     print("Current step: $currentStep");
     CacheManager.setValue(widget.exercise.id, currentStep + 1);
 
-    if (currentStep < widget.exercise.exerciseSteps.length) {
+    if (currentStep <= widget.exercise.exerciseSteps.length) {
       final currentExerciseStep = widget.exercise
           .exerciseSteps[currentStep - 1]; // currentStep - 1 since 0 indexed
       final header = "Exercise ${getExerciseLetter(currentExerciseStep.id)}";
@@ -312,11 +312,9 @@ class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
         step: currentExerciseStep.stepTitle,
         description: currentExerciseStep.description,
         imageUrl: currentExerciseStep.imageUrl,
-        buttonText: currentStep < widget.exercise.exerciseSteps.length
-            ? "Next Step"
-            : "Finish Exercise",
+        buttonText: "Next Step",
         onButtonPress: (BuildContext context) async {
-          if (currentStep < widget.exercise.exerciseSteps.length + 1000) {
+          if (currentStep <= widget.exercise.exerciseSteps.length) {
             // Save the next step in cache
             // await _saveCurrentStep(currentStep + 1);
             // Navigate to the next step
