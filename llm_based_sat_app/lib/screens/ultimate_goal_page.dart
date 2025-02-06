@@ -3,8 +3,11 @@
 /// define socially useful goals that foster personal growth and self-development.
 
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/firebase_helpers.dart';
+import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
+import 'package:llm_based_sat_app/widgets/custom_button.dart';
 import '../widgets/main_layout.dart';
 
 /// A stateful widget that represents the Ultimate Goal page.
@@ -40,15 +43,32 @@ class _UltimateGoalPageState extends State<UltimateGoalPage> {
 
   // Remaining characters counter.
   int _remainingCharacters = maxCharacters;
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
+    _fetchUltimateGoal();
     // Update the remaining character count as the user types.
     _textController.addListener(() {
       setState(() {
         _remainingCharacters = maxCharacters - _textController.text.length;
       });
+    });
+  }
+
+  Future<void> _fetchUltimateGoal() async {
+    if (user == null) {
+      print("No user logged in");
+      setState(() => _isLoading = false);
+      return;
+    }
+    String goal = await getUltimateGoal(user!.uid);
+    setState(() {
+      if (goal.isNotEmpty) {
+        _textController.text = goal;
+      }
+      _isLoading = false;
     });
   }
 
@@ -86,55 +106,34 @@ class _UltimateGoalPageState extends State<UltimateGoalPage> {
               const Text(
                 "Your goal should be a socially useful ideal that guides you towards growth and self-development to empower you in today’s world with our problems.",
                 style: TextStyle(
-                    fontSize: 16, color: AppColours.primaryGreyTextColor),
+                    fontSize: 15, color: AppColours.primaryGreyTextColor),
               ),
               const SizedBox(height: 10),
               const Text(
                 "It could be achievement in an academic, scientific, literary, philosophical, athletic, spiritual, professional, charitable, or a socially progressive manufacturing/commercial/business field.",
                 style: TextStyle(
-                    fontSize: 16, color: AppColours.primaryGreyTextColor),
+                    fontSize: 15, color: AppColours.primaryGreyTextColor),
               ),
               const SizedBox(height: 10),
               const Text(
                 "If we do not have a clear goal at the start of the program, you can refine it later.",
                 style: TextStyle(
-                    fontSize: 16, color: AppColours.primaryGreyTextColor),
+                    fontSize: 15, color: AppColours.primaryGreyTextColor),
               ),
               const SizedBox(height: 40),
               // Input box for entering the ultimate goal.
-              _buildInputBox(),
+              _isLoading
+                  ? Center(
+                      child:
+                          CircularProgressIndicator()) // Show a loading indicator
+                  : _buildInputBox(),
               const SizedBox(height: 40),
               // Save button to save the entered goal.
-              _buildSaveButton(),
+              CustomButton(
+                buttonText: "Save",
+                onPress: () => saveUltimateGoal(context, _textController),
+              ),
             ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  /// Builds the save button for the page.
-  ///
-  /// The button currently does not have an implementation for its functionality.
-  Widget _buildSaveButton() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: SizedBox(
-        width: double.infinity,
-        height: 60,
-        child: ElevatedButton(
-          onPressed: () {
-            // Placeholder for save functionality.
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF1C548C),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25),
-            ),
-          ),
-          child: const Text(
-            "Save",
-            style: TextStyle(fontSize: 18, color: Colors.white),
           ),
         ),
       ),
@@ -190,6 +189,25 @@ class _UltimateGoalPageState extends State<UltimateGoalPage> {
           ),
         ],
       ),
+    );
+  }
+}
+
+// The Onpress function for saving the ultimate goal.
+void saveUltimateGoal(
+    BuildContext context, TextEditingController goalController) async {
+  if (user == null) {
+    print("No user logged in");
+    return;
+  }
+  if (goalController.text.isNotEmpty) {
+    await setUltimateGoal(user!.uid, goalController.text);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Ultimate goal saved successfully!")),
+    );
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Please enter your ultimate goal.")),
     );
   }
 }

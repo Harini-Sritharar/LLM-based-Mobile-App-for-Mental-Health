@@ -19,11 +19,16 @@ Future<void> updatePersonalInfo(
   String tier = "free"; // Default tier
   List<String> favouritePhotos = [];
   List<String> nonfavouritePhotos = [];
+  String ultimateGoal = "";
   if (docSnapshot.exists) {
     // Preserve existing tier if user exists
     tier = (docSnapshot.data() as Map<String, dynamic>)['tier'] ?? "free";
-    favouritePhotos = (docSnapshot.data() as Map<String, dynamic>)['favouritePhotos'] ?? [];
-    nonfavouritePhotos = (docSnapshot.data() as Map<String, dynamic>)['nonfavouritePhotos'] ?? [];
+    favouritePhotos =
+        (docSnapshot.data() as Map<String, dynamic>)['favouritePhotos'] ?? [];
+    nonfavouritePhotos =
+        (docSnapshot.data() as Map<String, dynamic>)['nonfavouritePhotos'] ??
+            [];
+    ultimateGoal = (docSnapshot.data() as Map<String, dynamic>)['tier'] ?? "";
   }
 
   await userDoc.set(
@@ -33,8 +38,9 @@ Future<void> updatePersonalInfo(
         'dob': dob,
         'gender': gender,
         'tier': tier,
-        'favouritePhotos' : favouritePhotos,
-        'nonfavouritePhotos' : nonfavouritePhotos
+        'favouritePhotos': favouritePhotos,
+        'nonfavouritePhotos': nonfavouritePhotos,
+        'ultimateGoal': ultimateGoal
       },
       SetOptions(
           merge: true)); // Merging ensures we don’t overwrite other fields
