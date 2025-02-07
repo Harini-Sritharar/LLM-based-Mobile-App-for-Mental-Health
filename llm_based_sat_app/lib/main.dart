@@ -2,17 +2,16 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:llm_based_sat_app/consts.dart';
-import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
+import 'package:llm_based_sat_app/screens/questionnaire/questionnaire_assessments_page.dart';
 import 'package:llm_based_sat_app/screens/course/courses.dart';
+import '/screens/auth/sign_in_page.dart';
 import '../screens/community_page.dart';
 import '../screens/calendar_page.dart';
-import '../screens/home_page.dart';
 import '../screens/score_page.dart';
 import '../widgets/bottom_nav_bar.dart';
 import 'firebase_options.dart';
 import 'package:provider/provider.dart';
 import 'profile_notifier.dart';
-
 
 void main() async {
   await _setup();
@@ -76,7 +75,6 @@ class _MainScreenState extends State<MainScreen> {
     _selectedIndex = widget.initialIndex;
   }
 
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -88,7 +86,8 @@ class _MainScreenState extends State<MainScreen> {
     final List<Widget> pages = [
       CommunityPage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
       CalendarPage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
-      HomePage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
+      QuestionnaireAssessmentsPage(),
+      //HomePage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
       ScorePage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
       Courses(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
     ];
