@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/models/firebase-exercise-uploader/interface/chapter_interface.dart';
 import 'package:llm_based_sat_app/screens/assessment_page.dart';
 import 'package:llm_based_sat_app/screens/exercise_page.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
@@ -9,17 +10,22 @@ import 'package:llm_based_sat_app/widgets/exercise_widgets/checkbox_tile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/cache_manager.dart';
+import '../models/firebase-exercise-uploader/interface/course_interface.dart';
 import '../models/firebase-exercise-uploader/interface/exercise_interface.dart';
 import '../utils/exercise_helper_functions.dart';
 
 class ExerciseInfoPage extends StatefulWidget {
+  final Course course;
   final Exercise exercise;
+  final Chapter chapter;
   final Function(int) onItemTapped; // Function to update navbar index
   final int selectedIndex; // Current selected index
 
   const ExerciseInfoPage({
     Key? key,
+    required this.course,
     required this.exercise,
+    required this.chapter,
     required this.onItemTapped,
     required this.selectedIndex,
   }) : super(key: key);
@@ -346,8 +352,9 @@ void dispose() {
           } else {
             final elapsedTime = snapshot.data ?? "Elapsed time unavailable";
             return AssessmentPage(
+              chapter: widget.chapter,
               exercise: widget.exercise,
-              elapsedTime: elapsedTime,
+              elapsedTime: elapsedTime, course: widget.course,
             );
           }
         },

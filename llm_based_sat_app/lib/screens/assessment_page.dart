@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/main.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/custom_button.dart';
-import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_reflectionBox.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_appBar.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_description.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_sliderQuestion.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_step_label.dart';
+import '../models/firebase-exercise-uploader/interface/chapter_interface.dart';
+import '../models/firebase-exercise-uploader/interface/course_interface.dart';
 import '../models/firebase-exercise-uploader/interface/exercise_interface.dart';
 import '../utils/exercise_helper_functions.dart';
 
@@ -20,11 +21,13 @@ import '../utils/exercise_helper_functions.dart';
 - Ensure that the `Exercise` object passed to the page contains the `exerciseFinalStep` property, as it is used to generate the title and description.
 - The `elapsedTime` parameter should be a pre-formatted string that clearly represents the total time spent. */
 class AssessmentPage extends StatefulWidget {
+  final Course course;
+  final Chapter chapter;
   final Exercise exercise;
   final String elapsedTime;
 
   const AssessmentPage(
-      {super.key, required this.exercise, required this.elapsedTime});
+      {super.key, required this.exercise, required this.elapsedTime, required this.chapter, required this.course});
 
   @override
   _AssessmentPageState createState() => _AssessmentPageState();
@@ -35,6 +38,8 @@ class _AssessmentPageState extends State<AssessmentPage> {
   double feelingBetterValue = 3;
   double helpfulnessValue = 3;
   double ratingValue = 3;
+  final TextEditingController _commentController = TextEditingController();
+  int _selectedRating = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -57,18 +62,13 @@ class _AssessmentPageState extends State<AssessmentPage> {
             _buildSectionTitle('Session Info'),
             SizedBox(height: 8),
             ExerciseDescription(
-                // TODO
-                // What does sessions mean here
-                description: 'Sessions: 4 completed out of 14 minimum'),
+                description: 'Sessions: ${getExerciseNumber()} completed out of ${widget.chapter.exercises.length}'),
             SizedBox(height: 8),
             ExerciseDescription(description: widget.elapsedTime),
             SizedBox(height: 20),
             _buildSectionTitle('Comments'),
             SizedBox(height: 8),
-            ExerciseReflectionBox(
-              '',
-              hintText: 'Reflect on your experience...',
-            ),
+            _buildCommentBox(),
             SizedBox(height: 20),
             _buildSectionTitle('Assessment'),
             SizedBox(height: 8),
@@ -82,6 +82,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
             CustomButton(
               buttonText: 'Back to Course',
               onPress: () {
+                print("User commented: ${_commentController.text}");
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -129,5 +130,71 @@ class _AssessmentPageState extends State<AssessmentPage> {
         SizedBox(height: 8),
       ],
     );
+  }
+
+  Widget _buildCommentBox() {
+    return AnimatedOpacity(
+      opacity: 1.0,
+      duration: Duration(milliseconds: 300),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Leave a comment (optional):",
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: AppColours.brandBlueMain,
+            ),
+          ),
+          SizedBox(height: 8),
+          TextField(
+            controller: _commentController,
+            maxLines: 3,
+            decoration: InputDecoration(
+              hintText: "Share your experience...",
+              fillColor: AppColours.brandBlueMinusFour,
+              filled: true,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStars() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(5, (index) {
+        return IconButton(
+          onPressed: () {
+            setState(() {
+              _selectedRating = index + 1;
+            });
+          },
+          icon: Icon(
+            Icons.star,
+            color: index < _selectedRating
+                ? AppColours.brandBlueMain
+                : AppColours.neutralGreyMinusFour,
+            size: 40,
+          ),
+        );
+      }),
+    );
+  }
+  
+  getExerciseNumber() {
+    int index = 1;
+    for (final exercise in widget.chapter.exercises) {
+      if (widget.exercise.id == exercise.id) {
+        return index;
+      }
+      index++;
+    }
+    return index;
   }
 }

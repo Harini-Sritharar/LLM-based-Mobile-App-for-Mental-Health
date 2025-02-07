@@ -65,6 +65,7 @@ class CourseInfo extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => CoursePage(
+                      course: course,
                       courseTitle: course.title,
                       chapters: getChapters(),
                       onItemTapped: onItemTapped,
@@ -119,7 +120,7 @@ class CourseInfo extends StatelessWidget {
                 builder: (context) => ExerciseInfoPage(
                   exercise: exercise,
                   onItemTapped: onItemTapped,
-                  selectedIndex: selectedIndex,
+                  selectedIndex: selectedIndex, chapter: chapter, course: course,
                 ),
               ),
             );
