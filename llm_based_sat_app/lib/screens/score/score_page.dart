@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:llm_based_sat_app/firebase_score.dart';
+import 'package:llm_based_sat_app/firebase/firebase_score.dart';
 import 'package:llm_based_sat_app/widgets/score_widgets/circular_progress_bar.dart';
 import 'package:llm_based_sat_app/widgets/score_widgets/progress_row.dart';
 import 'package:llm_based_sat_app/widgets/score_widgets/score_graph.dart';
-import '../widgets/custom_app_bar.dart';
+import '../../widgets/custom_app_bar.dart';
 
 class ScorePage extends StatefulWidget {
   final Function(int) onItemTapped;

@@ -1,16 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:llm_based_sat_app/firebase_profile.dart';
+import 'package:llm_based_sat_app/firebase/firebase_profile.dart';
 import 'package:llm_based_sat_app/main.dart';
 import 'package:llm_based_sat_app/models/user_data_interface.dart';
-import 'package:llm_based_sat_app/screens/childhood_photos_page.dart';
-import 'package:llm_based_sat_app/screens/contact_details_page.dart';
-import 'package:llm_based_sat_app/screens/personal_info_page.dart';
-import 'package:llm_based_sat_app/screens/upload_profile_picture_page.dart';
+import 'package:llm_based_sat_app/screens/profile/childhood_photos_page.dart';
+import 'package:llm_based_sat_app/screens/profile/contact_details_page.dart';
+import 'package:llm_based_sat_app/screens/profile/personal_info_page.dart';
+import 'package:llm_based_sat_app/screens/profile/upload_profile_picture_page.dart';
 
-import '../widgets/auth_widgets/circular_checkbox.dart';
-import '../widgets/custom_button.dart';
+import '../../widgets/auth_widgets/circular_checkbox.dart';
+import '../../widgets/custom_button.dart';
 
 class PersonalProfilePage extends StatefulWidget {
   @override

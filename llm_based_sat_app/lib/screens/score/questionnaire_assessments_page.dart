@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:llm_based_sat_app/screens/questionnaire/questionnaire_page.dart';
+import 'package:llm_based_sat_app/screens/score/questionnaire_page.dart';
 import 'package:llm_based_sat_app/widgets/assessment_widgets/slider_question.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 

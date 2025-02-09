@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:llm_based_sat_app/screens/personal_info_page.dart';
-import 'package:llm_based_sat_app/screens/personal_profile_page.dart';
+import 'package:llm_based_sat_app/screens/profile/personal_info_page.dart';
+import 'package:llm_based_sat_app/screens/profile/personal_profile_page.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
-import '/firebase_auth_implementation/firebase_auth_services.dart';
+import '../../firebase/firebase_auth_services.dart';
 import 'sign_in_page.dart';
 import '/main.dart';
 // Widgets

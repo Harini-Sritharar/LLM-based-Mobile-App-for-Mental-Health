@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart'; // For handling SVG images
-import 'package:llm_based_sat_app/screens/contact_details_page.dart';
-import 'package:llm_based_sat_app/screens/personal_info_page.dart'; // Importing PersonalInfoPage screen
-import 'package:llm_based_sat_app/screens/upload_profile_picture_page.dart';
+import 'package:llm_based_sat_app/screens/profile/contact_details_page.dart';
+import 'package:llm_based_sat_app/screens/profile/personal_info_page.dart'; // Importing PersonalInfoPage screen
+import 'package:llm_based_sat_app/screens/profile/upload_profile_picture_page.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart'; // Custom theme colors
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart'; // Custom AppBar widget
-import '../widgets/custom_button.dart'; // Custom button widget
-import '../widgets/main_layout.dart'; // Main layout widget
-import '../widgets/menu_item.dart'; // Reusable menu item widget
+import '../../widgets/custom_button.dart'; // Custom button widget
+import '../../widgets/main_layout.dart'; // Main layout widget
+import '../../widgets/menu_item.dart'; // Reusable menu item widget
 
 /// The `EditProfilePage` is a stateless widget that provides users with options
 /// to edit their personal profile details. It includes navigation to specific
