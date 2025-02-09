@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/chatbot/chatprovider.dart';
 import 'package:llm_based_sat_app/firebase_helpers.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
+import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:provider/provider.dart';
 
 class Chatpage extends StatefulWidget {
@@ -38,7 +39,7 @@ class ChatpageState extends State<Chatpage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Center(child: Text('Hi ${name}, how can I help?')),
+          title: Center(child: Text('Hi $name, how can I help?')),
         ),
         body: SafeArea(
           child: Container(
@@ -57,7 +58,14 @@ class ChatpageState extends State<Chatpage> {
                         itemCount: chatProvider.messages.length,
                         itemBuilder: (context, index) {
                           final message = chatProvider.messages[index];
-                          return Text(message.data!);
+                          return Container(
+                              margin: const EdgeInsets.all(5),
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: AppColours.brandBlueMinusOne,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Text(message.data!));
                         });
                   }),
                 ),
