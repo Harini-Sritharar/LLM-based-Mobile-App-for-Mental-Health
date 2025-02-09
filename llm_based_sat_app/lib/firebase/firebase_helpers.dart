@@ -1,10 +1,4 @@
-import 'dart:io';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
-import 'package:path/path.dart' as path;
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 import '../models/firebase-exercise-uploader/interface/chapter_interface.dart';
 import '../models/firebase-exercise-uploader/interface/course_interface.dart';
 import '../models/firebase-exercise-uploader/interface/exercise_interface.dart';
@@ -39,6 +33,7 @@ Future<String> getName(String uid) async {
     return 'Error Fetching Name';
   }
 }
+
 Future<String> getTier(String uid) async {
   try {
     // Reference to the Firestore collection
@@ -200,8 +195,8 @@ Future<List<Course>> getAllCourses() async {
         // Loop through each exercise document
         for (var exerciseDoc in exercisesSnapshot.docs) {
           // Convert exercise data
-          final exercise = Exercise.fromFirestore(
-              exerciseDoc.id, exerciseDoc.data());
+          final exercise =
+              Exercise.fromFirestore(exerciseDoc.id, exerciseDoc.data());
 
           // Fetch steps for this exercise
           final stepsSnapshot = await FirebaseFirestore.instance
@@ -267,7 +262,6 @@ Future<List<Course>> getAllCourses() async {
     return [];
   }
 }
-
 
 // Remove all user documents from a given collection
 Future<void> removeUserDocuments({

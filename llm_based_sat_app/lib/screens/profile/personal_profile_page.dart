@@ -1,9 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/firebase/firebase_profile.dart';
 import 'package:llm_based_sat_app/main.dart';
-import 'package:llm_based_sat_app/models/user_data_interface.dart';
 import 'package:llm_based_sat_app/screens/profile/childhood_photos_page.dart';
 import 'package:llm_based_sat_app/screens/profile/contact_details_page.dart';
 import 'package:llm_based_sat_app/screens/profile/personal_info_page.dart';

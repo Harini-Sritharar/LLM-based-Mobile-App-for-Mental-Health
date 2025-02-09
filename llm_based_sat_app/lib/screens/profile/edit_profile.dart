@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart'; // For handling SVG images
+// import 'package:flutter_svg/flutter_svg.dart'; // For handling SVG images
 import 'package:llm_based_sat_app/screens/profile/contact_details_page.dart';
 import 'package:llm_based_sat_app/screens/profile/personal_info_page.dart'; // Importing PersonalInfoPage screen
 import 'package:llm_based_sat_app/screens/profile/upload_profile_picture_page.dart';

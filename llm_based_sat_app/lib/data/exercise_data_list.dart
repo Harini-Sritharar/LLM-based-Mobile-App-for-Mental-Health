@@ -1,7 +1,5 @@
-
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/models/exercise_data_interface.dart';
-import 'package:llm_based_sat_app/screens/home_page.dart';
 import 'package:llm_based_sat_app/utils/exercise_page_caller.dart';
 
 final List<ExerciseDataInterface> exerciseDataList = [
@@ -9,7 +7,8 @@ final List<ExerciseDataInterface> exerciseDataList = [
     id: "A_1",
     heading: "Exercise A",
     step: "Step 1",
-    description: "Look at your happy photo below. Recall positive childhood memories.",
+    description:
+        "Look at your happy photo below. Recall positive childhood memories.",
     imageUrl: "assets/icons/exercise_images/exercise_page_A_1.png",
     buttonText: "Next Step",
     onButtonPress: (BuildContext context) {
@@ -19,7 +18,7 @@ final List<ExerciseDataInterface> exerciseDataList = [
         MaterialPageRoute(
           builder: (context) => const ExercisePageCaller(id: "A_2"),
         ),
-        (route) => false, 
+        (route) => false,
       );
     },
     rightArrowPresent: true,
@@ -29,7 +28,8 @@ final List<ExerciseDataInterface> exerciseDataList = [
     id: "A_2",
     heading: "Exercise A",
     step: "Step 2",
-    description: "Look at your unhappy photos. Recall negative childhood memories.",
+    description:
+        "Look at your unhappy photos. Recall negative childhood memories.",
     imageUrl: "assets/icons/exercise_images/exercise_page_A_2.png",
     buttonText: "Next Step",
     rightArrowPresent: true,

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/firebase/firebase_helpers.dart';
-import 'package:llm_based_sat_app/main.dart';
 import 'package:llm_based_sat_app/screens/payments/payment_option_page.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
 import '../../widgets/main_layout.dart';

@@ -5,7 +5,6 @@
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 
-import '../../theme/app_colours.dart';
 import '../../widgets/custom_app_bar.dart';
 
 /// A stateless widget that represents the Payment Option page.

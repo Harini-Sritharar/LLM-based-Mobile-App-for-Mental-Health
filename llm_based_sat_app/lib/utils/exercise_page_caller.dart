@@ -12,8 +12,8 @@ class ExercisePageCaller extends StatelessWidget {
   const ExercisePageCaller({super.key, required this.id});
 
   ExerciseDataInterface getExerciseById(String id) {
-  return exerciseDataList.firstWhere((exercise) => exercise.id == id);
-}
+    return exerciseDataList.firstWhere((exercise) => exercise.id == id);
+  }
 
   @override
   Widget build(BuildContext context) {

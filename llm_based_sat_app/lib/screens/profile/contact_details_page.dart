@@ -29,25 +29,27 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
       selectedCountryCode; // Stores the selected country's code -> can be used to convert to obtain the country's dial code
   String? mobileNumber; // Stores the mobile number input
 
-   @override
+  @override
   void initState() {
     super.initState();
     _loadUserData();
   }
 
   void _loadUserData() async {
-  User? user = FirebaseAuth.instance.currentUser;
-  if (user != null) {
-    DocumentSnapshot doc =
-        await FirebaseFirestore.instance.collection('Profile').doc(user.uid).get();
-    if (doc.exists) {
-      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-      setState(() {
-        _countryController.text = data['country'] ?? 'United Kingdom';
-        _zipPostalController.text = data['zipcode'] ?? '';
-      });
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      DocumentSnapshot doc = await FirebaseFirestore.instance
+          .collection('Profile')
+          .doc(user.uid)
+          .get();
+      if (doc.exists) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        setState(() {
+          _countryController.text = data['country'] ?? 'United Kingdom';
+          _zipPostalController.text = data['zipcode'] ?? '';
+        });
+      }
     }
-  }
   }
 
   @override
@@ -85,7 +87,6 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
     return null;
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,76 +105,76 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
                   key: _formKey,
                   child: SingleChildScrollView(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                    const Text(
-                      "Contact Details",
-                      style: TextStyle(
-                          fontSize: 28,
-                          color: AppColours.brandBluePlusTwo),
-                    ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      "Complete your Contact Details",
-                      style: TextStyle(
-                          fontSize: 15, color: AppColours.neutralGreyMinusOne),
-                    ),
-                    const SizedBox(height: 40),
-                    // TODO : Replace the map icon, globe doesn't exist in Icons
-                    TextInputField(
-                      label: "Country",
-                      icon: Icons.map,
-                      isPassword: false,
-                      controller: _countryController,
-                      enabled: false,
-                    ),
-                    const SizedBox(height: 10),
-                    TextInputField(
-                      label: "Zip/Postal Code",
-                      icon: Icons.apartment,
-                      isPassword: false,
-                      controller: _zipPostalController,
-                      validator: _validateZipPostalCode,
-                    ),
-                    const SizedBox(height: 10),
-                    IntlPhoneField(
-                        decoration: InputDecoration(
-                          labelText: 'Mobile Number',
-                          filled: true,
-                          fillColor: AppColours.brandBlueMinusFour,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide.none,
-                          ),
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                        const Text(
+                          "Contact Details",
+                          style: TextStyle(
+                              fontSize: 28, color: AppColours.brandBluePlusTwo),
                         ),
-                        initialCountryCode: "GB",
-                        onCountryChanged: (country) {
-                          setState(() {
-                            _countryController.text =
-                                country.name; // Country name
-                            selectedCountryCode =
-                                country.code; // ISO Code (e.g., US, IN)
-                          });
-                        },
-                        onChanged: (phone) {
-                          setState(() {
-                            mobileNumber =
-                                phone.number; // Store the phone number
-                          });
-                        },
-                        keyboardType:
-                            TextInputType.phone, // Ensures phone keyboard
-                        validator: (value) =>
-                            _validateMobileNumber(value?.number),
-                        inputFormatters: [
-                          FilteringTextInputFormatter
-                              .digitsOnly, // Numeric input only
-                        ]),
-                    const SizedBox(height: 10),
-                    const SizedBox(height: 40),
-                    CustomButton(
-                        buttonText: "Save", onPress: _saveContactDetails)
-                  ])))
+                        const SizedBox(height: 8),
+                        const Text(
+                          "Complete your Contact Details",
+                          style: TextStyle(
+                              fontSize: 15,
+                              color: AppColours.neutralGreyMinusOne),
+                        ),
+                        const SizedBox(height: 40),
+                        // TODO : Replace the map icon, globe doesn't exist in Icons
+                        TextInputField(
+                          label: "Country",
+                          icon: Icons.map,
+                          isPassword: false,
+                          controller: _countryController,
+                          enabled: false,
+                        ),
+                        const SizedBox(height: 10),
+                        TextInputField(
+                          label: "Zip/Postal Code",
+                          icon: Icons.apartment,
+                          isPassword: false,
+                          controller: _zipPostalController,
+                          validator: _validateZipPostalCode,
+                        ),
+                        const SizedBox(height: 10),
+                        IntlPhoneField(
+                            decoration: InputDecoration(
+                              labelText: 'Mobile Number',
+                              filled: true,
+                              fillColor: AppColours.brandBlueMinusFour,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: BorderSide.none,
+                              ),
+                            ),
+                            initialCountryCode: "GB",
+                            onCountryChanged: (country) {
+                              setState(() {
+                                _countryController.text =
+                                    country.name; // Country name
+                                selectedCountryCode =
+                                    country.code; // ISO Code (e.g., US, IN)
+                              });
+                            },
+                            onChanged: (phone) {
+                              setState(() {
+                                mobileNumber =
+                                    phone.number; // Store the phone number
+                              });
+                            },
+                            keyboardType:
+                                TextInputType.phone, // Ensures phone keyboard
+                            validator: (value) =>
+                                _validateMobileNumber(value?.number),
+                            inputFormatters: [
+                              FilteringTextInputFormatter
+                                  .digitsOnly, // Numeric input only
+                            ]),
+                        const SizedBox(height: 10),
+                        const SizedBox(height: 40),
+                        CustomButton(
+                            buttonText: "Save", onPress: _saveContactDetails)
+                      ])))
             ],
           ),
         ),

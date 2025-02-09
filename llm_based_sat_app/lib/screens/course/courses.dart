@@ -59,7 +59,9 @@ class Courses extends StatelessWidget {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     // Show a loading indicator while waiting for data
                     return Center(child: CircularProgressIndicator());
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty || snapshot.hasError) {
+                  } else if (!snapshot.hasData ||
+                      snapshot.data!.isEmpty ||
+                      snapshot.hasError) {
                     // Handle the case where there is no data
                     return Center(
                       child: Column(
