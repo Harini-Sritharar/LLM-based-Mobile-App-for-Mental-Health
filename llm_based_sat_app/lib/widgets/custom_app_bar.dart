@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:llm_based_sat_app/chatbot/chatpage.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
-import '../screens/profile_page.dart';
+import '../screens/profile/profile_page.dart';
 
 /// A stateless widget that represents a custom app bar with configurable options.
 ///

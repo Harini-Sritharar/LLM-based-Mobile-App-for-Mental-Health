@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:llm_based_sat_app/firebase_helpers.dart';
+import 'package:llm_based_sat_app/firebase/firebase_helpers.dart';
 import 'package:llm_based_sat_app/models/firebase-exercise-uploader/interface/course_interface.dart';
 import 'package:llm_based_sat_app/screens/course/course_info.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/course_card.dart'; // Custom reusable widget for course cards
@@ -59,7 +59,9 @@ class Courses extends StatelessWidget {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     // Show a loading indicator while waiting for data
                     return Center(child: CircularProgressIndicator());
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty || snapshot.hasError) {
+                  } else if (!snapshot.hasData ||
+                      snapshot.data!.isEmpty ||
+                      snapshot.hasError) {
                     // Handle the case where there is no data
                     return Center(
                       child: Column(

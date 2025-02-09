@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 
-import '../theme/app_colours.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/main_layout.dart';
 
@@ -44,8 +43,8 @@ class _LanguagePageState extends State<LanguagePage> {
             // Instructional text for the user.
             const Text(
               "Select your preferred language from below. Restart the app to apply changes.",
-              style:
-                  TextStyle(fontSize: 14, color: AppColours.neutralGreyMinusOne),
+              style: TextStyle(
+                  fontSize: 14, color: AppColours.neutralGreyMinusOne),
             ),
             const SizedBox(height: 20),
             // Language options for the user to select.
