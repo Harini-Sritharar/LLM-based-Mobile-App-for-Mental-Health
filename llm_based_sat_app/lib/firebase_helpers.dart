@@ -187,6 +187,58 @@ Future<List?> getUserCourseProgress(String uid, String courseId) async {
   }
 }
 
+/* Updates the course progress for a specific user and course ID by adding a new
+"Chapter_Exercise_Step" entry to the existing list. */
+Future<void> updateUserCourseProgress(String uid, String courseId, String newChapterExerciseStep) async {
+  try {
+    // Reference to the user's course_progress subcollection
+    final collection = FirebaseFirestore.instance
+        .collection('Profile')
+        .doc(uid)
+        .collection('course_progress');
+
+    // Fetch the document for the given course ID
+    final docRef = collection.doc(courseId);
+
+    // Get the document snapshot
+    final docSnapshot = await docRef.get();
+
+    // Check if the document exists
+    if (docSnapshot.exists) {
+      // Fetch the current "Chapter_Exercise_Step" list from the document
+      List? currentChapterExerciseStep = docSnapshot.data()?['Chapter_Exercise_Step'];
+
+      // If the list is null, initialize it as an empty list
+      currentChapterExerciseStep ??= [];
+
+      // Add the new element to the list if not already present
+      if (!currentChapterExerciseStep.contains(newChapterExerciseStep)) {
+        currentChapterExerciseStep.add(newChapterExerciseStep);
+      }
+
+      // Update the document with the new list
+      await docRef.update({
+        'Chapter_Exercise_Step': currentChapterExerciseStep,
+      });
+
+      print('User progress updated successfully');
+    } else {
+      // If the document doesn't exist, create a new document with the given courseId and new progress
+      print('Creating entry for new course ID');
+      
+      await docRef.set({
+        'Chapter_Exercise_Step': [newChapterExerciseStep], // Initialize with the new entry
+      });
+
+      print('New course entry created and progress added');
+    }
+  } catch (e) {
+    // Handle errors and print them
+    print('Error updating course progress: $e');
+  }
+}
+
+
 
 /* Function to get all courses from firebase as a List of Courses */
 Future<List<Course>> getAllCourses() async {
