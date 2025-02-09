@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:llm_based_sat_app/firebase_profile.dart';
-import 'package:llm_based_sat_app/firebase_score.dart';
+import 'package:llm_based_sat_app/firebase/firebase_score.dart';
 import 'package:llm_based_sat_app/widgets/assessment_widgets/slider_question.dart';
 
 /// A stateful widget representing an individual questionnaire page.

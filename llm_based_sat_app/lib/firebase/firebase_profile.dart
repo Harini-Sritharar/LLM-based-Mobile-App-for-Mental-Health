@@ -6,7 +6,6 @@
 // Watch Introductory video - figure a way to show video to user ... maybe through youtube API? and track if user has seen it to display tick mark
 // Worry about cache after all tasks are done to ensure only 1 call is made to firebase.
 
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';

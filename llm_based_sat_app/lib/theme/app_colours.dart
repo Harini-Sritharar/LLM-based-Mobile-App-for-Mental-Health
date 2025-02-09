@@ -28,8 +28,7 @@ class AppColours {
 
   // Supporting Green
   static const Color supportingGreenMinusThree = Color(0xFFCEF2DE);
-  static const Color supportingGreenMinusOne =
-      Color(0xFF32A666);
+  static const Color supportingGreenMinusOne = Color(0xFF32A666);
 
   // Neutral Grey
   static const Color neutralGreyMinusFour = Color(0xFF8F959B);
