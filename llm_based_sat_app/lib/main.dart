@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:llm_based_sat_app/chatbot/chatprovider.dart';
 import 'package:llm_based_sat_app/consts.dart';
 import 'package:llm_based_sat_app/screens/questionnaire/questionnaire_assessments_page.dart';
 import 'package:llm_based_sat_app/screens/course/courses.dart';
@@ -20,8 +21,11 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => ProfileNotifier(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ProfileNotifier()),
+        ChangeNotifierProvider(create: (context) => ChatProvider()),
+      ],
       child: MyApp(),
     ),
   );
