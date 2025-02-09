@@ -155,6 +155,39 @@ Future<String> getProfilePictureUrl(String uid) async {
   }
 }
 
+/* Fetches the course progress for a specific user and course ID.
+The output for the attribute "Chapter_Exercise_Step" is returned 
+in the format: ["Chapter/Exercise/Step"] */
+Future<List?> getUserCourseProgress(String uid, String courseId) async {
+  try {
+    // Reference to the user's course_progress subcollection
+    final collection = FirebaseFirestore.instance
+        .collection('Profile')
+        .doc(uid)
+        .collection('course_progress');
+
+    // Fetch all documents in the course_progress subcollection
+    final querySnapshot = await collection.get();
+
+    // Iterate through the documents to find the matching course by ID
+    for (final doc in querySnapshot.docs) {
+      if (doc.id.trim() == courseId.trim()) {
+        // Return the "Chapter_Exercise_Step" attribute if found
+        final chapterExerciseStep = doc.data()['Chapter_Exercise_Step'] as List?;
+        return chapterExerciseStep; // Return the value if it exists
+      }
+    }
+
+    // Return null if no matching course is found
+    return null;
+  } catch (e) {
+    // Handle errors and print them
+    print('Error fetching course progress: $e');
+    return null;
+  }
+}
+
+
 /* Function to get all courses from firebase as a List of Courses */
 Future<List<Course>> getAllCourses() async {
   try {

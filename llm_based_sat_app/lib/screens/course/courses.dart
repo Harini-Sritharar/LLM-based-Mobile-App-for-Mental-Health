@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/data/cache_manager.dart';
 import 'package:llm_based_sat_app/firebase_helpers.dart';
+import 'package:llm_based_sat_app/models/chapter_exercise_step_interface.dart';
 import 'package:llm_based_sat_app/models/firebase-exercise-uploader/interface/course_interface.dart';
 import 'package:llm_based_sat_app/screens/course/course_info.dart';
-import 'package:llm_based_sat_app/widgets/course_widgets/course_card.dart'; // Custom reusable widget for course cards
+import 'package:llm_based_sat_app/widgets/course_widgets/course_card.dart';
+
+import '../auth/sign_in_page.dart'; // Custom reusable widget for course cards
 
 class Courses extends StatelessWidget {
   final Function(int) onItemTapped;
@@ -59,7 +63,9 @@ class Courses extends StatelessWidget {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     // Show a loading indicator while waiting for data
                     return Center(child: CircularProgressIndicator());
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty || snapshot.hasError) {
+                  } else if (!snapshot.hasData ||
+                      snapshot.data!.isEmpty ||
+                      snapshot.hasError) {
                     // Handle the case where there is no data
                     return Center(
                       child: Column(
@@ -158,6 +164,17 @@ class Courses extends StatelessWidget {
       if (coursesDatabase.isEmpty) {
         print("No courses found in the database.");
         return []; // Return an empty list if no courses are found
+      }
+
+      for (final course in coursesDatabase) {
+        final userProgress = await getUserCourseProgress(user!.uid, course.id);
+        if (userProgress != null) {
+          List<ChapterExerciseStep> progressList = [];
+          for (final progressData in userProgress) {
+            progressList.add(ChapterExerciseStep.fromString(progressData));
+          }
+          CacheManager.setValue(course.id, progressList);
+        }
       }
 
       // Generate CourseCard widgets for each course

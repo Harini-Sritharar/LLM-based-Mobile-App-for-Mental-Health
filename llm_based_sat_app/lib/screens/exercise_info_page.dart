@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/models/chapter_exercise_step_interface.dart';
 import 'package:llm_based_sat_app/models/firebase-exercise-uploader/interface/chapter_interface.dart';
 import 'package:llm_based_sat_app/screens/assessment_page.dart';
 import 'package:llm_based_sat_app/screens/exercise_page.dart';
@@ -20,6 +21,7 @@ class ExerciseInfoPage extends StatefulWidget {
   final Chapter chapter;
   final Function(int) onItemTapped; // Function to update navbar index
   final int selectedIndex; // Current selected index
+  final int exerciseSession;
 
   const ExerciseInfoPage({
     Key? key,
@@ -28,6 +30,7 @@ class ExerciseInfoPage extends StatefulWidget {
     required this.chapter,
     required this.onItemTapped,
     required this.selectedIndex,
+    required this.exerciseSession,
   }) : super(key: key);
 
   @override
@@ -36,11 +39,11 @@ class ExerciseInfoPage extends StatefulWidget {
 
 class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
   @override
-void dispose() {  
-  // Removes current step from cache so user must reset exercise
-  CacheManager.removeValue(widget.exercise.id);
-  super.dispose();
-}
+  void dispose() {
+    // Removes current step from cache so user must reset exercise
+    CacheManager.removeValue(widget.exercise.id);
+    super.dispose();
+  }
 
   void showDialogBox(BuildContext context, String title, String content) {
     showDialog(
@@ -86,7 +89,7 @@ void dispose() {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
-          title: 'Self-attachment',
+          title: widget.course.title,
           onItemTapped: widget.onItemTapped,
           selectedIndex: widget.selectedIndex),
       body: SingleChildScrollView(
@@ -219,10 +222,10 @@ void dispose() {
                           color: Color(0xFFCEDFF2),
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(color: Color(0xFF123659))),
-                      child: const Text(
+                      child: Text(
                         // TODO
                         // What value to put here
-                        '3',
+                        (widget.exerciseSession + 1).toString(),
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -302,10 +305,36 @@ void dispose() {
     return steps;
   }
 
+  /* Extracts the last number from a string in the format "Attachment_1_A_212".
+  If the string ends with a non-numeric value (e.g., "Attachment_1_A_Final"),
+  it returns -1. */
+  int extractLastNumber(String input) {
+    // Match the last part of the string after the last underscore
+    final match = RegExp(r'(\d+)$').firstMatch(input);
+
+    // If a match is found, return the number; otherwise, return -1
+    if (match != null) {
+      return int.parse(match.group(0)!);
+    } else {
+      return -1; // Return -1 if no number is found
+    }
+  }
+
   Widget getExerciseStep() {
-    int currentStep =
-        CacheManager.getValue(widget.exercise.id) ?? 1; // Default to 1st step
-    print("Current step: $currentStep");
+    int currentStep = 1;
+    if (CacheManager.getValue(widget.exercise.id) == null) {
+      for (ChapterExerciseStep value
+          in CacheManager.getValue(widget.course.id)) {
+        if (value.exercise.trim() == widget.exercise.id.trim()) {
+          currentStep = extractLastNumber(value.step);
+          if (currentStep == -1) {
+            currentStep = widget.exercise.exerciseSteps.length + 1; // Point to final step
+          }
+        }
+      }
+    } else {
+      currentStep = CacheManager.getValue(widget.exercise.id);
+    }
     CacheManager.setValue(widget.exercise.id, currentStep + 1);
 
     if (currentStep <= widget.exercise.exerciseSteps.length) {
@@ -354,7 +383,8 @@ void dispose() {
             return AssessmentPage(
               chapter: widget.chapter,
               exercise: widget.exercise,
-              elapsedTime: elapsedTime, course: widget.course,
+              elapsedTime: elapsedTime,
+              course: widget.course,
             );
           }
         },

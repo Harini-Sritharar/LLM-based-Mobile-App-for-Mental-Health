@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/data/cache_manager.dart';
 import 'package:llm_based_sat_app/models/chapter_exercise_interface.dart';
+import 'package:llm_based_sat_app/models/chapter_exercise_step_interface.dart';
 import 'package:llm_based_sat_app/models/chapter_interface.dart';
+import 'package:llm_based_sat_app/models/firebase-exercise-uploader/interface/exercise_interface.dart';
 import 'package:llm_based_sat_app/screens/course/course_page.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/course_exercise_duration.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/course_type_rating.dart';
@@ -109,7 +112,7 @@ class CourseInfo extends StatelessWidget {
             ChapterExerciseInterface(
           letter: exercise.id.substring(exercise.id.length - 1),
           title: exercise.exerciseTitle,
-          practised: 3,
+          practised: getStepsPracticed(exercise),
           totalSessions: exercise.totalSessions != ""
               ? int.parse(exercise.totalSessions)
               : 100, // 100 is default value ... Update database to ensure all values are filled
@@ -117,12 +120,13 @@ class CourseInfo extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ExerciseInfoPage(
-                  exercise: exercise,
-                  onItemTapped: onItemTapped,
-                  selectedIndex: selectedIndex, chapter: chapter, course: course,
-                ),
-              ),
+                  builder: (context) => ExerciseInfoPage(
+                      course: course,
+                      exercise: exercise,
+                      chapter: chapter,
+                      onItemTapped: onItemTapped,
+                      selectedIndex: selectedIndex,
+                      exerciseSession: getStepsPracticed(exercise))),
             );
           },
         );
@@ -152,5 +156,23 @@ class CourseInfo extends StatelessWidget {
     } else {
       return "$count Exercise";
     }
+  }
+
+  getStepsPracticed(Exercise exercise) {
+    if (CacheManager.getValue(course.id) == null) {
+      return 0;
+    }
+
+    List<ChapterExerciseStep> courseProgress = CacheManager.getValue(course.id);
+    for (final progress in courseProgress) {
+      if (progress.exercise.trim() == exercise.id.trim()) {
+        if (progress.step.endsWith("Final")) {
+          return int.parse(exercise.totalSessions);
+        } else {
+          return int.parse(progress.step.substring(progress.step.length - 1));
+        }
+      }
+    }
+    return 0;
   }
 }
