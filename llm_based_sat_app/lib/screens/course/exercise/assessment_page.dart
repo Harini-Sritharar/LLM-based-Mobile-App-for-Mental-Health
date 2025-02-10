@@ -6,10 +6,10 @@ import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_appBar.dart'
 import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_description.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_sliderQuestion.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_step_label.dart';
-import '../models/firebase-exercise-uploader/interface/chapter_interface.dart';
-import '../models/firebase-exercise-uploader/interface/course_interface.dart';
-import '../models/firebase-exercise-uploader/interface/exercise_interface.dart';
-import '../utils/exercise_helper_functions.dart';
+import '../../../models/firebase-exercise-uploader/interface/chapter_interface.dart';
+import '../../../models/firebase-exercise-uploader/interface/course_interface.dart';
+import '../../../models/firebase-exercise-uploader/interface/exercise_interface.dart';
+import '../../../utils/exercise_helper_functions.dart';
 
 /* The `AssessmentPage` is a widget that displays the final assessment and reflection section after completing an exercise. It provides information about the session, allows the user to rate the exercise, and offers an option to navigate back to the courses page.
 

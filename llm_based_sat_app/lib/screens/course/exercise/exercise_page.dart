@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_appBar.dart';
-import '../models/firebase-exercise-uploader/interface/exercise_interface.dart';
-import '../widgets/exercise_widgets/exercise_bottom_message.dart';
-import '../widgets/custom_button.dart';
-import '../widgets/exercise_widgets/exercise_description.dart';
-import '../widgets/exercise_widgets/exercise_image.dart';
-import '../widgets/exercise_widgets/exercise_step_label.dart';
-import '../widgets/exercise_widgets/exercise_timer.dart';
+import '../../../models/firebase-exercise-uploader/interface/exercise_interface.dart';
+import '../../../widgets/exercise_widgets/exercise_bottom_message.dart';
+import '../../../widgets/custom_button.dart';
+import '../../../widgets/exercise_widgets/exercise_description.dart';
+import '../../../widgets/exercise_widgets/exercise_image.dart';
+import '../../../widgets/exercise_widgets/exercise_step_label.dart';
+import '../../../widgets/exercise_widgets/exercise_timer.dart';
 
 // TODO
 // Potentially save user data temporarily then later in a database as they progress through the exercises

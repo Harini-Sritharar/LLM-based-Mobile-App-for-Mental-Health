@@ -11,7 +11,7 @@ import 'package:llm_based_sat_app/widgets/course_widgets/course_type_rating.dart
 import 'package:llm_based_sat_app/widgets/course_widgets/pre_course_list.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import 'package:llm_based_sat_app/widgets/expandable_text.dart';
-import 'package:llm_based_sat_app/screens/exercise_info_page.dart';
+import 'package:llm_based_sat_app/screens/course/exercise/exercise_info_page.dart';
 
 import '../../models/firebase-exercise-uploader/interface/course_interface.dart';
 
