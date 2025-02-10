@@ -3,6 +3,7 @@ import 'package:llm_based_sat_app/data/cache_manager.dart';
 import 'package:llm_based_sat_app/models/chapter_exercise_interface.dart';
 import 'package:llm_based_sat_app/models/chapter_exercise_step_interface.dart';
 import 'package:llm_based_sat_app/models/chapter_interface.dart';
+import 'package:llm_based_sat_app/models/firebase-exercise-uploader/interface/chapter_interface.dart';
 import 'package:llm_based_sat_app/models/firebase-exercise-uploader/interface/exercise_interface.dart';
 import 'package:llm_based_sat_app/screens/course/course_page.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/course_exercise_duration.dart';
@@ -104,7 +105,6 @@ class CourseInfo extends StatelessWidget {
     for (final chapter in course.chapters) {
       // TODO
       // Change isLocked to match to current user's subsciption plan
-      // Change practised: 3, to link to current user
 
       List<ChapterExerciseInterface> chapterExerciseInterfaces = [];
       for (final exercise in chapter.exercises) {
@@ -137,7 +137,9 @@ class CourseInfo extends StatelessWidget {
           chapterNumber: extractEndingNumber(chapter.id),
           chapterTitle: chapter.chapterTitle,
           exercises: chapterExerciseInterfaces,
-          isLocked: false);
+          // TODO
+          // isLocked to not be hard coded and rather only true when previous exercise is completed
+          isLocked: isChapterLocked(chapter));
 
       chapterInterfaces.add(chapterInterface);
     }
@@ -174,5 +176,26 @@ class CourseInfo extends StatelessWidget {
       }
     }
     return 0;
+  }
+
+  /* Function to check if the given chapter is locked or not. Returns true if the previous chapter is completed.
+  */
+  isChapterLocked(Chapter chapter) {
+    // Get index of current chapter
+    int current_chapter_index = course.chapters.indexOf(chapter);
+    if (current_chapter_index == 0) {
+      // First chapter is always unlocked
+      return false;
+    }
+    Chapter previous_chapter = course.chapters[current_chapter_index - 1];
+    // Check to see if all exercises completed
+    for (final exercise in previous_chapter.exercises) {
+      print("Exercise: ${exercise.id}   ${getStepsPracticed(exercise)}/${exercise.totalSessions}");
+      if (getStepsPracticed(exercise).toString() != exercise.totalSessions.trim()) {
+        // Exercise is not completed
+        return true;
+      }
+    }
+    return false;
   }
 }
