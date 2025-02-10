@@ -324,17 +324,18 @@ class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
 
   Widget getExerciseStep() {
     int currentStep = 1;
-    if (CacheManager.getValue(widget.exercise.id) == null) {
+    if (CacheManager.getValue(widget.exercise.id) == null && CacheManager.getValue(widget.course.id) != null) {
       for (ChapterExerciseStep value
           in CacheManager.getValue(widget.course.id)) {
         if (value.exercise.trim() == widget.exercise.id.trim()) {
           currentStep = extractLastNumber(value.step);
           if (currentStep == -1) {
-            currentStep = widget.exercise.exerciseSteps.length + 1; // Point to final step
+            currentStep =
+                widget.exercise.exerciseSteps.length + 1; // Point to final step
           }
         }
       }
-    } else {
+    } else if (CacheManager.getValue(widget.exercise.id) != null) {
       currentStep = CacheManager.getValue(widget.exercise.id);
     }
     CacheManager.setValue(widget.exercise.id, currentStep + 1);
@@ -373,9 +374,10 @@ class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
     } else {
       // Final Step - Show Assessment Page
       CacheManager.removeValue(widget.exercise.id); // Reset cache
-      String completedExercise = "${widget.chapter.id}/${widget.exercise.id}/${widget.exercise.exerciseFinalStep!.id}";
-      print("Completed Exercise: $completedExercise");
-      updateUserCourseProgress(user!.uid, widget.course.id.trim(), completedExercise); // Update firebase to indicate current exercise completed
+      String completedExercise =
+          "${widget.chapter.id}/${widget.exercise.id}/${widget.exercise.exerciseFinalStep!.id}";
+      updateUserCourseProgress(user!.uid, widget.course.id.trim(),
+          completedExercise); // Update firebase to indicate current exercise completed
       return FutureBuilder<String>(
         future: getElapsedTime(), // Fetch elapsed time
         builder: (context, snapshot) {
