@@ -369,7 +369,7 @@ class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
           }
         },
         rightArrowPresent: true,
-        messageText: currentExerciseStep.footerText,
+        messageText: currentExerciseStep.footerText, exercise: widget.exercise,
       );
     } else {
       // Final Step - Show Assessment Page

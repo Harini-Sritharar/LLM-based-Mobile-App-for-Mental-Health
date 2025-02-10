@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_appBar.dart';
+import '../models/firebase-exercise-uploader/interface/exercise_interface.dart';
 import '../widgets/exercise_widgets/exercise_bottom_message.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/exercise_widgets/exercise_description.dart';
@@ -19,6 +20,7 @@ class ExercisePage extends StatelessWidget {
   final void Function(BuildContext) onButtonPress;
   final bool rightArrowPresent;
   final String messageText;
+  final Exercise exercise;
 
   const ExercisePage({
     super.key,
@@ -30,6 +32,7 @@ class ExercisePage extends StatelessWidget {
     required this.onButtonPress,
     required this.rightArrowPresent,
     required this.messageText,
+    required this.exercise,
   });
 
   @override
@@ -77,12 +80,12 @@ class ExercisePage extends StatelessWidget {
           ),
 
           // Timer
-          const Positioned(
+          Positioned(
             bottom: 16.0,
             left: 0,
             right: 0,
             child: Center(
-              child: ExerciseTimer(),
+              child: ExerciseTimer(exercise: exercise,),
             ),
           ),
         ],

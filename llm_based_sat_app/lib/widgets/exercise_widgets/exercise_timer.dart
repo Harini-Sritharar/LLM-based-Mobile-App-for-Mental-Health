@@ -3,13 +3,16 @@ import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../models/firebase-exercise-uploader/interface/exercise_interface.dart';
+
 // TODO
 // Reset the cached timer when exercise is completed
 
 /* A widget that acts as a stopwatch and caches the elapsed time
 so that it can persist across widget rebuilds or app restarts. */
 class ExerciseTimer extends StatefulWidget {
-  const ExerciseTimer({super.key});
+  final Exercise exercise;
+  const ExerciseTimer({super.key, required this.exercise});
 
   @override
   _ExerciseTimerState createState() => _ExerciseTimerState();
@@ -166,20 +169,20 @@ class _ExerciseTimerState extends State<ExerciseTimer> {
   Future<void> _loadInitialTime() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      offsetTimeMillis = prefs.getInt('exercise_timer_elapsed') ?? 0;
+      offsetTimeMillis = prefs.getInt('exercise_timer_elapsed_${widget.exercise.id}') ?? 0;
     });
   }
 
   /// Saves the current elapsed time to shared preferences for persistence
   Future<void> _saveElapsedTime() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('exercise_timer_elapsed',
+    await prefs.setInt('exercise_timer_elapsed_${widget.exercise.id}',
         stopwatch.elapsedMilliseconds + offsetTimeMillis);
   }
 
   // Resets the cached timer to 0 and resets the stopwatch
   Future<void> _resetCachedTimer() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('exercise_timer_elapsed', 0); // Reset cache
+    await prefs.setInt('exercise_timer_elapsed_${widget.exercise.id}', 0); // Reset cache
   }
 }
