@@ -20,8 +20,8 @@ class ChatpageState extends State<Chatpage> {
   }
 
   Future<void> _loadName() async {
-    name = await getName(user!
-        .uid); // probably want to change this to be fetching the username rather than their full name
+    String fullName = await getName(user!.uid);
+    name = fullName.split(' ')[0];
     setState(() {});
   }
 
@@ -62,10 +62,12 @@ class ChatpageState extends State<Chatpage> {
                               margin: const EdgeInsets.all(5),
                               padding: const EdgeInsets.all(10),
                               decoration: BoxDecoration(
-                                color: AppColours.brandBlueMinusOne,
+                                color: message.isUserMessage
+                                    ? AppColours.brandBlueMinusOne
+                                    : AppColours.neutralGreyMinusOne,
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              child: Text(message.data!));
+                              child: Text(message.data));
                         });
                   }),
                 ),
