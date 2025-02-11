@@ -401,7 +401,7 @@ class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
 
   Future<String> getElapsedTime() async {
     final prefs = await SharedPreferences.getInstance();
-    int time = prefs.getInt('exercise_timer_elapsed') ?? 0;
+    int time = prefs.getInt('exercise_timer_elapsed_${widget.exercise.id}') ?? 0;
 
     if (_formatMinutes(time) == "00") {
       return "Elapsed Time: ${_formatSeconds(time)} seconds";
