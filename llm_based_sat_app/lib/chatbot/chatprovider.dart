@@ -6,12 +6,14 @@ import 'package:flutter/material.dart';
 class Message {
   final String data;
   final bool isUserMessage;
-
   Message(this.data, this.isUserMessage);
 }
 
 class ChatProvider with ChangeNotifier {
-  final List<Message> _messages = [];
+  final List<Message> _messages;
+
+  ChatProvider() : _messages = [Message('Hello, how can I help you?', false)];
+
   List<Message> get messages => _messages;
 
   Future<void> sendMessage(String text) async {

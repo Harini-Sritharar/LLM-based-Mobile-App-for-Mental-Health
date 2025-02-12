@@ -58,16 +58,31 @@ class ChatpageState extends State<Chatpage> {
                         itemCount: chatProvider.messages.length,
                         itemBuilder: (context, index) {
                           final message = chatProvider.messages[index];
-                          return Container(
-                              margin: const EdgeInsets.all(5),
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                color: message.isUserMessage
-                                    ? AppColours.brandBlueMinusOne
-                                    : AppColours.neutralGreyMinusOne,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Text(message.data));
+                          return Align(
+                            alignment: message.isUserMessage
+                                ? Alignment.centerRight
+                                : Alignment.centerLeft,
+                            child: Container(
+                                margin: const EdgeInsets.all(5),
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                    color: message.isUserMessage
+                                        ? AppColours.brandBlueMinusOne
+                                        : AppColours.neutralGreyMinusOne,
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10),
+                                      bottomLeft: message.isUserMessage
+                                          ? Radius.circular(10)
+                                          : Radius.circular(0),
+                                      bottomRight: message.isUserMessage
+                                          ? Radius.circular(0)
+                                          : Radius.circular(10),
+                                    )
+                                    // borderRadius: BorderRadius.circular(10),
+                                    ),
+                                child: Text(message.data)),
+                          );
                         });
                   }),
                 ),
