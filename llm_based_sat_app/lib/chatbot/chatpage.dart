@@ -55,8 +55,27 @@ class ChatpageState extends State<Chatpage> {
                     }
 
                     return ListView.builder(
-                        itemCount: chatProvider.messages.length,
+                        itemCount: chatProvider.messages.length +
+                            (chatProvider.isBotTyping ? 1 : 0),
                         itemBuilder: (context, index) {
+                          if (index == chatProvider.messages.length &&
+                              chatProvider.isBotTyping) {
+                            // Show typing indicator at the bottom
+                            return Align(
+                              alignment: Alignment.centerLeft,
+                              child: Container(
+                                margin: EdgeInsets.symmetric(
+                                    vertical: 5, horizontal: 10),
+                                padding: EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[300],
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Text("...",
+                                    style: TextStyle(color: Colors.black54)),
+                              ),
+                            );
+                          }
                           final message = chatProvider.messages[index];
                           return Align(
                             alignment: message.isUserMessage
