@@ -5,6 +5,7 @@ import 'package:llm_based_sat_app/models/chapter_exercise_step_interface.dart';
 import 'package:llm_based_sat_app/models/firebase-exercise-uploader/interface/course_interface.dart';
 import 'package:llm_based_sat_app/screens/course/course_info.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/course_card.dart';
+import 'package:llm_based_sat_app/widgets/firebase_video_player.dart';
 
 import '../auth/sign_in_page.dart'; // Custom reusable widget for course cards
 
@@ -93,7 +94,7 @@ class Courses extends StatelessWidget {
                               color: Colors.grey,
                             ),
                             textAlign: TextAlign.center,
-                          ),
+                          ), 
                         ],
                       ),
                     );

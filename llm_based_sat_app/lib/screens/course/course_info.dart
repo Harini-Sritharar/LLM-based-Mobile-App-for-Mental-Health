@@ -103,9 +103,6 @@ class CourseInfo extends StatelessWidget {
   getChapters() {
     List<ChapterInterface> chapterInterfaces = [];
     for (final chapter in course.chapters) {
-      // TODO
-      // Change isLocked to match to current user's subsciption plan
-
       List<ChapterExerciseInterface> chapterExerciseInterfaces = [];
       for (final exercise in chapter.exercises) {
         ChapterExerciseInterface chapterExerciseInterface =
@@ -137,8 +134,6 @@ class CourseInfo extends StatelessWidget {
           chapterNumber: extractEndingNumber(chapter.id),
           chapterTitle: chapter.chapterTitle,
           exercises: chapterExerciseInterfaces,
-          // TODO
-          // isLocked to not be hard coded and rather only true when previous exercise is completed
           isLocked: isChapterLocked(chapter));
 
       chapterInterfaces.add(chapterInterface);

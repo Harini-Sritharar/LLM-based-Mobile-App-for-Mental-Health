@@ -4,6 +4,7 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:llm_based_sat_app/consts.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
 import 'package:llm_based_sat_app/screens/course/courses.dart';
+import 'package:llm_based_sat_app/widgets/firebase_video_player.dart';
 import '../screens/community_page.dart';
 import '../screens/calendar_page.dart';
 import '../screens/home_page.dart';
@@ -49,7 +50,8 @@ class MyApp extends StatelessWidget {
         ),
       ),
       // For now, the landing screen is the Sign In page
-      home: SignInPage(),
+      home: SignInPage(), 
+      // home: LocalVideoPlayer(),
       // home: UploadProfilePicturePage(onItemTapped: (x) => {}, selectedIndex: 0,) // for local testing
       // home:ImagePickerWidget()
       // home: Courses(onItemTapped: (x) => {}, selectedIndex: 0)
