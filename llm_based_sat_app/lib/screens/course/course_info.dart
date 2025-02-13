@@ -5,7 +5,6 @@ import 'package:llm_based_sat_app/models/chapter_exercise_step_interface.dart';
 import 'package:llm_based_sat_app/models/chapter_interface.dart';
 import 'package:llm_based_sat_app/models/firebase-exercise-uploader/interface/chapter_interface.dart';
 import 'package:llm_based_sat_app/models/firebase-exercise-uploader/interface/exercise_interface.dart';
-import 'package:llm_based_sat_app/models/firebase-exercise-uploader/interface/chapter_interface.dart';
 import 'package:llm_based_sat_app/screens/course/course_page.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/course_exercise_duration.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/course_type_rating.dart';

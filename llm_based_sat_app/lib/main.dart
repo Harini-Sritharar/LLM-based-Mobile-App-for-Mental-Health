@@ -5,6 +5,7 @@ import 'package:llm_based_sat_app/chatbot/chatprovider.dart';
 import 'package:llm_based_sat_app/utils/consts.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
 import 'package:llm_based_sat_app/screens/course/courses.dart';
+import 'package:llm_based_sat_app/widgets/firebase_video_player.dart';
 import '../screens/community_page.dart';
 import '../screens/calendar_page.dart';
 import '../screens/home_page.dart';

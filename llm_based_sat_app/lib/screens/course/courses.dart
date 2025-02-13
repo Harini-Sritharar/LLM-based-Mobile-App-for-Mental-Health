@@ -6,7 +6,6 @@ import 'package:llm_based_sat_app/models/firebase-exercise-uploader/interface/co
 import 'package:llm_based_sat_app/screens/course/course_info.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/course_card.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
-import 'package:llm_based_sat_app/widgets/firebase_video_player.dart';
 
 import '../auth/sign_in_page.dart'; // Custom reusable widget for course cards
 
