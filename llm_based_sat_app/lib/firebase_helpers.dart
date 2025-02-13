@@ -189,7 +189,7 @@ Future<List?> getUserCourseProgress(String uid, String courseId) async {
 
 /* Updates the course progress for a specific user and course ID by adding a new
 "Chapter_Exercise_Step" entry to the existing list. */
-Future<void> updateUserCourseProgress(String uid, String courseId, String newChapterExerciseStep) async {
+Future<void> updateUserCourseProgress(String uid, String courseId, String newChapterExerciseStep, String previousSession) async {
   try {
     // Reference to the user's course_progress subcollection
     final collection = FirebaseFirestore.instance
@@ -211,7 +211,8 @@ Future<void> updateUserCourseProgress(String uid, String courseId, String newCha
       // If the list is null, initialize it as an empty list
       currentChapterExerciseStep ??= [];
 
-      // Add the new element to the list if not already present
+      // Add the new element to the list if not already present and also delete the previous session
+      currentChapterExerciseStep.remove(previousSession);
       if (!currentChapterExerciseStep.contains(newChapterExerciseStep)) {
         currentChapterExerciseStep.add(newChapterExerciseStep);
       }

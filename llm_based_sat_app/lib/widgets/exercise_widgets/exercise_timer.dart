@@ -23,7 +23,8 @@ class _ExerciseTimerState extends State<ExerciseTimer> {
   late Timer timer; // A periodic timer to update the UI
 
   Color textColor = AppColours.brandBluePlusTwo; // Text color for timer
-  Color backgroundColor = AppColours.brandBlueMinusThree; // Background color for timer
+  Color backgroundColor =
+      AppColours.brandBlueMinusThree; // Background color for timer
 
   bool isPaused = false; // To track pause/resume state
   int offsetTimeMillis = 0; // Offset time to add to the stopwatch
@@ -169,8 +170,19 @@ class _ExerciseTimerState extends State<ExerciseTimer> {
   Future<void> _loadInitialTime() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      offsetTimeMillis = prefs.getInt('exercise_timer_elapsed_${widget.exercise.id}') ?? 0;
+      offsetTimeMillis =
+          prefs.getInt('exercise_timer_elapsed_${widget.exercise.id}') ?? 0;
     });
+    printAllSharedPreferences();
+  }
+
+  Future<void> printAllSharedPreferences() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    print("Shared Preferences Data:");
+    for (String key in prefs.getKeys()) {
+      print("$key: ${prefs.get(key)}");
+    }
   }
 
   /// Saves the current elapsed time to shared preferences for persistence
@@ -183,6 +195,7 @@ class _ExerciseTimerState extends State<ExerciseTimer> {
   // Resets the cached timer to 0 and resets the stopwatch
   Future<void> _resetCachedTimer() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('exercise_timer_elapsed_${widget.exercise.id}', 0); // Reset cache
+    await prefs.setInt(
+        'exercise_timer_elapsed_${widget.exercise.id}', 0); // Reset cache
   }
 }

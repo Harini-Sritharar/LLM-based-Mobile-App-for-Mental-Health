@@ -7,6 +7,7 @@ import 'package:llm_based_sat_app/screens/course/exercise/exercise_page.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import 'package:llm_based_sat_app/widgets/custom_button.dart';
+import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_timer.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/learning_tile.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/checkbox_tile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -324,7 +325,8 @@ class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
 
   Widget getExerciseStep() {
     int currentStep = 1;
-    if (CacheManager.getValue(widget.exercise.id) == null && CacheManager.getValue(widget.course.id) != null) {
+    if (CacheManager.getValue(widget.exercise.id) == null &&
+        CacheManager.getValue(widget.course.id) != null) {
       for (ChapterExerciseStep value
           in CacheManager.getValue(widget.course.id)) {
         if (value.exercise.trim() == widget.exercise.id.trim()) {
@@ -369,15 +371,21 @@ class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
           }
         },
         rightArrowPresent: true,
-        messageText: currentExerciseStep.footerText, exercise: widget.exercise,
+        messageText: currentExerciseStep.footerText,
+        exercise: widget.exercise,
       );
     } else {
       // Final Step - Show Assessment Page
       CacheManager.removeValue(widget.exercise.id); // Reset cache
       String completedExercise =
-          "${widget.chapter.id}/${widget.exercise.id}/${widget.exercise.exerciseFinalStep!.id}";
-      updateUserCourseProgress(user!.uid, widget.course.id.trim(),
-          completedExercise); // Update firebase to indicate current exercise completed
+          "${widget.chapter.id}/${widget.exercise.id}/${widget.exercise.exerciseFinalStep!.id}/${getSessions(widget.exercise, widget.course) + 1}";
+      String previousSession =
+          "${widget.chapter.id}/${widget.exercise.id}/${widget.exercise.exerciseFinalStep!.id}/${getSessions(widget.exercise, widget.course)}";
+      updateUserCourseProgress(
+          user!.uid,
+          widget.course.id.trim(),
+          completedExercise,
+          previousSession); // Update firebase to indicate current exercise completed
       return FutureBuilder<String>(
         future: getElapsedTime(), // Fetch elapsed time
         builder: (context, snapshot) {
@@ -399,9 +407,16 @@ class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
     }
   }
 
+  // Returns elapsed time for given exercise then calls function to delete cached time.
   Future<String> getElapsedTime() async {
     final prefs = await SharedPreferences.getInstance();
-    int time = prefs.getInt('exercise_timer_elapsed_${widget.exercise.id}') ?? 0;
+    
+    // TODO
+    // // Delete cached time
+    // ExerciseTimer.deleteCachedTimer(widget.exercise.id);
+    
+    int time =
+        prefs.getInt('exercise_timer_elapsed_${widget.exercise.id}') ?? 0;
 
     if (_formatMinutes(time) == "00") {
       return "Elapsed Time: ${_formatSeconds(time)} seconds";

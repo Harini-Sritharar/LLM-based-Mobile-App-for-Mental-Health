@@ -14,6 +14,7 @@ import 'package:llm_based_sat_app/widgets/expandable_text.dart';
 import 'package:llm_based_sat_app/screens/course/exercise/exercise_info_page.dart';
 
 import '../../models/firebase-exercise-uploader/interface/course_interface.dart';
+import '../../utils/exercise_helper_functions.dart';
 
 class CourseInfo extends StatelessWidget {
   final Course course;
@@ -109,7 +110,7 @@ class CourseInfo extends StatelessWidget {
             ChapterExerciseInterface(
           letter: exercise.id.substring(exercise.id.length - 1),
           title: exercise.exerciseTitle,
-          practised: getStepsPracticed(exercise),
+          practised: getSessions(exercise, course),
           totalSessions: exercise.totalSessions != ""
               ? int.parse(exercise.totalSessions)
               : 100, // 100 is default value ... Update database to ensure all values are filled
@@ -123,7 +124,7 @@ class CourseInfo extends StatelessWidget {
                       chapter: chapter,
                       onItemTapped: onItemTapped,
                       selectedIndex: selectedIndex,
-                      exerciseSession: getStepsPracticed(exercise))),
+                      exerciseSession: getSessions(exercise, course))),
             );
           },
         );
@@ -185,8 +186,10 @@ class CourseInfo extends StatelessWidget {
     Chapter previous_chapter = course.chapters[current_chapter_index - 1];
     // Check to see if all exercises completed
     for (final exercise in previous_chapter.exercises) {
-      print("Exercise: ${exercise.id}   ${getStepsPracticed(exercise)}/${exercise.totalSessions}");
-      if (getStepsPracticed(exercise).toString() != exercise.totalSessions.trim()) {
+      print(
+          "Exercise: ${exercise.id}   ${getStepsPracticed(exercise)}/${exercise.totalSessions}");
+      if (getStepsPracticed(exercise).toString() !=
+          exercise.totalSessions.trim()) {
         // Exercise is not completed
         return true;
       }

@@ -113,13 +113,13 @@ class CoursePageChapter extends StatelessWidget {
                       width: 10,
                     ),
                     // Display progress indicator or a check mark
-                    if (exercise.practised == exercise.totalSessions &&
+                    if (exercise.practised >= exercise.totalSessions &&
                         !chapter.isLocked)
                       SvgPicture.asset(
                         'assets/icons/tick.svg',
                         width: 36.0,
                       ),
-                    if (exercise.practised != exercise.totalSessions &&
+                    if (exercise.practised < exercise.totalSessions &&
                         !chapter.isLocked)
                       Icon(
                         Icons.chevron_right_outlined,

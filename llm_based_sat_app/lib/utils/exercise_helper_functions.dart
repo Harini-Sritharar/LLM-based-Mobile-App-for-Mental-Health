@@ -1,3 +1,8 @@
+import '../data/cache_manager.dart';
+import '../models/chapter_exercise_step_interface.dart';
+import '../models/firebase-exercise-uploader/interface/course_interface.dart';
+import '../models/firebase-exercise-uploader/interface/exercise_interface.dart';
+
 String getExerciseLetter(String input) {
   // Use split to find the last letter between underscores
   List<String> parts = input.split('_');
@@ -13,3 +18,17 @@ String getExerciseLetter(String input) {
   }
   throw ArgumentError("No valid letter found between underscores.");
 }
+
+getSessions(Exercise exercise, Course course) {
+    if (CacheManager.getValue(course.id) == null) {
+      return 0;
+    }
+
+    List<ChapterExerciseStep> courseProgress = CacheManager.getValue(course.id);
+    for (final progress in courseProgress) {
+      if (progress.exercise.trim() == exercise.id.trim()) {
+        return int.parse(progress.session);
+      }
+    }
+    return 0;
+  }
