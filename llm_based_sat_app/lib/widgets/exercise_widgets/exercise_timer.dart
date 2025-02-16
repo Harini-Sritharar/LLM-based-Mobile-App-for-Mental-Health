@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
-import 'dart:async';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../models/firebase-exercise-uploader/interface/exercise_interface.dart';
+import '../../utils/exercise_timer_manager.dart';
 
-// TODO
-// Reset the cached timer when exercise is completed
+/* A stopwatch-style timer widget for tracking exercise duration.
 
-/* A widget that acts as a stopwatch and caches the elapsed time
-so that it can persist across widget rebuilds or app restarts. */
+This widget displays a live-updating timer, allowing users to pause and resume the timer as needed. It persists across widget rebuilds and leverages a singleton class, "ExerciseTimerManager", to manage state efficiently across different files.
+
+## Parameters:
+- `exercise`: The exercise instance associated with the timer. The exercise ID is used to cache and persist elapsed time. */
 class ExerciseTimer extends StatefulWidget {
   final Exercise exercise;
   const ExerciseTimer({super.key, required this.exercise});
@@ -19,40 +18,17 @@ class ExerciseTimer extends StatefulWidget {
 }
 
 class _ExerciseTimerState extends State<ExerciseTimer> {
-  late Stopwatch stopwatch; // The Stopwatch object to track elapsed time
-  late Timer timer; // A periodic timer to update the UI
-
-  Color textColor = AppColours.brandBluePlusTwo; // Text color for timer
-  Color backgroundColor =
-      AppColours.brandBlueMinusThree; // Background color for timer
-
-  bool isPaused = false; // To track pause/resume state
-  int offsetTimeMillis = 0; // Offset time to add to the stopwatch
+  final ExerciseTimerManager timerManager = ExerciseTimerManager();
 
   @override
   void initState() {
     super.initState();
-    stopwatch = Stopwatch(); // Initialize the stopwatch
-
-    // Load the previously cached time and start the stopwatch
-    _loadInitialTime().then((_) {
-      stopwatch.start();
-    });
-
-    // Create a periodic timer to update the UI every 10ms
-    timer = Timer.periodic(const Duration(milliseconds: 10), (Timer t) {
-      if (mounted) {
-        setState(() {});
-      }
-    });
+    timerManager.startTimer(widget.exercise.id);
   }
 
   @override
   void dispose() {
-    // Cancel the timer and stop the stopwatch when the widget is disposed
-    _resetCachedTimer();
-    timer.cancel();
-    stopwatch.stop();
+    timerManager.stopTimer();
     super.dispose();
   }
 
@@ -62,7 +38,7 @@ class _ExerciseTimerState extends State<ExerciseTimer> {
       width: 160,
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: backgroundColor, // Light blue background
+        color: AppColours.brandBlueMinusThree,
         borderRadius: BorderRadius.circular(15),
       ),
       child: Stack(
@@ -70,55 +46,51 @@ class _ExerciseTimerState extends State<ExerciseTimer> {
           // Timer display
           Align(
             alignment: Alignment.centerLeft,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Minutes
-                _buildTimeSection(
-                    _formatMinutes(
-                        stopwatch.elapsedMilliseconds + offsetTimeMillis),
-                    30),
-                const SizedBox(width: 10), // Gap between minutes and ":"
-
-                // ":"
-                Text(
-                  ":",
-                  style: TextStyle(fontSize: 25.0, color: textColor),
-                ),
-                const SizedBox(width: 10), // Gap between ":" and seconds
-
-                // Seconds
-                _buildTimeSection(
-                    _formatSeconds(
-                        stopwatch.elapsedMilliseconds + offsetTimeMillis),
-                    30),
-              ],
+            child: ListenableBuilder(
+              listenable: timerManager,
+              builder: (context, _) {
+                return Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _buildTimeSection(
+                        _formatMinutes(timerManager.elapsedTimeMillis), 30),
+                    const SizedBox(width: 10),
+                    Text(":",
+                        style: TextStyle(
+                            fontSize: 25.0,
+                            color: AppColours.brandBluePlusTwo)),
+                    const SizedBox(width: 10),
+                    _buildTimeSection(
+                        _formatSeconds(timerManager.elapsedTimeMillis), 30),
+                  ],
+                );
+              },
             ),
           ),
 
           // Pause/Resume button
           Positioned(
-            left: 90, // Sticking to right of parent widget
+            left: 90,
             top: -2,
             child: ElevatedButton(
-              onPressed: _togglePauseResume,
+              onPressed: () {
+                if (timerManager.isPaused) {
+                  timerManager.resumeTimer();
+                } else {
+                  timerManager.pauseTimer();
+                }
+              },
               style: ElevatedButton.styleFrom(
-                backgroundColor: backgroundColor,
+                backgroundColor: AppColours.brandBlueMinusThree,
                 shape: const CircleBorder(),
-                elevation: 0, // Remove shadow
-                padding: EdgeInsets.zero, // No padding
+                elevation: 0,
+                padding: EdgeInsets.zero,
               ),
-              child: isPaused
-                  ? Icon(
-                      Icons.play_arrow,
-                      size: 20,
-                      color: textColor,
-                    )
-                  : Image.asset(
-                      'assets/icons/pause.png',
-                      width: 20,
-                      height: 20,
-                    ),
+              child: timerManager.isPaused
+                  ? Icon(Icons.play_arrow,
+                      size: 20, color: AppColours.brandBluePlusTwo)
+                  : Image.asset('assets/icons/pause.png',
+                      width: 20, height: 20),
             ),
           ),
         ],
@@ -126,76 +98,23 @@ class _ExerciseTimerState extends State<ExerciseTimer> {
     );
   }
 
-  /// Builds a time section (minutes or seconds) with the SevenSegment font
   Widget _buildTimeSection(String text, double fontSize) {
     return Text(
       text,
       style: TextStyle(
         fontSize: fontSize,
         fontFamily: 'SevenSegment',
-        color: textColor,
+        color: AppColours.brandBluePlusTwo,
         fontWeight: FontWeight.bold,
       ),
     );
   }
 
-  // Formats the minutes and saves time elapsed to cache
   String _formatMinutes(int milliseconds) {
-    // Saving the current time in cache every second
-    _saveElapsedTime(); // Save the current elapsed time to cache
-
-    final minutes = milliseconds ~/ 60000;
-    return minutes.toString().padLeft(2, '0');
+    return (milliseconds ~/ 60000).toString().padLeft(2, '0');
   }
 
-  // Formats the seconds
   String _formatSeconds(int milliseconds) {
-    final seconds = (milliseconds ~/ 1000) % 60;
-    return seconds.toString().padLeft(2, '0');
-  }
-
-  // Toggles pause and resume
-  void _togglePauseResume() {
-    setState(() {
-      if (isPaused) {
-        stopwatch.start();
-      } else {
-        stopwatch.stop();
-      }
-      isPaused = !isPaused;
-    });
-  }
-
-  /// Loads the cached elapsed time (if any) from shared preferences
-  Future<void> _loadInitialTime() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      offsetTimeMillis =
-          prefs.getInt('exercise_timer_elapsed_${widget.exercise.id}') ?? 0;
-    });
-    printAllSharedPreferences();
-  }
-
-  Future<void> printAllSharedPreferences() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    print("Shared Preferences Data:");
-    for (String key in prefs.getKeys()) {
-      print("$key: ${prefs.get(key)}");
-    }
-  }
-
-  /// Saves the current elapsed time to shared preferences for persistence
-  Future<void> _saveElapsedTime() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('exercise_timer_elapsed_${widget.exercise.id}',
-        stopwatch.elapsedMilliseconds + offsetTimeMillis);
-  }
-
-  // Resets the cached timer to 0 and resets the stopwatch
-  Future<void> _resetCachedTimer() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt(
-        'exercise_timer_elapsed_${widget.exercise.id}', 0); // Reset cache
+    return ((milliseconds ~/ 1000) % 60).toString().padLeft(2, '0');
   }
 }

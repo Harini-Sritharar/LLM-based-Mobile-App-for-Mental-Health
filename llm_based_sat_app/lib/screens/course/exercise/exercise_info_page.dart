@@ -5,13 +5,11 @@ import 'package:llm_based_sat_app/screens/course/exercise/assessment_page.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
 import 'package:llm_based_sat_app/screens/course/exercise/exercise_page.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
+import 'package:llm_based_sat_app/utils/exercise_timer_manager.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import 'package:llm_based_sat_app/widgets/custom_button.dart';
-import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_timer.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/learning_tile.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/checkbox_tile.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../../data/cache_manager.dart';
 import '../../../firebase_helpers.dart';
 import '../../../models/firebase-exercise-uploader/interface/course_interface.dart';
@@ -409,28 +407,12 @@ class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
 
   // Returns elapsed time for given exercise then calls function to delete cached time.
   Future<String> getElapsedTime() async {
-    final prefs = await SharedPreferences.getInstance();
-    
-    // TODO
-    // // Delete cached time
-    // ExerciseTimer.deleteCachedTimer(widget.exercise.id);
-    
-    int time =
-        prefs.getInt('exercise_timer_elapsed_${widget.exercise.id}') ?? 0;
+    String elapsedTime = ExerciseTimerManager().getElapsedTimeFormatted();
 
-    if (_formatMinutes(time) == "00") {
-      return "Elapsed Time: ${_formatSeconds(time)} seconds";
-    }
-    return "Elapsed Time: ${_formatMinutes(time)} minutes ${_formatSeconds(time)} seconds";
-  }
+    // Reset the timer
+    ExerciseTimerManager().stopTimer();
+    ExerciseTimerManager().resetTimer();
 
-  String _formatMinutes(int milliseconds) {
-    final minutes = milliseconds ~/ 60000;
-    return minutes.toString().padLeft(2, '0');
-  }
-
-  String _formatSeconds(int milliseconds) {
-    final seconds = (milliseconds ~/ 1000) % 60;
-    return seconds.toString().padLeft(2, '0');
+    return elapsedTime;
   }
 }
