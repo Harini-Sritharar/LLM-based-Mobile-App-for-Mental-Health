@@ -62,7 +62,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
             _buildSectionTitle('Session Info'),
             SizedBox(height: 8),
             ExerciseDescription(
-                description: 'Sessions: ${getExerciseNumber()} completed out of ${widget.chapter.exercises.length}'),
+                description: 'Sessions: ${getSessions(widget.exercise, widget.course) + 1} completed out of ${widget.chapter.exercises.length}'),
             SizedBox(height: 8),
             ExerciseDescription(description: widget.elapsedTime),
             SizedBox(height: 20),

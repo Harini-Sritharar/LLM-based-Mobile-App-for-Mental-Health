@@ -111,9 +111,7 @@ class CourseInfo extends StatelessWidget {
           letter: exercise.id.substring(exercise.id.length - 1),
           title: exercise.exerciseTitle,
           practised: getSessions(exercise, course),
-          totalSessions: exercise.totalSessions != ""
-              ? int.parse(exercise.totalSessions)
-              : 100, // 100 is default value ... Update database to ensure all values are filled
+          totalSessions: exercise.totalSessions,
           onButtonPress: (BuildContext context) {
             Navigator.push(
               context,
@@ -156,7 +154,8 @@ class CourseInfo extends StatelessWidget {
     }
   }
 
-  getStepsPracticed(Exercise exercise) {
+  /* Function to return the number of sessions completed for given exercise */
+  getSessionsPracticed(Exercise exercise) {
     if (CacheManager.getValue(course.id) == null) {
       return 0;
     }
@@ -164,11 +163,7 @@ class CourseInfo extends StatelessWidget {
     List<ChapterExerciseStep> courseProgress = CacheManager.getValue(course.id);
     for (final progress in courseProgress) {
       if (progress.exercise.trim() == exercise.id.trim()) {
-        if (progress.step.endsWith("Final")) {
-          return int.parse(exercise.totalSessions);
-        } else {
-          return int.parse(progress.step.substring(progress.step.length - 1));
-        }
+        return int.parse(progress.session);
       }
     }
     return 0;
@@ -187,9 +182,9 @@ class CourseInfo extends StatelessWidget {
     // Check to see if all exercises completed
     for (final exercise in previous_chapter.exercises) {
       print(
-          "Exercise: ${exercise.id}   ${getStepsPracticed(exercise)}/${exercise.totalSessions}");
-      if (getStepsPracticed(exercise).toString() !=
-          exercise.totalSessions.trim()) {
+          "Exercise: ${exercise.id}   ${getSessionsPracticed(exercise)}/${exercise.totalSessions}");
+      if (getSessionsPracticed(exercise) <
+          exercise.totalSessions) {
         // Exercise is not completed
         return true;
       }
