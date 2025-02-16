@@ -8,7 +8,6 @@ import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/utils/exercise_timer_manager.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import 'package:llm_based_sat_app/widgets/custom_button.dart';
-import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_timer.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/learning_tile.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/checkbox_tile.dart';
 import '../../../data/cache_manager.dart';
