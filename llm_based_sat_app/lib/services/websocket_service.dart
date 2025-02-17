@@ -14,7 +14,7 @@ class WebSocketService {
     if (isConnected) return;
 
     final wsUrl = Uri.parse(
-        'ws://localhost:8000/ws/$userID'); // Backend URL, change this to the actual host one eventually.
+        'ws://chatbot-app-128555328235.europe-central2.run.app/ws/$userID'); // Backend URL, change this to the actual host one eventually.
     _channel = WebSocketChannel.connect(wsUrl);
 
     _channel!.stream.listen(
