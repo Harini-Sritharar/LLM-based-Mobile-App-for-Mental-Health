@@ -159,8 +159,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
       value: value,
       onChanged: onChanged,
       activeColor: AppColours.brandBlueMinusThree, // Thumb color when active.
-      activeTrackColor:
-          AppColours.brandBlueMain, // Track color when active.
+      activeTrackColor: AppColours.brandBlueMain, // Track color when active.
       inactiveThumbColor: const Color(0xFFB0BEC5), // Thumb color when inactive.
       inactiveTrackColor: const Color(0xFFE0E0E0), // Track color when inactive.
     );

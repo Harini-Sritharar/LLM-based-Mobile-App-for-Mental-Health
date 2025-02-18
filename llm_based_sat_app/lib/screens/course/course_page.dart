@@ -61,7 +61,6 @@ class CoursePage extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 24),
-
               Expanded(
                 // Using Expanded to take remaining space for the scrollable list
                 child: SingleChildScrollView(

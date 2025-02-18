@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:llm_based_sat_app/screens/language_page.dart';
 import 'package:llm_based_sat_app/screens/notifications_settings_page.dart';
-import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 
 import '../widgets/main_layout.dart';

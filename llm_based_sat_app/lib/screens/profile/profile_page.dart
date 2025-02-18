@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:llm_based_sat_app/firebase_helpers.dart';
-import 'package:llm_based_sat_app/main.dart';
-import 'package:llm_based_sat_app/screens/payment_option_page.dart';
+import 'package:llm_based_sat_app/firebase/firebase_helpers.dart';
+import 'package:llm_based_sat_app/screens/payments/payment_option_page.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
-import '../widgets/main_layout.dart';
+import '../../widgets/main_layout.dart';
 import 'edit_profile.dart';
-import 'manage_plan_page.dart';
-import 'settings_page.dart';
-import 'ultimate_goal_page.dart';
+import '../payments/manage_plan_page.dart';
+import '../settings_page.dart';
+import '../ultimate_goal_page.dart';
 import 'childhood_photos_page.dart';
-import '../widgets/custom_app_bar.dart';
-import '../theme/app_colours.dart';
-import '../widgets/menu_item.dart';
+import '../../widgets/custom_app_bar.dart';
+import '../../theme/app_colours.dart';
+import '../../widgets/menu_item.dart';
 import 'package:provider/provider.dart';
-import '../profile_notifier.dart';
+import '../../utils/profile_notifier.dart';
 
 class ProfilePage extends StatelessWidget {
   final Function(int) onItemTapped;

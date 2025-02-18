@@ -6,7 +6,7 @@ import 'package:llm_based_sat_app/widgets/custom_button.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/learning_tile.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/checkbox_tile.dart';
 
-import '../models/firebase-exercise-uploader/interface/exercise_interface.dart';
+import '../../../models/firebase-exercise-uploader/interface/exercise_interface.dart';
 
 class ExerciseInfoPage extends StatelessWidget {
   final Exercise exercise;

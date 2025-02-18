@@ -3,18 +3,18 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/firebase_messaging_service.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:llm_based_sat_app/consts.dart';
-import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
+import 'package:llm_based_sat_app/chatbot/chatprovider.dart';
+import 'package:llm_based_sat_app/screens/home_page.dart';
+import 'package:llm_based_sat_app/utils/consts.dart';
 import 'package:llm_based_sat_app/screens/course/courses.dart';
+import '/screens/auth/sign_in_page.dart';
 import '../screens/community_page.dart';
 import '../screens/calendar_page.dart';
-import '../screens/home_page.dart';
-import '../screens/score_page.dart';
+import 'screens/score/score_page.dart';
 import '../widgets/bottom_nav_bar.dart';
-import 'firebase_options.dart';
+import 'firebase/firebase_options.dart';
 import 'package:provider/provider.dart';
-import 'profile_notifier.dart';
-
+import 'utils/profile_notifier.dart';
 
 Future<void> _backgroundHandler(RemoteMessage message) async {
   print('Handling a background message: ${message.messageId}');
@@ -38,8 +38,11 @@ void main() async {
   final firebaseMessagingService = FirebaseMessagingService();
   await firebaseMessagingService.initialize();
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => ProfileNotifier(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ProfileNotifier()),
+        ChangeNotifierProvider(create: (context) => ChatProvider()),
+      ],
       child: MyApp(),
     ),
   );
@@ -93,7 +96,6 @@ class _MainScreenState extends State<MainScreen> {
     _selectedIndex = widget.initialIndex;
   }
 
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -105,6 +107,7 @@ class _MainScreenState extends State<MainScreen> {
     final List<Widget> pages = [
       CommunityPage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
       CalendarPage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
+      // QuestionnaireAssessmentsPage(),
       HomePage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
       ScorePage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
       Courses(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
