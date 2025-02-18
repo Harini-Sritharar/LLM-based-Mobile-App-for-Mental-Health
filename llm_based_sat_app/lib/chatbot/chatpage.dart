@@ -109,7 +109,10 @@ class ChatpageState extends State<Chatpage> {
                                     )
                                     // borderRadius: BorderRadius.circular(10),
                                     ),
-                                child: Text(message.data)),
+                                child: Text(
+                                  message.data,
+                                  style: TextStyle(color: Colors.white),
+                                )),
                           );
                         });
                   }),
