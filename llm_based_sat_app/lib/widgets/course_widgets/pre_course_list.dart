@@ -7,8 +7,7 @@ import 'package:llm_based_sat_app/widgets/custom_button.dart';
 
 import '../../models/firebase-exercise-uploader/interface/course_interface.dart';
 
-// TODO
-// Provide option to upload childhood photo and link to watch introductory video
+// If watchedIntroductoryVideo is false or prerequisite is there or childhood photo is not uploaded then user cannot proceed to start exercise
 class PreCourseList extends StatelessWidget {
   // Accepts three functions for each of the list items
   final void Function(BuildContext) onStartCoursePressed;
