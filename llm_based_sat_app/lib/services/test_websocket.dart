@@ -1,10 +1,15 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:path/path.dart';
+import 'package:flutter/widgets.dart';
+
 import 'websocket_service.dart'; // Import your WebSocket service
 
 void main() {
   String userID = "1234"; // Replace with a valid userID
-  webSocketService.connect(userID);
+
+  BuildContext bc = WidgetsBinding.instance!.renderViewElement!; // Initialize with a valid context
+  webSocketService.connect(userID, bc);
 
   // Listen for incoming messages
   webSocketService.messageStream.listen(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/chatbot/chatprovider.dart';
 import 'package:llm_based_sat_app/firebase/firebase_helpers.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
+import 'package:llm_based_sat_app/services/websocket_service.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:provider/provider.dart';
 
@@ -17,6 +18,13 @@ class ChatpageState extends State<Chatpage> {
   void initState() {
     super.initState();
     _loadName();
+    webSocketService.connect(user!.uid, context);
+  }
+
+  @override
+  void dispose() {
+    webSocketService.close();
+    super.dispose();
   }
 
   Future<void> _loadName() async {
@@ -31,6 +39,7 @@ class ChatpageState extends State<Chatpage> {
     if (_textController.text.isNotEmpty) {
       final chatProvider = context.read<ChatProvider>();
       chatProvider.sendMessage(_textController.text);
+      webSocketService.sendMessage(_textController.text);
       _textController.clear();
     }
   }
