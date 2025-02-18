@@ -25,6 +25,20 @@ class WebSocketService {
       (message) {
         // Notify the ChatProvider about the new message
         final chatProvider = Provider.of<ChatProvider>(context, listen: false);
+        // extract out anything we don't want to show the user
+        try {
+          // filters out the {"token_used": 0} messages
+          final decodedMessage = jsonDecode(message);
+          if (decodedMessage is Map && decodedMessage.containsKey("tokens_used")) {
+            // handle tokens_used case
+            return;
+          }
+        } catch (e) {
+          // If message is not a JSON, proceed with the original message
+          // replacing the leading number and dashes used in the chatbot response
+            message = message.replaceAll(RegExp(r'\\n'), '\n');
+            message = message.replaceFirst(RegExp(r'^\d+-\s*'), '');
+        }
         chatProvider.receiveMessage(message);
         _messageController.add(message);
       },

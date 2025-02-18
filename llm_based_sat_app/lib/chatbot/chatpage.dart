@@ -48,7 +48,7 @@ class ChatpageState extends State<Chatpage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Center(child: Text('Hi $name, how can I help?')),
+          title: Center(child: Text('Hi $name')),
         ),
         body: SafeArea(
           child: Container(

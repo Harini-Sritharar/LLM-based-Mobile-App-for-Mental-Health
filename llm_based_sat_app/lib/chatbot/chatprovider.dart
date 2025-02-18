@@ -13,8 +13,7 @@ class ChatProvider with ChangeNotifier {
   final List<Message> _messages;
   bool _isBotTyping = false; // represents whether the bot is fetching a reply or not
 
-  // initialise the chat with a default welcome message
-  ChatProvider() : _messages = [Message('Hello, how can I help you?', false)];
+  ChatProvider() : _messages = [];
 
   List<Message> get messages => _messages;
   bool get isBotTyping => _isBotTyping;
