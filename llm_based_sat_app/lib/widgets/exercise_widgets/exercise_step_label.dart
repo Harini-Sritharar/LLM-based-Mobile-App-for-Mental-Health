@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/theme/app_colours.dart';
 
 class ExerciseStepLabel extends StatelessWidget {
   final String step;
@@ -9,7 +10,7 @@ class ExerciseStepLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       step,
-      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.normal, color: Color(0xFF062240)),
+      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.normal, color: AppColours.brandBluePlusThree),
     );
   }
 }

@@ -1,0 +1,296 @@
+{
+    "Self-Attachment_1_A_1": {
+        "Step_title": "Step 1",
+        "Description": "Look at your happy photo below. Recall positive childhood memories.",
+        "Additional Details":"",
+        "Footer_text": "Leave and lose your progress. X"
+    },
+    "Self-Attachment_1_A_2": {
+        "Step_title": "Step 2",
+        "Description": "Look at your unhappy photo. Recall negative childhood memories.",
+        "Additional Details":"",
+        "Footer_text": "Leave and lose your progress. X"
+    },
+    "Self-Attachment_1_A_3": {
+        "Step_title": "Step 3",
+        "Description": "Recall early relationships in the family.",
+        "Additional Details":"",
+        "Footer_text": "Leave and lose your progress. X"
+    },
+    "Self-Attachment_1_A_Final": {
+        "Step_title": "Congratulations",
+        "Description": "You successfully completed Exercise A. You can now move on to the next exercise or back to the course page.",
+        "Assessment_questions": [
+            "(A) Are you feeling better than before practising the exercise?",
+            "(B) How helpful was this exercises?",
+            "(C) Rate this exercise."
+        ]
+    },
+    "Self-Attachment_1_B_1": {
+        "Step_title": "Step 1",
+        "Description": "Look at your happy photo. Close your eyes. Imagine the child in a happy state.",
+        "Additional Details":"",
+        "Footer_text": "Leave and lose your progress. X"
+    },
+    "Self-Attachment_1_B_2": {
+        "Step_title": "Step 2",
+        "Description": "With your eyes closed, imagine that the child is near you.",
+        "Additional Details":"",
+        "Footer_text": "Leave and lose your progress. X"
+    },
+    "Self-Attachment_1_B_3": {
+        "Step_title": "Step 3",
+        "Description": "Now imagine you are embracing the child.",
+        "Additional Details":"",
+        "Footer_text": "Leave and lose your progress. X"
+    },
+    "Self-Attachment_1_B_4": {
+        "Step_title": "Step 4",
+        "Description": "Now imagine you are playing with the child, e.g. a game that you played as a child.",
+        "Additional Details":"",
+        "Footer_text": "Leave and lose your progress. X"
+    },
+    "Self-Attachment_1_B_5": {
+        "Step_title": "Step 5",
+        "Description": "Now imagine you are dancing with the child.",
+        "Additional Details":"",
+        "Footer_text": "Leave and lose your progress. X"
+    },
+    "Self-Attachment_1_B_Final": {
+        "Step_title": "Congratulations",
+        "Description": "You successfully completed Exercise B. You can now move on to the next exercise or back to the course page.",
+        "Assessment_questions": [
+            "(A) Are you feeling better than before practising the exercise?",
+            "(B) How helpful was this exercises?",
+            "(C) Rate this exercise."
+        ]
+    },
+    "Self-Attachment_1_C_1": {
+        "Step_title": "Step 1",
+        "Description": "Look at your unhappy photo. Close your eyes. Imagine the child in an unhappy state.",
+        "Additional Details":"",
+        "Footer_text": "Leave and lose your progress. X"
+    },
+    "Self-Attachment_1_C_2": {
+        "Step_title": "Step 2",
+        "Description": "With your eyes closed, imagine that the child is near you.",
+        "Additional Details":"",
+        "Footer_text": "Leave and lose your progress. X"
+    },
+    "Self-Attachment_1_C_3": {
+        "Step_title": "Step 3",
+        "Description": "Now imagine you are embracing and consoling the child.",
+        "Additional Details":"",
+        "Footer_text": "Leave and lose your progress. X"
+    },
+    "Self-Attachment_1_C_Final": {
+        "Step_title": "Congratulations",
+        "Description": "You successfully completed Exercise C. You can now move on to the next exercise or back to the course page.",
+        "Assessment_questions": [
+            "(A) Are you feeling better than before practising the exercise?",
+            "(B) How helpful was this exercises?",
+            "(C) Rate this exercise."
+        ]
+    },
+    "Self-Attachment_2_D_1": {
+        "Step_title": "Step 1",
+        "Description": "While looking at the happy photo/avatar, sing the song, as a way to establish a deep emotional bond with the child in your mind.",
+        "Additional Details":"",
+        "Footer_text": "Leave and lose your progress. X"
+    },
+    "Self-Attachment_2_D_2": {
+        "Step_title": "Step 2",
+        "Description": "Start quietly; then, over time, allow your voice to become louder while using more of your body (e.g. shaking your shoulders, hands, and lifting your eyebrows up and down).",
+        "Additional Details":"",
+        "Footer_text": "Leave and lose your progress. X"
+    },
+    "Self-Attachment_2_D_3": {
+        "Step_title": "Step 3",
+        "Description": "Imagine that in this way, like a parent, you are having a loving, passionate dialogue and are joyfully dancing and playing with the child.",
+        "Additional Details":"",
+        "Footer_text": "Leave and lose your progress. X"
+    },
+    "Self-Attachment_2_D_Final": {
+        "Step_title": "Congratulations",
+        "Description": "You successfully completed Exercise D. You can now move on to the next exercise or back to the course page.",
+        "Assessment_questions": [
+            "(A) Are you feeling better than before practising the exercise?",
+            "(B) How helpful was this exercises?",
+            "(C) Rate this exercise."
+        ]
+    },
+    "Self-Attachment_2_E_1": {
+        "Step_title": "Step 1",
+        "Description": "While genuinely smiling at the happy photo, speak out the selected sentence loudly and passionately while looking at your childhood photo or avatar.",
+        "Additional Details":"",
+        "Footer_text": "Leave and lose your progress. X"
+    },
+    "Self-Attachment_2_E_Final": {
+        "Step_title": "Congratulations",
+        "Description": "You successfully completed Exercise E. You can now move on to the next exercise or back to the course page.",
+        "Assessment_questions": [
+            "(A) Are you feeling better than before practising the exercise?",
+            "(B) How helpful was this exercises?",
+            "(C) Rate this exercise."
+        ]
+    },
+    "Self-Attachment_2_F_1": {
+        "Step_title": "Step 1",
+        "Description": "While genuinely smiling at the happy photo, speak out the selected sentence loudly and passionately while looking at your childhood photo or avatar.",
+        "Additional Details":"",
+        "Footer_text": "Leave and lose your progress. X"
+    },
+    "Self-Attachment_2_F_Final": {
+        "Step_title": "Congratulations",
+        "Description": "You, as your adult self, begin with reading your pledge silently. Then, you confidently make your pledge to the child out loud.",
+        "Assessment_questions": [
+            "(A) Are you feeling better than before practising the exercise?",
+            "(B) How helpful was this exercises?",
+            "(C) Rate this exercise."
+        ]
+    },
+    "Self-Attachment_3_G_1": {
+        "Step_title": "Step 1",
+        "Description": "By looking at the picture of a house with some derelict parts, imagine that this is your emotional world. Think that renovating the house you are improving your emotional self",
+        "Additional Details":"",
+        "Footer_text": "Leave and lose your progress. X"
+    },
+    "Self-Attachment_3_G_2": {
+        "Step_title": "Step 2",
+        "Description": "Now, instead of the old derelict house, you will build a new house by click on the different derelict parts of the house to fix them. Your new magnificent house has strong pillars and structure withstanding any rough weather and disaster. The rooms of your new home and its garden are bright and colourful.",
+        "Additional Details":"",
+        "Footer_text": "Leave and lose your progress. X"
+    },
+    "Self-Attachment_3_G_3": {
+        "Step_title": "Step 3",
+        "Description": "However, notice the unrestored basement/cellar of your new house. This part of the house contains your negative emotions. When suffering negative emotions, imagine that your child is trapped in the basement. Imagine you as the adult invite your child to leave the cellar by opening the door. Imagine that the child walks out and enters the bright rooms, and you embrace your child in reunion.",
+        "Additional Details":"",
+        "Footer_text": "Leave and lose your progress. X"
+    },
+    "Self-Attachment_3_G_Final": {
+        "Step_title": "Congratulations",
+        "Description": "You successfully completed Exercise G. You can now move on to the next exercise or back to the course page.",
+        "Assessment_questions": [
+            "(A) Are you feeling better than before practising the exercise?",
+            "(B) How helpful was this exercises?",
+            "(C) Rate this exercise."
+        ]
+    },
+    "Self-Attachment_3_H_1": {
+        "Step_title": "Step 1",
+        "Description": "Say your chosen phrase slowly, out loud at least 5 times as you look at the happy photo.",
+        "Additional Details":"",
+        "Footer_text": "Leave and lose your progress. X"
+    },
+    "Self-Attachment_3_H_2": {
+        "Step_title": "Step 2",
+        "Description": "Then sing your favourite chosen love song at least 5 times. As previously, increase your volume and begin to use your whole body.",
+        "Additional Details":"",
+        "Footer_text": "Leave and lose your progress. X"
+    },
+    "Self-Attachment_3_H_Final": {
+        "Step_title": "Congratulations",
+        "Description": "You successfully completed Exercise H. You can now move on to the next exercise or back to the course page.",
+        "Assessment_questions": [
+            "(A) Are you feeling better than before practising the exercise?",
+            "(B) How helpful was this exercises?",
+            "(C) Rate this exercise."
+        ]
+    },
+    "Self-Attachment_3_I_1": {
+        "Step_title": "Step 1",
+        "Description": "While looking at yourself through the front camera, imagine your image to be that of the child, then begin to loudly sing your previously chosen song. As previously, increase your volume and begin to use your whole body. [twice now]",
+        "Additional Details":"",
+        "Footer_text": "Leave and lose your progress. X"
+    },
+    "Self-Attachment_3_I_Final": {
+        "Step_title": "Congratulations",
+        "Description": "You successfully completed Exercise I. You can now move on to the next exercise or back to the course page.",
+        "Assessment_questions": [
+            "(A) Are you feeling better than before practising the exercise?",
+            "(B) How helpful was this exercises?",
+            "(C) Rate this exercise."
+        ]
+    },
+    "Self-Attachment_4_J_1": {
+        "Step_title": "Step 1",
+        "Description": "Go to your planned visit in Nature. Spend at least 5 minutes admiring a tree, attempting to appreciate its real beauty as you have never previously experienced.",
+        "Additional Details":"",
+        "Footer_text": "Leave and lose your progress. X"
+    },
+    "Self-Attachment_4_J_2": {
+        "Step_title": "Step 2",
+        "Description": "Repeat this process, including with other aspects of nature (e.g. sky, stars, plants, birds, rivers, sea, your favourite animal), until you feel you have developed an attachment to nature that helps regulate your emotions.",
+        "Additional Details":"",
+        "Footer_text": "Leave and lose your progress. X"
+    },
+    "Self-Attachment_4_J_Final": {
+        "Step_title": "Congratulations",
+        "Description": "You successfully completed Exercise J. You can now move on to the next exercise or back to the course page.",
+        "Assessment_questions": [
+            "(A) Are you feeling better than before practising the exercise?",
+            "(B) How helpful was this exercises?",
+            "(C) Rate this exercise."
+        ]
+    },
+    "Self-Attachment_4_K_1": {
+        "Step_title": "Step 1",
+        "Description": "Unlock your phone and sing your favourite jolly/love song as soon as you see your childhood image.",
+        "Additional Details":"",
+        "Footer_text": "Leave and lose your progress. X"
+    },
+    "Self-Attachment_4_K_Final": {
+        "Step_title": "Congratulations",
+        "Description": "You successfully completed Exercise K. You can now move on to the next exercise or back to the course page.",
+        "Assessment_questions": [
+            "(A) Are you feeling better than before practising the exercise?",
+            "(B) How helpful was this exercises?",
+            "(C) Rate this exercise."
+        ]
+    },
+    "Attachment_1_A_1": {
+        "Step_title": "Step 1",
+        "Description": "Try to project and partially/vaguely imagine your childhood photo expanded on rectangular objects such as windows and doors.",
+        "Additional Details":"",
+        "Footer_text": "Leave and lose your progress. X"
+    },
+    "Attachment_1_A_Final": {
+        "Step_title": "Congratulations",
+        "Description": "You successfully completed Exercise A. You can now move on to the next exercise or back to the course page.",
+        "Assessment_questions": [
+            "(A) Are you feeling better than before practising the exercise?",
+            "(B) How helpful was this exercises?",
+            "(C) Rate this exercise."
+        ]
+    },
+    "Attachment_1_B_1": {
+        "Step_title": "Step 1",
+        "Description": "Try to project and partially/vaguely imagine your childhood photo expanded on any object in your view, potentially on all natural and inanimate objects., e.g., trees, clouds.",
+        "Additional Details":"",
+        "Footer_text": "Leave and lose your progress. X"
+    },
+    "Attachment_1_B_Final": {
+        "Step_title": "Congratulations",
+        "Description": "You successfully completed Exercise B. You can now move on to the next exercise or back to the course page.",
+        "Assessment_questions": [
+            "(A) Are you feeling better than before practising the exercise?",
+            "(B) How helpful was this exercises?",
+            "(C) Rate this exercise."
+        ]
+    },
+    "Attachment_1_C_1": {
+        "Step_title": "Step 1",
+        "Description": "Imagine the favourite childhood photo in multiple copies on objects all around you.",
+        "Additional Details":"",
+        "Footer_text": "Leave and lose your progress. X"
+    },
+    "Attachment_1_C_Final": {
+        "Step_title": "Congratulations",
+        "Description": "You successfully completed Exercise C. You can now move on to the next exercise or back to the course page.",
+        "Assessment_questions": [
+            "(A) Are you feeling better than before practising the exercise?",
+            "(B) How helpful was this exercises?",
+            "(C) Rate this exercise."
+        ]
+    }
+}

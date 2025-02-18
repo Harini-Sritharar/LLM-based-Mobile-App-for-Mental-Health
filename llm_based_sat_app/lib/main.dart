@@ -1,26 +1,17 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:llm_based_sat_app/consts.dart';
-import 'package:llm_based_sat_app/screens/personal_profile_page.dart';
-import 'package:llm_based_sat_app/screens/auth/sign_up_page.dart';
-import 'package:llm_based_sat_app/screens/contact_details_page.dart';
-import 'package:llm_based_sat_app/screens/personal_info_page.dart';
-import 'package:llm_based_sat_app/theme/app_colours.dart';
-import 'package:llm_based_sat_app/widgets/profile_widgets/image_picker.dart';
+import 'package:llm_based_sat_app/screens/home_page.dart';
+import 'package:llm_based_sat_app/utils/consts.dart';
 import 'package:llm_based_sat_app/screens/course/courses.dart';
-import 'package:llm_based_sat_app/firebase_helpers.dart';
-import 'package:llm_based_sat_app/screens/childhood_photos_page.dart';
 import '/screens/auth/sign_in_page.dart';
 import '../screens/community_page.dart';
 import '../screens/calendar_page.dart';
-import '../screens/home_page.dart';
-import '../screens/score_page.dart';
+import 'screens/score/score_page.dart';
 import '../widgets/bottom_nav_bar.dart';
-import 'firebase_options.dart';
+import 'firebase/firebase_options.dart';
 import 'package:provider/provider.dart';
-import 'profile_notifier.dart';
-
+import 'utils/profile_notifier.dart';
 
 void main() async {
   await _setup();
@@ -60,6 +51,7 @@ class MyApp extends StatelessWidget {
       home: SignInPage(),
       // home: UploadProfilePicturePage(onItemTapped: (x) => {}, selectedIndex: 0,) // for local testing
       // home:ImagePickerWidget()
+      // home: Courses(onItemTapped: (x) => {}, selectedIndex: 0)
     );
   }
 }
@@ -83,7 +75,6 @@ class _MainScreenState extends State<MainScreen> {
     _selectedIndex = widget.initialIndex;
   }
 
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -95,6 +86,7 @@ class _MainScreenState extends State<MainScreen> {
     final List<Widget> pages = [
       CommunityPage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
       CalendarPage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
+      // QuestionnaireAssessmentsPage(),
       HomePage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
       ScorePage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
       Courses(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),

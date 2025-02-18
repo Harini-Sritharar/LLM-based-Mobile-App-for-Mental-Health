@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/theme/app_colours.dart';
 
 class CourseTypeRating extends StatelessWidget {
   final String courseType;
@@ -18,7 +19,7 @@ class CourseTypeRating extends StatelessWidget {
           courseType,
           style: const TextStyle(
             fontSize: 14,
-            color: Color(0xFF8C7F1C),
+            color: AppColours.supportingYellowMain,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -29,7 +30,7 @@ class CourseTypeRating extends StatelessWidget {
               '$rating',
               style: const TextStyle(
                 fontSize: 14,
-                color: Color(0xFF326CA6),
+                color: AppColours.brandBlueMinusOne,
                 fontWeight: FontWeight.w500,
               ),
             ),

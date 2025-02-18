@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart'; // For handling SVG images
-import 'package:llm_based_sat_app/screens/contact_details_page.dart';
-import 'package:llm_based_sat_app/screens/personal_info_page.dart'; // Importing PersonalInfoPage screen
-import 'package:llm_based_sat_app/screens/upload_profile_picture_page.dart';
+// import 'package:flutter_svg/flutter_svg.dart'; // For handling SVG images
+import 'package:llm_based_sat_app/screens/profile/contact_details_page.dart';
+import 'package:llm_based_sat_app/screens/profile/personal_info_page.dart'; // Importing PersonalInfoPage screen
+import 'package:llm_based_sat_app/screens/profile/upload_profile_picture_page.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart'; // Custom theme colors
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart'; // Custom AppBar widget
-import '../widgets/custom_button.dart'; // Custom button widget
-import '../widgets/main_layout.dart'; // Main layout widget
-import '../widgets/menu_item.dart'; // Reusable menu item widget
+import '../../widgets/custom_button.dart'; // Custom button widget
+import '../../widgets/main_layout.dart'; // Main layout widget
+import '../../widgets/menu_item.dart'; // Reusable menu item widget
 
 /// The `EditProfilePage` is a stateless widget that provides users with options
 /// to edit their personal profile details. It includes navigation to specific
@@ -69,9 +69,7 @@ class EditProfilePage extends StatelessWidget {
               const Text(
                 "Edit your Personal Profile",
                 style: TextStyle(
-                  fontSize: 15,
-                  color: AppColours.primaryGreyTextColor,
-                ),
+                    fontSize: 15, color: AppColours.neutralGreyMinusOne),
               ),
 
               const SizedBox(height: 20), // Vertical spacing before menu items
@@ -79,7 +77,7 @@ class EditProfilePage extends StatelessWidget {
               // Menu item for navigating to the Personal Info page
               MenuItem(
                 title: "Personal Info",
-                color: AppColours.secondaryBlueTextColor,
+                color: AppColours.brandBluePlusTwo,
                 onTap: () {
                   // Navigation to PersonalInfoPage
                   Navigator.push(
@@ -97,7 +95,7 @@ class EditProfilePage extends StatelessWidget {
               // Menu item for navigating to Contact Details
               MenuItem(
                 title: "Contact Details",
-                color: AppColours.secondaryBlueTextColor,
+                color: AppColours.brandBluePlusTwo,
                 onTap: () {
                   Navigator.push(
                     context,
@@ -113,7 +111,7 @@ class EditProfilePage extends StatelessWidget {
               // Menu item for navigating to Profile Picture settings
               MenuItem(
                 title: "Profile Picture",
-                color: AppColours.secondaryBlueTextColor,
+                color: AppColours.brandBluePlusTwo,
                 onTap: () {
                   Navigator.push(
                     context,

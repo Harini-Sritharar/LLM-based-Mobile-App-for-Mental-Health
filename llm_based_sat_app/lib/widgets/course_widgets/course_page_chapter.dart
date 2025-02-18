@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:llm_based_sat_app/models/chapter_interface.dart';
+import 'package:llm_based_sat_app/theme/app_colours.dart';
 
 /* This widget displays a course chapter with its associated exercises.
 
@@ -35,7 +36,7 @@ class CoursePageChapter extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
-                color: Color(0xFF062240),
+                color: AppColours.brandBluePlusThree,
               ),
             ),
             Text(
@@ -43,7 +44,7 @@ class CoursePageChapter extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
-                color: Color(0xFF1C548C),
+                color: AppColours.brandBlueMain,
               ),
             ),
           ],
@@ -70,8 +71,9 @@ class CoursePageChapter extends StatelessWidget {
                       height: 50,
                       decoration: BoxDecoration(
                         color: chapter.isLocked
-                            ? const Color(0xFFB9C0C7)
-                            : const Color(0xFFCEDFF2), // Background color
+                            ? AppColours.neutralGreyMinusThree
+                            : AppColours
+                                .brandBlueMinusThree, // Background color
                         borderRadius: BorderRadius.circular(10),
                       ),
                       alignment: Alignment.center,
@@ -79,7 +81,7 @@ class CoursePageChapter extends StatelessWidget {
                         exercise.letter,
                         style: TextStyle(
                           color: chapter.isLocked
-                              ? const Color(0xFF495560)
+                              ? AppColours.neutralGreyMinusOne
                               : Colors.black,
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
@@ -94,8 +96,8 @@ class CoursePageChapter extends StatelessWidget {
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
                         color: chapter.isLocked
-                            ? Color(0xFF687078)
-                            : Color(0xFF191C1F),
+                            ? AppColours.neutralGreyMinusOne
+                            : AppColours.neutralGreyPlusThree,
                       ),
                     ),
                     Spacer(),
@@ -104,7 +106,7 @@ class CoursePageChapter extends StatelessWidget {
                         "${exercise.practised} / ${exercise.totalSessions}",
                         style: const TextStyle(
                           fontSize: 15,
-                          color: Color(0xFF293138),
+                          color: AppColours.neutralGreyPlusOne,
                         ),
                       ),
                     SizedBox(
@@ -121,13 +123,13 @@ class CoursePageChapter extends StatelessWidget {
                         !chapter.isLocked)
                       Icon(
                         Icons.chevron_right_outlined,
-                        color: Color(0xFF1C548C),
+                        color: AppColours.brandBlueMain,
                         size: 30,
                       ),
                     if (chapter.isLocked)
                       Icon(
                         Icons.lock_outline,
-                        color: Color(0xFF687078),
+                        color: AppColours.neutralGreyMinusOne,
                         size: 24,
                       ),
                   ],

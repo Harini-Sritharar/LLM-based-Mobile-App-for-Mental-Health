@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/theme/app_colours.dart';
 
 /* ExerciseBottomMessage is a widget that displays a cautionary message to the user.
 
@@ -19,7 +20,7 @@ class ExerciseBottomMessage extends StatelessWidget {
     return Center(
       child: Text(
         messageText,
-        style: const TextStyle(fontSize: 13, color: Color(0xFF8F959B)),
+        style: TextStyle(fontSize: 13, color: AppColours.neutralGreyMinusFour),
       ),
     );
   }

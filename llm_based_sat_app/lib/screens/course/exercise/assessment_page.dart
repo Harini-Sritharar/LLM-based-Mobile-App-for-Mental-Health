@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:llm_based_sat_app/screens/home_page.dart';
+import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/custom_button.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_reflectionBox.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_appBar.dart';
@@ -72,8 +72,8 @@ class _AssessmentPageState extends State<AssessmentPage> {
               onPress: () {
                 // Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
               },
-              backgroundColor: const Color(0xFFF2F9FF),
-              textColor: Color(0xFF1C548C),
+              backgroundColor: AppColours.brandBlueMinusFour,
+              textColor: AppColours.brandBlueMain,
             ),
             SizedBox(height: 30),
             ExerciseTimer()

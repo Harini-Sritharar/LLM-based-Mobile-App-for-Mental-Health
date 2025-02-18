@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
-import 'profile_page.dart';
 
 class HomePage extends StatelessWidget {
   final Function(int) onItemTapped;

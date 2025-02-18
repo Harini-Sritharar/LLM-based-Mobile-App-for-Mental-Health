@@ -3,11 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'dart:io';
-import '../screens/auth/sign_in_page.dart';
-import 'package:llm_based_sat_app/screens/personal_info_page.dart';
-import 'package:llm_based_sat_app/screens/personal_profile_page.dart';
+import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 
 class ChildhoodPhotosPage extends StatefulWidget {
@@ -143,7 +140,7 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: SingleChildScrollView(
           child: Column(
@@ -156,13 +153,13 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
               ),
               const Text(
                 "Childhood photos",
-                style: TextStyle(
-                    fontSize: 22, color: AppColours.secondaryBlueTextColor),
+                style:
+                    TextStyle(fontSize: 22, color: AppColours.brandBluePlusTwo),
               ),
               const Text(
                 "Add favourite and non-favourite Photos of your Childhood",
                 style: TextStyle(
-                    fontSize: 14, color: AppColours.primaryGreyTextColor),
+                    fontSize: 14, color: AppColours.neutralGreyMinusOne),
               ),
               const SizedBox(height: 20),
               _buildPhotoSection("Favourite photos", favouritePhotos,
@@ -192,7 +189,7 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
                     fontWeight: FontWeight.bold,
                     color: Colors.blueGrey)),
             IconButton(
-                icon: const Icon(Icons.add, color: Colors.blueGrey),
+                icon: const Icon(Icons.add, color: AppColours.brandBluePlusTwo),
                 onPressed: () => _pickImage(isFavourite)),
           ],
         ),
@@ -252,7 +249,7 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
         child: ElevatedButton(
           onPressed: isSaving ? null : _savePhotos,
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.blue,
+            backgroundColor: AppColours.brandBlueMain,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
           ),

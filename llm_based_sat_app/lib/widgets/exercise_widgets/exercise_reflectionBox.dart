@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/theme/app_colours.dart';
 
 class ExerciseReflectionBox extends StatelessWidget {
   final String hintText;
@@ -9,7 +10,7 @@ class ExerciseReflectionBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFFF4F9FF), // Light blue background
+        color: AppColours.brandBlueMinusFour, // Light blue background
         borderRadius: BorderRadius.circular(8),
       ),
       child: TextField(

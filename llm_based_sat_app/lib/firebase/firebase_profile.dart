@@ -1,4 +1,10 @@
 // TODO: will need to move all the firebase calls to one place perhaps?
+// TODO
+// For each user have a progress collection in database which defines which all courses/ exercises/steps they have gone till and the timer data as well.
+// TODO
+// Upload childhood photos already exists so perform a check to see if user has any photos uploaded for Pre-course-task.
+// Watch Introductory video - figure a way to show video to user ... maybe through youtube API? and track if user has seen it to display tick mark
+// Worry about cache after all tasks are done to ensure only 1 call is made to firebase.
 
 import 'dart:io';
 
@@ -22,8 +28,11 @@ Future<void> updatePersonalInfo(
   if (docSnapshot.exists) {
     // Preserve existing tier if user exists
     tier = (docSnapshot.data() as Map<String, dynamic>)['tier'] ?? "free";
-    favouritePhotos = (docSnapshot.data() as Map<String, dynamic>)['favouritePhotos'] ?? [];
-    nonfavouritePhotos = (docSnapshot.data() as Map<String, dynamic>)['nonfavouritePhotos'] ?? [];
+    favouritePhotos =
+        (docSnapshot.data() as Map<String, dynamic>)['favouritePhotos'] ?? [];
+    nonfavouritePhotos =
+        (docSnapshot.data() as Map<String, dynamic>)['nonfavouritePhotos'] ??
+            [];
   }
 
   await userDoc.set(
@@ -33,8 +42,8 @@ Future<void> updatePersonalInfo(
         'dob': dob,
         'gender': gender,
         'tier': tier,
-        'favouritePhotos' : favouritePhotos,
-        'nonfavouritePhotos' : nonfavouritePhotos
+        'favouritePhotos': favouritePhotos,
+        'nonfavouritePhotos': nonfavouritePhotos
       },
       SetOptions(
           merge: true)); // Merging ensures we don’t overwrite other fields

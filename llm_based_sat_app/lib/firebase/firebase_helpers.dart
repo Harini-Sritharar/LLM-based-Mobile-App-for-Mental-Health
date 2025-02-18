@@ -1,8 +1,9 @@
-import 'dart:io';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:path/path.dart' as path;
-import 'package:cloud_firestore/cloud_firestore.dart';
+import '../models/firebase-exercise-uploader/interface/chapter_interface.dart';
+import '../models/firebase-exercise-uploader/interface/course_interface.dart';
+import '../models/firebase-exercise-uploader/interface/exercise_interface.dart';
+import '../models/firebase-exercise-uploader/interface/final_step_interface.dart';
+import '../models/firebase-exercise-uploader/interface/step_interface.dart';
 
 Future<String> getName(String uid) async {
   try {
@@ -146,6 +147,119 @@ Future<String> getProfilePictureUrl(String uid) async {
     // Handle errors and return a default value
     print('Error fetching profile picture URL: $e');
     return 'Error Fetching Profile Picture';
+  }
+}
+
+/* Function to get all courses from firebase as a List of Courses */
+Future<List<Course>> getAllCourses() async {
+  try {
+    // Fetch all courses
+    final querySnapshot =
+        await FirebaseFirestore.instance.collection('Courses').get();
+
+    // Fetch chapters and exercises for each course
+    final List<Course> courses = [];
+
+    // Loop through each course document
+    for (var doc in querySnapshot.docs) {
+      // Convert course data
+      final course = Course.fromFirestore(doc.id, doc.data());
+
+      // Fetch chapters for this course
+      final chaptersSnapshot = await FirebaseFirestore.instance
+          .collection('Courses')
+          .doc(doc.id)
+          .collection('Chapters')
+          .get();
+
+      // List to store all chapters
+      final List<Chapter> chapters = [];
+
+      // Loop through each chapter document
+      for (var chapterDoc in chaptersSnapshot.docs) {
+        // Convert chapter data
+        final chapter = Chapter.fromFirestore(chapterDoc.id, chapterDoc.data());
+
+        // Fetch exercises for this chapter
+        final exercisesSnapshot = await FirebaseFirestore.instance
+            .collection('Courses')
+            .doc(doc.id)
+            .collection('Chapters')
+            .doc(chapterDoc.id)
+            .collection('Exercises')
+            .get();
+
+        // List to store all exercises
+        final List<Exercise> exercises = [];
+
+        // Loop through each exercise document
+        for (var exerciseDoc in exercisesSnapshot.docs) {
+          // Convert exercise data
+          final exercise =
+              Exercise.fromFirestore(exerciseDoc.id, exerciseDoc.data());
+
+          // Fetch steps for this exercise
+          final stepsSnapshot = await FirebaseFirestore.instance
+              .collection('Courses')
+              .doc(doc.id)
+              .collection('Chapters')
+              .doc(chapterDoc.id)
+              .collection('Exercises')
+              .doc(exerciseDoc.id)
+              .collection('Steps')
+              .get();
+
+          // List to store steps
+          final List<Step> exerciseSteps = [];
+          FinalStep? finalStep;
+
+          // Loop through each step document
+          for (var stepDoc in stepsSnapshot.docs) {
+            final stepData = stepDoc.data();
+            if (stepDoc.id.endsWith("Final")) {
+              finalStep = FinalStep.fromFirestore(stepDoc.id, stepData);
+            } else {
+              exerciseSteps.add(Step.fromFirestore(stepDoc.id, stepData));
+            }
+          }
+
+          // Attach steps and final step to exercise
+          final exerciseWithSteps = exercise.withStepsAndFinalStep(
+            exerciseSteps,
+            finalStep!,
+          );
+
+          // Add the exercise to the list
+          exercises.add(exerciseWithSteps);
+        }
+
+        // Attach exercises to chapter
+        final chapterWithExercises = chapter.withExercises(exercises);
+
+        // Add the chapter to the list
+        chapters.add(chapterWithExercises);
+      }
+
+      // Now that all chapters and exercises are fetched, add course to the list
+      courses.add(Course(
+        id: course.id,
+        title: course.title,
+        rating: course.rating,
+        duration: course.duration,
+        ratingCount: course.ratingCount,
+        imageUrl: course.imageUrl,
+        aim: course.aim,
+        subscription: course.subscription,
+        courseType: course.courseType,
+        prerequisites: course.prerequisites,
+        chapters: chapters,
+      ));
+    }
+
+    return courses;
+  } catch (e) {
+    print('Error fetching courses with chapters, exercises, and steps: $e');
+    return [];
   }
 }
 

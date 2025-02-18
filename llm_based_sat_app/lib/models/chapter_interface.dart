@@ -5,7 +5,6 @@ class ChapterInterface {
   final String chapterTitle;
   final List<ChapterExerciseInterface> exercises;
   final bool isLocked;
-  
 
   ChapterInterface({
     required this.chapterNumber,

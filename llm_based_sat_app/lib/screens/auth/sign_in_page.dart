@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '/firebase_auth_implementation/firebase_auth_services.dart';
+import 'package:flutter/material.dart';
+import '../../firebase/firebase_auth_services.dart';
 import '/main.dart';
 import '/screens/auth/sign_up_page.dart';
 import '/theme/app_colours.dart';
@@ -41,8 +41,7 @@ class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:
-          AppColours.backgroundColor, // Matches the white background
+      backgroundColor: AppColours.white, // Matches the white background
       body: Center(
         child: Form(
             key: _formKey,
@@ -113,7 +112,7 @@ class _SignInPageState extends State<SignInPage> {
                           child: const Text(
                             "SIGN UP",
                             style: TextStyle(
-                              color: AppColours.customBlue,
+                              color: AppColours.brandBlueMain,
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
                               decoration: TextDecoration.underline,
