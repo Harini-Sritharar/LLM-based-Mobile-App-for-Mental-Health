@@ -176,6 +176,10 @@ class Courses extends StatelessWidget {
           }
           CacheManager.setValue(course.id, progressList);
         }
+
+        // Update watched intro videos
+        final watchedIntroductoryVideo = await getIntroductoryVideoWatched(user!.uid, course.id);
+        CacheManager.setValue("${course.id}_introductory_video", watchedIntroductoryVideo);
       }
 
       // Generate CourseCard widgets for each course

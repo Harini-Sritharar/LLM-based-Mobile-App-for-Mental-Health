@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/data/cache_manager.dart';
 import 'package:video_player/video_player.dart';
 
+import '../firebase_helpers.dart';
+import '../models/firebase-exercise-uploader/interface/course_interface.dart';
+import '../screens/auth/sign_in_page.dart';
+
 class LocalVideoPlayer extends StatefulWidget {
-  const LocalVideoPlayer({Key? key}) : super(key: key);
+  final Course course;
+  const LocalVideoPlayer({Key? key, required this.course}) : super(key: key);
 
   @override
   _LocalVideoPlayerState createState() => _LocalVideoPlayerState();
@@ -26,8 +32,12 @@ class _LocalVideoPlayerState extends State<LocalVideoPlayer> {
         setState(() {
           _isLoading = false;
         });
-        _controller.setLooping(true); // Optional: Loop the video
+        _controller.setLooping(false); // Optional: Loop the video
         _controller.play(); // Optional: Auto-play the video
+
+        // Update cache and database to indicate intro video has been watched
+        CacheManager.setValue("${widget.course.id}_introductory_video", true);
+        updateWatchedIntroductoryVideo(user!.uid, widget.course.id, true);
       });
   }
 

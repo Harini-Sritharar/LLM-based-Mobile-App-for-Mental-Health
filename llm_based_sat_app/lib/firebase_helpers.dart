@@ -239,7 +239,74 @@ Future<void> updateUserCourseProgress(String uid, String courseId, String newCha
   }
 }
 
+/* Function to get if Introductory video is watched for given user and course */
+Future<bool> getIntroductoryVideoWatched(String uid, String courseId) async {
+  try {
+    // Reference to the user's course_progress subcollection
+    final collection = FirebaseFirestore.instance
+        .collection('Profile')
+        .doc(uid)
+        .collection('course_progress');
 
+    // Fetch all documents in the course_progress subcollection
+    final querySnapshot = await collection.get();
+
+    // Iterate through the documents to find the matching course by ID
+    for (final doc in querySnapshot.docs) {
+      if (doc.id.trim() == courseId.trim()) {
+        // Return the "Introductory_video_watched" attribute if found
+        bool introductoryVideoWatched = doc.data()['Introductory_video_watched'];
+        return introductoryVideoWatched; // Return the value if it exists
+      }
+    }
+
+    // Return null if no matching course is found
+    return false;
+  } catch (e) {
+    // Handle errors and print them
+    print('Error fetching course progress: $e');
+    return false;
+  }
+}
+
+/* Updates the 'Introductory_video_watched' parameter for a given user. */
+Future<void> updateWatchedIntroductoryVideo(String uid, String courseId, bool watchedVideo) async {
+  try {
+    // Reference to the user's course_progress subcollection
+    final collection = FirebaseFirestore.instance
+        .collection('Profile')
+        .doc(uid)
+        .collection('course_progress');
+
+    // Fetch the document for the given course ID
+    final docRef = collection.doc(courseId);
+
+    // Get the document snapshot
+    final docSnapshot = await docRef.get();
+
+    // Check if the document exists
+    if (docSnapshot.exists) {
+      // Update the document with the new valye
+      await docRef.update({
+        'Introductory_video_watched': watchedVideo,
+      });
+
+      print('Introductory_video_watched updated successfully');
+    } else {
+      // If the document doesn't exist, create a new document with the given courseId and Introductory_video_watched
+      print('Creating entry for new course ID');
+      
+      await docRef.set({
+        'Introductory_video_watched': watchedVideo, // Initialize with the new entry
+      });
+
+      print('New course entry created and Introductory_video_watched added');
+    }
+  } catch (e) {
+    // Handle errors and print them
+    print('Error updating Introductory_video_watched: $e');
+  }
+}
 
 /* Function to get all courses from firebase as a List of Courses */
 Future<List<Course>> getAllCourses() async {

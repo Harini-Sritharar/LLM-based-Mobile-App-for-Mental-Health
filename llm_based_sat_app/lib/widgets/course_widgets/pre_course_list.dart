@@ -5,6 +5,8 @@ import 'package:llm_based_sat_app/widgets/course_widgets/course_list_all_prerequ
 import 'package:llm_based_sat_app/widgets/course_widgets/empty_pre_requisite.dart';
 import 'package:llm_based_sat_app/widgets/custom_button.dart';
 
+import '../../models/firebase-exercise-uploader/interface/course_interface.dart';
+
 // If watchedIntroductoryVideo is false or prerequisite is there or childhood photo is not uploaded then user cannot proceed to start exercise
 // TODO
 // Provide option to upload childhood photo and link to watch introductory video
@@ -17,6 +19,7 @@ class PreCourseList extends StatelessWidget {
   final List<String> prerequisites;
   final bool watchedIntroductoryVideo;
   final bool childhoodPhotosUploaded;
+  final Course course;
 
   const PreCourseList({
     Key? key,
@@ -26,6 +29,7 @@ class PreCourseList extends StatelessWidget {
     required this.prerequisites,
     required this.watchedIntroductoryVideo,
     required this.childhoodPhotosUploaded,
+    required this.course,
   }) : super(key: key);
 
   @override
@@ -60,7 +64,7 @@ class PreCourseList extends StatelessWidget {
 
         // Watch Introductory Video
         GestureDetector(
-          onTap: () {},
+          onTap: () => onWatchIntroductoryVideoPressed(context),
           child: Padding(
               padding: const EdgeInsets.only(left: 16.0),
               child: Row(
