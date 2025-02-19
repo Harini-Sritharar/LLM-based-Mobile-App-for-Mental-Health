@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:llm_based_sat_app/firebase_helpers.dart';
+import 'package:llm_based_sat_app/firebase/firebase_helpers.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
 
 class CourseCard extends StatefulWidget {
@@ -71,7 +72,7 @@ class _CourseCardState extends State<CourseCard> {
             margin: const EdgeInsets.only(bottom: 16),
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: const Color(0xFFF4F9FF),
+              color: AppColours.brandBlueMinusFour,
               borderRadius: BorderRadius.circular(12),
               border: _isLocked ? Border.all(color: Colors.grey.shade400, width: 1.5) : null,
             ),
@@ -96,7 +97,7 @@ class _CourseCardState extends State<CourseCard> {
                         widget.courseType,
                         style: TextStyle(
                           fontSize: 14,
-                          color: _isLocked ? Colors.grey.shade600 : const Color(0xFF8C7F1C),
+                          color: _isLocked ? Colors.grey.shade600 : AppColours.supportingYellowMain,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -105,7 +106,7 @@ class _CourseCardState extends State<CourseCard> {
                         widget.courseTitle,
                         style: TextStyle(
                           fontSize: 18,
-                          color: _isLocked ? Colors.grey.shade700 : const Color(0xFF123659),
+                          color: _isLocked ? Colors.grey.shade700 : AppColours.brandBluePlusTwo,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -114,7 +115,7 @@ class _CourseCardState extends State<CourseCard> {
                         'Duration: ${widget.duration}',
                         style: TextStyle(
                           fontSize: 14,
-                          color: _isLocked ? Colors.grey.shade600 : const Color(0xFF32A666),
+                          color: _isLocked ? Colors.grey.shade600 : AppColours.supportingGreenMinusOne,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -124,7 +125,7 @@ class _CourseCardState extends State<CourseCard> {
                             '${widget.rating}',
                             style: TextStyle(
                               fontSize: 14,
-                              color: _isLocked ? Colors.grey.shade500 : const Color(0xFF326CA6),
+                              color: _isLocked ? Colors.grey.shade500 : AppColours.brandBlueMinusOne,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -135,7 +136,7 @@ class _CourseCardState extends State<CourseCard> {
                             '${widget.ratingsCount} ratings',
                             style: TextStyle(
                               fontSize: 14,
-                              color: _isLocked ? Colors.grey.shade500 : const Color(0xFF326CA6),
+                              color: _isLocked ? Colors.grey.shade500 : AppColours.brandBlueMinusOne,
                             ),
                           ),
                         ],

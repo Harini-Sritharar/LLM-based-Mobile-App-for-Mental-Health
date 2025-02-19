@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/theme/app_colours.dart';
 
 class ExerciseAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -11,7 +12,7 @@ class ExerciseAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.title,
     this.fontSize = 20.0,
     this.fontWeight = FontWeight.w600,
-    this.textColor = const Color(0xFF687078),
+    this.textColor = AppColours.neutralGreyMinusOne,
   }) : super(key: key);
 
   @override

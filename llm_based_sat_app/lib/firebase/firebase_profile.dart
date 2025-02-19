@@ -1,4 +1,10 @@
 // TODO: will need to move all the firebase calls to one place perhaps?
+// TODO
+// For each user have a progress collection in database which defines which all courses/ exercises/steps they have gone till and the timer data as well.
+// TODO
+// Upload childhood photos already exists so perform a check to see if user has any photos uploaded for Pre-course-task.
+// Watch Introductory video - figure a way to show video to user ... maybe through youtube API? and track if user has seen it to display tick mark
+// Worry about cache after all tasks are done to ensure only 1 call is made to firebase.
 
 import 'dart:io';
 

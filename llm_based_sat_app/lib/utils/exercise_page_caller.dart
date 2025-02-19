@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/data/exercise_data_list.dart';
 import 'package:llm_based_sat_app/models/exercise_data_interface.dart';
-import 'package:llm_based_sat_app/screens/exercise_page.dart';
+import 'package:llm_based_sat_app/screens/course/exercise/exercise_page.dart';
 
 /* ExercisePageCaller is a utility widget that fetches and
  displays an ExercisePage based on a unique ID passed to it. */
@@ -12,8 +12,8 @@ class ExercisePageCaller extends StatelessWidget {
   const ExercisePageCaller({super.key, required this.id});
 
   ExerciseDataInterface getExerciseById(String id) {
-  return exerciseDataList.firstWhere((exercise) => exercise.id == id);
-}
+    return exerciseDataList.firstWhere((exercise) => exercise.id == id);
+  }
 
   @override
   Widget build(BuildContext context) {

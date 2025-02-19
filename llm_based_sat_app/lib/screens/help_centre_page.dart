@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:llm_based_sat_app/firebase_helpers.dart';
+import 'package:llm_based_sat_app/firebase/firebase_helpers.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/custom_button.dart';

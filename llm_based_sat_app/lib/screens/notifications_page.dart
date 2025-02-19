@@ -7,13 +7,11 @@ import '../widgets/main_layout.dart'; // Import MainLayout
 /// A StatefulWidget for managing and displaying notification settings.
 /// Allows users to enable or disable various types of notifications.
 class NotificationsPage extends StatefulWidget {
-  static const Color primaryTextColor = Color(0xFF687078);
-  static const Color secondaryTextColor = Color(0xFF123659);
-  static const Color primaryButtonColor = Color(0xFFCEDFF2);
-  static const Color arrowColor = Color(0xFF1C548C);
 
-  final Function(int) onItemTapped;
-  final int selectedIndex;
+
+  final Function(int)
+      onItemTapped; // Callback function to update the navbar index.
+  final int selectedIndex; // Current selected index in the navigation bar.
 
   NotificationsPage({
     required this.onItemTapped,
@@ -67,7 +65,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
               const SizedBox(height: 10),
               const Text(
                 "Enable the notifications you want to receive.",
-                style: TextStyle(color: NotificationsPage.primaryTextColor),
+                style: TextStyle(color: AppColours.neutralGreyMinusOne),
               ),
               const SizedBox(height: 20),
               Expanded(
@@ -102,14 +100,14 @@ class _NotificationsPageState extends State<NotificationsPage> {
     return SwitchListTile(
       title: Text(
         title,
-        style: const TextStyle(color: NotificationsPage.primaryTextColor),
+        style: const TextStyle(color: AppColours.neutralGreyMinusOne),
       ),
       value: value,
       onChanged: onChanged,
-      activeColor: NotificationsPage.arrowColor,
-      activeTrackColor: NotificationsPage.primaryButtonColor,
-      inactiveThumbColor: const Color(0xFFB0BEC5),
-      inactiveTrackColor: const Color(0xFFE0E0E0),
+      activeColor: AppColours.brandBlueMinusThree, // Thumb color when active.
+      activeTrackColor: AppColours.brandBlueMain, // Track color when active.
+      inactiveThumbColor: const Color(0xFFB0BEC5), // Thumb color when inactive.
+      inactiveTrackColor: const Color(0xFFE0E0E0), // Track color when inactive.
     );
   }
 

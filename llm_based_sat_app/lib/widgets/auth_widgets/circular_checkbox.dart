@@ -56,18 +56,18 @@ class _CircularCheckboxState extends State<CircularCheckbox> {
         decoration: BoxDecoration(
           shape: BoxShape.circle, // Makes the container circular
           color: _isChecked
-              ? AppColours.checkboxBackgroundColor
+              ? AppColours.supportingGreenMinusThree
               : AppColours
-                  .checkboxUntickedBackgroundColor, // Background color based on state
+                  .brandBlueMinusFour, // Background color based on state
           border: Border.all(
-            color: AppColours.checkboxBorderColor, // Border color
+            color: AppColours.brandBlueMain, // Border color
             width: 2.0, // Border width
           ),
         ),
         child: _isChecked
             ? Icon(
                 Icons.check, // Checkmark icon when selected
-                color: AppColours.checkboxCheckmarkColor,
+                color: AppColours.supportingGreenMinusOne,
                 size: 16.0,
               )
             : null, // Empty when unchecked
