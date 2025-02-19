@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:firebase_auth/firebase_auth.dart'; // Import Firebase Auth
-import 'package:llm_based_sat_app/utils/consts.dart';
+import 'package:llm_based_sat_app/consts.dart';
 
-import '../firebase/firebase_helpers.dart';
+import '../firebase_helpers.dart';
 
 class StripeService {
   StripeService._();

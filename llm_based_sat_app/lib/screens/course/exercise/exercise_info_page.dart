@@ -11,7 +11,7 @@ import 'package:llm_based_sat_app/widgets/custom_button.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/learning_tile.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/checkbox_tile.dart';
 import '../../../data/cache_manager.dart';
-import '../../../firebase/firebase_helpers.dart';
+import '../../../firebase_helpers.dart';
 import '../../../models/firebase-exercise-uploader/interface/course_interface.dart';
 import '../../../models/firebase-exercise-uploader/interface/exercise_interface.dart';
 import '../../../utils/exercise_helper_functions.dart';

@@ -224,9 +224,6 @@ class _CourseInfoState extends State<CourseInfo> {
   
   /* Function to check if the user has uploaded their childhood photos by referencing the cache */
   getChildhoodPhotosUploaded() {
-    // TODO
-    // Delete below line when implementated
-    return true;
     // Check cache to see if video watched
     if (CacheManager.getValue("${widget.course.id}_childhood_photos") == null) {
       return false;

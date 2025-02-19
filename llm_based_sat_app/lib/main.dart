@@ -2,18 +2,17 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:llm_based_sat_app/chatbot/chatprovider.dart';
-import 'package:llm_based_sat_app/utils/consts.dart';
+import 'package:llm_based_sat_app/consts.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
 import 'package:llm_based_sat_app/screens/course/courses.dart';
-import 'package:llm_based_sat_app/widgets/firebase_video_player.dart';
 import '../screens/community_page.dart';
 import '../screens/calendar_page.dart';
 import '../screens/home_page.dart';
+import '../screens/score_page.dart';
 import '../widgets/bottom_nav_bar.dart';
-import 'firebase/firebase_options.dart';
+import 'firebase_options.dart';
 import 'package:provider/provider.dart';
-import 'utils/profile_notifier.dart';
-import 'screens/score/score_page.dart';
+import 'profile_notifier.dart';
 
 
 void main() async {

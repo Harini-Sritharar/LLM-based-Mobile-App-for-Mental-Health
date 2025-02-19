@@ -33,7 +33,6 @@ dependencies:
   provider: ^6.1.2
   flutter_stripe: ^11.4.0
   dio: ^5.8.0+1
-  fl_chart: ^0.70.2
   video_player: ^2.9.2
   web_socket_channel: ^2.4.0
 

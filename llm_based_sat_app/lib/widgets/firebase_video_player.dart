@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/data/cache_manager.dart';
 import 'package:video_player/video_player.dart';
 
-import '../firebase/firebase_helpers.dart';
+import '../firebase_helpers.dart';
 import '../models/firebase-exercise-uploader/interface/course_interface.dart';
 import '../screens/auth/sign_in_page.dart';
 

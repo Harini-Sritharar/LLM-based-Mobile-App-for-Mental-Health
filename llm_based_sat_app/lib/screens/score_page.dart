@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'profile_page.dart';
 import '../widgets/custom_app_bar.dart';
 
-class CalendarPage extends StatelessWidget {
-  final Function(int) onItemTapped; // Pass navigation function
-  final int selectedIndex; // Pass selected index
+class ScorePage extends StatelessWidget {
+  final Function(int) onItemTapped;
+  final int selectedIndex;
 
-  const CalendarPage(
+  const ScorePage(
       {super.key, required this.onItemTapped, required this.selectedIndex});
 
   @override
@@ -19,7 +20,7 @@ class CalendarPage extends StatelessWidget {
       ),
       body: const Center(
         child: Text(
-          'Calendar Page',
+          'Score Page',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
       ),

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/data/cache_manager.dart';
-import 'package:llm_based_sat_app/firebase/firebase_helpers.dart';
+import 'package:llm_based_sat_app/firebase_helpers.dart';
 import 'package:llm_based_sat_app/models/chapter_exercise_step_interface.dart';
 import 'package:llm_based_sat_app/models/firebase-exercise-uploader/interface/course_interface.dart';
 import 'package:llm_based_sat_app/screens/course/course_info.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/course_card.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
-
 import '../auth/sign_in_page.dart'; // Custom reusable widget for course cards
 
 class Courses extends StatelessWidget {

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:llm_based_sat_app/firebase/firebase_helpers.dart';
+import 'package:llm_based_sat_app/firebase_helpers.dart';
 import 'package:llm_based_sat_app/services/stripe_service.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
-import '../../widgets/main_layout.dart';
-import '../../widgets/custom_app_bar.dart';
+import '../widgets/main_layout.dart';
+import '../widgets/custom_app_bar.dart';
 
 class ManagePlanPage extends StatefulWidget {
   final Function(int) onItemTapped;
