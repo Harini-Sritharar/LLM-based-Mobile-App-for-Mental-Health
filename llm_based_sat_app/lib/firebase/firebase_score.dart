@@ -118,13 +118,56 @@ Future<void> recalculateSubScores(String userId) async {
           20;
     }
   }
+  Map<String, Map<String, List<double>>> subscoreHistory = {};
+  String currentMonth = DateFormat.MMMM().format(DateTime.now());
+  List<String> subscoreNames = [
+    "Resilience",
+    'Self-efficacy',
+    'Personal growth',
+    'Self-Acceptance',
+    'Acting to alleviate suffering'
+  ];
 
-  // Save the new sub scores to Firestore
+  if (data['subScoresHistory'] != null &&
+      data['subScoresHistory'] is Map<String, dynamic>) {
+    subscoreHistory = (data['subScoresHistory'] as Map<String, dynamic>)
+        .map<String, Map<String, List<double>>>(
+      (key, value) => MapEntry(
+        key,
+        (value as Map<String, dynamic>).map<String, List<double>>(
+          (month, scores) => MapEntry(
+            month,
+            scores is List<dynamic>
+                ? scores
+                    .map((e) => (e as num).toDouble())
+                    .toList() // Convert list elements to double
+                : [], // Default empty list if the value isn't a list
+          ),
+        ),
+      ),
+    );
+  }
+
+// Iterate through each of the subscores and update the history
+  for (String subscore in subscoreNames) {
+    // Fetching or creating the inner history map
+    Map<String, List<double>> history =
+        subscoreHistory.putIfAbsent(subscore, () => <String, List<double>>{});
+
+    // Appending the new score to the correct month
+    history
+        .putIfAbsent(currentMonth, () => [])
+        .add(calculatedSubScores[subscore]!);
+
+    // Updating the outer map with the modified inner map
+    subscoreHistory[subscore] = history;
+  }
+
+// Save to Firestore
   await userDoc.update({
     'subScores': calculatedSubScores,
+    'subScoresHistory': subscoreHistory,
   });
-
-  print("Sub scores updated successfully!");
 }
 
 Future<void> recalculateScores(String userId) async {
@@ -189,9 +232,20 @@ Future<void> recalculateScores(String userId) async {
 
   Map<String, List<double>> scoresMap = {};
   String currentMonth = DateFormat.MMMM().format(DateTime.now());
-  if (data['scores'] != null) {
-    scoresMap = Map<String, List<double>>.from(data['scores']);
+
+  if (data['scores'] != null && data['scores'] is Map<String, dynamic>) {
+    scoresMap =
+        (data['scores'] as Map<String, dynamic>).map<String, List<double>>(
+      (key, value) => MapEntry(
+        key,
+        value is List<dynamic> // Ensure it's a list before conversion
+            ? value.map((e) => (e as num).toDouble()).toList()
+            : [], // Default to an empty list if value is invalid
+      ),
+    );
   }
+
+// Ensure we add the score to the correct month
   scoresMap.putIfAbsent(currentMonth, () => []).add(overallScore);
 
   // check if the scores already exists

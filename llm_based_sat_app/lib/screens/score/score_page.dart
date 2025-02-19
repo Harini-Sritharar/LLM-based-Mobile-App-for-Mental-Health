@@ -52,17 +52,14 @@ class _ScorePageState extends State<ScorePage> {
   void _onTabSelected(int index) {
     widget.onItemTapped(index);
     if (index == widget.selectedIndex) {
-      print("ScorePage tab selected, reloading scores...");
       _loadScores();
     }
   }
 
   Future<void> _loadScores() async {
-    print("fetching overall score");
     overallScore = await getOverallScore();
     subScores = await getSubScores();
     setState(() {});
-    print("overall score $overallScore");
   }
 
   @override
