@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
 
 /// Saves questionnaire responses to Firestore
 Future<void> saveQuestionnaireResponse(
@@ -185,8 +186,21 @@ Future<void> recalculateScores(String userId) async {
       0.1 * (subScores['ERQ_R']! + (28 - subScores['ERQ_S']!)));
 
   double overallScore = ((mentalHealthScore + weightedScore) / 2);
+
+  Map<String, List<double>> scoresMap = {};
+  String currentMonth = DateFormat.MMMM().format(DateTime.now());
+  if (data['scores'] != null) {
+    scoresMap = Map<String, List<double>>.from(data['scores']);
+  }
+  scoresMap.putIfAbsent(currentMonth, () => []).add(overallScore);
+
+  // check if the scores already exists
   // Save the new scores
-  await userDoc.update({'overallScore': overallScore, 'calculatedScore': true});
+  await userDoc.update({
+    'overallScore': overallScore,
+    'calculatedScore': true,
+    'scores': scoresMap
+  });
 
   print("Scores updated successfully!");
 }

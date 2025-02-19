@@ -61,7 +61,7 @@ class BottomNavBar extends StatelessWidget {
               width: 24,
               color: selectedIndex == 0 ? Colors.black : Colors.grey,
             ),
-            label: 'Community',
+            label: 'Questionnaire',
           ),
           BottomNavigationBarItem(
             // Calendar tab icon.
