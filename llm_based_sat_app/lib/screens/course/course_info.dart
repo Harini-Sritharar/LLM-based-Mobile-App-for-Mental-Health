@@ -99,7 +99,7 @@ class _CourseInfoState extends State<CourseInfo> {
                 );
               },
               watchedIntroductoryVideo: getWatchedIntroductoryVideo(),
-              childhoodPhotosUploaded: true,
+              childhoodPhotosUploaded: getChildhoodPhotosUploaded(),
               course: widget.course,
             ),
           ],
@@ -220,5 +220,16 @@ class _CourseInfoState extends State<CourseInfo> {
     
     // Return cache value
     return CacheManager.getValue("${widget.course.id}_introductory_video");
+  }
+  
+  /* Function to check if the user has uploaded their childhood photos by referencing the cache */
+  getChildhoodPhotosUploaded() {
+    // Check cache to see if video watched
+    if (CacheManager.getValue("${widget.course.id}_childhood_photos") == null) {
+      return false;
+    }
+    
+    // Return cache value
+    return CacheManager.getValue("${widget.course.id}_childhood_photos");
   }
 }
