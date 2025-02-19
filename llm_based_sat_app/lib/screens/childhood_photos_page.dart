@@ -4,10 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:io';
-import '../screens/auth/sign_in_page.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
-import 'package:llm_based_sat_app/screens/personal_info_page.dart';
-import 'package:llm_based_sat_app/screens/personal_profile_page.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 
 class ChildhoodPhotosPage extends StatefulWidget {

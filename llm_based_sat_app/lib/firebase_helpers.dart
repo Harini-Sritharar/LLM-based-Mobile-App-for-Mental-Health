@@ -1,10 +1,4 @@
-import 'dart:io';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
-import 'package:path/path.dart' as path;
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'models/firebase-exercise-uploader/interface/chapter_interface.dart';
 import 'models/firebase-exercise-uploader/interface/course_interface.dart';
 import 'models/firebase-exercise-uploader/interface/exercise_interface.dart';
