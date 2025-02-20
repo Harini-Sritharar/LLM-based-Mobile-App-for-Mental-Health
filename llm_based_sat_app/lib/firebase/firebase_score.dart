@@ -302,3 +302,87 @@ Future<Map<String, double>> getSubScores() async {
     };
   }
 }
+
+Future<Map<String, dynamic>> getAverageSubScores() async {
+  User? user = FirebaseAuth.instance.currentUser;
+  if (user == null) {
+    return {"months": [], "averages": []};
+  }
+
+  FirebaseFirestore db = FirebaseFirestore.instance;
+  DocumentReference userDoc = db.collection('Profile').doc(user.uid);
+
+  DocumentSnapshot userSnapshot = await userDoc.get();
+  var data = userSnapshot.data() as Map<String, dynamic>;
+
+  if (data['subScoresHistory'] == null) {
+    return {"months": [], "averages": []};
+  }
+
+  // Convert Firestore data to a proper map
+  Map<String, Map<String, List<double>>> subScoresHistory =
+      (data['subScoresHistory'] as Map<String, dynamic>).map(
+    (subscore, monthsMap) => MapEntry(
+      subscore,
+      (monthsMap as Map<String, dynamic>).map(
+        (month, scoresList) => MapEntry(
+          month,
+          (scoresList as List<dynamic>)
+              .map((e) => (e as num).toDouble())
+              .toList(),
+        ),
+      ),
+    ),
+  );
+
+  // Define the chronological order of months
+  List<String> monthOrder = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec"
+  ];
+
+  // Get all unique months in chronological order
+  Set<String> allMonths = {};
+  for (var subscoreMap in subScoresHistory.values) {
+    allMonths.addAll(subscoreMap.keys);
+  }
+  List<String> sortedMonths = allMonths.toList()
+    ..sort((a, b) => monthOrder.indexOf(a).compareTo(monthOrder.indexOf(b)));
+
+  // Initialize subscore averages per month
+  List<List<double>> averages = List.generate(
+    subScoresHistory.keys.length, // One list per subscore
+    (_) => List.filled(
+        sortedMonths.length, 0.0), // Placeholder for monthly averages
+  );
+
+  // Compute averages
+  int subscoreIndex = 0;
+  for (String subscore in subScoresHistory.keys) {
+    Map<String, List<double>> monthToScores = subScoresHistory[subscore]!;
+
+    for (int i = 0; i < sortedMonths.length; i++) {
+      String month = sortedMonths[i];
+
+      if (monthToScores.containsKey(month)) {
+        List<double> scores = monthToScores[month]!;
+        averages[subscoreIndex][i] =
+            scores.reduce((a, b) => a + b) / scores.length; // Compute average
+      }
+    }
+    subscoreIndex++;
+  }
+
+  // Return both months and averages
+  return {"months": sortedMonths, "averages": averages};
+}

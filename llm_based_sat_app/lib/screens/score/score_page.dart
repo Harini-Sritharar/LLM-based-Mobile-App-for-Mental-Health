@@ -17,23 +17,9 @@ class ScorePage extends StatefulWidget {
 }
 
 class _ScorePageState extends State<ScorePage> {
-  // Example dynamic data
-  static const List<List<double>> scores = [
-    [10, 30, 50, 70, 85, 90, 95], // Line 1 (e.g., Engagement)
-    [10, 25, 45, 65, 80, 85, 90], // Line 2 (e.g., Positive Emotions)
-    [5, 20, 40, 55, 60, 75, 80], // Line 3 (e.g., Meaning)
-    [8, 18, 30, 40, 50, 60, 65], // Line 4 (e.g., Accomplishment)
-  ];
+  List<List<double>> scores = [];
+  List<String> months = [];
 
-  static const List<String> months = [
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sept"
-  ];
   double overallScore = 0.0;
   Map<String, double> subScores = {
     "Resilience": 0.0,
@@ -59,6 +45,9 @@ class _ScorePageState extends State<ScorePage> {
   Future<void> _loadScores() async {
     overallScore = await getOverallScore();
     subScores = await getSubScores();
+    Map<String, dynamic> res = await getAverageSubScores();
+    scores = res["averages"];
+    months = res["months"];
     setState(() {});
   }
 
