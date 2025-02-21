@@ -5,8 +5,11 @@ import 'package:llm_based_sat_app/firebase_messaging_service.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:llm_based_sat_app/chatbot/chatprovider.dart';
 import 'package:llm_based_sat_app/screens/home_page.dart';
+import 'package:llm_based_sat_app/screens/score/questionnaire_assessments_page.dart';
 import 'package:llm_based_sat_app/utils/consts.dart';
 import 'package:llm_based_sat_app/screens/course/courses.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:llm_based_sat_app/widgets/fcm_init.dart';
 import '/screens/auth/sign_in_page.dart';
 import '../screens/community_page.dart';
 import '../screens/calendar_page.dart';
@@ -16,27 +19,32 @@ import 'firebase/firebase_options.dart';
 import 'package:provider/provider.dart';
 import 'utils/profile_notifier.dart';
 
-Future<void> _backgroundHandler(RemoteMessage message) async {
+// Background message handler
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print('Handling a background message: ${message.messageId}');
 }
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 void main() async {
-  await _setup();
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Register background handler before initializing Firebase
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
+  await _setup();  // Ensures Stripe and other initializations
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-    // Request permission for notifications
+  // Request permission for notifications (iOS)
   await FirebaseMessaging.instance.requestPermission(
     alert: true,
     badge: true,
     sound: true,
   );
 
-  FirebaseMessaging.onBackgroundMessage(_backgroundHandler);
-  final firebaseMessagingService = FirebaseMessagingService();
-  await firebaseMessagingService.initialize();
   runApp(
     MultiProvider(
       providers: [
@@ -49,7 +57,6 @@ void main() async {
 }
 
 Future<void> _setup() async {
-  WidgetsFlutterBinding.ensureInitialized();
   Stripe.publishableKey = stripePublishableKey;
 }
 
@@ -58,9 +65,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Initialize Firebase Messaging Service with context
+    final firebaseMessagingService = FirebaseMessagingService(context);
+    firebaseMessagingService.initialize();
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Navigation',
+      navigatorKey: navigatorKey,  // Set up global navigator key
       theme: ThemeData(
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: Colors.white,
@@ -68,11 +80,9 @@ class MyApp extends StatelessWidget {
           backgroundColor: Colors.white,
         ),
       ),
-      // For now, the landing screen is the Sign In page
-      home: SignInPage(),
-      // home: UploadProfilePicturePage(onItemTapped: (x) => {}, selectedIndex: 0,) // for local testing
-      // home:ImagePickerWidget()
-      // home: Courses(onItemTapped: (x) => {}, selectedIndex: 0)
+      home: FCMInitializer(   // DO NOT REMOVE THE FCMINITIALIZER WIDGET IF YOU WANT TO CHANGE THE LANDING PAGE OR NOTIFICATIONS WILL BREAK
+        child: SignInPage(),
+      ),
     );
   }
 }
@@ -86,9 +96,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  // Default page is home page (index 2)
   int _selectedIndex = 2;
-  bool photosLoaded = false;
 
   @override
   void initState() {
@@ -107,7 +115,6 @@ class _MainScreenState extends State<MainScreen> {
     final List<Widget> pages = [
       CommunityPage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
       CalendarPage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
-      // QuestionnaireAssessmentsPage(),
       HomePage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
       ScorePage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
       Courses(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
@@ -127,5 +134,3 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 }
-
-
