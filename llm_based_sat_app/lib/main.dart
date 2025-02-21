@@ -113,7 +113,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> pages = [
-      CommunityPage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
+      QuestionnaireAssessmentsPage(),
       CalendarPage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
       HomePage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
       ScorePage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),

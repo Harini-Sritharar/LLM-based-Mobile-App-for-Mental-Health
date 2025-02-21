@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/screens/profile/personal_profile_page.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../firebase/firebase_auth_services.dart';
 import 'sign_in_page.dart';
 // Widgets
@@ -17,6 +18,8 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   // Firebase authentication service to use for authentication
   final FirebaseAuthService _auth = FirebaseAuthService();
+  final Uri _termsAndConditionsUrl =
+      Uri.parse("https://invincimind.com/terms-and-conditions/");
 
   // Form specific fields
   bool _agreeToTerms = false;
@@ -109,12 +112,22 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   const SizedBox(
                       width: 10), // Space between the checkbox and text
-                  Text(
-                    'Agree to Terms & Conditions',
-                    style: TextStyle(
-                      color: Colors.black,
+                  Text("I agree to the "),
+                  InkWell(
+                    child: Text(
+                      'Terms & Conditions',
+                      style: TextStyle(
+                        color: AppColours.brandBlueMain,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        // decoration: TextDecoration.underline,
+                      ),
                     ),
-                  ),
+                    onTap: () => {
+                      launchUrl(_termsAndConditionsUrl)
+                      // Open the terms and conditions page
+                    },
+                  )
                 ],
               ),
               const SizedBox(height: 20),
@@ -127,7 +140,14 @@ class _SignUpPageState extends State<SignUpPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text('Already have an Account? '),
+                  const Text(
+                    'Already have an Account? ',
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                   GestureDetector(
                     onTap: () {
                       // Navigate to sign-in page
@@ -137,10 +157,11 @@ class _SignUpPageState extends State<SignUpPage> {
                               builder: (context) => SignInPage()));
                     },
                     child: const Text(
-                      'SIGN IN',
+                      "SIGN IN",
                       style: TextStyle(
-                        fontSize: 14,
                         color: AppColours.brandBlueMain,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
                         decoration: TextDecoration.underline,
                       ),
                     ),

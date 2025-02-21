@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
 
 /// Saves questionnaire responses to Firestore
 Future<void> saveQuestionnaireResponse(
@@ -117,13 +118,56 @@ Future<void> recalculateSubScores(String userId) async {
           20;
     }
   }
+  Map<String, Map<String, List<double>>> subscoreHistory = {};
+  String currentMonth = DateFormat.MMMM().format(DateTime.now());
+  List<String> subscoreNames = [
+    "Resilience",
+    'Self-efficacy',
+    'Personal growth',
+    'Self-Acceptance',
+    'Acting to alleviate suffering'
+  ];
 
-  // Save the new sub scores to Firestore
+  if (data['subScoresHistory'] != null &&
+      data['subScoresHistory'] is Map<String, dynamic>) {
+    subscoreHistory = (data['subScoresHistory'] as Map<String, dynamic>)
+        .map<String, Map<String, List<double>>>(
+      (key, value) => MapEntry(
+        key,
+        (value as Map<String, dynamic>).map<String, List<double>>(
+          (month, scores) => MapEntry(
+            month,
+            scores is List<dynamic>
+                ? scores
+                    .map((e) => (e as num).toDouble())
+                    .toList() // Convert list elements to double
+                : [], // Default empty list if the value isn't a list
+          ),
+        ),
+      ),
+    );
+  }
+
+// Iterate through each of the subscores and update the history
+  for (String subscore in subscoreNames) {
+    // Fetching or creating the inner history map
+    Map<String, List<double>> history =
+        subscoreHistory.putIfAbsent(subscore, () => <String, List<double>>{});
+
+    // Appending the new score to the correct month
+    history
+        .putIfAbsent(currentMonth, () => [])
+        .add(calculatedSubScores[subscore]!);
+
+    // Updating the outer map with the modified inner map
+    subscoreHistory[subscore] = history;
+  }
+
+// Save to Firestore
   await userDoc.update({
     'subScores': calculatedSubScores,
+    'subScoresHistory': subscoreHistory,
   });
-
-  print("Sub scores updated successfully!");
 }
 
 Future<void> recalculateScores(String userId) async {
@@ -185,8 +229,32 @@ Future<void> recalculateScores(String userId) async {
       0.1 * (subScores['ERQ_R']! + (28 - subScores['ERQ_S']!)));
 
   double overallScore = ((mentalHealthScore + weightedScore) / 2);
+
+  Map<String, List<double>> scoresMap = {};
+  String currentMonth = DateFormat.MMMM().format(DateTime.now());
+
+  if (data['scores'] != null && data['scores'] is Map<String, dynamic>) {
+    scoresMap =
+        (data['scores'] as Map<String, dynamic>).map<String, List<double>>(
+      (key, value) => MapEntry(
+        key,
+        value is List<dynamic> // Ensure it's a list before conversion
+            ? value.map((e) => (e as num).toDouble()).toList()
+            : [], // Default to an empty list if value is invalid
+      ),
+    );
+  }
+
+// Ensure we add the score to the correct month
+  scoresMap.putIfAbsent(currentMonth, () => []).add(overallScore);
+
+  // check if the scores already exists
   // Save the new scores
-  await userDoc.update({'overallScore': overallScore, 'calculatedScore': true});
+  await userDoc.update({
+    'overallScore': overallScore,
+    'calculatedScore': true,
+    'scores': scoresMap
+  });
 
   print("Scores updated successfully!");
 }
@@ -233,4 +301,88 @@ Future<Map<String, double>> getSubScores() async {
       "Alleviating suffering": 0.0,
     };
   }
+}
+
+Future<Map<String, dynamic>> getAverageSubScores() async {
+  User? user = FirebaseAuth.instance.currentUser;
+  if (user == null) {
+    return {"months": [], "averages": []};
+  }
+
+  FirebaseFirestore db = FirebaseFirestore.instance;
+  DocumentReference userDoc = db.collection('Profile').doc(user.uid);
+
+  DocumentSnapshot userSnapshot = await userDoc.get();
+  var data = userSnapshot.data() as Map<String, dynamic>;
+
+  if (data['subScoresHistory'] == null) {
+    return {"months": [], "averages": []};
+  }
+
+  // Convert Firestore data to a proper map
+  Map<String, Map<String, List<double>>> subScoresHistory =
+      (data['subScoresHistory'] as Map<String, dynamic>).map(
+    (subscore, monthsMap) => MapEntry(
+      subscore,
+      (monthsMap as Map<String, dynamic>).map(
+        (month, scoresList) => MapEntry(
+          month,
+          (scoresList as List<dynamic>)
+              .map((e) => (e as num).toDouble())
+              .toList(),
+        ),
+      ),
+    ),
+  );
+
+  // Define the chronological order of months
+  List<String> monthOrder = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec"
+  ];
+
+  // Get all unique months in chronological order
+  Set<String> allMonths = {};
+  for (var subscoreMap in subScoresHistory.values) {
+    allMonths.addAll(subscoreMap.keys);
+  }
+  List<String> sortedMonths = allMonths.toList()
+    ..sort((a, b) => monthOrder.indexOf(a).compareTo(monthOrder.indexOf(b)));
+
+  // Initialize subscore averages per month
+  List<List<double>> averages = List.generate(
+    subScoresHistory.keys.length, // One list per subscore
+    (_) => List.filled(
+        sortedMonths.length, 0.0), // Placeholder for monthly averages
+  );
+
+  // Compute averages
+  int subscoreIndex = 0;
+  for (String subscore in subScoresHistory.keys) {
+    Map<String, List<double>> monthToScores = subScoresHistory[subscore]!;
+
+    for (int i = 0; i < sortedMonths.length; i++) {
+      String month = sortedMonths[i];
+
+      if (monthToScores.containsKey(month)) {
+        List<double> scores = monthToScores[month]!;
+        averages[subscoreIndex][i] =
+            scores.reduce((a, b) => a + b) / scores.length; // Compute average
+      }
+    }
+    subscoreIndex++;
+  }
+
+  // Return both months and averages
+  return {"months": sortedMonths, "averages": averages};
 }
