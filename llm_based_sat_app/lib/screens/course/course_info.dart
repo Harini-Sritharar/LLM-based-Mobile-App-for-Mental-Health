@@ -9,6 +9,11 @@ import 'package:llm_based_sat_app/widgets/expandable_text.dart';
 import '../../models/firebase-exercise-uploader/interface/course_interface.dart';
 import '../../widgets/firebase_video_player.dart';
 
+/* This file defines the CourseInfo widget, which provides an overview of a selected course. It displays course details, ratings, prerequisites, and options to start the course or watch an introductory video.
+Parameters:
+- [course]: The Course object containing details such as title, aim, duration, and prerequisites.
+- [onItemTapped]: Callback function to update the selected index of the navigation bar.
+- [selectedIndex]: The current selected index of the navigation bar. */
 class CourseInfo extends StatefulWidget {
   final Course course;
   final Function(int) onItemTapped;
@@ -63,9 +68,7 @@ class _CourseInfoState extends State<CourseInfo> {
                 text: widget.course.aim),
             const SizedBox(height: 40),
             PreCourseList(
-              // TODO
-              // prerequisites: course.prerequisites,
-              prerequisites: [],
+              prerequisites: widget.course.prerequisites,
               onUploadChildhoodPhotosPressed: (BuildContext context) {},
               onWatchIntroductoryVideoPressed: (BuildContext context) {
                 Navigator.push(
