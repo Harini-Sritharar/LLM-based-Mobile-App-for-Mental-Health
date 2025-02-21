@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/firebase_messaging_service.dart';
 import '../../firebase/firebase_auth_services.dart';
 import '/main.dart';
 import '/screens/auth/sign_up_page.dart';
@@ -35,6 +37,11 @@ class _SignInPageState extends State<SignInPage> {
           MaterialPageRoute(builder: (context) => MainScreen()),
         );
       }
+      String? token = await FirebaseMessaging.instance.getToken();
+      if (token != null) {
+        await FirebaseMessagingService(context).saveTokenToDatabase(token);
+      }
+
     }
   }
 

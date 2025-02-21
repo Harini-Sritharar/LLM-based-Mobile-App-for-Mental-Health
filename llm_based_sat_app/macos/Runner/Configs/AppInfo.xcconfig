@@ -8,7 +8,7 @@
 PRODUCT_NAME = llm_based_sat_app
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.example.llmBasedSatApp
+PRODUCT_BUNDLE_IDENTIFIER = com.invincimind.satapp
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2025 com.example. All rights reserved.

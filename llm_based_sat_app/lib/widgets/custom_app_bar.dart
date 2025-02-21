@@ -5,6 +5,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:llm_based_sat_app/chatbot/chatpage.dart';
+import 'package:llm_based_sat_app/screens/notification/notifications_page.dart';
+import 'package:llm_based_sat_app/screens/notification/notifications_page.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 import '../screens/profile/profile_page.dart';
 
@@ -95,7 +97,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             height: 28,
           ),
           onPressed: () {
-            // Define notification button action if needed.
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => NotificationsPage(
+                  onItemTapped: onItemTapped,
+                  selectedIndex: selectedIndex,
+                ),
+              ),
+            );
           },
         ),
         // Profile navigation button.

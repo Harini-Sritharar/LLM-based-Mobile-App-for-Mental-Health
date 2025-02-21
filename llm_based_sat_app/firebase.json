@@ -1,1 +1,38 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"llm-based-sat-app","appId":"1:128555328235:android:1258809a117affd2b9d4ae","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"llm-based-sat-app","configurations":{"android":"1:128555328235:android:1258809a117affd2b9d4ae","ios":"1:128555328235:ios:4d09a79a2d667192b9d4ae","macos":"1:128555328235:ios:4d09a79a2d667192b9d4ae","web":"1:128555328235:web:553a30f691410a81b9d4ae","windows":"1:128555328235:web:ce4534ee44bfdce2b9d4ae"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "llm-based-sat-app",
+          "appId": "1:128555328235:android:1258809a117affd2b9d4ae",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "llm-based-sat-app",
+          "configurations": {
+            "android": "1:128555328235:android:1258809a117affd2b9d4ae",
+            "ios": "1:128555328235:ios:4d09a79a2d667192b9d4ae",
+            "macos": "1:128555328235:ios:4d09a79a2d667192b9d4ae",
+            "web": "1:128555328235:web:553a30f691410a81b9d4ae",
+            "windows": "1:128555328235:web:ce4534ee44bfdce2b9d4ae"
+          }
+        }
+      }
+    }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ]
+    }
+  ]
+}
