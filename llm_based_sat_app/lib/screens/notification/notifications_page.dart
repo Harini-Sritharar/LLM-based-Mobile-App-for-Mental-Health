@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import 'package:llm_based_sat_app/widgets/main_layout.dart';
 import 'package:llm_based_sat_app/widgets/notification_widgets/notification_item.dart';
-import 'package:llm_based_sat_app/widgets/bottom_nav_bar.dart';
-import 'package:llm_based_sat_app/widgets/notification_widgets/notification_item.dart';
+import 'package:llm_based_sat_app/firebase/firebase_notifications.dart';
 
 class NotificationsPage extends StatefulWidget {
   final Function(int) onItemTapped;
@@ -20,34 +20,7 @@ class NotificationsPage extends StatefulWidget {
 }
 
 class _NotificationsPageState extends State<NotificationsPage> {
-  // Sample notifications data
-  final List<Map<String, String>> notifications = [
-    {
-      "icon": "assignment",
-      "title": "Incomplete task",
-      "description": "Start the task now.",
-    },
-    {
-      "icon": "timer",
-      "title": "Practice Time Remaining",
-      "description": "Start exercise A of Self-attachment.",
-    },
-    {
-      "icon": "menu_book",
-      "title": "New Course Available!",
-      "description": "Start now to boost your creativity.",
-    },
-    {
-      "icon": "star",
-      "title": "Subscription",
-      "description": "Your subscription has been renewed.",
-    },
-    {
-      "icon": "trending_up",
-      "title": "Check your Score",
-      "description": "There was a change in your score.",
-    }
-  ];
+  final FirebaseNotifications _firebaseNotifications = FirebaseNotifications();
 
   @override
   Widget build(BuildContext context) {
@@ -61,36 +34,62 @@ class _NotificationsPageState extends State<NotificationsPage> {
         ),
         body: Padding(
           padding: const EdgeInsets.all(10.0),
-          child: SingleChildScrollView(
-            child: Column(
-              children: notifications.map((notification) {
-                IconData iconData;
-                switch (notification["icon"]) {
-                  case "assignment":
-                    iconData = Icons.assignment;
-                    break;
-                  case "timer":
-                    iconData = Icons.timer;
-                    break;
-                  case "menu_book":
-                    iconData = Icons.menu_book;
-                    break;
-                  case "star":
-                    iconData = Icons.star;
-                    break;
-                  case "trending_up":
-                    iconData = Icons.trending_up;
-                    break;
-                  default:
-                    iconData = Icons.notifications;
-                }
-                return NotificationItem(
-                  icon: iconData,
-                  title: notification["title"]!,
-                  description: notification["description"]!,
-                );
-              }).toList(),
-            ),
+          child: StreamBuilder<QuerySnapshot>(
+            stream: _firebaseNotifications.getNotificationsStream(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              }
+
+              if (snapshot.hasError) {
+                return Center(child: Text("Error fetching notifications."));
+              }
+
+              if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                return Center(child: Text("No notifications yet."));
+              }
+
+              var notifications = snapshot.data!.docs;
+
+              return ListView.builder(
+                itemCount: notifications.length,
+                itemBuilder: (context, index) {
+                  var notification = notifications[index];
+                  var data = notification.data() as Map<String, dynamic>;
+
+                  // Map notification type to icon
+                  IconData iconData;
+                  switch (data["type"]) {
+                    case "reminder":
+                      iconData = Icons.assignment;
+                      break;
+                    case "time_alert":
+                      iconData = Icons.timer;
+                      break;
+                    case "new_course":
+                      iconData = Icons.menu_book;
+                      break;
+                    case "subscription":
+                      iconData = Icons.star;
+                      break;
+                    case "score_update":
+                      iconData = Icons.trending_up;
+                      break;
+                    default:
+                      iconData = Icons.notifications;
+                  }
+
+                  return NotificationItem(
+                    icon: iconData,
+                    title: data["title"] ?? "Notification",
+                    description: data["message"] ?? "",
+                    onTap: () {
+                      _firebaseNotifications.markNotificationAsRead(notification.id);
+                    },
+                  );
+                },
+              );
+            },
           ),
         ),
       ),
