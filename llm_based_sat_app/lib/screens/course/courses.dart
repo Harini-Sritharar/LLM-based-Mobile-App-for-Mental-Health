@@ -174,6 +174,7 @@ class Courses extends StatelessWidget {
           onButtonPress: createOnButtonPress(
             course: course,
           ),
+          isLocked: course.subscription == 'Paid',
         );
       }).toList();
     } catch (e) {
