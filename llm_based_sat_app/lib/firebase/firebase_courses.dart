@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:llm_based_sat_app/models/time_stamp_entry.dart';
 
 import '../models/firebase-exercise-uploader/interface/chapter_interface.dart';
 import '../models/firebase-exercise-uploader/interface/course_interface.dart';
 import '../models/firebase-exercise-uploader/interface/exercise_interface.dart';
 import '../models/firebase-exercise-uploader/interface/final_step_interface.dart';
 import '../models/firebase-exercise-uploader/interface/step_interface.dart';
-
 
 /* Fetches the course progress for a specific user and course ID.
 The output for the attribute "Chapter_Exercise_Step" is returned 
@@ -25,7 +25,8 @@ Future<List?> getUserCourseProgress(String uid, String courseId) async {
     for (final doc in querySnapshot.docs) {
       if (doc.id.trim() == courseId.trim()) {
         // Return the "Chapter_Exercise_Step" attribute if found
-        final chapterExerciseStep = doc.data()['Chapter_Exercise_Step'] as List?;
+        final chapterExerciseStep =
+            doc.data()['Chapter_Exercise_Step'] as List?;
         return chapterExerciseStep; // Return the value if it exists
       }
     }
@@ -41,7 +42,8 @@ Future<List?> getUserCourseProgress(String uid, String courseId) async {
 
 /* Updates the course progress for a specific user and course ID by adding a new
 "Chapter_Exercise_Step" entry to the existing list. */
-Future<void> updateUserCourseProgress(String uid, String courseId, String newChapterExerciseStep, String previousSession) async {
+Future<void> updateUserCourseProgress(String uid, String courseId,
+    String newChapterExerciseStep, String previousSession) async {
   try {
     // Reference to the user's course_progress subcollection
     final collection = FirebaseFirestore.instance
@@ -58,7 +60,8 @@ Future<void> updateUserCourseProgress(String uid, String courseId, String newCha
     // Check if the document exists
     if (docSnapshot.exists) {
       // Fetch the current "Chapter_Exercise_Step" list from the document
-      List? currentChapterExerciseStep = docSnapshot.data()?['Chapter_Exercise_Step'];
+      List? currentChapterExerciseStep =
+          docSnapshot.data()?['Chapter_Exercise_Step'];
 
       // If the list is null, initialize it as an empty list
       currentChapterExerciseStep ??= [];
@@ -78,9 +81,11 @@ Future<void> updateUserCourseProgress(String uid, String courseId, String newCha
     } else {
       // If the document doesn't exist, create a new document with the given courseId and new progress
       print('Creating entry for new course ID');
-      
+
       await docRef.set({
-        'Chapter_Exercise_Step': [newChapterExerciseStep], // Initialize with the new entry
+        'Chapter_Exercise_Step': [
+          newChapterExerciseStep
+        ], // Initialize with the new entry
       });
 
       print('New course entry created and progress added');
@@ -107,7 +112,8 @@ Future<bool> getIntroductoryVideoWatched(String uid, String courseId) async {
     for (final doc in querySnapshot.docs) {
       if (doc.id.trim() == courseId.trim()) {
         // Return the "Introductory_video_watched" attribute if found
-        bool introductoryVideoWatched = doc.data()['Introductory_video_watched'];
+        bool introductoryVideoWatched =
+            doc.data()['Introductory_video_watched'];
         return introductoryVideoWatched; // Return the value if it exists
       }
     }
@@ -122,7 +128,8 @@ Future<bool> getIntroductoryVideoWatched(String uid, String courseId) async {
 }
 
 /* Updates the 'Introductory_video_watched' parameter for a given user. */
-Future<void> updateWatchedIntroductoryVideo(String uid, String courseId, bool watchedVideo) async {
+Future<void> updateWatchedIntroductoryVideo(
+    String uid, String courseId, bool watchedVideo) async {
   try {
     // Reference to the user's course_progress subcollection
     final collection = FirebaseFirestore.instance
@@ -147,9 +154,10 @@ Future<void> updateWatchedIntroductoryVideo(String uid, String courseId, bool wa
     } else {
       // If the document doesn't exist, create a new document with the given courseId and Introductory_video_watched
       print('Creating entry for new course ID');
-      
+
       await docRef.set({
-        'Introductory_video_watched': watchedVideo, // Initialize with the new entry
+        'Introductory_video_watched':
+            watchedVideo, // Initialize with the new entry
       });
 
       print('New course entry created and Introductory_video_watched added');
@@ -205,8 +213,8 @@ Future<List<Course>> getAllCourses() async {
         // Loop through each exercise document
         for (var exerciseDoc in exercisesSnapshot.docs) {
           // Convert exercise data
-          final exercise = Exercise.fromFirestore(
-              exerciseDoc.id, exerciseDoc.data());
+          final exercise =
+              Exercise.fromFirestore(exerciseDoc.id, exerciseDoc.data());
 
           // Fetch steps for this exercise
           final stepsSnapshot = await FirebaseFirestore.instance
@@ -270,5 +278,91 @@ Future<List<Course>> getAllCourses() async {
   } catch (e) {
     print('Error fetching courses with chapters, exercises, and steps: $e');
     return [];
+  }
+}
+
+/* Adds a timestamp entry for a specific user and exercise Id by creating a new entry to the existing collection. */
+Future<void> updateTimeStamp(String uid, String courseId, String exerciseId,
+    String sessionNumber, Timestamp startTime, Timestamp endTime) async {
+  try {
+    // Reference to the user's course_progress subcollection
+    final collection = FirebaseFirestore.instance
+        .collection('Profile')
+        .doc(uid)
+        .collection('course_progress');
+
+    // Fetch the document for the given course ID
+    final docRef = collection.doc(courseId);
+
+// Get the document snapshot
+    final docSnapshot = await docRef.get();
+
+// Check if the document exists
+    if (docSnapshot.exists) {
+      // Reference to the 'TimeStamps' subcollection inside courseId
+      final timeStampRef =
+          docRef.collection('TimeStamps').doc("$exerciseId\\$sessionNumber");
+
+      // Add a new timestamp entry
+      await timeStampRef.set({
+        'startTime': startTime,
+        'endTime': endTime,
+      }, SetOptions(merge: true));
+
+      print('Timestamp added successfully');
+    } else {
+      // If the document doesn't exist, create a new document with the given courseId
+      print('Creating entry for new course ID');
+
+      await docRef.set({}); // Initialize the courseId document
+
+      // Reference to the 'TimeStamps' subcollection inside courseId
+      final timeStampRef =
+          docRef.collection('TimeStamps').doc("$exerciseId\\$sessionNumber");
+
+      // Create new timestamp entry
+      await timeStampRef.set({
+        'startTime': startTime,
+        'endTime': endTime,
+      });
+
+      print('New course entry created and timestamp added');
+    }
+  } catch (e) {
+    // Handle errors and print them
+    print('Error updating course progress: $e');
+  }
+}
+
+Future<TimeStampEntry?> getTimeStamp(String uid, String courseId,
+    String exerciseId, String sessionNumber) async {
+  try {
+// Reference to the user's course_progress subcollection
+    final collection = FirebaseFirestore.instance
+        .collection('Profile')
+        .doc(uid)
+        .collection('course_progress');
+
+// Reference to the specific timestamp entry
+    final timeStampRef = collection
+        .doc(courseId)
+        .collection('TimeStamps')
+        .doc("$exerciseId\\$sessionNumber");
+
+// Get the document snapshot
+    final docSnapshot = await timeStampRef.get();
+
+// Check if the document exists and return the data
+    if (docSnapshot.exists) {
+      print('Timestamp retrieved successfully');
+      return TimeStampEntry.fromMap(docSnapshot.data()!);
+    } else {
+      print('No timestamp found for the given exercise and session');
+      return null;
+    }
+  } catch (e) {
+// Handle errors and print them
+    print('Error retrieving timestamp: $e');
+    return null;
   }
 }

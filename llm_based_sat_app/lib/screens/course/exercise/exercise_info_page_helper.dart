@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/data/cache_manager.dart';
 import 'package:llm_based_sat_app/firebase/firebase_courses.dart';
@@ -92,6 +93,12 @@ Widget getExerciseStep(Exercise exercise, Course course, Chapter chapter) {
   }
   CacheManager.setValue(exercise.id, currentStep + 1);
 
+  if (currentStep == 1) {
+    CacheManager.setValue(
+        "${exercise.id}/${getSessions(exercise, course) + 1}/TimeStamp",
+        Timestamp.now());
+  }
+
   if (currentStep <= exercise.exerciseSteps.length) {
     final currentExerciseStep = exercise
         .exerciseSteps[currentStep - 1]; // currentStep - 1 since 0 indexed
@@ -131,8 +138,25 @@ Widget getExerciseStep(Exercise exercise, Course course, Chapter chapter) {
         "${chapter.id}/${exercise.id}/${exercise.exerciseFinalStep!.id}/${getSessions(exercise, course) + 1}";
     String previousSession =
         "${chapter.id}/${exercise.id}/${exercise.exerciseFinalStep!.id}/${getSessions(exercise, course)}";
-    updateUserCourseProgress(user!.uid, course.id.trim(), completedExercise,
-        previousSession); // Update firebase to indicate current exercise completed
+
+    // Update firebase to indicate current exercise completed
+    updateUserCourseProgress(
+        user!.uid, course.id.trim(), completedExercise, previousSession);
+
+    // Add TimeStamp entry for given exercise and session
+    updateTimeStamp(
+        user!.uid,
+        course.id.trim(),
+        exercise.id.trim(),
+        (getSessions(exercise, course) + 1).toString(),
+        CacheManager.getValue(
+            "${exercise.id}/${getSessions(exercise, course) + 1}/TimeStamp"),
+        Timestamp.now());
+
+    // Remove cached TimeStamp for current exercise and session
+    CacheManager.removeValue(
+        "${exercise.id}/${getSessions(exercise, course) + 1}/TimeStamp");
+
     return FutureBuilder<String>(
       future: getElapsedTime(), // Fetch elapsed time
       builder: (context, snapshot) {

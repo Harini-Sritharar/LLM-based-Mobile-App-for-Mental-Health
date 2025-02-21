@@ -68,6 +68,7 @@ class _CourseInfoState extends State<CourseInfo> {
                 text: widget.course.aim),
             const SizedBox(height: 40),
             PreCourseList(
+              // TODO: Implement check to see if prerequisites are fulfilled
               prerequisites: widget.course.prerequisites,
               onUploadChildhoodPhotosPressed: (BuildContext context) {},
               onWatchIntroductoryVideoPressed: (BuildContext context) {
