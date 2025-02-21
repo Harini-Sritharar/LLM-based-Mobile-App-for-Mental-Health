@@ -56,12 +56,16 @@ class ScoreGraph extends StatelessWidget {
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: true,
+                interval: 1, // Ensure labels appear at equal intervals
                 getTitlesWidget: (value, _) {
                   int index = value.toInt();
-                  return (index >= 0 && index < months.length)
-                      ? Text(months[index],
-                          style: const TextStyle(fontSize: 12))
-                      : const SizedBox.shrink();
+                  if (index >= 0 && index < months.length) {
+                    return Text(
+                      months[index],
+                      style: const TextStyle(fontSize: 12),
+                    );
+                  }
+                  return const SizedBox.shrink();
                 },
               ),
             ),
@@ -91,8 +95,12 @@ class ScoreGraph extends StatelessWidget {
 
     return List.generate(scores.length, (lineIndex) {
       return LineChartBarData(
-        spots: List.generate(scores[lineIndex].length,
-            (i) => FlSpot(i.toDouble(), scores[lineIndex][i])),
+        spots: scores[lineIndex]
+            .asMap()
+            .entries
+            .where((entry) => entry.value != 0.0) // Ignore 0.0 values
+            .map((entry) => FlSpot(entry.key.toDouble(), entry.value))
+            .toList(),
         isCurved: true,
         color: colors[lineIndex % colors.length],
         barWidth: 3,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/screens/course/course_info_helper.dart';
 import '../../data/cache_manager.dart';
 import '../../firebase/firebase_courses.dart';
 import '../../models/chapter_exercise_step_interface.dart';
@@ -52,7 +53,8 @@ Future<List<CourseCard>> generateCourseCards(
           course: course,
           onItemTapped: onItemTapped,
           selectedIndex: selectedIndex,
-        ),
+        ), 
+        isLocked: getIsCourseLocked(),
       );
     }).toList();
   } catch (e) {
@@ -60,6 +62,12 @@ Future<List<CourseCard>> generateCourseCards(
     print("Error while generating course cards: $e");
     return []; // Return an empty list in case of an error
   }
+}
+
+getIsCourseLocked() {
+  // TODO
+  // Implement this
+  return false;
 }
 
 /* Creates a dynamic `onButtonPress` function that navigates to the `CourseInfo` page with the specified parameters. */
