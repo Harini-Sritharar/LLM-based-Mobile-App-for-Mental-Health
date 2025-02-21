@@ -410,3 +410,30 @@ Future<void> saveReportedIssue({
     rethrow;
   }
 }
+
+  Future<List<bool>?> getNotificationPreferences(String userId) async {
+    try {
+      final collection = FirebaseFirestore.instance.collection('Profile');
+      final doc = await collection.doc(userId).get();
+      if (doc.exists) {
+        final data = doc.data();
+        if (data != null && data.containsKey('notificationPreferences')) {
+          return List<bool>.from(data['notificationPreferences']);
+        }
+      }
+    } catch (e) {
+      print('Error getting notification preferences: $e');
+    }
+    return null;
+  }
+
+   Future<void> saveNotificationPreferences(String userId, List<bool> preferences) async {
+    try {
+      final collection = FirebaseFirestore.instance.collection('Profile');
+      await collection.doc(userId).set({
+        'notificationPreferences': preferences,
+      }, SetOptions(merge: true));
+    } catch (e) {
+      print('Error saving notification preferences: $e');
+    }
+  }
