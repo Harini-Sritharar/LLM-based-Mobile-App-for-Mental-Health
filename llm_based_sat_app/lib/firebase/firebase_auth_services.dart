@@ -50,6 +50,10 @@ class FirebaseAuthService {
     return null;
   }
 
+  Future<void> signOut() async {
+    await _auth.signOut();
+  }
+
   void _handleFirebaseAuthError(BuildContext context, FirebaseAuthException e) {
     switch (e.code) {
       case 'email-already-in-use':

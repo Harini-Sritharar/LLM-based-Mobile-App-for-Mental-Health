@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/firebase/firebase_auth_services.dart';
 import 'package:llm_based_sat_app/firebase/firebase_helpers.dart';
 import 'package:llm_based_sat_app/screens/payments/payment_option_page.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
@@ -23,6 +24,17 @@ class ProfilePage extends StatelessWidget {
     required this.onItemTapped,
     required this.selectedIndex,
   });
+
+  void _signOut(BuildContext context) async {
+    final FirebaseAuthService _auth = FirebaseAuthService();
+
+    await _auth.signOut();
+    Navigator.of(context).pop();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => SignInPage()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -221,14 +233,7 @@ class ProfilePage extends StatelessWidget {
                                 child: Text("Cancel"),
                               ),
                               TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => SignInPage()),
-                                  );
-                                },
+                                onPressed: () => _signOut(context),
                                 child: const Text(
                                   "Logout",
                                   style: TextStyle(color: Colors.red),
