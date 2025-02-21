@@ -27,7 +27,11 @@ class AssessmentPage extends StatefulWidget {
   final String elapsedTime;
 
   const AssessmentPage(
-      {super.key, required this.exercise, required this.elapsedTime, required this.chapter, required this.course});
+      {super.key,
+      required this.exercise,
+      required this.elapsedTime,
+      required this.chapter,
+      required this.course});
 
   @override
   _AssessmentPageState createState() => _AssessmentPageState();
@@ -39,7 +43,6 @@ class _AssessmentPageState extends State<AssessmentPage> {
   double helpfulnessValue = 3;
   double ratingValue = 3;
   final TextEditingController _commentController = TextEditingController();
-  int _selectedRating = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +65,8 @@ class _AssessmentPageState extends State<AssessmentPage> {
             _buildSectionTitle('Session Info'),
             SizedBox(height: 8),
             ExerciseDescription(
-                description: 'Sessions: ${getSessions(widget.exercise, widget.course) + 1} completed out of ${widget.chapter.exercises.length}'),
+                description:
+                    'Sessions: ${getSessions(widget.exercise, widget.course) + 1} completed out of ${widget.chapter.exercises.length}'),
             SizedBox(height: 8),
             ExerciseDescription(description: widget.elapsedTime),
             SizedBox(height: 20),
@@ -106,32 +110,6 @@ class _AssessmentPageState extends State<AssessmentPage> {
     );
   }
 
-  Widget _buildSliderQuestion(
-    BuildContext context,
-    String question,
-    double currentValue,
-    ValueChanged<double> onChanged,
-  ) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          question,
-          style: TextStyle(fontSize: 16),
-        ),
-        Slider(
-          value: currentValue,
-          min: 1,
-          max: 5,
-          divisions: 4,
-          label: currentValue.round().toString(),
-          onChanged: onChanged,
-        ),
-        SizedBox(height: 8),
-      ],
-    );
-  }
-
   Widget _buildCommentBox() {
     return AnimatedOpacity(
       opacity: 1.0,
@@ -165,28 +143,6 @@ class _AssessmentPageState extends State<AssessmentPage> {
     );
   }
 
-  Widget _buildStars() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(5, (index) {
-        return IconButton(
-          onPressed: () {
-            setState(() {
-              _selectedRating = index + 1;
-            });
-          },
-          icon: Icon(
-            Icons.star,
-            color: index < _selectedRating
-                ? AppColours.brandBlueMain
-                : AppColours.neutralGreyMinusFour,
-            size: 40,
-          ),
-        );
-      }),
-    );
-  }
-  
   getExerciseNumber() {
     int index = 1;
     for (final exercise in widget.chapter.exercises) {
