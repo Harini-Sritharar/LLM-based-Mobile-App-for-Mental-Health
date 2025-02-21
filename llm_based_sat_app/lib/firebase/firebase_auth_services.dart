@@ -80,6 +80,35 @@ class FirebaseAuthService {
     }
   }
 
+  Future<void> deleteAccount(BuildContext context) async {
+    try {
+      User? user = _auth.currentUser;
+      if (user == null) {
+        _showSnackBar(context, "No user signed in.");
+        return;
+      }
+
+      FirebaseFirestore db = FirebaseFirestore.instance;
+
+      // Delete user's data from Firestore
+      await db.collection('Profile').doc(user.uid).delete();
+
+      // Delete Firebase Authentication account
+      await user.delete();
+
+      _showSnackBar(context, "Account successfully deleted.");
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'requires-recent-login') {
+        _showSnackBar(
+            context, "Please log in again before deleting your account.");
+      } else {
+        _showSnackBar(context, "Error: ${e.message}");
+      }
+    } catch (e) {
+      _showSnackBar(context, "An error occurred while deleting the account.");
+    }
+  }
+
   void _showSnackBar(BuildContext context, String message) {
     final snackBar = SnackBar(content: Text(message));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);

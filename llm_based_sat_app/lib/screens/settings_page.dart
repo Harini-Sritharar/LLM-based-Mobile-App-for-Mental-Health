@@ -4,6 +4,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:llm_based_sat_app/firebase/firebase_auth_services.dart';
+import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
 import 'package:llm_based_sat_app/screens/language_page.dart';
 import 'package:llm_based_sat_app/screens/notifications_page.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
@@ -128,7 +130,7 @@ class SettingsPage extends StatelessWidget {
               context,
               'Delete Account',
               'assets/icons/profile/trash.svg',
-              () {},
+              () => _confirmDeleteAccount(context),
             ),
             SizedBox(height: 20),
             _buildBackButton(
@@ -137,6 +139,44 @@ class SettingsPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _confirmDeleteAccount(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: Text("Delete Account"),
+          content: Text(
+              "Are you sure you want to delete your account? This action cannot be undone."),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext),
+              child: Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.pop(dialogContext); // Close dialog
+                await _deleteAccountAndRedirect(context);
+              },
+              child: Text("Delete", style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _deleteAccountAndRedirect(BuildContext context) async {
+    try {
+      await FirebaseAuthService().deleteAccount(context);
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => SignInPage())); // Redirect to login
+    } catch (e) {
+      print("An error occurred while deleting the account.");
+    }
   }
 
   /// Builds a list item for the settings page.
