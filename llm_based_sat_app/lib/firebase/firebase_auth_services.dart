@@ -1,9 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class FirebaseAuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  static const platform =
+      MethodChannel('com.example.llmBasedSatApp.auth/session');
+
   Future<User?> signUpWithEmailAndPassword(
       BuildContext context, String email, String password) async {
     try {
@@ -14,6 +18,7 @@ class FirebaseAuthService {
       // Create an empty record in the collection 'Profile' with the user's uid
       FirebaseFirestore db = FirebaseFirestore.instance;
       await db.collection('Profile').doc(credential.user!.uid).set({});
+      await platform.invokeMethod("setLoginStatus", {'isLoggedIn': true});
 
       return credential.user;
     } on FirebaseAuthException catch (e) {
@@ -35,6 +40,8 @@ class FirebaseAuthService {
     try {
       UserCredential credential = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
+      // await platform.invokeMethod("setLoginStatus", {'isLoggedIn': true});
+
       return credential.user;
     } on FirebaseAuthException catch (e) {
       if (context.mounted) {
@@ -52,6 +59,22 @@ class FirebaseAuthService {
 
   Future<void> signOut() async {
     await _auth.signOut();
+    await platform.invokeMethod("setLoginStatus", {'isLoggedIn': true});
+  }
+
+  Future<bool> checkIfLoggedIn() async {
+    try {
+      bool isLoggedIn = await platform.invokeMethod('getLoginStatus');
+      User? user = FirebaseAuth.instance.currentUser;
+
+      print("🔍 Debug: Stored session status: $isLoggedIn");
+      print("🔍 Debug: Firebase user ID: ${user?.uid}");
+
+      return isLoggedIn && user != null;
+    } on PlatformException catch (e) {
+      print("❌ Error checking login status: $e");
+      return false;
+    }
   }
 
   void _handleFirebaseAuthError(BuildContext context, FirebaseAuthException e) {
