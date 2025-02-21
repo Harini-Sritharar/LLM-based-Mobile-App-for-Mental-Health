@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/data/cache_manager.dart';
+import 'package:llm_based_sat_app/firebase/firebase_courses.dart';
 import 'package:video_player/video_player.dart';
-
-import '../firebase/firebase_helpers.dart';
 import '../models/firebase-exercise-uploader/interface/course_interface.dart';
 import '../screens/auth/sign_in_page.dart';
 
-class LocalVideoPlayer extends StatefulWidget {
+
+/* This file defines a FirebaseVideoPlayer widget that streams and plays course-related introductory videos from Firebase Storage. It ensures that the video is watched and updates the cache and database accordingly.
+
+ Parameters:
+ - [course]: A Course object representing the course whose introductory video is being played */
+class FirebaseVideoPlayer extends StatefulWidget {
   final Course course;
-  const LocalVideoPlayer({Key? key, required this.course}) : super(key: key);
+  const FirebaseVideoPlayer({Key? key, required this.course}) : super(key: key);
 
   @override
-  _LocalVideoPlayerState createState() => _LocalVideoPlayerState();
+  _FirebaseVideoPlayerState createState() => _FirebaseVideoPlayerState();
 }
 
-class _LocalVideoPlayerState extends State<LocalVideoPlayer> {
+class _FirebaseVideoPlayerState extends State<FirebaseVideoPlayer> {
   late VideoPlayerController _controller;
   bool _isLoading = true;
 

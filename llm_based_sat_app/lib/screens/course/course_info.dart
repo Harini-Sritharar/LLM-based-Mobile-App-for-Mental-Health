@@ -78,7 +78,7 @@ class _CourseInfoState extends State<CourseInfo> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => LocalVideoPlayer(
+                      builder: (context) => FirebaseVideoPlayer(
                             course: widget.course,
                           )),
                 );

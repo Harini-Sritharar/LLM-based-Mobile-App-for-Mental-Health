@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/data/cache_manager.dart';
-import 'package:llm_based_sat_app/firebase/firebase_helpers.dart';
+import 'package:llm_based_sat_app/firebase/firebase_courses.dart';
 import 'package:llm_based_sat_app/models/chapter_exercise_step_interface.dart';
 import 'package:llm_based_sat_app/models/firebase-exercise-uploader/interface/course_interface.dart';
 import 'package:llm_based_sat_app/screens/course/course_info.dart';
