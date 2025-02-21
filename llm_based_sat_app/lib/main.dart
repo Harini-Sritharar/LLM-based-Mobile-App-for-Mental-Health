@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:llm_based_sat_app/chatbot/chatprovider.dart';
 import 'package:llm_based_sat_app/screens/home_page.dart';
+import 'package:llm_based_sat_app/screens/score/questionnaire_assessments_page.dart';
 import 'package:llm_based_sat_app/utils/consts.dart';
 import 'package:llm_based_sat_app/screens/course/courses.dart';
 import '/screens/auth/sign_in_page.dart';
@@ -88,9 +89,8 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> pages = [
-      CommunityPage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
+      QuestionnaireAssessmentsPage(),
       CalendarPage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
-      // QuestionnaireAssessmentsPage(),
       HomePage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
       ScorePage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
       Courses(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),
