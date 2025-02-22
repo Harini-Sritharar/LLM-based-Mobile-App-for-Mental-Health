@@ -96,6 +96,40 @@ Future<void> updateUserCourseProgress(String uid, String courseId,
   }
 }
 
+/* Function to get if childhood photo is uploaded for given user */
+Future<bool> getUploadedChildhoodPhoto(String uid) async {
+  try {
+    // Reference to the user
+    final docRef = FirebaseFirestore.instance.collection('Profile').doc(uid);
+
+    // Get the document snapshot
+    final docSnapshot = await docRef.get();
+
+    // Check if the document exists and contains 'favouritePhotos' or 'nonFavouritePhotos' attributes
+    if (docSnapshot.exists) {
+      bool hasFavouritePhotos = docSnapshot
+              .data()!
+              .containsKey('favouritePhotos') &&
+          (docSnapshot.data()!['favouritePhotos'] as List<dynamic>).isNotEmpty;
+
+      bool hasNonFavouritePhotos =
+          docSnapshot.data()!.containsKey('nonfavouritePhotos') &&
+              (docSnapshot.data()!['nonfavouritePhotos'] as List<dynamic>)
+                  .isNotEmpty;
+
+      // Return true if either list contains at least one photo
+      return hasFavouritePhotos || hasNonFavouritePhotos;
+    }
+
+// Return false if no matching data is found
+    return false;
+  } catch (e) {
+    // Handle errors and print them
+    print('Error fetching course progress: $e');
+    return false;
+  }
+}
+
 /* Function to get if Introductory video is watched for given user and course */
 Future<bool> getIntroductoryVideoWatched(String uid, String courseId) async {
   try {

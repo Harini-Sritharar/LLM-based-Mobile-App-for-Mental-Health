@@ -37,6 +37,11 @@ Future<List<CourseCard>> generateCourseCards(
           await getIntroductoryVideoWatched(user!.uid, course.id);
       CacheManager.setValue(
           "${course.id}_introductory_video", watchedIntroductoryVideo);
+
+      // Update uploaded childhood photos
+      final uploadedChildhoodPhoto =
+          await getUploadedChildhoodPhoto(user!.uid);
+      CacheManager.setValue("childhood_photos", uploadedChildhoodPhoto);
     }
 
     // Generate CourseCard widgets for each course

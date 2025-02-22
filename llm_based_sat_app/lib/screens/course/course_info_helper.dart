@@ -111,16 +111,13 @@ getWatchedIntroductoryVideo(Course course) {
 
 /* Function to check if the user has uploaded their childhood photos by referencing the cache */
 getChildhoodPhotosUploaded(Course course) {
-  // TODO
-  // Delete below line when implementated
-  return true;
   // Check cache to see if video watched
-  if (CacheManager.getValue("${course.id}_childhood_photos") == null) {
+  if (CacheManager.getValue("childhood_photos") == null) {
     return false;
   }
 
   // Return cache value
-  return CacheManager.getValue("${course.id}_childhood_photos");
+  return CacheManager.getValue("childhood_photos");
 }
 
 /* Returns the total number of exercises in a course, formatted as a string. */

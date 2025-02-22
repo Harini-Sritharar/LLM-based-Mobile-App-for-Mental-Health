@@ -60,9 +60,22 @@ class PreCourseList extends StatelessWidget {
         const SizedBox(height: 20),
 
         // Watch Introductory Video
-        GestureDetector(
-          onTap: () => onWatchIntroductoryVideoPressed(context),
-          child: Padding(
+        Container(
+          decoration: !watchedIntroductoryVideo
+              ? // Light blue background highlight if not watched
+              BoxDecoration(
+                  color: const Color.fromARGB(255, 220, 236, 243),
+                  borderRadius: BorderRadius.circular(8), // Rounded corners
+                  border: Border.all(
+                    color: const Color.fromARGB(255, 8, 127, 178),
+                    width: 2.0,
+                  ),
+                )
+              : // No decoration if the video is watched
+              null,
+          child: GestureDetector(
+            onTap: () => onWatchIntroductoryVideoPressed(context),
+            child: Padding(
               padding: const EdgeInsets.only(left: 16.0),
               child: Row(
                 children: [
@@ -90,7 +103,9 @@ class PreCourseList extends StatelessWidget {
                     style: TextStyle(fontSize: 16),
                   ),
                 ],
-              )),
+              ),
+            ),
+          ),
         ),
 
         const SizedBox(height: 20),
