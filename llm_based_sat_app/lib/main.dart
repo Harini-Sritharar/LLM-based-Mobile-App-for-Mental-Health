@@ -11,7 +11,6 @@ import 'package:llm_based_sat_app/screens/course/courses.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:llm_based_sat_app/widgets/fcm_init.dart';
 import '/screens/auth/sign_in_page.dart';
-import '../screens/community_page.dart';
 import '../screens/calendar_page.dart';
 import 'screens/score/score_page.dart';
 import '../widgets/bottom_nav_bar.dart';

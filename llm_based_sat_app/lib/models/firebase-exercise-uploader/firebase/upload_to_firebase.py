@@ -1,5 +1,7 @@
 #!/usr/bin/env python3.12
 
+# Run python3 upload_to_firebase from a new terminal
+
 import json
 import firebase_admin
 from firebase_admin import credentials, firestore
@@ -70,6 +72,15 @@ def upload_course_structure_to_firestore(course_path, exercise_data_path, steps_
                     # Add steps for the exercise
                     step_ids = exercise_data[exercise_name].get("Exercise Steps", [])
                     for step_id in step_ids:
+                        if step_id in steps_data:
+                            print(f"      Adding step: {step_id}")
+                            step_ref = exercise_ref.collection("Steps").document(step_id)
+                            step_ref.set(steps_data[step_id])
+                        else:
+                            print(f"      Warning: Step {step_id} not found in steps data.")
+
+                    final_step_id = [exercise_data[exercise_name].get("Exercise Final Step", "")]
+                    for step_id in final_step_id:
                         if step_id in steps_data:
                             print(f"      Adding step: {step_id}")
                             step_ref = exercise_ref.collection("Steps").document(step_id)

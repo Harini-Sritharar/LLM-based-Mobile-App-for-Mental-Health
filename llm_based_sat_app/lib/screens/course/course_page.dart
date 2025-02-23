@@ -3,8 +3,17 @@ import 'package:llm_based_sat_app/models/chapter_interface.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/course_page_chapter.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
+import '../../models/firebase-exercise-uploader/interface/course_interface.dart';
 
+/* This file defines the CoursePage widget, which displays a detailed view of a course, including its title, chapters, and progress tracking.
+Parameters:
+- [course]: The Course object containing course-related information.
+- [courseTitle]: The title of the course displayed at the top of the page.
+- [chapters]: A list of ChapterInterface objects representing course chapters.
+- [onItemTapped]: Callback function to update the selected index of the navigation bar.
+- [selectedIndex]: The current selected index of the navigation bar. */
 class CoursePage extends StatelessWidget {
+  final Course course;
   final String courseTitle;
   final List<ChapterInterface> chapters;
   final Function(int) onItemTapped; // Function to update navbar index
@@ -12,6 +21,7 @@ class CoursePage extends StatelessWidget {
 
   const CoursePage({
     super.key,
+    required this.course,
     required this.courseTitle,
     required this.chapters,
     required this.onItemTapped,

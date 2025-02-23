@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// import 'package:llm_based_sat_app/widgets/expandable_text.dart';
 
 /* This widget is called from within the PreCourseList widget to handle the case when all prerequisites for a course have not been completed.
 
