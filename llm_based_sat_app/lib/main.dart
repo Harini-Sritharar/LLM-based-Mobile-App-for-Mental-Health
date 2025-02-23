@@ -2,7 +2,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:llm_based_sat_app/chatbot/chatprovider.dart';
-import 'package:llm_based_sat_app/firebase/firebase_auth_services.dart';
 import 'package:llm_based_sat_app/screens/home_page.dart';
 import 'package:llm_based_sat_app/screens/score/questionnaire_assessments_page.dart';
 import 'package:llm_based_sat_app/utils/consts.dart';
@@ -40,17 +39,6 @@ Future<void> _setup() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-  static bool isLoggedIn = false;
-
-  void initState() {
-    checkAuthStatus();
-  }
-
-  void checkAuthStatus() async {
-    FirebaseAuthService _authService = FirebaseAuthService();
-    isLoggedIn = await _authService.checkIfLoggedIn();
-    print('User is logged in: $isLoggedIn');
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +53,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       // For now, the landing screen is the Sign In page
-      home: isLoggedIn ? MainScreen() : SignInPage(),
+      home: SignInPage(),
       // home: UploadProfilePicturePage(onItemTapped: (x) => {}, selectedIndex: 0,) // for local testing
       // home:ImagePickerWidget()
       // home: Courses(onItemTapped: (x) => {}, selectedIndex: 0)

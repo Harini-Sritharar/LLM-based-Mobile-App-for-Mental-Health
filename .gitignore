@@ -25,7 +25,3 @@ doc/api/
 
 .flutter-plugins
 .flutter-plugins-dependencies
-
-# Don't want to commit any non-android or non-ios specific files
-linux/
-macos/

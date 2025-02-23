@@ -30,12 +30,6 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-        <!-- Added for persistent auth -->
-
-        <meta-data
-            android:name="com.google.android.gms.auth.api.signin"
-            android:value="@string/default_web_client_id"/>
-
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and
@@ -51,9 +45,5 @@
     <!-- Permissions to use your camera for the image picker package -->
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-
-    <!-- Added for persistent auth -->
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
 
 </manifest>
