@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/firebase/firebase_helpers.dart';
-import 'package:llm_based_sat_app/screens/payments/payment_option_page.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
 import '../../widgets/main_layout.dart';
 import 'edit_profile.dart';
@@ -174,21 +173,6 @@ class ProfilePage extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => ManagePlanPage(
-                            onItemTapped: onItemTapped,
-                            selectedIndex: selectedIndex,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                  MenuItem(
-                    title: "Payment Option",
-                    icon: 'assets/icons/empty-wallet.svg',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PaymentOptionPage(
                             onItemTapped: onItemTapped,
                             selectedIndex: selectedIndex,
                           ),
