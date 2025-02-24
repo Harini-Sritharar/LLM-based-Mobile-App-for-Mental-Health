@@ -4,6 +4,7 @@ import 'package:llm_based_sat_app/firebase/firebase_helpers.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
 import 'package:llm_based_sat_app/services/websocket_service.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
+import 'package:llm_based_sat_app/utils/user_provider.dart';
 import 'package:provider/provider.dart';
 
 class Chatpage extends StatefulWidget {
@@ -28,7 +29,8 @@ class ChatpageState extends State<Chatpage> {
   }
 
   Future<void> _loadName() async {
-    String fullName = await getName(user!.uid);
+    var userProvider = Provider.of<UserProvider>(context);
+    String fullName = userProvider.getName();
     name = fullName.split(' ')[0];
     setState(() {});
   }

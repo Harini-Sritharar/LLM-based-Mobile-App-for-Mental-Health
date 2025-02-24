@@ -3,6 +3,8 @@ import 'package:llm_based_sat_app/firebase/firebase_auth_services.dart';
 import 'package:llm_based_sat_app/firebase/firebase_helpers.dart';
 import 'package:llm_based_sat_app/screens/payments/payment_option_page.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
+import 'package:llm_based_sat_app/utils/user_provider.dart';
+import 'package:llm_based_sat_app/widgets/profile_widgets/profile_avatar.dart';
 import '../../widgets/main_layout.dart';
 import 'edit_profile.dart';
 import '../payments/manage_plan_page.dart';
@@ -38,6 +40,9 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var userProvider = Provider.of<UserProvider>(context);
+    String userName = userProvider.getName();
+    String? userEmail = userProvider.email;
     return MainLayout(
       selectedIndex: selectedIndex,
       body: Container(
@@ -50,62 +55,12 @@ class ProfilePage extends StatelessWidget {
               selectedIndex: selectedIndex,
             ),
             const SizedBox(height: 20),
-            Consumer<ProfileNotifier>(
-              builder: (context, profileNotifier, child) {
-                return FutureBuilder<String>(
-                  future: getProfilePictureUrl(user!.uid),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircleAvatar(
-                        radius: 50,
-                        backgroundColor: AppColours.avatarBackgroundColor,
-                        child: CircularProgressIndicator(),
-                      );
-                    } else if (snapshot.hasError ||
-                        snapshot.data == null ||
-                        snapshot.data!.isEmpty) {
-                      return CircleAvatar(
-                        radius: 50,
-                        backgroundColor: AppColours.avatarBackgroundColor,
-                        child: Icon(
-                          Icons.person,
-                          size: 80,
-                          color: AppColours.avatarForegroundColor,
-                        ),
-                      );
-                    } else {
-                      return CircleAvatar(
-                        radius: 50,
-                        backgroundColor: AppColours.avatarBackgroundColor,
-                        backgroundImage: NetworkImage(snapshot.data!),
-                        onBackgroundImageError: (error, stackTrace) {
-                          print('Error loading profile picture: $error');
-                        },
-                      );
-                    }
-                  },
-                );
-              },
-            ),
+            ProfileAvatar(),
             const SizedBox(height: 10),
-            Consumer<ProfileNotifier>(
-              builder: (context, profileNotifier, child) {
-                return FutureBuilder<String>(
-                  future: getName(user!.uid),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return buildText("Loading...");
-                    } else if (snapshot.hasError) {
-                      return buildText("Error fetching name");
-                    } else {
-                      return buildText(snapshot.data ?? "No name found");
-                    }
-                  },
-                );
-              },
-            ),
+            buildText(userName),
+           
             Text(
-              user!.email ?? "No email provided",
+              userEmail ?? "No email provided",
               style: const TextStyle(
                 fontSize: 16,
                 color: AppColours.neutralGreyMinusOne,

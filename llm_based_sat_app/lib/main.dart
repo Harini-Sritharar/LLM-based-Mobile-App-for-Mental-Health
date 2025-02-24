@@ -6,6 +6,8 @@ import 'package:llm_based_sat_app/screens/home_page.dart';
 import 'package:llm_based_sat_app/screens/score/questionnaire_assessments_page.dart';
 import 'package:llm_based_sat_app/utils/consts.dart';
 import 'package:llm_based_sat_app/screens/course/courses.dart';
+import 'package:llm_based_sat_app/utils/user_provider.dart';
+import 'package:llm_based_sat_app/utils/wrapper.dart';
 import '/screens/auth/sign_in_page.dart';
 import '../screens/community_page.dart';
 import '../screens/calendar_page.dart';
@@ -26,6 +28,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (context) => ProfileNotifier()),
         ChangeNotifierProvider(create: (context) => ChatProvider()),
+        ChangeNotifierProvider(create: (context) => UserProvider()),
       ],
       child: MyApp(),
     ),
@@ -53,7 +56,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       // For now, the landing screen is the Sign In page
-      home: SignInPage(),
+      home: Wrapper(),
       // home: UploadProfilePicturePage(onItemTapped: (x) => {}, selectedIndex: 0,) // for local testing
       // home:ImagePickerWidget()
       // home: Courses(onItemTapped: (x) => {}, selectedIndex: 0)
