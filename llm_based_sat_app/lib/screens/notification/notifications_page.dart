@@ -38,10 +38,10 @@ class _NotificationsPageState extends State<NotificationsPage> {
       case "score_update":
         targetPage = ScorePage(onItemTapped: widget.onItemTapped, selectedIndex: widget.selectedIndex);
         break;
-      case "reminder":
-        targetPage = HomePage(onItemTapped: widget.onItemTapped, selectedIndex: widget.selectedIndex);
+      case "session_reminder":
+        targetPage = MainScreen();
         break;
-      case "new_course":
+      case "practice_reminder":
         targetPage = Courses(onItemTapped: widget.onItemTapped, selectedIndex: widget.selectedIndex);
         break;
       case "subscription":
@@ -106,7 +106,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                   // Map notification type to icon
                   IconData iconData;
                   switch (type) {
-                    case "reminder":
+                    case "session_reminder":
                       iconData = Icons.assignment;
                       break;
                     case "time_alert":
