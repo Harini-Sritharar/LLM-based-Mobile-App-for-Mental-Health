@@ -17,7 +17,6 @@ class FirebaseMessagingService {
   Future<void> initialize() async {
     // Get the device token
     String? token = await _firebaseMessaging.getToken();
-    print("Device Token: $token");
 
     // Request permission for iOS
     NotificationSettings settings = await _firebaseMessaging.requestPermission(
@@ -26,17 +25,17 @@ class FirebaseMessagingService {
       sound: true,
     );
 
+    // Check the authorization status
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      print('User granted permission');
+      // User granted permission
     } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
-      print('User granted provisional permission');
+      // User granted provisional permission
     } else {
-      print('User denied permission');
+      // User denied permission
     }
 
     // Save APNs Token for iOS
     String? apnsToken = await _firebaseMessaging.getAPNSToken();
-    print("APNs Token: $apnsToken");
 
     // Initialize local notifications for Android & iOS
     const AndroidInitializationSettings initializationSettingsAndroid =
@@ -55,6 +54,7 @@ class FirebaseMessagingService {
           iOS: initializationSettingsIOS,
         );
 
+    // Initialize the local notifications plugin
     await _flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
       onDidReceiveNotificationResponse: (NotificationResponse response) {
@@ -64,8 +64,6 @@ class FirebaseMessagingService {
 
     // Handle foreground messages
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print("Foreground Notification Received: ${message.notification?.title}");
-
       if (message.notification != null) {
         _showNotification(message);
       }
@@ -73,19 +71,18 @@ class FirebaseMessagingService {
 
     // Handle background messages
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print("Notification tapped when app was in background");
       _navigateToNotificationsPage(context);
     });
 
     // Handle terminated state notifications
     FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) {
-        print("App was opened from a terminated state via notification.");
       if (message != null) {
         _navigateToNotificationsPage(context);
       }
     });
   }
 
+  // Navigate to the notifications page
   void _navigateToNotificationsPage(BuildContext context) {
     Navigator.push(
       context,
@@ -98,7 +95,9 @@ class FirebaseMessagingService {
     );
   }
 
+  // Show a local notification
   Future<void> _showNotification(RemoteMessage message) async {
+    if (!context.mounted) return;
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
           'high_importance_channel',
@@ -130,12 +129,10 @@ class FirebaseMessagingService {
     );
   }
 
-
-
+  // Save the FCM token to the Firestore database
   Future<void> saveTokenToDatabase(String token) async {
     // Get the current user ID
     User? user = FirebaseAuth.instance.currentUser;
-    // Assuming you have a method to get the current user ID from your authentication service
     String userId = user!.uid;
 
     // Reference to the user's profile in the Firestore database
@@ -144,5 +141,4 @@ class FirebaseMessagingService {
     // Save the token
     await userRef.update({'fcmToken': token});
   }
-
 }
