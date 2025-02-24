@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:llm_based_sat_app/screens/course/courses.dart';
+import 'package:llm_based_sat_app/screens/home_page.dart';
+import 'package:llm_based_sat_app/screens/payments/manage_plan_page.dart';
+import 'package:llm_based_sat_app/screens/score/score_page.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import 'package:llm_based_sat_app/widgets/main_layout.dart';
 import 'package:llm_based_sat_app/widgets/notification_widgets/notification_item.dart';
 import 'package:llm_based_sat_app/firebase/firebase_notifications.dart';
+
+// Import navigatorKey from main.dart
+import '../../main.dart';
 
 class NotificationsPage extends StatefulWidget {
   final Function(int) onItemTapped;
@@ -22,6 +29,38 @@ class NotificationsPage extends StatefulWidget {
 class _NotificationsPageState extends State<NotificationsPage> {
   final FirebaseNotifications _firebaseNotifications = FirebaseNotifications();
 
+  /// Handles tapping a notification: Marks as read and navigates to the correct page.
+  Future<void> _handleNotificationTap(String type, String notificationId) async {
+    if (!mounted) return; // Ensure widget is still active before navigation
+
+    Widget targetPage;
+    switch (type) {
+      case "score_update":
+        targetPage = ScorePage(onItemTapped: widget.onItemTapped, selectedIndex: widget.selectedIndex);
+        break;
+      case "reminder":
+        targetPage = HomePage(onItemTapped: widget.onItemTapped, selectedIndex: widget.selectedIndex);
+        break;
+      case "new_course":
+        targetPage = Courses(onItemTapped: widget.onItemTapped, selectedIndex: widget.selectedIndex);
+        break;
+      case "subscription":
+        targetPage = ManagePlanPage(onItemTapped: widget.onItemTapped, selectedIndex: widget.selectedIndex);
+        break;
+      default:
+        print("Unknown notification type: $type");
+        return;
+    }
+
+    // Mark the notification as read before navigating
+    await _firebaseNotifications.markNotificationAsRead(notificationId);
+
+    // Use navigatorKey to ensure safe navigation
+    navigatorKey.currentState?.push(
+      MaterialPageRoute(builder: (context) => targetPage),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return MainLayout(
@@ -35,7 +74,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
         body: Padding(
           padding: const EdgeInsets.all(10.0),
           child: StreamBuilder<QuerySnapshot>(
-            stream: _firebaseNotifications.getNotificationsStream(),
+            stream: _firebaseNotifications.getUnreadNotificationsStream(), // Fetch only unread notifications
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(child: CircularProgressIndicator());
@@ -46,7 +85,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
               }
 
               if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                return Center(child: Text("No notifications yet."));
+                return Center(child: Text("No unread notifications."));
               }
 
               var notifications = snapshot.data!.docs;
@@ -55,11 +94,18 @@ class _NotificationsPageState extends State<NotificationsPage> {
                 itemCount: notifications.length,
                 itemBuilder: (context, index) {
                   var notification = notifications[index];
-                  var data = notification.data() as Map<String, dynamic>;
+                  var data = notification.data() as Map<String, dynamic>?;
+
+                  if (data == null) return SizedBox.shrink(); // Skip if data is missing
+
+                  String? type = data["type"];
+                  String? title = data["title"] ?? "Notification";
+                  String? message = data["message"] ?? "";
+                  String notificationId = notification.id;
 
                   // Map notification type to icon
                   IconData iconData;
-                  switch (data["type"]) {
+                  switch (type) {
                     case "reminder":
                       iconData = Icons.assignment;
                       break;
@@ -81,11 +127,9 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
                   return NotificationItem(
                     icon: iconData,
-                    title: data["title"] ?? "Notification",
-                    description: data["message"] ?? "",
-                    onTap: () {
-                      _firebaseNotifications.markNotificationAsRead(notification.id);
-                    },
+                    title: title ?? "Notification",
+                    description: message ?? "",
+                    onTap: () => _handleNotificationTap(type ?? "", notificationId),
                   );
                 },
               );

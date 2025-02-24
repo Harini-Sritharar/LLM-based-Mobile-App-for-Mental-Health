@@ -8,9 +8,8 @@ import 'package:llm_based_sat_app/screens/home_page.dart';
 import 'package:llm_based_sat_app/screens/score/questionnaire_assessments_page.dart';
 import 'package:llm_based_sat_app/utils/consts.dart';
 import 'package:llm_based_sat_app/screens/course/courses.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:llm_based_sat_app/widgets/fcm_init.dart';
-import '/screens/auth/sign_in_page.dart';
+import 'screens/auth/sign_in_page.dart';
 import '../screens/calendar_page.dart';
 import 'screens/score/score_page.dart';
 import '../widgets/bottom_nav_bar.dart';
@@ -23,7 +22,9 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print('Handling a background message: ${message.messageId}');
 }
 
+// Global keys for navigation and scaffold
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -59,19 +60,30 @@ Future<void> _setup() async {
   Stripe.publishableKey = stripePublishableKey;
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // Initialize Firebase Messaging Service with context
-    final firebaseMessagingService = FirebaseMessagingService(context);
-    firebaseMessagingService.initialize();
+  State<MyApp> createState() => _MyAppState();
+}
 
+class _MyAppState extends State<MyApp> {
+  late FirebaseMessagingService _firebaseMessagingService;
+
+  @override
+  void initState() {
+    super.initState();
+    _firebaseMessagingService = FirebaseMessagingService();
+    _firebaseMessagingService.initialize();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Navigation',
-      navigatorKey: navigatorKey,  // Set up global navigator key
+      navigatorKey: navigatorKey,  // Global navigator key for navigation
+      scaffoldMessengerKey: scaffoldMessengerKey, // Global scaffold key
       theme: ThemeData(
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: Colors.white,
@@ -79,7 +91,7 @@ class MyApp extends StatelessWidget {
           backgroundColor: Colors.white,
         ),
       ),
-      home: FCMInitializer(   // DO NOT REMOVE THE FCMINITIALIZER WIDGET IF YOU WANT TO CHANGE THE LANDING PAGE OR NOTIFICATIONS WILL BREAK
+      home: FCMInitializer(   // DO NOT REMOVE IF YOU WANT TO KEEP NOTIFICATIONS WORKING
         child: SignInPage(),
       ),
     );

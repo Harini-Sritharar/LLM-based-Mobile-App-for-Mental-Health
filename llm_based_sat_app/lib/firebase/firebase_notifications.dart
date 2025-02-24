@@ -10,18 +10,19 @@ class FirebaseNotifications {
     return _auth.currentUser?.uid;
   }
 
-  /// Returns a stream of notifications for the logged-in user
-  Stream<QuerySnapshot> getNotificationsStream() {
+  /// Returns a stream of only unread notifications for the logged-in user
+  Stream<QuerySnapshot> getUnreadNotificationsStream() {
     final String? userId = getCurrentUserId();
     if (userId == null) {
       throw Exception("User not logged in");
     }
-    
+
     return _firestore
         .collection("Profile")
         .doc(userId)
         .collection("notifications")
-        .orderBy("timestamp", descending: true)
+        .where("isRead", isEqualTo: false) // Fetch only unread notifications
+        .orderBy("timestamp", descending: true) // Latest first
         .snapshots();
   }
 

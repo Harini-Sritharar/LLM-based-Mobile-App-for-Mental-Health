@@ -43,19 +43,19 @@ class _FCMInitializerState extends State<FCMInitializer> {
 
         if (token != null && mounted) {
           print("FCM Token: $token");
-          final firebaseMessagingService = FirebaseMessagingService(context);
+          final firebaseMessagingService = FirebaseMessagingService();
           await firebaseMessagingService.saveTokenToDatabase(token);
         } else {
           print("Token is null. Retrying in 5 seconds...");
           await Future.delayed(const Duration(seconds: 5));
-          _initializeFCM(); // Retry once if the token is null
+          if (mounted) _initializeFCM(); // Retry only if widget is still mounted
         }
 
         // Listen for token updates and save them
         FirebaseMessaging.instance.onTokenRefresh.listen((newToken) async {
           print("Token updated: $newToken");
           if (mounted) {
-            final firebaseMessagingService = FirebaseMessagingService(context);
+            final firebaseMessagingService = FirebaseMessagingService();
             await firebaseMessagingService.saveTokenToDatabase(newToken);
           }
         });
@@ -66,17 +66,17 @@ class _FCMInitializerState extends State<FCMInitializer> {
           _showNotification(message);
         });
 
-        //Handle Background Notification Click
+        // Handle Background Notification Click
         FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
           print("Notification Clicked (Background) - ${message.notification?.title}");
-          _navigateToNotificationsPage(context);
+          if (mounted) _navigateToNotificationsPage();
         });
 
         // Handle Terminated Notification Click
         FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) {
-          if (message != null) {
+          if (message != null && mounted) {
             print("App Opened from Terminated State via Notification: ${message.notification?.title}");
-            _navigateToNotificationsPage(context);
+            _navigateToNotificationsPage();
           }
         });
       } else {
@@ -87,8 +87,10 @@ class _FCMInitializerState extends State<FCMInitializer> {
     }
   }
 
-  ///  Function to navigate to the Notifications page when user taps a notification
-  void _navigateToNotificationsPage(BuildContext context) {
+  ///Function to navigate to the Notifications page safely
+  void _navigateToNotificationsPage() {
+    if (!mounted) return;
+
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -100,8 +102,10 @@ class _FCMInitializerState extends State<FCMInitializer> {
     );
   }
 
-  ///  Function to show a local notification in the foreground (iOS requires this)
+  ///Function to show a local notification in the foreground (iOS requires this)
   void _showNotification(RemoteMessage message) {
+    if (!mounted) return;
+
     if (message.notification != null) {
       print("Displaying Local Notification: ${message.notification?.title}");
 
@@ -114,8 +118,11 @@ class _FCMInitializerState extends State<FCMInitializer> {
             content: Text(message.notification!.body ?? "You have a new message"),
             actions: [
               TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text("OK"),
+                onPressed: () {
+                  Navigator.pop(context);
+                  _navigateToNotificationsPage(); // Navigate to notifications on dismiss
+                },
+                child: const Text("View"),
               ),
             ],
           );
