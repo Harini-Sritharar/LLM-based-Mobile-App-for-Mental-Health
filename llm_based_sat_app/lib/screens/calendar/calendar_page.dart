@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:llm_based_sat_app/firebase/firebase_calendar.dart';
 import 'package:llm_based_sat_app/models/calendar/calendar_exercise_entry.dart';
+import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 import '../../widgets/custom_app_bar.dart';
 
-// TODO: Cache the entries for given date and update after a new one is done in courses if today's
-// TODO: Have a call to firebase each time a new date is requested
 class CalendarPage extends StatefulWidget {
   final Function(int) onItemTapped;
   final int selectedIndex;
@@ -23,24 +23,25 @@ class CalendarPage extends StatefulWidget {
 
 class _CalendarPageState extends State<CalendarPage> {
   DateTime _selectedDate = DateTime.now();
+  List<CalendarExerciseEntry> allCompletedExercises = [];
 
-  // Dummy data: Map of dates to list of completed exercises
-  final List<CalendarExerciseEntry> allCompletedExercises = [
-    CalendarExerciseEntry(
-        courseName: "Self-Attachment",
-        exerciseName: "Exercise A",
-        duration: "8 minutes",
-        notes:
-            "At first, I struggled to connect with my childhood self, but after more focused practice, I managed to create a deep bond with my inner child, which was very satisfying.",
-        date: DateTime(2025, 2, 24)),
-        CalendarExerciseEntry(
-        courseName: "Self-Attachment",
-        exerciseName: "Exercise A",
-        duration: "8 minutes",
-        notes:
-            "At first, I struggled to connect with my childhood self, but after more focused practice, I managed to create a deep bond with my inner child, which was very satisfying.",
-        date: DateTime(2025, 2, 24))
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _fetchExercises(); // Fetch exercises when the page loads
+  }
+
+  // Function to fetch exercises from Firebase
+  Future<void> _fetchExercises() async {
+    if (user == null) return;
+
+    List<CalendarExerciseEntry> result =
+        await getExercisesByDate(user!.uid, _selectedDate);
+
+    setState(() {
+      allCompletedExercises = result; // Update exercises
+    });
+  }
 
   // Function to pick a date
   Future<void> _pickDate(BuildContext context) async {
@@ -55,6 +56,7 @@ class _CalendarPageState extends State<CalendarPage> {
       setState(() {
         _selectedDate = pickedDate;
       });
+      _fetchExercises(); // Fetch data for the new date
     }
   }
 
@@ -157,7 +159,9 @@ class _CalendarPageState extends State<CalendarPage> {
                                   style: TextStyle(fontWeight: FontWeight.w700),
                                 ),
                                 Text(
-                                  exercise.notes,
+                                  exercise.notes.isEmpty
+                                      ? "No notes added"
+                                      : exercise.notes,
                                   style: const TextStyle(
                                     fontSize: 14,
                                   ),
