@@ -80,25 +80,81 @@ class FirebaseAuthService {
     }
   }
 
-  Future<void> deleteAccount(BuildContext context) async {
+  // Future<void> deleteAccount(
+  //     BuildContext context, String password, String reason) async {
+  //   try {
+  //     User? user = _auth.currentUser;
+  //     if (user == null) {
+  //       _showSnackBar(context, "No user signed in.");
+  //       return;
+  //     }
+
+  //     // Re-authenticate user
+  //     AuthCredential credential = EmailAuthProvider.credential(
+  //       email: user.email!,
+  //       password: password,
+  //     );
+
+  //     await user.reauthenticateWithCredential(credential);
+
+  //     FirebaseFirestore db = FirebaseFirestore.instance;
+
+  //     // Delete user's data from Firestore
+  //     await db.collection('Profile').doc(user.uid).delete();
+
+  //     // Delete Firebase Authentication account
+  //     await user.delete();
+
+  //     _showSnackBar(context, "Account successfully deleted.");
+  //   } on FirebaseAuthException catch (e) {
+  //     if (e.code == 'requires-recent-login') {
+  //       _showSnackBar(
+  //           context, "Please log in again before deleting your account.");
+  //     } else {
+  //       _showSnackBar(context, "Error: ${e.message}");
+  //     }
+  //   } catch (e) {
+  //     _showSnackBar(context, "An error occurred while deleting the account.");
+  //   }
+  // }
+
+  Future<bool> deleteAccount(
+      BuildContext context, String password, String reason) async {
     try {
       User? user = _auth.currentUser;
       if (user == null) {
         _showSnackBar(context, "No user signed in.");
-        return;
+        return false;
       }
+
+      // Re-authenticate user
+      AuthCredential credential = EmailAuthProvider.credential(
+        email: user.email!,
+        password: password,
+      );
+
+      await user.reauthenticateWithCredential(credential);
 
       FirebaseFirestore db = FirebaseFirestore.instance;
 
-      // Delete user's data from Firestore
+      // Save deletion reason before deleting account
+      await db.collection("DeletedAccounts").doc(user.uid).set({
+        "reason": reason.isNotEmpty ? reason : "Other",
+        "timestamp": FieldValue.serverTimestamp(),
+      });
+
+      // Delete user's profile data
       await db.collection('Profile').doc(user.uid).delete();
 
-      // Delete Firebase Authentication account
+      // Delete user authentication
       await user.delete();
 
       _showSnackBar(context, "Account successfully deleted.");
+      return true; // Indicate success
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'requires-recent-login') {
+      if (e.code == 'wrong-password') {
+        _showSnackBar(context, "Incorrect password. Please try again.");
+      } else if (e.code == 'requires-recent-login') {
         _showSnackBar(
             context, "Please log in again before deleting your account.");
       } else {
@@ -107,6 +163,7 @@ class FirebaseAuthService {
     } catch (e) {
       _showSnackBar(context, "An error occurred while deleting the account.");
     }
+    return false; // Indicate failure
   }
 
   void _showSnackBar(BuildContext context, String message) {
