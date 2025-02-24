@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
 import 'package:llm_based_sat_app/screens/notification/notifications_page.dart';
 
 // Import Global Keys from main.dart
@@ -14,6 +15,29 @@ class FirebaseMessagingService {
       FlutterLocalNotificationsPlugin();
 
   FirebaseMessagingService();
+
+  ///Navigate to Notifications Page when a notification is clicked
+  void _navigateToNotificationsPage() {
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user == null) {
+      // User is not logged in, redirect to Sign-in Page
+      navigatorKey.currentState?.pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => SignInPage()),
+        (route) => false, // Clears the navigation stack
+      );
+    } else {
+      // User is logged in, go to Notifications Page
+      navigatorKey.currentState?.push(
+        MaterialPageRoute(
+          builder: (context) => NotificationsPage(
+            onItemTapped: (index) {},
+            selectedIndex: 0,
+          ),
+        ),
+      );
+    }
+  }
 
   Future<void> initialize() async {
     // Get and save the FCM token
@@ -75,16 +99,6 @@ class FirebaseMessagingService {
 
     // Save or update the token
     await userRef.set({'fcmToken': token}, SetOptions(merge: true));
-  }
-
-  ///Navigate to Notifications Page when a notification is clicked
-  void _navigateToNotificationsPage() {
-    navigatorKey.currentState?.push(MaterialPageRoute(
-      builder: (context) => NotificationsPage(
-        onItemTapped: (index) {},
-        selectedIndex: 0,
-      ),
-    ));
   }
 
   ///Show an in-app notification using ScaffoldMessengerKey
