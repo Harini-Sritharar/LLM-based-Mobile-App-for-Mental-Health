@@ -1,37 +1,31 @@
 import 'package:flutter/material.dart';
 
-class CheckboxTile extends StatefulWidget {
+class CheckboxTile extends StatelessWidget {
   final String title;
   final IconData icon;
+  final bool value;
+  final ValueChanged<bool> onChanged;
 
   const CheckboxTile({
-    Key? key,
+    super.key,
     required this.title,
     required this.icon,
-  }) : super(key: key);
-
-  @override
-  _CheckboxTileState createState() => _CheckboxTileState();
-}
-
-class _CheckboxTileState extends State<CheckboxTile> {
-  bool _isChecked = false;
+    required this.value,
+    required this.onChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(widget.icon),
-      title: Text(widget.title,
+      leading: Icon(icon),
+      title: Text(title,
           style: const TextStyle(
-            fontSize: 16, 
-            fontWeight: FontWeight.w400,
-            color: Color(0xFF123659)
-            )),
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+              color: Color(0xFF123659))),
       trailing: GestureDetector(
         onTap: () {
-          setState(() {
-            _isChecked = !_isChecked;
-          });
+          onChanged(!value); // Toggle the checkbox value and notify parent
         },
         child: Container(
           width: 41,
@@ -42,9 +36,9 @@ class _CheckboxTileState extends State<CheckboxTile> {
               color: Color(0xFF1c548c),
               width: 2,
             ),
-            color: _isChecked ? Color(0xFF1c548c) : Colors.transparent,
+            color: value ? Color(0xFF1c548c) : Colors.transparent,
           ),
-          child: _isChecked
+          child: value
               ? const Icon(
                   Icons.check,
                   size: 16,
