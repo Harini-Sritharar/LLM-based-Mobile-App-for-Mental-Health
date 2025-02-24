@@ -6,8 +6,7 @@ class Exercise {
   final String exerciseTitle;
   final String objective;
   final String minimumPracticeTime;
-  final String minimumSessions;
-  final String totalSessions;
+  final int totalSessions;
   final List<String> preExerciseTasks;
   final List<String> requiredLearning;
   final List<String> optionalLearning;
@@ -20,7 +19,6 @@ class Exercise {
     required this.exerciseTitle,
     required this.objective,
     required this.minimumPracticeTime,
-    required this.minimumSessions,
     required this.totalSessions,
     required this.preExerciseTasks,
     required this.requiredLearning,
@@ -37,8 +35,7 @@ class Exercise {
       exerciseTitle: data['Exercise_title'] ?? '',
       objective: data['Objective'] ?? '',
       minimumPracticeTime: data['Minimum practice time'],
-      minimumSessions: data['Minimum sessions'],
-      totalSessions: data['Total sessions'] ?? '0',
+      totalSessions: data['Total sessions'] ?? 0,
       preExerciseTasks: List<String>.from(data['Pre-Exercise Tasks'] ?? []),
       requiredLearning: List<String>.from(data['Required learning'] ?? []),
       optionalLearning: List<String>.from(data['Optional learning'] ?? []),
@@ -53,7 +50,6 @@ class Exercise {
       exerciseTitle: exerciseTitle,
       objective: objective,
       minimumPracticeTime: minimumPracticeTime,
-      minimumSessions: minimumSessions,
       totalSessions: totalSessions,
       preExerciseTasks: preExerciseTasks,
       requiredLearning: requiredLearning,

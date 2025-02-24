@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/firebase/firebase_helpers.dart';
+import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,19 +31,15 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
     _loadNotificationSettings();
   }
 
-  Future<void> _loadNotificationSettings() async {
-    final prefs = await SharedPreferences.getInstance();
+ Future<void> _loadNotificationSettings() async {
+    final notificationPreferences = await getNotificationPreferences(user!.uid);
     setState(() {
-      notificationSettings = List.generate(
-          8, (index) => prefs.getBool('notification_$index') ?? false);
+      notificationSettings = notificationPreferences ?? List.filled(8, false);
     });
   }
 
   Future<void> _saveNotificationSettings() async {
-    final prefs = await SharedPreferences.getInstance();
-    for (int i = 0; i < notificationSettings.length; i++) {
-      await prefs.setBool('notification_$i', notificationSettings[i]);
-    }
+    await saveNotificationPreferences(user!.uid, notificationSettings);
   }
 
   @override

@@ -1,61 +1,51 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/models/firebase-exercise-uploader/interface/chapter_interface.dart';
+import 'package:llm_based_sat_app/screens/course/exercise/exercise_info_page_helper.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
-import 'package:llm_based_sat_app/utils/exercise_page_caller.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import 'package:llm_based_sat_app/widgets/custom_button.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/learning_tile.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/checkbox_tile.dart';
-
+import '../../../data/cache_manager.dart';
+import '../../../models/firebase-exercise-uploader/interface/course_interface.dart';
 import '../../../models/firebase-exercise-uploader/interface/exercise_interface.dart';
 
-class ExerciseInfoPage extends StatelessWidget {
+/* This file defines the ExerciseInfoPage widget, which provides detailed information about a specific exercise. Users can review preparation steps, learning materials, and key objectives before starting the exercise.
+Parameters:
+- [course]: The Course object containing course-related details.
+- [exercise]: The Exercise object representing the specific exercise being viewed.
+- [chapter]: The Chapter object to which the exercise belongs.
+- [onItemTapped]: Callback function to update the navigation bar index.
+- [selectedIndex]: The current selected index of the navigation bar.
+- [exerciseSession]: The current session count for the given exercise. */
+class ExerciseInfoPage extends StatefulWidget {
+  final Course course;
   final Exercise exercise;
+  final Chapter chapter;
   final Function(int) onItemTapped; // Function to update navbar index
   final int selectedIndex; // Current selected index
+  final int exerciseSession;
 
-  const ExerciseInfoPage(
-      {Key? key,
-      required this.exercise,
-      required this.onItemTapped,
-      required this.selectedIndex});
+  const ExerciseInfoPage({
+    super.key,
+    required this.course,
+    required this.exercise,
+    required this.chapter,
+    required this.onItemTapped,
+    required this.selectedIndex,
+    required this.exerciseSession,
+  });
 
-  void showDialogBox(BuildContext context, String title, String content) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          title: Text(
-            title,
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF062240),
-            ),
-          ),
-          content: Text(
-            content,
-            style: const TextStyle(
-              fontSize: 16,
-              color: Color(0xFF293138),
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text(
-                'Close',
-                style: TextStyle(color: Color(0xFF123659)),
-              ),
-            ),
-          ],
-        );
-      },
-    );
+  @override
+  _ExerciseInfoPageState createState() => _ExerciseInfoPageState();
+}
+
+class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
+  @override
+  void dispose() {
+    // Removes current step from cache so user must reset exercise
+    CacheManager.removeValue(widget.exercise.id);
+    super.dispose();
   }
 
   @override
@@ -63,9 +53,9 @@ class ExerciseInfoPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
-          title: 'Self-attachment',
-          onItemTapped: onItemTapped,
-          selectedIndex: selectedIndex),
+          title: widget.course.title,
+          onItemTapped: widget.onItemTapped,
+          selectedIndex: widget.selectedIndex),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -73,7 +63,7 @@ class ExerciseInfoPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Exercise ${exercise.id.substring(exercise.id.length - 1)}",
+              "Exercise ${widget.exercise.id.substring(widget.exercise.id.length - 1)}",
               style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w500,
@@ -127,13 +117,13 @@ class ExerciseInfoPage extends StatelessWidget {
                   title: 'Aim',
                   icon: Icons.lightbulb,
                   subject: 'Aim',
-                  content: exercise.objective,
+                  content: widget.exercise.objective,
                 ),
                 LearningTile(
                   title: 'Theory',
                   icon: Icons.article,
                   subject: 'Theory',
-                  content: getLearning(),
+                  content: getLearning(widget.exercise),
                 ),
                 // TODO
                 // Check if we can remove this LearningTile since can't find step headings anywhere
@@ -141,7 +131,7 @@ class ExerciseInfoPage extends StatelessWidget {
                   title: 'Steps',
                   icon: Icons.list,
                   subject: 'Steps',
-                  content: getSteps(),
+                  content: getSteps(widget.exercise),
                 ),
               ],
             ),
@@ -169,7 +159,7 @@ class ExerciseInfoPage extends StatelessWidget {
                         border: Border.all(color: Color(0xFF123659)),
                       ),
                       child: Text(
-                        exercise.minimumPracticeTime,
+                        widget.exercise.minimumPracticeTime,
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -196,10 +186,10 @@ class ExerciseInfoPage extends StatelessWidget {
                           color: Color(0xFFCEDFF2),
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(color: Color(0xFF123659))),
-                      child: const Text(
+                      child: Text(
                         // TODO
                         // What value to put here
-                        '3',
+                        (widget.exerciseSession + 1).toString(),
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -218,7 +208,8 @@ class ExerciseInfoPage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const ExercisePageCaller(id: "A_2"),
+                      builder: (context) => getExerciseStep(
+                          widget.exercise, widget.course, widget.chapter),
                     ),
                   );
                 },
@@ -229,53 +220,5 @@ class ExerciseInfoPage extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  /* Function to combine required and optional learning into one String */
-  getLearning() {
-    String learning = "";
-    String currentLetter = 'a';
-    for (final pointer in exercise.requiredLearning) {
-      learning = "$learning ($currentLetter) $pointer\n\n";
-      currentLetter = incrementLetter(currentLetter);
-    }
-    for (final pointer in exercise.optionalLearning) {
-      learning = "$learning ($currentLetter) $pointer\n\n";
-      currentLetter = incrementLetter(currentLetter);
-    }
-
-    return learning;
-  }
-
-  /* Function to increment given letter by 1 */
-  String incrementLetter(String letter) {
-    // Ensure the letter is a single character
-    if (letter.length == 1) {
-      // Get the Unicode code of the letter
-      int code = letter.codeUnitAt(0);
-
-      // Check if it's a lowercase letter between 'a' and 'z'
-      if (code >= 97 && code <= 122) {
-        // Increment the code to the next letter
-        code++;
-
-        // Convert back to a character and return
-        return String.fromCharCode(code);
-      }
-      // If it's not a valid lowercase letter
-      return letter;
-    }
-    return ''; // Return empty if input is invalid
-  }
-
-  /* Function to combine all exercise steps into one String */
-  getSteps() {
-    String steps = "";
-    int count = 1;
-    for (final step in exercise.exerciseSteps) {
-      steps = "$steps ($count) ${step.stepTitle}\n\n";
-      count++;
-    }
-    return steps;
   }
 }
