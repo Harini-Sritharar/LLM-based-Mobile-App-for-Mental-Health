@@ -126,6 +126,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
             ),
           ),
           SizedBox(height: 8),
+          // TODO: Upload comment to firebase for each user, exercise and session
           TextField(
             controller: _commentController,
             maxLines: 3,
