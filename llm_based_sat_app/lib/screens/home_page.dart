@@ -240,17 +240,33 @@ class HomePage extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
                     "Daily Quote",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: AppColours.brandBluePlusThree),
                   ),
                   const SizedBox(height: 8),
-                  Text(
-                    '“$quote”\n\n$author',
+                  Text.rich(
+                    TextSpan(
+                      text: '“$quote”\n\n',
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontStyle: FontStyle.italic,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: author,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
-                        fontSize: 16, fontStyle: FontStyle.italic),
                   ),
                 ],
               ),
