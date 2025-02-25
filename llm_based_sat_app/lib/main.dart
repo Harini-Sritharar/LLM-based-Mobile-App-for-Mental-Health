@@ -10,7 +10,7 @@ import 'package:llm_based_sat_app/utils/consts.dart';
 import 'package:llm_based_sat_app/screens/course/courses.dart';
 import 'package:llm_based_sat_app/widgets/fcm_init.dart';
 import 'screens/auth/sign_in_page.dart';
-import '../screens/calendar_page.dart';
+import 'screens/calendar/calendar_page.dart';
 import 'screens/score/score_page.dart';
 import '../widgets/bottom_nav_bar.dart';
 import 'firebase/firebase_options.dart';

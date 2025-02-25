@@ -316,8 +316,14 @@ Future<List<Course>> getAllCourses() async {
 }
 
 /* Adds a timestamp entry for a specific user and exercise Id by creating a new entry to the existing collection. */
-Future<void> updateTimeStamp(String uid, String courseId, String exerciseId,
-    String sessionNumber, Timestamp startTime, Timestamp endTime) async {
+Future<void> updateTimeStampAndComment(
+    String uid,
+    String courseId,
+    String exerciseId,
+    String sessionNumber,
+    Timestamp startTime,
+    Timestamp endTime,
+    String comment) async {
   try {
     // Reference to the user's course_progress subcollection
     final collection = FirebaseFirestore.instance
@@ -341,6 +347,7 @@ Future<void> updateTimeStamp(String uid, String courseId, String exerciseId,
       await timeStampRef.set({
         'startTime': startTime,
         'endTime': endTime,
+        'comment': comment,
       }, SetOptions(merge: true));
 
       print('Timestamp added successfully');
@@ -358,6 +365,7 @@ Future<void> updateTimeStamp(String uid, String courseId, String exerciseId,
       await timeStampRef.set({
         'startTime': startTime,
         'endTime': endTime,
+        'comment': comment,
       });
 
       print('New course entry created and timestamp added');
