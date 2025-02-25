@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:llm_based_sat_app/firebase/firebase_helpers.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
 
@@ -65,7 +64,9 @@ class _CourseCardState extends State<CourseCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: _isLocked ? () => _showPremiumMessage(context) : () => widget.onButtonPress(context),
+      onTap: _isLocked
+          ? () => _showPremiumMessage(context)
+          : () => widget.onButtonPress(context),
       child: Stack(
         children: [
           Container(
@@ -74,7 +75,9 @@ class _CourseCardState extends State<CourseCard> {
             decoration: BoxDecoration(
               color: AppColours.brandBlueMinusFour,
               borderRadius: BorderRadius.circular(12),
-              border: _isLocked ? Border.all(color: Colors.grey.shade400, width: 1.5) : null,
+              border: _isLocked
+                  ? Border.all(color: Colors.grey.shade400, width: 1.5)
+                  : null,
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,7 +100,9 @@ class _CourseCardState extends State<CourseCard> {
                         widget.courseType,
                         style: TextStyle(
                           fontSize: 14,
-                          color: _isLocked ? Colors.grey.shade600 : AppColours.supportingYellowMain,
+                          color: _isLocked
+                              ? Colors.grey.shade600
+                              : AppColours.supportingYellowMain,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -106,7 +111,9 @@ class _CourseCardState extends State<CourseCard> {
                         widget.courseTitle,
                         style: TextStyle(
                           fontSize: 18,
-                          color: _isLocked ? Colors.grey.shade700 : AppColours.brandBluePlusTwo,
+                          color: _isLocked
+                              ? Colors.grey.shade700
+                              : AppColours.brandBluePlusTwo,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -115,7 +122,9 @@ class _CourseCardState extends State<CourseCard> {
                         'Duration: ${widget.duration}',
                         style: TextStyle(
                           fontSize: 14,
-                          color: _isLocked ? Colors.grey.shade600 : AppColours.supportingGreenMinusOne,
+                          color: _isLocked
+                              ? Colors.grey.shade600
+                              : AppColours.supportingGreenMinusOne,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -125,18 +134,26 @@ class _CourseCardState extends State<CourseCard> {
                             '${widget.rating}',
                             style: TextStyle(
                               fontSize: 14,
-                              color: _isLocked ? Colors.grey.shade500 : AppColours.brandBlueMinusOne,
+                              color: _isLocked
+                                  ? Colors.grey.shade500
+                                  : AppColours.brandBlueMinusOne,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
                           const SizedBox(width: 8),
-                          Icon(Icons.star, size: 16, color: _isLocked ? Colors.grey.shade400 : Colors.amber),
+                          Icon(Icons.star,
+                              size: 16,
+                              color: _isLocked
+                                  ? Colors.grey.shade400
+                                  : Colors.amber),
                           const SizedBox(width: 8),
                           Text(
                             '${widget.ratingsCount} ratings',
                             style: TextStyle(
                               fontSize: 14,
-                              color: _isLocked ? Colors.grey.shade500 : AppColours.brandBlueMinusOne,
+                              color: _isLocked
+                                  ? Colors.grey.shade500
+                                  : AppColours.brandBlueMinusOne,
                             ),
                           ),
                         ],
@@ -148,14 +165,11 @@ class _CourseCardState extends State<CourseCard> {
             ),
           ),
           if (_isLocked)
-            Positioned(
-              left: 0,
-              right: 0,
-              top: 0,
-              bottom: 16,
+            Positioned.fill(
+              // Ensure it's properly positioned within the Stack
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.5),
+                  color: Colors.black45,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Center(
@@ -176,7 +190,7 @@ class _CourseCardState extends State<CourseCard> {
                       Text(
                         "Upgrade to access",
                         style: TextStyle(
-                          color: Colors.white.withOpacity(0.9),
+                          color: Colors.white70,
                           fontSize: 14,
                         ),
                       ),
@@ -190,6 +204,3 @@ class _CourseCardState extends State<CourseCard> {
     );
   }
 }
-
-
-
