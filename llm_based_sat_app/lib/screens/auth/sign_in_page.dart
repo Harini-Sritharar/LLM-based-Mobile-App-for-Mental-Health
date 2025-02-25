@@ -39,7 +39,7 @@ class _SignInPageState extends State<SignInPage> {
       }
       String? token = await FirebaseMessaging.instance.getToken();
       if (token != null) {
-        await FirebaseMessagingService(context).saveTokenToDatabase(token);
+        await FirebaseMessagingService().saveTokenToDatabase(token);
       }
 
     }
