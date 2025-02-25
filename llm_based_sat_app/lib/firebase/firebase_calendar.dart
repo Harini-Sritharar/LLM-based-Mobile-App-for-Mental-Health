@@ -26,6 +26,7 @@ Future<List<CalendarExerciseEntry>> getExercisesByDate(
         Map<String, dynamic> data = timestampDoc.data();
         Timestamp endTimestamp = data['endTime'];
         Timestamp startTimestamp = data['startTime'];
+        String comment = data['comment'] ?? "";
         DateTime exerciseDate = endTimestamp.toDate();
 
         if (_isSameDay(exerciseDate, date)) {
@@ -40,8 +41,8 @@ Future<List<CalendarExerciseEntry>> getExercisesByDate(
             exerciseName:
                 "Exercise ${exerciseId.substring(exerciseId.length - 1)}",
             duration: formatDuration(startTimestamp, endTimestamp),
-            // TODO: Update notes to accept comments
-            notes: '', date: exerciseDate,
+            notes: comment,
+            date: exerciseDate,
           ));
         }
       }
