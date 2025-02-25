@@ -14,6 +14,8 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart'; // Add this import for date formatting
 
+/// The HomePage widget is the main screen of the application, displaying
+/// various sections such as the user's score, tasks, courses, and a daily quote.
 class HomePage extends StatelessWidget {
   final Function(int) onItemTapped;
   final int selectedIndex;
@@ -77,6 +79,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  /// Builds the score card section which displays the user's overall score.
   Widget _buildScoreCard(BuildContext context) {
     return FutureBuilder<double>(
       future: getOverallScore(), // Fetch the overall score
@@ -129,6 +132,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  /// Builds the tasks card section which displays the tasks for the day.
   Widget _buildTasksCard() {
     return Card(
       color: AppColours.brandBlueMinusTwo,
@@ -155,6 +159,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  /// Builds a single task item with a task name and completion status.
   Widget _buildTaskItem(String task, bool completed) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -180,6 +185,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  /// Builds the courses section which displays the user's courses.
   Widget _buildCoursesSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -217,6 +223,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  /// Builds the daily quote section which displays a motivational quote.
   Widget _buildDailyQuote() {
     return FutureBuilder<Map<String, dynamic>>(
       future: fetchDailyQuote(),
@@ -277,6 +284,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  /// Fetches the daily quote from a remote API or from local storage if already fetched.
   Future<Map<String, dynamic>> fetchDailyQuote() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? storedQuote = prefs.getString('dailyQuote');
