@@ -13,6 +13,7 @@ class UserProvider with ChangeNotifier {
   Future<void> fetchUserData() async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
+      _uid = user.uid;
       _email = user.email;
       DocumentSnapshot userDoc = await FirebaseFirestore.instance
           .collection('Profile')
