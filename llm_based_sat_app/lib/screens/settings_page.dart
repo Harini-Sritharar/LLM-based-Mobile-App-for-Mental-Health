@@ -9,6 +9,7 @@ import 'package:llm_based_sat_app/screens/notifications_settings_page.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import 'package:llm_based_sat_app/widgets/custom_button.dart';
 import 'package:llm_based_sat_app/widgets/menu_item.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../widgets/main_layout.dart';
 import 'help_centre_page.dart';
@@ -84,15 +85,9 @@ class SettingsPage extends StatelessWidget {
                 title: 'Terms & Conditions',
                 icon: 'assets/icons/profile/book.svg',
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => TermsAndConditionsPage(
-                        onItemTapped: onItemTapped,
-                        selectedIndex: selectedIndex,
-                      ),
-                    ),
-                  );
+                  Uri url = Uri.parse(
+                      'https://invincimind.com/terms-and-conditions/');
+                  launchUrl(url);
                 }),
             MenuItem(
                 title: 'Help Centre',
