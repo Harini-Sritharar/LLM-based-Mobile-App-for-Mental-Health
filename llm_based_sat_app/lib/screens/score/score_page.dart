@@ -46,8 +46,14 @@ class _ScorePageState extends State<ScorePage> {
     overallScore = await getOverallScore();
     subScores = await getSubScores();
     Map<String, dynamic> res = await getAverageSubScores();
-    scores = res["averages"];
-    months = res["months"];
+    List<dynamic> x = res["averages"];
+    List<dynamic> y = res["months"];
+    if (x.isNotEmpty){
+      scores = res["averages"];
+    }
+    if (y.isNotEmpty){
+       months = res["months"];
+    }
     setState(() {});
   }
 

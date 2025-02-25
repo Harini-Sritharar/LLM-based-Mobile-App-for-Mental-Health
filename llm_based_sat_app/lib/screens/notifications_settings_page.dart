@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/firebase/firebase_helpers.dart';
+import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,23 +8,21 @@ import '../widgets/main_layout.dart'; // Import MainLayout
 
 /// A StatefulWidget for managing and displaying notification settings.
 /// Allows users to enable or disable various types of notifications.
-class NotificationsPage extends StatefulWidget {
-
-
+class NotificationSettingsPage extends StatefulWidget {
   final Function(int)
       onItemTapped; // Callback function to update the navbar index.
   final int selectedIndex; // Current selected index in the navigation bar.
 
-  NotificationsPage({
+  NotificationSettingsPage({
     required this.onItemTapped,
     required this.selectedIndex,
   });
 
   @override
-  _NotificationsPageState createState() => _NotificationsPageState();
+  _NotificationSettingsPageState createState() => _NotificationSettingsPageState();
 }
 
-class _NotificationsPageState extends State<NotificationsPage> {
+class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
   List<bool> notificationSettings = List.filled(8, false);
 
   @override
@@ -31,19 +31,15 @@ class _NotificationsPageState extends State<NotificationsPage> {
     _loadNotificationSettings();
   }
 
-  Future<void> _loadNotificationSettings() async {
-    final prefs = await SharedPreferences.getInstance();
+ Future<void> _loadNotificationSettings() async {
+    final notificationPreferences = await getNotificationPreferences(user!.uid);
     setState(() {
-      notificationSettings = List.generate(
-          8, (index) => prefs.getBool('notification_$index') ?? false);
+      notificationSettings = notificationPreferences ?? List.filled(8, false);
     });
   }
 
   Future<void> _saveNotificationSettings() async {
-    final prefs = await SharedPreferences.getInstance();
-    for (int i = 0; i < notificationSettings.length; i++) {
-      await prefs.setBool('notification_$i', notificationSettings[i]);
-    }
+    await saveNotificationPreferences(user!.uid, notificationSettings);
   }
 
   @override
@@ -112,9 +108,9 @@ class _NotificationsPageState extends State<NotificationsPage> {
   }
 
   final List<String> _notificationTitles = [
-    "Upcoming tasks",
-    "Missed tasks",
-    "Reminders",
+    "Daily tasks",
+    "Daily practice",
+    "Score Updates",
     "Daily motivation",
     "New courses",
     "Tips",
