@@ -9,6 +9,10 @@ import 'package:llm_based_sat_app/screens/course/courses_helper.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/course_card.dart';
 
 import '../widgets/score_widgets/circular_progress_bar.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart'; // Add this import for date formatting
 
 class HomePage extends StatelessWidget {
   final Function(int) onItemTapped;
@@ -182,7 +186,10 @@ class HomePage extends StatelessWidget {
       children: [
         const Text(
           "My courses",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+              color: AppColours.brandBluePlusThree),
         ),
         const SizedBox(height: 8),
         FutureBuilder<List<CourseCard>>(
@@ -211,26 +218,73 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildDailyQuote() {
-    return Card(
-      color: Colors.blue[100],
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: const [
-            Text(
-              "Daily Quote",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+    return FutureBuilder<Map<String, dynamic>>(
+      future: fetchDailyQuote(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(
+            child: Text(
+              'Error loading quote.',
+              style: TextStyle(fontSize: 16, color: Colors.grey),
             ),
-            SizedBox(height: 8),
-            Text(
-              '“The only true wisdom is in knowing you know nothing.”\n\nSocrates',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
+          );
+        } else {
+          final quote = snapshot.data?['content'] ?? 'No quote available';
+          final author = snapshot.data?['author'] ?? 'Unknown';
+          return Card(
+            color: Colors.blue[100],
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  const Text(
+                    "Daily Quote",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    '“$quote”\n\n$author',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                        fontSize: 16, fontStyle: FontStyle.italic),
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
-      ),
+          );
+        }
+      },
     );
+  }
+
+  Future<Map<String, dynamic>> fetchDailyQuote() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? storedQuote = prefs.getString('dailyQuote');
+    String? storedAuthor = prefs.getString('dailyAuthor');
+    String? storedDate = prefs.getString('quoteDate');
+
+    String todayDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+
+    if (storedQuote != null &&
+        storedAuthor != null &&
+        storedDate == todayDate) {
+      return {'content': storedQuote, 'author': storedAuthor};
+    } else {
+      final response =
+          await http.get(Uri.parse('http://api.quotable.io/random'));
+      if (response.statusCode == 200) {
+        Map<String, dynamic> quoteData = json.decode(response.body);
+        await prefs.setString('dailyQuote', quoteData['content']);
+        await prefs.setString('dailyAuthor', quoteData['author']);
+        await prefs.setString('quoteDate', todayDate);
+        return quoteData;
+      } else {
+        throw Exception('Failed to load quote');
+      }
+    }
   }
 }
