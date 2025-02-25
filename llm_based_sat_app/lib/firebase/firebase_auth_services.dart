@@ -1,9 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/utils/user_provider.dart';
+import 'package:path/path.dart';
+import 'package:provider/provider.dart';
 
 class FirebaseAuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseMessaging _messaging = FirebaseMessaging.instance;
   Future<User?> signUpWithEmailAndPassword(
       BuildContext context, String email, String password) async {
     try {
@@ -50,8 +55,27 @@ class FirebaseAuthService {
     return null;
   }
 
-  Future<void> signOut() async {
-    await _auth.signOut();
+ Future<void> signOut(BuildContext context) async {
+    try {
+      var userProvider = Provider.of<UserProvider>(context);
+      User? user = _auth.currentUser; // Get the user before signing out
+      if (user != null) {
+        String userId = userProvider.getUid();
+
+        // Remove FCM token from Firestore
+        await _firestore.collection('Profile').doc(userId).update({
+          'fcmToken': FieldValue.delete(),
+        });
+
+        // Optionally delete FCM token from the device (for security)
+        await _messaging.deleteToken();
+      }
+
+      await _auth.signOut();
+      print("User signed out and FCM token removed successfully.");
+    } catch (e) {
+      print("Error signing out: $e");
+    }
   }
 
   void _handleFirebaseAuthError(BuildContext context, FirebaseAuthException e) {

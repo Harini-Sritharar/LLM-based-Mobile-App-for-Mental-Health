@@ -6,8 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/firebase/firebase_helpers.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
+import 'package:llm_based_sat_app/utils/user_provider.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import 'package:llm_based_sat_app/widgets/custom_button.dart';
+import 'package:provider/provider.dart';
 import '../widgets/main_layout.dart';
 
 /// A stateful widget that represents the Ultimate Goal page.
@@ -45,9 +47,14 @@ class _UltimateGoalPageState extends State<UltimateGoalPage> {
   int _remainingCharacters = maxCharacters;
   bool _isLoading = true;
 
+  var userProvider;
+  late String uid;
+
   @override
   void initState() {
     super.initState();
+    userProvider = Provider.of<UserProvider>(context);
+    uid = userProvider.getUid();
     _fetchUltimateGoal();
     // Update the remaining character count as the user types.
     _textController.addListener(() {
@@ -63,7 +70,7 @@ class _UltimateGoalPageState extends State<UltimateGoalPage> {
       setState(() => _isLoading = false);
       return;
     }
-    String goal = await getUltimateGoal(user!.uid);
+    String goal = await getUltimateGoal(uid);
     setState(() {
       if (goal.isNotEmpty) {
         _textController.text = goal;
@@ -196,12 +203,14 @@ class _UltimateGoalPageState extends State<UltimateGoalPage> {
 // The Onpress function for saving the ultimate goal.
 void saveUltimateGoal(
     BuildContext context, TextEditingController goalController) async {
+  var userProvider = Provider.of<UserProvider>(context);
+  var uid = userProvider.getUid();
   if (user == null) {
     print("No user logged in");
     return;
   }
   if (goalController.text.isNotEmpty) {
-    await setUltimateGoal(user!.uid, goalController.text);
+    await setUltimateGoal(uid, goalController.text);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text("Ultimate goal saved successfully!")),
     );

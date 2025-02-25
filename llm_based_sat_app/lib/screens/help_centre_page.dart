@@ -5,8 +5,10 @@ import 'package:file_picker/file_picker.dart';
 import 'package:llm_based_sat_app/firebase/firebase_helpers.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
+import 'package:llm_based_sat_app/utils/user_provider.dart';
 import 'package:llm_based_sat_app/widgets/custom_button.dart';
 import 'package:llm_based_sat_app/widgets/main_layout.dart';
+import 'package:provider/provider.dart';
 import '../widgets/custom_app_bar.dart';
 
 /// A stateful widget representing the Help Centre page.
@@ -41,6 +43,8 @@ class _HelpCentrePageState extends State<HelpCentrePage> {
 
   @override
   Widget build(BuildContext context) {
+    var userProvider = Provider.of<UserProvider>(context);
+    String uid = userProvider.getUid();
     return MainLayout(
       selectedIndex: widget.selectedIndex,
       body: Padding(
@@ -102,7 +106,7 @@ class _HelpCentrePageState extends State<HelpCentrePage> {
                   }
                   // Save the issue to Firestore.
                   await saveReportedIssue(
-                    userId: user!.uid, // Replace with the actual user ID.
+                    userId: uid, // Replace with the actual user ID.
                     issue: _textController.text,
                     mediaURLs: uploadedUrls,
                   );

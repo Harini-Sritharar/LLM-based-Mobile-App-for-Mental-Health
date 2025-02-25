@@ -3,6 +3,8 @@ import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:llm_based_sat_app/firebase/firebase_helpers.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
+import 'package:llm_based_sat_app/utils/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class CourseCard extends StatefulWidget {
   final String imageUrl;
@@ -32,15 +34,19 @@ class CourseCard extends StatefulWidget {
 
 class _CourseCardState extends State<CourseCard> {
   bool _isLocked = true;
+  var userProvider;
+  late String uid;
 
   @override
   void initState() {
     super.initState();
+    userProvider = Provider.of<UserProvider>(context);
+    uid = userProvider.getUid();
     _checkUserTier();
   }
 
   Future<void> _checkUserTier() async {
-    String tier = await getTier(user!.uid);
+    String tier = await getTier(uid);
     if (tier == 'monthly' || tier == 'yearly') {
       setState(() {
         _isLocked = false;
