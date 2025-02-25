@@ -93,17 +93,20 @@ class HomePage extends StatelessWidget {
               );
             },
             child: Card(
-              color: Colors.blue[100],
+              color: AppColours.brandBlueMinusThree,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
                       "Your Score",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: AppColours.brandBluePlusThree),
                     ),
                     const SizedBox(height: 8),
                     Center(
