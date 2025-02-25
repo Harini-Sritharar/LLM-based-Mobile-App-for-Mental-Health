@@ -9,7 +9,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.llmBasedSatApp</string>
+	<string>com.invincimind.satapp</string>
 	<key>PROJECT_ID</key>
 	<string>llm-based-sat-app</string>
 	<key>STORAGE_BUCKET</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:128555328235:ios:4d09a79a2d667192b9d4ae</string>
+	<string>1:128555328235:ios:2fd56f5ed21bd4e8b9d4ae</string>
 </dict>
 </plist>

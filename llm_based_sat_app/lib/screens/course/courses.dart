@@ -1,46 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:llm_based_sat_app/firebase/firebase_helpers.dart';
-import 'package:llm_based_sat_app/models/firebase-exercise-uploader/interface/course_interface.dart';
-import 'package:llm_based_sat_app/screens/course/course_info.dart';
-import 'package:llm_based_sat_app/widgets/course_widgets/course_card.dart'; // Custom reusable widget for course cards
+import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
+import 'courses_helper.dart';
 
+/* This file defines the Courses Screen, which displays a list of available courses. It fetches course data asynchronously and displays them as selectable cards.
+Parameters:
+- [onItemTapped]: Callback function triggered when a bottom navigation item is tapped.
+- [selectedIndex]: The index of the currently selected navigation item. */
 class Courses extends StatelessWidget {
   final Function(int) onItemTapped;
   final int selectedIndex;
 
   const Courses({
-    Key? key,
+    super.key,
     required this.onItemTapped,
     required this.selectedIndex,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text(
-          'Courses',
-          style: TextStyle(color: Colors.black),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications),
-            onPressed: () {
-              // Handle notification click
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.person),
-            onPressed: () {
-              // Navigate to profile page
-            },
-          ),
-        ],
+      appBar: CustomAppBar(
+        title: "Courses",
+        onItemTapped: onItemTapped,
+        selectedIndex: selectedIndex,
+        backButton: false,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -54,7 +38,7 @@ class Courses extends StatelessWidget {
             const SizedBox(height: 16),
             Expanded(
               child: FutureBuilder<List<Widget>>(
-                future: generateCourseCards(),
+                future: generateCourseCards(onItemTapped, selectedIndex),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     // Show a loading indicator while waiting for data
@@ -102,84 +86,6 @@ class Courses extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.white,
-        currentIndex: selectedIndex,
-        onTap: onItemTapped,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.group),
-            label: 'Community',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today),
-            label: 'Calendar',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.score),
-            label: 'Score',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.book),
-            label: 'Courses',
-          ),
-        ],
-      ),
     );
-  }
-
-/* Creates a dynamic `onButtonPress` function that navigates to the `CourseInfo` page with the specified parameters. */
-  void Function(BuildContext) createOnButtonPress({
-    required Course course,
-  }) {
-    return (BuildContext context) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => CourseInfo(
-            course: course,
-            onItemTapped: onItemTapped,
-            selectedIndex: selectedIndex,
-          ),
-        ),
-      );
-    };
-  }
-
-  /* Generates a list of `CourseCard` widgets dynamically based on course data. */
-  Future<List<CourseCard>> generateCourseCards() async {
-    try {
-      // Fetch courses from the database
-      List<Course> coursesDatabase = await getAllCourses();
-
-      // Handle the case where no courses are found
-      if (coursesDatabase.isEmpty) {
-        print("No courses found in the database.");
-        return []; // Return an empty list if no courses are found
-      }
-
-      // Generate CourseCard widgets for each course
-      return coursesDatabase.map((course) {
-        return CourseCard(
-          imageUrl: course.imageUrl,
-          courseType: course.courseType,
-          courseTitle: course.title,
-          duration: course.duration,
-          rating: course.rating,
-          ratingsCount: course.ratingCount,
-          onButtonPress: createOnButtonPress(
-            course: course,
-          ),
-        );
-      }).toList();
-    } catch (e) {
-      // Log and handle errors
-      print("Error while generating course cards: $e");
-      return []; // Return an empty list in case of an error
-    }
   }
 }

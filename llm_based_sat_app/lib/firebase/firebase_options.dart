@@ -64,7 +64,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '128555328235',
     projectId: 'llm-based-sat-app',
     storageBucket: 'llm-based-sat-app.firebasestorage.app',
-    iosBundleId: 'com.example.llmBasedSatApp',
+    iosBundleId: 'com.invincimind.satapp',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -73,7 +73,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '128555328235',
     projectId: 'llm-based-sat-app',
     storageBucket: 'llm-based-sat-app.firebasestorage.app',
-    iosBundleId: 'com.example.llmBasedSatApp',
+    iosBundleId: 'com.invincimind.satapp',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(

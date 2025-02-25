@@ -61,6 +61,7 @@ Future<void> updatePersonalInfo(
   String tier = "free"; // Default tier
   List<String> favouritePhotos = [];
   List<String> nonfavouritePhotos = [];
+  String ultimateGoal = "";
 
   if (docSnapshot.exists) {
     Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
@@ -70,6 +71,7 @@ Future<void> updatePersonalInfo(
     // Fixing the List<dynamic> to List<String> conversion issue
     favouritePhotos = List<String>.from(data['favouritePhotos'] ?? []);
     nonfavouritePhotos = List<String>.from(data['nonfavouritePhotos'] ?? []);
+    ultimateGoal = data['ultimateGoal'] ?? "";
   }
 
   await userDoc.set(
@@ -80,7 +82,8 @@ Future<void> updatePersonalInfo(
       'gender': gender,
       'tier': tier,
       'favouritePhotos': favouritePhotos,
-      'nonfavouritePhotos': nonfavouritePhotos
+      'nonfavouritePhotos': nonfavouritePhotos,
+      'ultimateGoal': ultimateGoal
     },
     SetOptions(merge: true), // Merging ensures we don’t overwrite other fields
   );

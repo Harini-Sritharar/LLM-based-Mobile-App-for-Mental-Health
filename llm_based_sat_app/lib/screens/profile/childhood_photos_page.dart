@@ -91,7 +91,7 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
       List<String> storedFavouritePhotos =
           List<String>.from(snapshot.get('favouritePhotos') ?? []);
       List<String> storedNonFavouritePhotos =
-          List<String>.from(snapshot.get('nonFavouritePhotos') ?? []);
+          List<String>.from(snapshot.get('nonfavouritePhotos') ?? []);
 
       // Upload new local photos
       List<String> uploadedFavouritePhotos = [];
@@ -119,7 +119,7 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
       // Update Firestore
       await userDoc.set({
         'favouritePhotos': storedFavouritePhotos,
-        'nonFavouritePhotos': storedNonFavouritePhotos,
+        'nonfavouritePhotos': storedNonFavouritePhotos,
       }, SetOptions(merge: true));
 
       setState(() {
