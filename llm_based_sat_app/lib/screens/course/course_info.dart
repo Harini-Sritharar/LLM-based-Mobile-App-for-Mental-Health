@@ -42,67 +42,74 @@ class _CourseInfoState extends State<CourseInfo> {
           title: "Courses",
           onItemTapped: widget.onItemTapped,
           selectedIndex: widget.selectedIndex),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CourseTypeRating(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CourseTypeRating(
                 courseType: widget.course.courseType,
-                rating: widget.course.rating),
-            const SizedBox(height: 10),
-            Text(
-              widget.course.title,
-              style: TextStyle(
-                fontSize: 26,
-                fontWeight: FontWeight.w500,
+                rating: widget.course.rating,
               ),
-            ),
-            const SizedBox(height: 14),
-            CourseExerciseDuration(
+              const SizedBox(height: 10),
+              Text(
+                widget.course.title,
+                style: TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 14),
+              CourseExerciseDuration(
                 exercises: getNumberOfExercises(widget.course),
-                duration: widget.course.duration),
-            const SizedBox(height: 20),
-            ExpandableText(
-                // Course Aim
-                text: widget.course.aim),
-            const SizedBox(height: 40),
-            PreCourseList(
-              // TODO: Implement check to see if prerequisites are fulfilled
-              prerequisites: widget.course.prerequisites,
-              onUploadChildhoodPhotosPressed: (BuildContext context) {},
-              onWatchIntroductoryVideoPressed: (BuildContext context) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
+                duration: widget.course.duration,
+              ),
+              const SizedBox(height: 20),
+              ExpandableText(
+                text: widget.course.aim,
+              ),
+              const SizedBox(height: 40),
+              PreCourseList(
+                prerequisites: widget.course.prerequisites,
+                onUploadChildhoodPhotosPressed: (BuildContext context) {},
+                onWatchIntroductoryVideoPressed: (BuildContext context) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
                       builder: (context) => FirebaseVideoPlayer(
-                            course: widget.course,
-                          )),
-                );
-                setState(() {}); // Refresh after returning;
-              },
-              onStartCoursePressed: (BuildContext context) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CoursePage(
-                      course: widget.course,
-                      courseTitle: widget.course.title,
-                      chapters: getChapters(widget.course, widget.onItemTapped,
-                          widget.selectedIndex),
-                      onItemTapped: widget.onItemTapped,
-                      selectedIndex: widget.selectedIndex,
+                        course: widget.course,
+                      ),
                     ),
-                  ),
-                );
-              },
-              watchedIntroductoryVideo:
-                  getWatchedIntroductoryVideo(widget.course),
-              childhoodPhotosUploaded:
-                  getChildhoodPhotosUploaded(widget.course),
-              course: widget.course,
-            ),
-          ],
+                  );
+                  setState(() {}); // Refresh after returning
+                },
+                onStartCoursePressed: (BuildContext context) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CoursePage(
+                        course: widget.course,
+                        courseTitle: widget.course.title,
+                        chapters: getChapters(
+                          widget.course,
+                          widget.onItemTapped,
+                          widget.selectedIndex,
+                        ),
+                        onItemTapped: widget.onItemTapped,
+                        selectedIndex: widget.selectedIndex,
+                      ),
+                    ),
+                  );
+                },
+                watchedIntroductoryVideo:
+                    getWatchedIntroductoryVideo(widget.course),
+                childhoodPhotosUploaded:
+                    getChildhoodPhotosUploaded(widget.course),
+                course: widget.course,
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -147,15 +147,21 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     );
                     break;
                   case 1:
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => NotificationsPage(
-                          onItemTapped: onItemTapped,
-                          selectedIndex: selectedIndex,
+                    if (ModalRoute.of(context)?.settings.name !=
+                        '/notifications') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => NotificationsPage(
+                            onItemTapped: onItemTapped,
+                            selectedIndex: selectedIndex,
+                          ),
+                          settings: const RouteSettings(
+                            name: '/notifications',
+                          ),
                         ),
-                      ),
-                    );
+                      );
+                    }
                     break;
                   case 2:
                     if (ModalRoute.of(context)?.settings.name != '/profile') {

@@ -1,5 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/data/cache_manager.dart';
+import 'package:llm_based_sat_app/firebase/firebase_courses.dart';
 import 'package:llm_based_sat_app/main.dart';
+import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/custom_button.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_appBar.dart';
@@ -86,7 +90,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
             CustomButton(
               buttonText: 'Back to Course',
               onPress: () {
-                print("User commented: ${_commentController.text}");
+                uploadTimeStampAndComment();
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -152,5 +156,22 @@ class _AssessmentPageState extends State<AssessmentPage> {
       index++;
     }
     return index;
+  }
+
+  // Add TimeStamp entry and comment for given exercise and session
+  void uploadTimeStampAndComment() {
+    updateTimeStampAndComment(
+        user!.uid,
+        widget.course.id.trim(),
+        widget.exercise.id.trim(),
+        (getSessions(widget.exercise, widget.course) + 1).toString(),
+        CacheManager.getValue(
+            "${widget.exercise.id}/${getSessions(widget.exercise, widget.course) + 1}/TimeStamp"),
+        Timestamp.now(),
+        _commentController.text);
+
+    // Remove cached TimeStamp for current exercise and session
+    CacheManager.removeValue(
+        "${widget.exercise.id}/${getSessions(widget.exercise, widget.course) + 1}/TimeStamp");
   }
 }

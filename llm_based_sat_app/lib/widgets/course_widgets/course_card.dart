@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:llm_based_sat_app/firebase/firebase_helpers.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
 import 'package:llm_based_sat_app/utils/user_provider.dart';
@@ -179,14 +178,11 @@ class _CourseCardState extends State<CourseCard> {
             ),
           ),
           if (_isLocked)
-            Positioned(
-              left: 0,
-              right: 0,
-              top: 0,
-              bottom: 16,
+            Positioned.fill(
+              // Ensure it's properly positioned within the Stack
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.5),
+                  color: Colors.black45,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Center(
@@ -207,7 +203,7 @@ class _CourseCardState extends State<CourseCard> {
                       Text(
                         "Upgrade to access",
                         style: TextStyle(
-                          color: Colors.white.withOpacity(0.9),
+                          color: Colors.white70,
                           fontSize: 14,
                         ),
                       ),

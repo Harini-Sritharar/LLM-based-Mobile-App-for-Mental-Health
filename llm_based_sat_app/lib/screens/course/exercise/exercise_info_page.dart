@@ -43,11 +43,22 @@ class ExerciseInfoPage extends StatefulWidget {
 }
 
 class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
+  List<bool> checkboxStates = [
+    false,
+    false,
+    false
+  ]; // Initial states for checkboxes
+
   @override
   void dispose() {
     // Removes current step from cache so user must reset exercise
     CacheManager.removeValue(widget.exercise.id);
     super.dispose();
+  }
+
+  // Returns true if all Checkboxes are checked
+  bool allCheckboxesChecked() {
+    return checkboxStates.every((element) => element);
   }
 
   @override
@@ -88,21 +99,39 @@ class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
             ),
             const SizedBox(height: 8),
             Column(
-              children: const [
+              children: [
                 CheckboxTile(
                   title:
                       'Go to a quiet place. If not possible, wear headphones.',
                   icon: Icons.headphones,
+                  value: checkboxStates[0],
+                  onChanged: (bool? newValue) {
+                    setState(() {
+                      checkboxStates[0] = newValue ?? false;
+                    });
+                  },
                 ),
                 CheckboxTile(
                   title:
                       'Set your childhood photo as the background on your phone.',
                   icon: Icons.photo,
+                  value: checkboxStates[1],
+                  onChanged: (bool? newValue) {
+                    setState(() {
+                      checkboxStates[1] = newValue ?? false;
+                    });
+                  },
                 ),
                 CheckboxTile(
                   title:
                       'Plan a visit to a natural area (park, river, mountain, sea..).',
                   icon: Icons.calendar_today,
+                  value: checkboxStates[2],
+                  onChanged: (bool? newValue) {
+                    setState(() {
+                      checkboxStates[2] = newValue ?? false;
+                    });
+                  },
                 ),
               ],
             ),
@@ -205,21 +234,22 @@ class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
               ],
             ),
             const SizedBox(height: 16),
-            Center(
-              child: CustomButton(
-                buttonText: 'Start Exercise',
-                onPress: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => getExerciseStep(
-                          widget.exercise, widget.course, widget.chapter, uid),
-                    ),
-                  );
-                },
-                rightArrowPresent: true,
+            if (allCheckboxesChecked()) // Show button only when all Checkboxes are checked
+              Center(
+                child: CustomButton(
+                  buttonText: 'Start Exercise',
+                  onPress: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => getExerciseStep(
+                            widget.exercise, widget.course, widget.chapter, uid),
+                      ),
+                    );
+                  },
+                  rightArrowPresent: true,
+                ),
               ),
-            ),
           ],
         ),
       ),
