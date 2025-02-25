@@ -48,11 +48,11 @@ class _ScorePageState extends State<ScorePage> {
     Map<String, dynamic> res = await getAverageSubScores();
     List<dynamic> x = res["averages"];
     List<dynamic> y = res["months"];
-    if (x.isNotEmpty){
+    if (x.isNotEmpty) {
       scores = res["averages"];
     }
-    if (y.isNotEmpty){
-       months = res["months"];
+    if (y.isNotEmpty) {
+      months = res["months"];
     }
     setState(() {});
   }
@@ -87,7 +87,27 @@ class _ScorePageState extends State<ScorePage> {
                 percentage: overallScore, title: "Overall", inMiddle: true),
             ProgressRow(progressData: progressDataTop),
             ProgressRow(progressData: progressDataBottom),
-            ScoreGraph(scores: scores, months: months),
+            if (months.length >= 3)
+              ScoreGraph(scores: scores, months: months)
+            else
+              Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                Icon(
+                  Icons.info_outline,
+                  color: Colors.grey,
+                  size: 40,
+                ),
+                SizedBox(height: 8),
+                Text(
+                  "Continue using the app for 3 months to view your score graph",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey),
+                  textAlign: TextAlign.center,
+                ),
+                ],
+              ),
+              ),
           ]),
         ));
   }
