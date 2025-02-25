@@ -45,8 +45,6 @@ class _CalendarPageState extends State<CalendarPage> {
 
   // Function to fetch exercises from Firebase
   Future<void> _fetchExercises() async {
-    if (user == null) return;
-
     List<CalendarExerciseEntry> result =
         await getExercisesByDate(uid, _selectedDate);
 
