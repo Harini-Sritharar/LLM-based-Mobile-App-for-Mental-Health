@@ -22,12 +22,17 @@ class FirebaseVideoPlayer extends StatefulWidget {
 class _FirebaseVideoPlayerState extends State<FirebaseVideoPlayer> {
   late VideoPlayerController _controller;
   bool _isLoading = true;
-  var userProvider;
+  late UserProvider userProvider;
   late String uid;
 
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     userProvider = Provider.of<UserProvider>(context);
     uid = userProvider.getUid();
     _initializeVideo();

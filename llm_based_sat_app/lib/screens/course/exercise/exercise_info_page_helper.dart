@@ -122,7 +122,7 @@ Widget getExerciseStep(
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => getExerciseStep(exercise, course, chapter),
+              builder: (context) => getExerciseStep(exercise, course, chapter, context),
             ),
           );
         } else {
@@ -136,7 +136,7 @@ Widget getExerciseStep(
       exercise: exercise,
     );
   } else {
-    var userProvider = Provider.of<UserProvider>(context);
+    UserProvider userProvider = Provider.of<UserProvider>(context);
     String uid = userProvider.getUid();
     // Final Step - Show Assessment Page
     CacheManager.removeValue(exercise.id); // Reset cache

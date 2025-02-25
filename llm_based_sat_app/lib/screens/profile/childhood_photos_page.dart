@@ -32,12 +32,17 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
   List<String> deletedFavouritePhotos = [];
   List<String> deletedNonFavouritePhotos = [];
   bool isSaving = false;
-  var userProvider;
+  late UserProvider userProvider;
   late String uid;
 
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     userProvider = Provider.of<UserProvider>(context);
     uid = userProvider.getUid();
     _loadStoredPhotos();

@@ -13,7 +13,7 @@ import 'course_info.dart';
 Future<List<CourseCard>> generateCourseCards(
     Function(int) onItemTapped, int selectedIndex, BuildContext context) async {
   try {
-    var userProvider = Provider.of<UserProvider>(context);
+    UserProvider userProvider = Provider.of<UserProvider>(context);
     String uid = userProvider.getUid();
     // Fetch courses from the database
     List<Course> coursesDatabase = await getAllCourses();

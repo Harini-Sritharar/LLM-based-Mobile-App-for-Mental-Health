@@ -208,8 +208,8 @@ class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => getExerciseStep(
-                          widget.exercise, widget.course, widget.chapter),
+                      builder: (context) => getExerciseStep(widget.exercise,
+                          widget.course, widget.chapter, context),
                     ),
                   );
                 },

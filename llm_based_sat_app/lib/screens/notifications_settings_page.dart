@@ -27,12 +27,19 @@ class NotificationSettingsPage extends StatefulWidget {
 
 class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
   List<bool> notificationSettings = List.filled(8, false);
-  var userProvider;
+  late UserProvider userProvider;
+
   late String uid;
 
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
     userProvider = Provider.of<UserProvider>(context);
     uid = userProvider.getUid();
     _loadNotificationSettings();
@@ -40,6 +47,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
 
   Future<void> _loadNotificationSettings() async {
     final notificationPreferences = await getNotificationPreferences(uid);
+    if (!mounted) return;
     setState(() {
       notificationSettings = notificationPreferences ?? List.filled(8, false);
     });

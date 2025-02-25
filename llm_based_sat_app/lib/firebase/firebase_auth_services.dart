@@ -56,9 +56,9 @@ class FirebaseAuthService {
     return null;
   }
 
- Future<void> signOut(BuildContext context) async {
+  Future<void> signOut(BuildContext context) async {
     try {
-      var userProvider = Provider.of<UserProvider>(context);
+      UserProvider userProvider = Provider.of<UserProvider>(context);
       User? user = _auth.currentUser; // Get the user before signing out
       if (user != null) {
         String userId = userProvider.getUid();

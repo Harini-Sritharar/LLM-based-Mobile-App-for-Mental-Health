@@ -43,7 +43,7 @@ class _HelpCentrePageState extends State<HelpCentrePage> {
 
   @override
   Widget build(BuildContext context) {
-    var userProvider = Provider.of<UserProvider>(context);
+    UserProvider userProvider = Provider.of<UserProvider>(context);
     String uid = userProvider.getUid();
     return MainLayout(
       selectedIndex: widget.selectedIndex,

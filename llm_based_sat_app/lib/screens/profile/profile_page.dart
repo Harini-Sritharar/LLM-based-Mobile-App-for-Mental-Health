@@ -38,7 +38,7 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var userProvider = Provider.of<UserProvider>(context);
+    UserProvider userProvider = Provider.of<UserProvider>(context);
     String uid = userProvider.getUid();
     String? userEmail = userProvider.email;
     return MainLayout(

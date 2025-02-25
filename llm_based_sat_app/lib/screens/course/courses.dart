@@ -38,7 +38,8 @@ class Courses extends StatelessWidget {
             const SizedBox(height: 16),
             Expanded(
               child: FutureBuilder<List<Widget>>(
-                future: generateCourseCards(onItemTapped, selectedIndex),
+                future:
+                    generateCourseCards(onItemTapped, selectedIndex, context),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     // Show a loading indicator while waiting for data

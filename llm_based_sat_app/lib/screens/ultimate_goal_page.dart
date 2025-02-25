@@ -47,21 +47,27 @@ class _UltimateGoalPageState extends State<UltimateGoalPage> {
   int _remainingCharacters = maxCharacters;
   bool _isLoading = true;
 
-  var userProvider;
+  late UserProvider userProvider;
+
   late String uid;
 
   @override
   void initState() {
     super.initState();
-    userProvider = Provider.of<UserProvider>(context);
-    uid = userProvider.getUid();
-    _fetchUltimateGoal();
     // Update the remaining character count as the user types.
     _textController.addListener(() {
       setState(() {
         _remainingCharacters = maxCharacters - _textController.text.length;
       });
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    userProvider = Provider.of<UserProvider>(context);
+    uid = userProvider.getUid();
+    _fetchUltimateGoal();
   }
 
   Future<void> _fetchUltimateGoal() async {
@@ -203,7 +209,7 @@ class _UltimateGoalPageState extends State<UltimateGoalPage> {
 // The Onpress function for saving the ultimate goal.
 void saveUltimateGoal(
     BuildContext context, TextEditingController goalController) async {
-  var userProvider = Provider.of<UserProvider>(context);
+  UserProvider userProvider = Provider.of<UserProvider>(context);
   var uid = userProvider.getUid();
   if (user == null) {
     print("No user logged in");

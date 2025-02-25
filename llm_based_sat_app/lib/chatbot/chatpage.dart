@@ -14,16 +14,24 @@ class Chatpage extends StatefulWidget {
 
 class ChatpageState extends State<Chatpage> {
   String name = '';
-  var userProvider;
+  late UserProvider userProvider;
+
   late String uid;
 
   @override
   void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // Access Provider here
     userProvider = Provider.of<UserProvider>(context);
     uid = userProvider.getUid();
-    super.initState();
-    _loadName();
     webSocketService.connect(uid, context);
+    _loadName();
   }
 
   @override
@@ -35,6 +43,7 @@ class ChatpageState extends State<Chatpage> {
   Future<void> _loadName() async {
     String fullName = await getName(uid);
     name = fullName.split(' ')[0];
+    if (!mounted) return;
     setState(() {});
   }
 
