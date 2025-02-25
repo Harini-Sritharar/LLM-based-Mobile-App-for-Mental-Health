@@ -58,7 +58,8 @@ class FirebaseAuthService {
 
   Future<void> signOut(BuildContext context) async {
     try {
-      UserProvider userProvider = Provider.of<UserProvider>(context);
+      UserProvider userProvider =
+          Provider.of<UserProvider>(context, listen: false);
       User? user = _auth.currentUser; // Get the user before signing out
       if (user != null) {
         String userId = userProvider.getUid();
@@ -71,11 +72,10 @@ class FirebaseAuthService {
         // Optionally delete FCM token from the device (for security)
         await _messaging.deleteToken();
       }
-
       await _auth.signOut();
       print("User signed out and FCM token removed successfully.");
     } catch (e) {
-      print("Error signing out: $e");
+      throw ("Error signing out: $e");
     }
   }
 
