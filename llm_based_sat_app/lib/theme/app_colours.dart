@@ -18,6 +18,7 @@ class AppColours {
   // Brand Blue
   static const Color brandBlueMinusFour = Color(0xFFF2F9FF);
   static const Color brandBlueMinusThree = Color(0xFFCEDFF2);
+  static const Color brandBlueMinusTwo = Color(0xFF7AA3CC);
   static const Color brandBlueMinusOne = Color(0xFF326CA6);
   static const Color brandBlueMain = Color(0xFF1C548C);
   static const Color brandBluePlusTwo = Color(0xFF123659);

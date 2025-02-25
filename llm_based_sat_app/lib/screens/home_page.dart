@@ -5,6 +5,8 @@ import 'package:llm_based_sat_app/screens/score/score_page.dart'; // Import the 
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import 'package:llm_based_sat_app/firebase/firebase_score.dart';
+import 'package:llm_based_sat_app/screens/course/courses_helper.dart';
+import 'package:llm_based_sat_app/widgets/course_widgets/course_card.dart';
 
 import '../widgets/score_widgets/circular_progress_bar.dart';
 
@@ -104,9 +106,9 @@ class HomePage extends StatelessWidget {
                     const Text(
                       "Your Score",
                       style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: AppColours.brandBluePlusThree),
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: AppColours.brandBluePlusThree),
                     ),
                     const SizedBox(height: 8),
                     Center(
@@ -125,7 +127,7 @@ class HomePage extends StatelessWidget {
 
   Widget _buildTasksCard() {
     return Card(
-      color: Colors.blue[300],
+      color: AppColours.brandBlueMinusTwo,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -135,9 +137,9 @@ class HomePage extends StatelessWidget {
             const Text(
               "Tasks Today",
               style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 28,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white),
+                  color: AppColours.brandBluePlusThree),
             ),
             const SizedBox(height: 8),
             _buildTaskItem("Upload Childhood Photos", true),
@@ -157,11 +159,18 @@ class HomePage extends StatelessWidget {
         children: [
           Text(
             task,
-            style: TextStyle(color: Colors.white, fontSize: 16),
+            style: TextStyle(color: AppColours.brandBluePlusTwo, fontSize: 16),
           ),
           completed
-              ? const Icon(Icons.check_box, color: Colors.green)
-              : const Icon(Icons.chevron_right, color: Colors.white),
+              ? Container(
+                  decoration: BoxDecoration(
+                    color: Color(0xFFCEF2DE),
+                    borderRadius: BorderRadius.circular(4.0),
+                  ),
+                  child: Icon(Icons.check_box, color: Color(0xFF1C8C4E)),
+                )
+              : const Icon(Icons.arrow_forward_ios,
+                  color: AppColours.brandBluePlusTwo),
         ],
       ),
     );
@@ -176,38 +185,28 @@ class HomePage extends StatelessWidget {
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 8),
-        Row(
-          children: [
-            _buildCourseCard(
-                "Self-attachment", "62%", "assets/self_attachment.png"),
-            const SizedBox(width: 8),
-            _buildCourseCard("Humour", "35%", "assets/humour.png"),
-          ],
+        FutureBuilder<List<CourseCard>>(
+          future: generateCourseCards(onItemTapped, selectedIndex),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError ||
+                !snapshot.hasData ||
+                snapshot.data!.isEmpty) {
+              return Center(
+                child: Text(
+                  'No courses available.',
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                ),
+              );
+            } else {
+              return Column(
+                children: snapshot.data!,
+              );
+            }
+          },
         ),
       ],
-    );
-  }
-
-  Widget _buildCourseCard(String title, String completion, String assetPath) {
-    return Expanded(
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        child: Column(
-          children: [
-            Image.asset(assetPath, height: 100, fit: BoxFit.cover),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text("Completion: $completion",
-                      style: TextStyle(color: Colors.green)),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 
