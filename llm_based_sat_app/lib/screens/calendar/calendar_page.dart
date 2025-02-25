@@ -5,6 +5,8 @@ import 'package:llm_based_sat_app/firebase/firebase_calendar.dart';
 import 'package:llm_based_sat_app/models/calendar/calendar_exercise_entry.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
+import 'package:llm_based_sat_app/utils/user_provider.dart';
+import 'package:provider/provider.dart';
 import '../../widgets/custom_app_bar.dart';
 
 class CalendarPage extends StatefulWidget {
@@ -24,10 +26,20 @@ class CalendarPage extends StatefulWidget {
 class _CalendarPageState extends State<CalendarPage> {
   DateTime _selectedDate = DateTime.now();
   List<CalendarExerciseEntry> allCompletedExercises = [];
+  late UserProvider userProvider;
+  late String uid;
 
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Access Provider here
+    userProvider = Provider.of<UserProvider>(context);
+    uid = userProvider.getUid();
     _fetchExercises(); // Fetch exercises when the page loads
   }
 
@@ -36,7 +48,7 @@ class _CalendarPageState extends State<CalendarPage> {
     if (user == null) return;
 
     List<CalendarExerciseEntry> result =
-        await getExercisesByDate(user!.uid, _selectedDate);
+        await getExercisesByDate(uid, _selectedDate);
 
     setState(() {
       allCompletedExercises = result; // Update exercises
