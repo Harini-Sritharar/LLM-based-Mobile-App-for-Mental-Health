@@ -46,16 +46,16 @@ class PreCourseList extends StatelessWidget {
         const SizedBox(height: 10),
 
         // Tasks yet to complete
-        GestureDetector(
-          child: Padding(
-              padding: const EdgeInsets.only(left: 16.0),
-              child: Row(
-                children: [
-                  if (prerequisites.isEmpty) EmptyPreRequisites(),
-                  if (prerequisites.isNotEmpty)
-                    ListAllPreRequisites(preRequisitesList: prerequisites),
-                ],
-              )),
+        Padding(
+          padding: const EdgeInsets.only(left: 16.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start, // Align to the top
+            children: [
+              if (prerequisites.isEmpty) const EmptyPreRequisites(),
+              if (prerequisites.isNotEmpty)
+                ListAllPreRequisites(preRequisitesList: prerequisites),
+            ],
+          ),
         ),
         const SizedBox(height: 20),
 
