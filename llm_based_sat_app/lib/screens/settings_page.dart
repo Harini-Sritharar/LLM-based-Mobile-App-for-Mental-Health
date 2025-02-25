@@ -9,6 +9,7 @@ import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
 import 'package:llm_based_sat_app/screens/language_page.dart';
 import 'package:llm_based_sat_app/screens/notifications_page.dart';
 import 'package:llm_based_sat_app/screens/profile/delete_account_page.dart';
+import 'package:llm_based_sat_app/screens/profile/reset_settings_page.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 
 import '../widgets/main_layout.dart';
@@ -125,7 +126,14 @@ class SettingsPage extends StatelessWidget {
               context,
               'Reset Setting',
               'assets/icons/profile/rotate-left.svg',
-              () {},
+              () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ResetSettingsPage(),
+                  ),
+                );
+              },
             ),
             _buildSettingsItem(
               context,
