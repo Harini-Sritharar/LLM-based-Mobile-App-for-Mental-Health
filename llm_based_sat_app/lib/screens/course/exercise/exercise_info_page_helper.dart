@@ -143,20 +143,6 @@ Widget getExerciseStep(Exercise exercise, Course course, Chapter chapter) {
     updateUserCourseProgress(
         user!.uid, course.id.trim(), completedExercise, previousSession);
 
-    // Add TimeStamp entry for given exercise and session
-    updateTimeStamp(
-        user!.uid,
-        course.id.trim(),
-        exercise.id.trim(),
-        (getSessions(exercise, course) + 1).toString(),
-        CacheManager.getValue(
-            "${exercise.id}/${getSessions(exercise, course) + 1}/TimeStamp"),
-        Timestamp.now());
-
-    // Remove cached TimeStamp for current exercise and session
-    CacheManager.removeValue(
-        "${exercise.id}/${getSessions(exercise, course) + 1}/TimeStamp");
-
     return FutureBuilder<String>(
       future: getElapsedTime(), // Fetch elapsed time
       builder: (context, snapshot) {
