@@ -108,9 +108,9 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
   }
 
   final List<String> _notificationTitles = [
-    "Upcoming tasks",
-    "Missed tasks",
-    "Reminders",
+    "Daily tasks",
+    "Daily practice",
+    "Score Updates",
     "Daily motivation",
     "New courses",
     "Tips",
