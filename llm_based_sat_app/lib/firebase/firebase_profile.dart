@@ -12,6 +12,42 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
+// Future<void> updatePersonalInfo(
+//     String firstname, String surname, String dob, String gender) async {
+//   User? user = FirebaseAuth.instance.currentUser;
+//   FirebaseFirestore db = FirebaseFirestore.instance;
+
+//   if (user == null) return;
+
+//   DocumentReference userDoc = db.collection('Profile').doc(user.uid);
+//   DocumentSnapshot docSnapshot = await userDoc.get();
+
+//   String tier = "free"; // Default tier
+//   List<String> favouritePhotos = [];
+//   List<String> nonfavouritePhotos = [];
+//   if (docSnapshot.exists) {
+//     // Preserve existing tier if user exists
+//     tier = (docSnapshot.data() as Map<String, dynamic>)['tier'] ?? "free";
+//     favouritePhotos = List<String>.from(data['favouritePhotos'] ?? []);
+//     nonfavouritePhotos =
+//         (docSnapshot.data() as Map<String, dynamic>)['nonfavouritePhotos'] ??
+//             [];
+//   }
+
+//   await userDoc.set(
+//       {
+//         'firstname': firstname,
+//         'surname': surname,
+//         'dob': dob,
+//         'gender': gender,
+//         'tier': tier,
+//         'favouritePhotos': favouritePhotos,
+//         'nonfavouritePhotos': nonfavouritePhotos
+//       },
+//       SetOptions(
+//           merge: true)); // Merging ensures we don’t overwrite other fields
+// }
+
 Future<void> updatePersonalInfo(
     String firstname, String surname, String dob, String gender) async {
   User? user = FirebaseAuth.instance.currentUser;
@@ -25,28 +61,29 @@ Future<void> updatePersonalInfo(
   String tier = "free"; // Default tier
   List<String> favouritePhotos = [];
   List<String> nonfavouritePhotos = [];
+
   if (docSnapshot.exists) {
-    // Preserve existing tier if user exists
-    tier = (docSnapshot.data() as Map<String, dynamic>)['tier'] ?? "free";
-    favouritePhotos =
-        (docSnapshot.data() as Map<String, dynamic>)['favouritePhotos'] ?? [];
-    nonfavouritePhotos =
-        (docSnapshot.data() as Map<String, dynamic>)['nonfavouritePhotos'] ??
-            [];
+    Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+
+    tier = data['tier'] ?? "free";
+
+    // Fixing the List<dynamic> to List<String> conversion issue
+    favouritePhotos = List<String>.from(data['favouritePhotos'] ?? []);
+    nonfavouritePhotos = List<String>.from(data['nonfavouritePhotos'] ?? []);
   }
 
   await userDoc.set(
-      {
-        'firstname': firstname,
-        'surname': surname,
-        'dob': dob,
-        'gender': gender,
-        'tier': tier,
-        'favouritePhotos': favouritePhotos,
-        'nonfavouritePhotos': nonfavouritePhotos
-      },
-      SetOptions(
-          merge: true)); // Merging ensures we don’t overwrite other fields
+    {
+      'firstname': firstname,
+      'surname': surname,
+      'dob': dob,
+      'gender': gender,
+      'tier': tier,
+      'favouritePhotos': favouritePhotos,
+      'nonfavouritePhotos': nonfavouritePhotos
+    },
+    SetOptions(merge: true), // Merging ensures we don’t overwrite other fields
+  );
 }
 
 Future<void> updateContactDetails(

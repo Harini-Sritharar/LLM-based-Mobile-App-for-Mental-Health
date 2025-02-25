@@ -16,11 +16,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 class PersonalInfoPage extends StatefulWidget {
   final Function(int) onItemTapped;
   final int selectedIndex;
+  final VoidCallback onCompletion;
 
   const PersonalInfoPage({
     Key? key,
     required this.onItemTapped,
     required this.selectedIndex,
+    required this.onCompletion,
   }) : super(key: key);
 
   @override
@@ -67,18 +69,26 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
   }
 
   void _savePersonalInfo() {
-    if (_formKey.currentState!.validate()) {
-      updatePersonalInfo(
-        _nameController.text,
-        _surnameController.text,
-        _dobController.text,
-        _genderController.text,
+    if (!_formKey.currentState!.validate()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Please fill in all fields before saving."),
+          backgroundColor: Colors.red,
+        ),
       );
-
-      Provider.of<ProfileNotifier>(context, listen: false)
-          .notifyProfileUpdated();
-      Navigator.pop(context);
+      return;
     }
+
+    updatePersonalInfo(
+      _nameController.text.trim(),
+      _surnameController.text.trim(),
+      _dobController.text.trim(),
+      _genderController.text.trim(),
+    );
+
+    Provider.of<ProfileNotifier>(context, listen: false).notifyProfileUpdated();
+    widget.onCompletion();
+    Navigator.pop(context);
   }
 
   @override
