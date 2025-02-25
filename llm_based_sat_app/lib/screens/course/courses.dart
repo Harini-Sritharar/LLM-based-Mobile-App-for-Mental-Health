@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/utils/user_provider.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
+import 'package:provider/provider.dart';
 import 'courses_helper.dart';
 
 /* This file defines the Courses Screen, which displays a list of available courses. It fetches course data asynchronously and displays them as selectable cards.
@@ -18,6 +20,8 @@ class Courses extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UserProvider userProvider = Provider.of<UserProvider>(context);
+    String uid = userProvider.getUid();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
@@ -39,7 +43,7 @@ class Courses extends StatelessWidget {
             Expanded(
               child: FutureBuilder<List<Widget>>(
                 future:
-                    generateCourseCards(onItemTapped, selectedIndex, context),
+                    generateCourseCards(onItemTapped, selectedIndex, uid),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     // Show a loading indicator while waiting for data

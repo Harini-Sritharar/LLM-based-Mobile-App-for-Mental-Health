@@ -11,10 +11,8 @@ import 'course_info.dart';
 
 /* Generates a list of `CourseCard` widgets dynamically based on course data. */
 Future<List<CourseCard>> generateCourseCards(
-    Function(int) onItemTapped, int selectedIndex, BuildContext context) async {
+    Function(int) onItemTapped, int selectedIndex, String uid) async {
   try {
-    UserProvider userProvider = Provider.of<UserProvider>(context);
-    String uid = userProvider.getUid();
     // Fetch courses from the database
     List<Course> coursesDatabase = await getAllCourses();
 

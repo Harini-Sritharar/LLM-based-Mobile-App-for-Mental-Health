@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/models/firebase-exercise-uploader/interface/chapter_interface.dart';
 import 'package:llm_based_sat_app/screens/course/exercise/exercise_info_page_helper.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
+import 'package:llm_based_sat_app/utils/user_provider.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import 'package:llm_based_sat_app/widgets/custom_button.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/learning_tile.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/checkbox_tile.dart';
+import 'package:provider/provider.dart';
 import '../../../data/cache_manager.dart';
 import '../../../models/firebase-exercise-uploader/interface/course_interface.dart';
 import '../../../models/firebase-exercise-uploader/interface/exercise_interface.dart';
@@ -50,6 +52,8 @@ class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
 
   @override
   Widget build(BuildContext context) {
+    UserProvider userProvider = Provider.of<UserProvider>(context);
+    String uid = userProvider.getUid();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
@@ -208,8 +212,8 @@ class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => getExerciseStep(widget.exercise,
-                          widget.course, widget.chapter, context),
+                      builder: (context) => getExerciseStep(
+                          widget.exercise, widget.course, widget.chapter, uid),
                     ),
                   );
                 },

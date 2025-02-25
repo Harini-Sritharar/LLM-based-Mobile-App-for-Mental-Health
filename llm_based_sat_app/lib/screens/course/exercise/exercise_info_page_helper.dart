@@ -79,7 +79,7 @@ int extractLastNumber(String input) {
 }
 
 Widget getExerciseStep(
-    Exercise exercise, Course course, Chapter chapter, BuildContext context) {
+    Exercise exercise, Course course, Chapter chapter, String uid) {
   int currentStep = 1;
   if (CacheManager.getValue(exercise.id) == null &&
       CacheManager.getValue(course.id) != null) {
@@ -122,7 +122,7 @@ Widget getExerciseStep(
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => getExerciseStep(exercise, course, chapter, context),
+              builder: (context) => getExerciseStep(exercise, course, chapter, uid),
             ),
           );
         } else {
@@ -136,8 +136,6 @@ Widget getExerciseStep(
       exercise: exercise,
     );
   } else {
-    UserProvider userProvider = Provider.of<UserProvider>(context);
-    String uid = userProvider.getUid();
     // Final Step - Show Assessment Page
     CacheManager.removeValue(exercise.id); // Reset cache
     String completedExercise =
