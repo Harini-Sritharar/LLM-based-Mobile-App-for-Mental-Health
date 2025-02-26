@@ -54,6 +54,7 @@ class _ScorePageState extends State<ScorePage> {
     if (y.isNotEmpty) {
       months = res["months"];
     }
+    if (!mounted) return;
     setState(() {});
   }
 

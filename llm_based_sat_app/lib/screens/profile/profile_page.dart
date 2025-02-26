@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/firebase/firebase_auth_services.dart';
 import 'package:llm_based_sat_app/firebase/firebase_helpers.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
+import 'package:llm_based_sat_app/utils/user_provider.dart';
 import '../../widgets/main_layout.dart';
 import 'edit_profile.dart';
 import '../payments/manage_plan_page.dart';
@@ -23,8 +25,20 @@ class ProfilePage extends StatelessWidget {
     required this.selectedIndex,
   });
 
+  void _signOut(BuildContext context) async {
+    final FirebaseAuthService _auth = FirebaseAuthService();
+    await _auth.signOut(context);
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => SignInPage()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    UserProvider userProvider = Provider.of<UserProvider>(context);
+    String uid = userProvider.getUid();
+    String? userEmail = userProvider.email;
     return MainLayout(
       selectedIndex: selectedIndex,
       body: Container(
@@ -40,7 +54,7 @@ class ProfilePage extends StatelessWidget {
             Consumer<ProfileNotifier>(
               builder: (context, profileNotifier, child) {
                 return FutureBuilder<String>(
-                  future: getProfilePictureUrl(user!.uid),
+                  future: getProfilePictureUrl(uid),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return CircleAvatar(
@@ -78,7 +92,7 @@ class ProfilePage extends StatelessWidget {
             Consumer<ProfileNotifier>(
               builder: (context, profileNotifier, child) {
                 return FutureBuilder<String>(
-                  future: getName(user!.uid),
+                  future: getName(uid),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return buildText("Loading...");
@@ -92,7 +106,7 @@ class ProfilePage extends StatelessWidget {
               },
             ),
             Text(
-              user!.email ?? "No email provided",
+              userEmail ?? "No email provided",
               style: const TextStyle(
                 fontSize: 16,
                 color: AppColours.neutralGreyMinusOne,
@@ -205,14 +219,7 @@ class ProfilePage extends StatelessWidget {
                                 child: Text("Cancel"),
                               ),
                               TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => SignInPage()),
-                                  );
-                                },
+                                onPressed: () => _signOut(context),
                                 child: const Text(
                                   "Logout",
                                   style: TextStyle(color: Colors.red),

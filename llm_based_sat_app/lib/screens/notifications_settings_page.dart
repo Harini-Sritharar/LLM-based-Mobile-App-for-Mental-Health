@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/firebase/firebase_helpers.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
+import 'package:llm_based_sat_app/utils/user_provider.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../widgets/main_layout.dart'; // Import MainLayout
 
@@ -19,27 +21,40 @@ class NotificationSettingsPage extends StatefulWidget {
   });
 
   @override
-  _NotificationSettingsPageState createState() => _NotificationSettingsPageState();
+  _NotificationSettingsPageState createState() =>
+      _NotificationSettingsPageState();
 }
 
 class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
   List<bool> notificationSettings = List.filled(8, false);
+  late UserProvider userProvider;
+
+  late String uid;
 
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    userProvider = Provider.of<UserProvider>(context);
+    uid = userProvider.getUid();
     _loadNotificationSettings();
   }
 
- Future<void> _loadNotificationSettings() async {
-    final notificationPreferences = await getNotificationPreferences(user!.uid);
+  Future<void> _loadNotificationSettings() async {
+    final notificationPreferences = await getNotificationPreferences(uid);
+    if (!mounted) return;
     setState(() {
       notificationSettings = notificationPreferences ?? List.filled(8, false);
     });
   }
 
   Future<void> _saveNotificationSettings() async {
-    await saveNotificationPreferences(user!.uid, notificationSettings);
+    await saveNotificationPreferences(uid, notificationSettings);
   }
 
   @override

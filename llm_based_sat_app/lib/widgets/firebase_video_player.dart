@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/data/cache_manager.dart';
 import 'package:llm_based_sat_app/firebase/firebase_courses.dart';
+import 'package:llm_based_sat_app/utils/user_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 import '../models/firebase-exercise-uploader/interface/course_interface.dart';
 import '../screens/auth/sign_in_page.dart';
-
 
 /* This file defines a FirebaseVideoPlayer widget that streams and plays course-related introductory videos from Firebase Storage. It ensures that the video is watched and updates the cache and database accordingly.
 
@@ -21,10 +22,19 @@ class FirebaseVideoPlayer extends StatefulWidget {
 class _FirebaseVideoPlayerState extends State<FirebaseVideoPlayer> {
   late VideoPlayerController _controller;
   bool _isLoading = true;
+  late UserProvider userProvider;
+  late String uid;
 
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    userProvider = Provider.of<UserProvider>(context);
+    uid = userProvider.getUid();
     _initializeVideo();
   }
 
@@ -41,10 +51,11 @@ class _FirebaseVideoPlayerState extends State<FirebaseVideoPlayer> {
 
         // Update cache and database to indicate intro video has been watched if doesn't exist in cache
         if (CacheManager.getValue("${widget.course.id}_introductory_video") ==
-            null || CacheManager.getValue("${widget.course.id}_introductory_video") ==
-            false) {
+                null ||
+            CacheManager.getValue("${widget.course.id}_introductory_video") ==
+                false) {
           CacheManager.setValue("${widget.course.id}_introductory_video", true);
-          updateWatchedIntroductoryVideo(user!.uid, widget.course.id, true);
+          updateWatchedIntroductoryVideo(uid, widget.course.id, true);
         }
       });
   }
