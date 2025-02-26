@@ -231,10 +231,45 @@ class HomePage extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
-          return Center(
-            child: Text(
-              'Error loading quote.',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
+          final defaultQuote = 'Believe you can and you\'re halfway there.';
+          final defaultAuthor = 'Theodore Roosevelt';
+          return Card(
+            color: Colors.blue[100],
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Daily Quote",
+                    style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: AppColours.brandBluePlusThree),
+                  ),
+                  const SizedBox(height: 8),
+                  Text.rich(
+                    TextSpan(
+                      text: '“$defaultQuote”\n\n',
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontStyle: FontStyle.italic,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: defaultAuthor,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
             ),
           );
         } else {
