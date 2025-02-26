@@ -53,6 +53,7 @@ class _CourseCardState extends State<CourseCard> {
 
   Future<void> _checkUserTier() async {
     String tier = await getTier(uid);
+    if (!mounted) return;
     if (tier == 'monthly' || tier == 'yearly') {
       setState(() {
         _isLocked = false;

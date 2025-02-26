@@ -15,7 +15,7 @@ import '../../widgets/menu_item.dart';
 import 'package:provider/provider.dart';
 import '../../utils/profile_notifier.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   final Function(int) onItemTapped;
   final int selectedIndex;
 
@@ -24,6 +24,22 @@ class ProfilePage extends StatelessWidget {
     required this.onItemTapped,
     required this.selectedIndex,
   });
+
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  late UserProvider userProvider;
+  late String uid;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Access Provider here
+    userProvider = Provider.of<UserProvider>(context, listen: false);
+    uid = userProvider.getUid();
+  }
 
   void _signOut(BuildContext context) async {
     final FirebaseAuthService _auth = FirebaseAuthService();
@@ -36,19 +52,17 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UserProvider userProvider = Provider.of<UserProvider>(context);
-    String uid = userProvider.getUid();
     String? userEmail = userProvider.email;
     return MainLayout(
-      selectedIndex: selectedIndex,
+      selectedIndex: widget.selectedIndex,
       body: Container(
         color: AppColours.white,
         child: Column(
           children: [
             CustomAppBar(
               title: "Profile Settings",
-              onItemTapped: onItemTapped,
-              selectedIndex: selectedIndex,
+              onItemTapped: widget.onItemTapped,
+              selectedIndex: widget.selectedIndex,
             ),
             const SizedBox(height: 20),
             Consumer<ProfileNotifier>(
@@ -124,8 +138,8 @@ class ProfilePage extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => EditProfilePage(
-                            onItemTapped: onItemTapped,
-                            selectedIndex: selectedIndex,
+                            onItemTapped: widget.onItemTapped,
+                            selectedIndex: widget.selectedIndex,
                           ),
                         ),
                       ).then((_) {
@@ -142,8 +156,8 @@ class ProfilePage extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => SettingsPage(
-                            onItemTapped: onItemTapped,
-                            selectedIndex: selectedIndex,
+                            onItemTapped: widget.onItemTapped,
+                            selectedIndex: widget.selectedIndex,
                           ),
                         ),
                       );
@@ -157,8 +171,8 @@ class ProfilePage extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => UltimateGoalPage(
-                            onItemTapped: onItemTapped,
-                            selectedIndex: selectedIndex,
+                            onItemTapped: widget.onItemTapped,
+                            selectedIndex: widget.selectedIndex,
                           ),
                         ),
                       );
@@ -172,8 +186,8 @@ class ProfilePage extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => ChildhoodPhotosPage(
-                            onItemTapped: onItemTapped,
-                            selectedIndex: selectedIndex,
+                            onItemTapped: widget.onItemTapped,
+                            selectedIndex: widget.selectedIndex,
                           ),
                         ),
                       );
@@ -187,8 +201,8 @@ class ProfilePage extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => ManagePlanPage(
-                            onItemTapped: onItemTapped,
-                            selectedIndex: selectedIndex,
+                            onItemTapped: widget.onItemTapped,
+                            selectedIndex: widget.selectedIndex,
                           ),
                         ),
                       );

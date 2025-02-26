@@ -19,6 +19,8 @@ class _ImagePickerState extends State<ImagePickerWidget> {
     try {
       final XFile? pickedFile =
           await _picker.pickImage(source: ImageSource.gallery);
+      if (!mounted) return;
+
       if (pickedFile != null) {
         setState(() {
           _selectedImage = File(pickedFile.path);
