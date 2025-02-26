@@ -32,6 +32,31 @@ Future<String> getName(String uid) async {
   }
 }
 
+Future<String> getFirstName(String uid) async {
+  try {
+    // Reference to the Firestore collection
+    final collection = FirebaseFirestore.instance.collection('Profile');
+
+    // Get the document for the user with the given UID
+    final snapshot = await collection.doc(uid).get();
+
+    // Check if the document exists and return the first name
+    if (snapshot.exists) {
+      final firstName = snapshot.data()?['firstname'] as String?;
+
+      if (firstName != null && firstName.isNotEmpty) {
+        return firstName;
+      }
+    }
+    // Return a default value if the first name is null or the document doesn't exist
+    return 'No First Name Found';
+  } catch (e) {
+    // Handle errors and return a default value
+    print('Error fetching first name: $e');
+    return 'Error Fetching First Name';
+  }
+}
+
 Future<String> getTier(String uid) async {
   try {
     // Reference to the Firestore collection
@@ -293,29 +318,30 @@ Future<void> saveReportedIssue({
   }
 }
 
-  Future<List<bool>?> getNotificationPreferences(String userId) async {
-    try {
-      final collection = FirebaseFirestore.instance.collection('Profile');
-      final doc = await collection.doc(userId).get();
-      if (doc.exists) {
-        final data = doc.data();
-        if (data != null && data.containsKey('notificationPreferences')) {
-          return List<bool>.from(data['notificationPreferences']);
-        }
+Future<List<bool>?> getNotificationPreferences(String userId) async {
+  try {
+    final collection = FirebaseFirestore.instance.collection('Profile');
+    final doc = await collection.doc(userId).get();
+    if (doc.exists) {
+      final data = doc.data();
+      if (data != null && data.containsKey('notificationPreferences')) {
+        return List<bool>.from(data['notificationPreferences']);
       }
-    } catch (e) {
-      print('Error getting notification preferences: $e');
     }
-    return null;
+  } catch (e) {
+    print('Error getting notification preferences: $e');
   }
+  return null;
+}
 
-   Future<void> saveNotificationPreferences(String userId, List<bool> preferences) async {
-    try {
-      final collection = FirebaseFirestore.instance.collection('Profile');
-      await collection.doc(userId).set({
-        'notificationPreferences': preferences,
-      }, SetOptions(merge: true));
-    } catch (e) {
-      print('Error saving notification preferences: $e');
-    }
+Future<void> saveNotificationPreferences(
+    String userId, List<bool> preferences) async {
+  try {
+    final collection = FirebaseFirestore.instance.collection('Profile');
+    await collection.doc(userId).set({
+      'notificationPreferences': preferences,
+    }, SetOptions(merge: true));
+  } catch (e) {
+    print('Error saving notification preferences: $e');
   }
+}
