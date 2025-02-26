@@ -40,7 +40,6 @@ class SettingsPage extends StatelessWidget {
               selectedIndex: selectedIndex,
             ),
             const SizedBox(height: 10),
-
             MenuItem(
               title: 'Notifications',
               icon: 'assets/icons/profile/notification-bing.svg',
@@ -56,19 +55,16 @@ class SettingsPage extends StatelessWidget {
                 );
               },
             ),
-
             MenuItem(
               title: 'Security',
               icon: 'assets/icons/profile/security-safe.svg',
               onTap: () {},
             ),
-
             MenuItem(
               title: 'Accessibility',
               icon: 'assets/icons/profile/accessibility.svg',
               onTap: () {},
             ),
-
             MenuItem(
               title: 'Language',
               icon: 'assets/icons/profile/language-circle.svg',
@@ -84,7 +80,6 @@ class SettingsPage extends StatelessWidget {
                 );
               },
             ),
-
             MenuItem(
               title: 'Terms & Conditions',
               icon: 'assets/icons/profile/book.svg',
@@ -100,7 +95,6 @@ class SettingsPage extends StatelessWidget {
                 );
               },
             ),
-
             MenuItem(
               title: 'Help Centre',
               icon: 'assets/icons/profile/message-question.svg',
@@ -116,11 +110,10 @@ class SettingsPage extends StatelessWidget {
                 );
               },
             ),
-            _buildSettingsItem(
-              context,
-              'Reset Setting',
-              'assets/icons/profile/rotate-left.svg',
-              () {
+            MenuItem(
+              title: 'Reset Setting',
+              icon: 'assets/icons/profile/rotate-left.svg',
+              onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -129,11 +122,10 @@ class SettingsPage extends StatelessWidget {
                 );
               },
             ),
-            _buildSettingsItem(
-              context,
-              'Delete Account',
-              'assets/icons/profile/trash.svg',
-              () {
+            MenuItem(
+              title: 'Delete Account',
+              icon: 'assets/icons/profile/trash.svg',
+              onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -142,9 +134,7 @@ class SettingsPage extends StatelessWidget {
                 );
               },
             ),
-
             const SizedBox(height: 20),
-
             CustomButton(
               buttonText: "Back",
               onPress: () => Navigator.pop(context),
@@ -157,5 +147,4 @@ class SettingsPage extends StatelessWidget {
       ),
     );
   }
-
 }
