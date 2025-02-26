@@ -32,6 +32,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   // Flag to determine if the back button should be displayed.
   final bool backButton;
 
+  // Optional image parameter.
+  final ImageProvider? image;
+
   /// Constructor for `CustomAppBar`.
   ///
   /// Parameters:
@@ -41,6 +44,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   /// - [onItemTapped]: A function to handle navigation bar item taps.
   /// - [selectedIndex]: The index of the currently selected navigation bar item.
   /// - [backButton]: A flag to control the visibility of the back button (default is true).
+  /// - [image]: An optional image to display instead of the title.
   const CustomAppBar({
     Key? key,
     required this.title,
@@ -49,19 +53,25 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.onItemTapped,
     required this.selectedIndex,
     this.backButton = true,
+    this.image, // Initialize the image parameter
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      // Title text configuration.
-      title: FittedBox(
-        fit: BoxFit.scaleDown,
-        child: Text(
-          title,
-          style: TextStyle(color: textColor),
-        ),
-      ),
+      // Title text or image configuration.
+      title: image != null
+          ? Image(
+              image: image!,
+              height: 40, // Adjust the height as needed
+            )
+          : FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                title,
+                style: TextStyle(color: textColor),
+              ),
+            ),
       centerTitle: true, // Centers the title text.
       // Background styling.
       backgroundColor:
