@@ -86,6 +86,7 @@ class EditProfilePage extends StatelessWidget {
                       builder: (context) => PersonalInfoPage(
                         onItemTapped: onItemTapped,
                         selectedIndex: selectedIndex,
+                        onCompletion: () => (),
                       ),
                     ),
                   );

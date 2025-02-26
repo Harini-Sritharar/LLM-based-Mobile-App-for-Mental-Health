@@ -173,20 +173,37 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
+  // Show Snackbar for errors
+  void _showError(String message) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  // This function should be called when the user presses the sign up button
+  // It first checks that:
+  // - all form fields are valid
+  // - the terms have been agreed to before navigating to the main screen
+  // It will then update the database by using firebase's sign up with email and
+  // password method
   void _signUp() async {
-    if (_formKey.currentState!.validate() && _agreeToTerms) {
-      String email = _emailController.text;
-      String password = _passwordController.text;
+    if (!_formKey.currentState!.validate()) return; // Validate form fields
 
-      User? currentUser =
-          await _auth.signUpWithEmailAndPassword(context, email, password);
+    if (!_agreeToTerms) {
+      _showError("You must accept the Terms & Conditions");
+      return;
+    }
 
-      if (currentUser != null) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => PersonalProfilePage()),
-        );
-      }
+    String email = _emailController.text;
+    String password = _passwordController.text;
+
+    User? currentUser =
+        await _auth.signUpWithEmailAndPassword(context, email, password);
+
+    if (currentUser != null) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => PersonalProfilePage()),
+      );
     }
   }
 }
