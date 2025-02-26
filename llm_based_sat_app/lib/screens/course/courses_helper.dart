@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/utils/user_provider.dart';
+import 'package:provider/provider.dart';
 import '../../data/cache_manager.dart';
 import '../../firebase/firebase_courses.dart';
 import '../../models/chapter_exercise_step_interface.dart';
@@ -9,9 +11,7 @@ import 'course_info.dart';
 
 /* Generates a list of `CourseCard` widgets dynamically based on course data. */
 Future<List<CourseCard>> generateCourseCards(
-  Function(int) onItemTapped,
-  int selectedIndex,
-) async {
+    Function(int) onItemTapped, int selectedIndex, String uid) async {
   try {
     // Fetch courses from the database
     List<Course> coursesDatabase = await getAllCourses();
@@ -23,7 +23,7 @@ Future<List<CourseCard>> generateCourseCards(
     }
 
     for (final course in coursesDatabase) {
-      final userProgress = await getUserCourseProgress(user!.uid, course.id);
+      final userProgress = await getUserCourseProgress(uid, course.id);
       if (userProgress != null) {
         List<ChapterExerciseStep> progressList = [];
         for (final progressData in userProgress) {
@@ -34,13 +34,12 @@ Future<List<CourseCard>> generateCourseCards(
 
       // Update watched intro videos
       final watchedIntroductoryVideo =
-          await getIntroductoryVideoWatched(user!.uid, course.id);
+          await getIntroductoryVideoWatched(uid, course.id);
       CacheManager.setValue(
           "${course.id}_introductory_video", watchedIntroductoryVideo);
 
       // Update uploaded childhood photos
-      final uploadedChildhoodPhoto =
-          await getUploadedChildhoodPhoto(user!.uid);
+      final uploadedChildhoodPhoto = await getUploadedChildhoodPhoto(uid);
       CacheManager.setValue("childhood_photos", uploadedChildhoodPhoto);
     }
 

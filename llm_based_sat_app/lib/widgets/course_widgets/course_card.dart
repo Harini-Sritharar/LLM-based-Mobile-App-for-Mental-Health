@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/firebase/firebase_helpers.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
+import 'package:llm_based_sat_app/utils/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class CourseCard extends StatefulWidget {
   final String imageUrl;
@@ -31,15 +33,26 @@ class CourseCard extends StatefulWidget {
 
 class _CourseCardState extends State<CourseCard> {
   bool _isLocked = true;
+  late UserProvider userProvider;
+  late String uid;
 
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Access Provider here
+    userProvider = Provider.of<UserProvider>(context);
+    uid = userProvider.getUid();
     _checkUserTier();
+    // Now that uid is available, load the name and connect WebSocket
   }
 
   Future<void> _checkUserTier() async {
-    String tier = await getTier(user!.uid);
+    String tier = await getTier(uid);
     if (tier == 'monthly' || tier == 'yearly') {
       setState(() {
         _isLocked = false;

@@ -5,11 +5,13 @@ import 'package:llm_based_sat_app/firebase/firebase_courses.dart';
 import 'package:llm_based_sat_app/main.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
+import 'package:llm_based_sat_app/utils/user_provider.dart';
 import 'package:llm_based_sat_app/widgets/custom_button.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_appBar.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_description.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_sliderQuestion.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_step_label.dart';
+import 'package:provider/provider.dart';
 import '../../../models/firebase-exercise-uploader/interface/chapter_interface.dart';
 import '../../../models/firebase-exercise-uploader/interface/course_interface.dart';
 import '../../../models/firebase-exercise-uploader/interface/exercise_interface.dart';
@@ -47,6 +49,22 @@ class _AssessmentPageState extends State<AssessmentPage> {
   double helpfulnessValue = 3;
   double ratingValue = 3;
   final TextEditingController _commentController = TextEditingController();
+  late UserProvider userProvider;
+  late String uid;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Access Provider here
+    userProvider = Provider.of<UserProvider>(context);
+    uid = userProvider.getUid();
+    // Now that uid is available, load the name and connect WebSocket
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -161,7 +179,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
   // Add TimeStamp entry and comment for given exercise and session
   void uploadTimeStampAndComment() {
     updateTimeStampAndComment(
-        user!.uid,
+        uid,
         widget.course.id.trim(),
         widget.exercise.id.trim(),
         (getSessions(widget.exercise, widget.course) + 1).toString(),
