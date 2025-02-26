@@ -3,10 +3,12 @@ import 'package:llm_based_sat_app/firebase/firebase_helpers.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
 import 'package:llm_based_sat_app/screens/score/score_page.dart'; // Import the ScoresPage
 import 'package:llm_based_sat_app/theme/app_colours.dart';
+import 'package:llm_based_sat_app/utils/user_provider.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import 'package:llm_based_sat_app/firebase/firebase_score.dart';
 import 'package:llm_based_sat_app/screens/course/courses_helper.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/course_card.dart';
+import 'package:provider/provider.dart';
 
 import '../widgets/score_widgets/circular_progress_bar.dart';
 import 'package:http/http.dart' as http;
@@ -28,6 +30,8 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UserProvider userProvider = Provider.of<UserProvider>(context);
+    String uid = userProvider.getUid();
     return Scaffold(
       appBar: CustomAppBar(
         title: "InvinciMind",
@@ -42,7 +46,7 @@ class HomePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             FutureBuilder<String>(
-              future: getFirstName(user!.uid),
+              future: getFirstName(uid),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Text(
@@ -70,7 +74,7 @@ class HomePage extends StatelessWidget {
             const SizedBox(height: 16),
             _buildTasksCard(),
             const SizedBox(height: 16),
-            _buildCoursesSection(),
+            _buildCoursesSection(uid),
             const SizedBox(height: 16),
             _buildDailyQuote(),
           ],
@@ -186,7 +190,7 @@ class HomePage extends StatelessWidget {
   }
 
   /// Builds the courses section which displays the user's courses.
-  Widget _buildCoursesSection() {
+  Widget _buildCoursesSection(String uid) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -199,7 +203,7 @@ class HomePage extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         FutureBuilder<List<CourseCard>>(
-          future: generateCourseCards(onItemTapped, selectedIndex),
+          future: generateCourseCards(onItemTapped, selectedIndex, uid),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
