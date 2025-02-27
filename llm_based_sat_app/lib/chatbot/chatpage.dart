@@ -15,8 +15,10 @@ class Chatpage extends StatefulWidget {
 class ChatpageState extends State<Chatpage> {
   String name = '';
   late UserProvider userProvider;
-
   late String uid;
+
+  // Add a boolean flag to prevent multiple WebSocket connections
+  bool _isWebSocketConnected = false;
 
   @override
   void initState() {
@@ -27,10 +29,16 @@ class ChatpageState extends State<Chatpage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    // Access Provider here
-    userProvider = Provider.of<UserProvider>(context);
+    // Use listen: false to prevent unnecessary rebuilds
+    userProvider = Provider.of<UserProvider>(context, listen: false);
     uid = userProvider.getUid();
-    webSocketService.connect(uid, context);
+
+    // Ensure WebSocket connection runs only once
+    if (!_isWebSocketConnected) {
+      _isWebSocketConnected = true;
+      webSocketService.connect(uid, context);
+    }
+
     _loadName();
   }
 

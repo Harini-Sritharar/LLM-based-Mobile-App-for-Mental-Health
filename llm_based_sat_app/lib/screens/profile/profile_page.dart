@@ -37,7 +37,7 @@ class _ProfilePageState extends State<ProfilePage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     // Access Provider here
-    userProvider = Provider.of<UserProvider>(context, listen: false);
+    userProvider = Provider.of<UserProvider>(context);
     uid = userProvider.getUid();
   }
 
