@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -12,17 +13,8 @@ import 'course_info.dart';
 Future<List<CourseCard>> generateCourseCards(
     Function(int) onItemTapped, int selectedIndex, String uid) async {
   try {
-    // Fetch childhood images from Firestore
-    Map<String, List<String>> images = await getChildhoodImages(uid);
-
-    // Store in CacheManager with respective keys
-    CacheManager.setValue("Happy", images["Happy"] ?? []);
-    CacheManager.setValue("Sad", images["Sad"] ?? []);
-    CacheManager.setValue("Happy_current_index", 1);
-    CacheManager.setValue("Sad_current_index", 1);
-
-    // Ensure images are preloaded into memory
-    await preloadImages(images);
+    // Start fetching images in the background
+    unawaited(_fetchAndCacheChildhoodImages(uid));
 
     // Fetch courses from the database
     List<Course> coursesDatabase = await getAllCourses();
@@ -75,6 +67,24 @@ Future<List<CourseCard>> generateCourseCards(
     // Log and handle errors
     print("Error while generating course cards: $e");
     return []; // Return an empty list in case of an error
+  }
+}
+
+// Background function to fetch and cache childhood images
+Future<void> _fetchAndCacheChildhoodImages(String uid) async {
+  try {
+    Map<String, List<String>> images = await getChildhoodImages(uid);
+
+    // Store images in CacheManager
+    CacheManager.setValue("Happy", images["Happy"] ?? []);
+    CacheManager.setValue("Sad", images["Sad"] ?? []);
+    CacheManager.setValue("Happy_current_index", 1);
+    CacheManager.setValue("Sad_current_index", 1);
+
+    // Preload images into memory
+    await preloadImages(images);
+  } catch (e) {
+    print("Error loading childhood images: $e");
   }
 }
 
