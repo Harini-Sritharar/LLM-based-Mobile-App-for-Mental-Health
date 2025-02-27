@@ -42,6 +42,27 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
   }
 
   void _finishProfile() {
+    if (!_isPersonalInfoComplete || !_isContactDetailsComplete) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+              "Please complete Personal Info and Contact Details before finishing."),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    if (!isVerified) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Please verify that your information is correct."),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
     // Navigate to the Main Screen upon finishing profile
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => MainScreen()));
@@ -102,8 +123,9 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
                           builder: (context) => PersonalInfoPage(
                                 onItemTapped: (int) {},
                                 selectedIndex: 2,
+                                onCompletion: _fetchCompletionStatus,
                               )));
-                  _fetchCompletionStatus();
+                  //_fetchCompletionStatus();
                 },
               ),
               const SizedBox(height: 24),

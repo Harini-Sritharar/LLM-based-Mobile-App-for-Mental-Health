@@ -1,14 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/screens/profile/personal_profile_page.dart';
+import 'package:llm_based_sat_app/screens/webview_page.dart'; // Import WebViewPage
 import 'package:llm_based_sat_app/theme/app_colours.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../../firebase/firebase_auth_services.dart';
 import 'sign_in_page.dart';
 // Widgets
 import '../../widgets/custom_button.dart';
 import '../../widgets/auth_widgets/circular_checkbox.dart';
-import '../../widgets//auth_widgets/text_input_field.dart';
+import '../../widgets/auth_widgets/text_input_field.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -16,21 +16,14 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  // Firebase authentication service to use for authentication
   final FirebaseAuthService _auth = FirebaseAuthService();
-  final Uri _termsAndConditionsUrl =
-      Uri.parse("https://invincimind.com/terms-and-conditions/");
-
-  // Form specific fields
   bool _agreeToTerms = false;
   final _formKey = GlobalKey<FormState>();
 
-  // Controllers, used for field validation and can be used to fetch the field value
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
-  // Validator used to check if the password and confirm password fields match
   String? _checkPasswordsMatch(String? value) {
     if (value != _passwordController.text) {
       return 'Passwords do not match';
@@ -41,7 +34,7 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColours.white, // Matches the white background
+      backgroundColor: AppColours.white,
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Form(
@@ -110,8 +103,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       });
                     },
                   ),
-                  const SizedBox(
-                      width: 10), // Space between the checkbox and text
+                  const SizedBox(width: 10),
                   Text("I agree to the "),
                   InkWell(
                     child: Text(
@@ -120,12 +112,18 @@ class _SignUpPageState extends State<SignUpPage> {
                         color: AppColours.brandBlueMain,
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
-                        // decoration: TextDecoration.underline,
                       ),
                     ),
-                    onTap: () => {
-                      launchUrl(_termsAndConditionsUrl)
-                      // Open the terms and conditions page
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => WebViewPage(
+                            url: 'https://invincimind.com/terms-and-conditions/',
+                            title: 'Terms & Conditions',
+                          ),
+                        ),
+                      );
                     },
                   )
                 ],
@@ -150,7 +148,6 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      // Navigate to sign-in page
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
@@ -176,6 +173,12 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
+  // Show Snackbar for errors
+  void _showError(String message) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
+  }
+
   // This function should be called when the user presses the sign up button
   // It first checks that:
   // - all form fields are valid
@@ -183,21 +186,24 @@ class _SignUpPageState extends State<SignUpPage> {
   // It will then update the database by using firebase's sign up with email and
   // password method
   void _signUp() async {
-    if (_formKey.currentState!.validate() && _agreeToTerms) {
-      // Navigate to the main screen
-      String email = _emailController.text;
-      String password = _passwordController.text;
+    if (!_formKey.currentState!.validate()) return; // Validate form fields
 
-      User? currentUser =
-          await _auth.signUpWithEmailAndPassword(context, email, password);
+    if (!_agreeToTerms) {
+      _showError("You must accept the Terms & Conditions");
+      return;
+    }
 
-      if (currentUser != null) {
-        user = currentUser;
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => PersonalProfilePage()),
-        );
-      }
+    String email = _emailController.text;
+    String password = _passwordController.text;
+
+    User? currentUser =
+        await _auth.signUpWithEmailAndPassword(context, email, password);
+
+    if (currentUser != null) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => PersonalProfilePage()),
+      );
     }
   }
 }

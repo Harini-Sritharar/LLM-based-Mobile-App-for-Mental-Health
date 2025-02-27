@@ -8,9 +8,13 @@ import 'package:llm_based_sat_app/screens/home_page.dart';
 import 'package:llm_based_sat_app/screens/score/questionnaire_assessments_page.dart';
 import 'package:llm_based_sat_app/utils/consts.dart';
 import 'package:llm_based_sat_app/screens/course/courses.dart';
+import 'package:llm_based_sat_app/utils/user_provider.dart';
+import 'package:llm_based_sat_app/utils/wrapper.dart';
+import '/screens/auth/sign_in_page.dart';
+import '../screens/community_page.dart';
 import 'package:llm_based_sat_app/widgets/fcm_init.dart';
 import 'screens/auth/sign_in_page.dart';
-import '../screens/calendar_page.dart';
+import 'screens/calendar/calendar_page.dart';
 import 'screens/score/score_page.dart';
 import '../widgets/bottom_nav_bar.dart';
 import 'firebase/firebase_options.dart';
@@ -50,6 +54,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (context) => ProfileNotifier()),
         ChangeNotifierProvider(create: (context) => ChatProvider()),
+        ChangeNotifierProvider(create: (context) => UserProvider()),
       ],
       child: MyApp(),
     ),
@@ -92,7 +97,7 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
       home: FCMInitializer(   // DO NOT REMOVE IF YOU WANT TO KEEP NOTIFICATIONS WORKING
-        child: SignInPage(),
+        child: Wrapper(),
       ),
     );
   }

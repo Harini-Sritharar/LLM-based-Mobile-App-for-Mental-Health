@@ -5,7 +5,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:io';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
+import 'package:llm_based_sat_app/utils/user_provider.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
+import 'package:provider/provider.dart';
 
 class ChildhoodPhotosPage extends StatefulWidget {
   final Function(int) onItemTapped;
@@ -30,15 +32,23 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
   List<String> deletedFavouritePhotos = [];
   List<String> deletedNonFavouritePhotos = [];
   bool isSaving = false;
+  late UserProvider userProvider;
+  late String uid;
 
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    userProvider = Provider.of<UserProvider>(context);
+    uid = userProvider.getUid();
     _loadStoredPhotos();
   }
 
   Future<void> _loadStoredPhotos() async {
-    String uid = FirebaseAuth.instance.currentUser!.uid;
     DocumentSnapshot snapshot =
         await FirebaseFirestore.instance.collection('Profile').doc(uid).get();
     setState(() {
@@ -82,7 +92,6 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
     setState(() => isSaving = true);
 
     try {
-      String uid = FirebaseAuth.instance.currentUser!.uid;
       DocumentReference userDoc =
           FirebaseFirestore.instance.collection('Profile').doc(uid);
 

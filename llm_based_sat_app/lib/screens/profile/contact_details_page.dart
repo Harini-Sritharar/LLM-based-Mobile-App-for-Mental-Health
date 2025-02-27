@@ -61,11 +61,21 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
   }
 
   void _saveContactDetails() {
-    if (_formKey.currentState!.validate()) {
-      updateContactDetails(
-          _countryController.text, _zipPostalController.text, mobileNumber!);
-      Navigator.pop(context);
+    if (!_formKey.currentState!.validate() ||
+        mobileNumber == null ||
+        mobileNumber!.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Please fill in all fields before saving."),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
     }
+
+    updateContactDetails(
+        _countryController.text, _zipPostalController.text, mobileNumber!);
+    Navigator.pop(context);
   }
 
   // TO DO : Add validation for Zip/Postal Code

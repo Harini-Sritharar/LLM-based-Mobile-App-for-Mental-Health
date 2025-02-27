@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/models/firebase-exercise-uploader/interface/chapter_interface.dart';
 import 'package:llm_based_sat_app/screens/course/exercise/exercise_info_page_helper.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
+import 'package:llm_based_sat_app/utils/user_provider.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import 'package:llm_based_sat_app/widgets/custom_button.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/learning_tile.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/checkbox_tile.dart';
+import 'package:provider/provider.dart';
 import '../../../data/cache_manager.dart';
 import '../../../models/firebase-exercise-uploader/interface/course_interface.dart';
 import '../../../models/firebase-exercise-uploader/interface/exercise_interface.dart';
@@ -41,6 +43,12 @@ class ExerciseInfoPage extends StatefulWidget {
 }
 
 class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
+  List<bool> checkboxStates = [
+    false,
+    false,
+    false
+  ]; // Initial states for checkboxes
+
   @override
   void dispose() {
     // Removes current step from cache so user must reset exercise
@@ -48,8 +56,15 @@ class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
     super.dispose();
   }
 
+  // Returns true if all Checkboxes are checked
+  bool allCheckboxesChecked() {
+    return checkboxStates.every((element) => element);
+  }
+
   @override
   Widget build(BuildContext context) {
+    UserProvider userProvider = Provider.of<UserProvider>(context);
+    String uid = userProvider.getUid();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
@@ -84,21 +99,39 @@ class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
             ),
             const SizedBox(height: 8),
             Column(
-              children: const [
+              children: [
                 CheckboxTile(
                   title:
                       'Go to a quiet place. If not possible, wear headphones.',
                   icon: Icons.headphones,
+                  value: checkboxStates[0],
+                  onChanged: (bool? newValue) {
+                    setState(() {
+                      checkboxStates[0] = newValue ?? false;
+                    });
+                  },
                 ),
                 CheckboxTile(
                   title:
                       'Set your childhood photo as the background on your phone.',
                   icon: Icons.photo,
+                  value: checkboxStates[1],
+                  onChanged: (bool? newValue) {
+                    setState(() {
+                      checkboxStates[1] = newValue ?? false;
+                    });
+                  },
                 ),
                 CheckboxTile(
                   title:
                       'Plan a visit to a natural area (park, river, mountain, sea..).',
                   icon: Icons.calendar_today,
+                  value: checkboxStates[2],
+                  onChanged: (bool? newValue) {
+                    setState(() {
+                      checkboxStates[2] = newValue ?? false;
+                    });
+                  },
                 ),
               ],
             ),
@@ -201,21 +234,22 @@ class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
               ],
             ),
             const SizedBox(height: 16),
-            Center(
-              child: CustomButton(
-                buttonText: 'Start Exercise',
-                onPress: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => getExerciseStep(
-                          widget.exercise, widget.course, widget.chapter),
-                    ),
-                  );
-                },
-                rightArrowPresent: true,
+            if (allCheckboxesChecked()) // Show button only when all Checkboxes are checked
+              Center(
+                child: CustomButton(
+                  buttonText: 'Start Exercise',
+                  onPress: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => getExerciseStep(
+                            widget.exercise, widget.course, widget.chapter, uid),
+                      ),
+                    );
+                  },
+                  rightArrowPresent: true,
+                ),
               ),
-            ),
           ],
         ),
       ),

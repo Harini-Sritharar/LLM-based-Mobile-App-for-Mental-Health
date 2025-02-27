@@ -11,6 +11,9 @@ import 'package:llm_based_sat_app/screens/course/exercise/assessment_page.dart';
 import 'package:llm_based_sat_app/screens/course/exercise/exercise_page.dart';
 import 'package:llm_based_sat_app/utils/exercise_helper_functions.dart';
 import 'package:llm_based_sat_app/utils/exercise_timer_manager.dart';
+import 'package:llm_based_sat_app/utils/user_provider.dart';
+import 'package:path/path.dart';
+import 'package:provider/provider.dart';
 
 /* Function to combine required and optional learning into one String */
 getLearning(Exercise exercise) {
@@ -75,7 +78,8 @@ int extractLastNumber(String input) {
   }
 }
 
-Widget getExerciseStep(Exercise exercise, Course course, Chapter chapter) {
+Widget getExerciseStep(
+    Exercise exercise, Course course, Chapter chapter, String uid) {
   int currentStep = 1;
   if (CacheManager.getValue(exercise.id) == null &&
       CacheManager.getValue(course.id) != null) {
@@ -118,7 +122,7 @@ Widget getExerciseStep(Exercise exercise, Course course, Chapter chapter) {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => getExerciseStep(exercise, course, chapter),
+              builder: (context) => getExerciseStep(exercise, course, chapter, uid),
             ),
           );
         } else {
@@ -141,21 +145,7 @@ Widget getExerciseStep(Exercise exercise, Course course, Chapter chapter) {
 
     // Update firebase to indicate current exercise completed
     updateUserCourseProgress(
-        user!.uid, course.id.trim(), completedExercise, previousSession);
-
-    // Add TimeStamp entry for given exercise and session
-    updateTimeStamp(
-        user!.uid,
-        course.id.trim(),
-        exercise.id.trim(),
-        (getSessions(exercise, course) + 1).toString(),
-        CacheManager.getValue(
-            "${exercise.id}/${getSessions(exercise, course) + 1}/TimeStamp"),
-        Timestamp.now());
-
-    // Remove cached TimeStamp for current exercise and session
-    CacheManager.removeValue(
-        "${exercise.id}/${getSessions(exercise, course) + 1}/TimeStamp");
+        uid, course.id.trim(), completedExercise, previousSession);
 
     return FutureBuilder<String>(
       future: getElapsedTime(), // Fetch elapsed time
