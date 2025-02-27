@@ -1,18 +1,29 @@
+import 'dart:typed_data';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:llm_based_sat_app/utils/user_provider.dart';
-import 'package:provider/provider.dart';
 import '../../data/cache_manager.dart';
 import '../../firebase/firebase_courses.dart';
 import '../../models/chapter_exercise_step_interface.dart';
 import '../../models/firebase-exercise-uploader/interface/course_interface.dart';
 import '../../widgets/course_widgets/course_card.dart';
-import '../auth/sign_in_page.dart';
 import 'course_info.dart';
 
-/* Generates a list of `CourseCard` widgets dynamically based on course data. */
+/* Generates a list of `CourseCard` widgets dynamically based on course data. Loads in user childhood favorite and non-favorite images and stores in cache */
 Future<List<CourseCard>> generateCourseCards(
     Function(int) onItemTapped, int selectedIndex, String uid) async {
   try {
+    // Fetch childhood images from Firestore
+    Map<String, List<String>> images = await getChildhoodImages(uid);
+
+    // Store in CacheManager with respective keys
+    CacheManager.setValue("Happy", images["Happy"] ?? []);
+    CacheManager.setValue("Sad", images["Sad"] ?? []);
+    CacheManager.setValue("Happy_current_index", 1);
+    CacheManager.setValue("Sad_current_index", 1);
+
+    // Ensure images are preloaded into memory
+    await preloadImages(images);
+
     // Fetch courses from the database
     List<Course> coursesDatabase = await getAllCourses();
 
@@ -91,4 +102,28 @@ void Function(BuildContext) createOnButtonPress({
       ),
     );
   };
+}
+
+Future<void> preloadImages(Map<String, List<String>> images) async {
+  for (var entry in images.entries) {
+    String imageType = entry.key; // "Happy" or "Sad"
+    List<String> urls = entry.value;
+
+    List<Uint8List> imageDataList = [];
+
+    for (String url in urls) {
+      try {
+        final response = await http.get(Uri.parse(url));
+        if (response.statusCode == 200) {
+          imageDataList.add(response.bodyBytes);
+        }
+      } catch (e) {
+        print("Error loading image: $url, Error: $e");
+      }
+    }
+
+    // Store the loaded images in cache
+    CacheManager.setValue(imageType, imageDataList);
+    CacheManager.setValue("${imageType}_current_index", 0);
+  }
 }

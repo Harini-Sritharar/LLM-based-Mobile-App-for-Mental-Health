@@ -408,3 +408,40 @@ Future<TimeStampEntry?> getTimeStamp(String uid, String courseId,
     return null;
   }
 }
+
+/* Fetches childhood images categorized as "Happy" (Favourite Photos) and "Sad" (Non-Favourite Photos).
+
+The images are categorized into two types:
+- "Happy" → Stored under `favouritePhotos`
+- "Sad" → Stored under `nonfavouritePhotos`
+
+If the document doesn't exist or an error occurs, it returns an empty map. */
+Future<Map<String, List<String>>> getChildhoodImages(String uid) async {
+  try {
+    // Reference to the user's document in Firestore
+    final docSnapshot =
+        await FirebaseFirestore.instance.collection('Profile').doc(uid).get();
+
+    // Check if the document exists
+    if (!docSnapshot.exists) {
+      return {};
+    }
+
+    // Extract data from Firestore document
+    final data = docSnapshot.data();
+    if (data == null) {
+      return {};
+    }
+
+    // Convert to expected format
+    Map<String, List<String>> imagesMap = {
+      "Happy": List<String>.from(data["favouritePhotos"] ?? []),
+      "Sad": List<String>.from(data["nonfavouritePhotos"] ?? []),
+    };
+
+    return imagesMap;
+  } catch (e) {
+    print("Error fetching childhood images: $e");
+    return {};
+  }
+}

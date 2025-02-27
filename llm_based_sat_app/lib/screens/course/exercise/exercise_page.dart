@@ -15,19 +15,18 @@ Parameters:
 - `heading` (String): The title of the exercise displayed in the app bar.
 - `step` (String): The current step or label for the exercise workflow.
 - `description` (String): A detailed description of the exercise.
-- `imageUrl` (String): URL for the exercise image to be displayed on the page.
+- `imageType` (String): Type for the exercise image to be displayed on the page. ("Happy" or "Sad")
 - `buttonText` (String): Text displayed on the custom action button.
 - `onButtonPress` (void Function(BuildContext)): Callback function triggered when the custom button is pressed. It takes the current `BuildContext` as input.
 - `rightArrowPresent` (bool): Indicates whether a right arrow should appear on the custom button.
 - `messageText` (String): A bottom message text providing additional exercise info.
 - `exercise` (Exercise): The `Exercise` model containing exercise-specific details, such as duration, progress, and metadata. */
 
-
 class ExercisePage extends StatelessWidget {
   final String heading;
   final String step;
   final String description;
-  final String imageUrl;
+  final String imageType;
   final String buttonText;
   final void Function(BuildContext) onButtonPress;
   final bool rightArrowPresent;
@@ -39,7 +38,7 @@ class ExercisePage extends StatelessWidget {
     required this.heading,
     required this.step,
     required this.description,
-    required this.imageUrl,
+    required this.imageType,
     required this.buttonText,
     required this.onButtonPress,
     required this.rightArrowPresent,
@@ -62,7 +61,7 @@ class ExercisePage extends StatelessWidget {
                 const SizedBox(height: 32),
                 ExerciseDescription(description: description),
                 const SizedBox(height: 40),
-                ExerciseImage(imageUrl: imageUrl),
+                ExerciseImage(imageType: imageType),
                 const SizedBox(height: 40),
                 Center(
                   child: CustomButton(
@@ -97,7 +96,9 @@ class ExercisePage extends StatelessWidget {
             left: 0,
             right: 0,
             child: Center(
-              child: ExerciseTimer(exercise: exercise,),
+              child: ExerciseTimer(
+                exercise: exercise,
+              ),
             ),
           ),
         ],

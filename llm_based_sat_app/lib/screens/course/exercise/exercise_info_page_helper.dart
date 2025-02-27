@@ -6,14 +6,10 @@ import 'package:llm_based_sat_app/models/chapter_exercise_step_interface.dart';
 import 'package:llm_based_sat_app/models/firebase-exercise-uploader/interface/chapter_interface.dart';
 import 'package:llm_based_sat_app/models/firebase-exercise-uploader/interface/course_interface.dart';
 import 'package:llm_based_sat_app/models/firebase-exercise-uploader/interface/exercise_interface.dart';
-import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
 import 'package:llm_based_sat_app/screens/course/exercise/assessment_page.dart';
 import 'package:llm_based_sat_app/screens/course/exercise/exercise_page.dart';
 import 'package:llm_based_sat_app/utils/exercise_helper_functions.dart';
 import 'package:llm_based_sat_app/utils/exercise_timer_manager.dart';
-import 'package:llm_based_sat_app/utils/user_provider.dart';
-import 'package:path/path.dart';
-import 'package:provider/provider.dart';
 
 /* Function to combine required and optional learning into one String */
 getLearning(Exercise exercise) {
@@ -112,7 +108,7 @@ Widget getExerciseStep(
       heading: header,
       step: currentExerciseStep.stepTitle,
       description: currentExerciseStep.description,
-      imageUrl: currentExerciseStep.imageUrl,
+      imageType: currentExerciseStep.imageType,
       buttonText: "Next Step",
       onButtonPress: (BuildContext context) async {
         if (currentStep <= exercise.exerciseSteps.length) {
@@ -122,7 +118,8 @@ Widget getExerciseStep(
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => getExerciseStep(exercise, course, chapter, uid),
+              builder: (context) =>
+                  getExerciseStep(exercise, course, chapter, uid),
             ),
           );
         } else {
