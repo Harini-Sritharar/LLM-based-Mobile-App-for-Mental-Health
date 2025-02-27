@@ -36,10 +36,10 @@ class Exercise {
       objective: data['Objective'] ?? '',
       minimumPracticeTime: data['Minimum practice time'],
       totalSessions: data['Total sessions'] ?? 0,
-      preExerciseTasks: List<String>.from(data['Pre-Exercise Tasks'] ?? []),
+      preExerciseTasks: List<String>.from(data['Pre-exercise tasks'] ?? []),
       requiredLearning: List<String>.from(data['Required learning'] ?? []),
       optionalLearning: List<String>.from(data['Optional learning'] ?? []),
-      afterExerciseTasks: List<String>.from(data['After-Exercise Tasks'] ?? []),
+      afterExerciseTasks: List<String>.from(data['After-exercise tasks'] ?? []),
     );
   }
 
