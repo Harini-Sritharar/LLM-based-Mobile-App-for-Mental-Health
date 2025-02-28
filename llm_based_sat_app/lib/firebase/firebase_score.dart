@@ -313,6 +313,12 @@ Future<Map<String, dynamic>> getAverageSubScores() async {
   DocumentReference userDoc = db.collection('Profile').doc(user.uid);
 
   DocumentSnapshot userSnapshot = await userDoc.get();
+
+  // Ensure document exists and contains data
+  if (!userSnapshot.exists || userSnapshot.data() == null) {
+    return {"months": [], "averages": []};
+  }
+
   var data = userSnapshot.data() as Map<String, dynamic>;
 
   if (data['subScoresHistory'] == null) {
