@@ -17,27 +17,19 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final _emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
+/* This function handles the password reset process. It checks if the email is valid, sends a password reset email if the email is associated with a
+ user, and handles various error scenarios. It shows a SnackBar with the appropriate message to the user; to inform them of whether any errors have 
+ been encountered during the reset process */
+
   void _resetPassword() async {
     // checks to see if the email is valid
     if (_formKey.currentState!.validate()) {
-      // Check if a user exists for this email
-      // List<String> signInMethods =
-      //     await _firebaseAuth.fetchSignInMethodsForEmail(_emailController.text);
-
-      // if (signInMethods.isEmpty) {
-      //   if (!mounted) return;
-      //   // No user exists for this email
-      //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      //     content: Text("No user found for that email."),
-      //     duration: const Duration(seconds: 3),
-      //   ));
-      //   return; // Stop execution
-      // }
       try {
         await _auth.resetPassword(_emailController.text);
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Check your email for a password reset link!"),
+          content: Text(
+              "If an account exists for this email, you will recieve a reset link!"),
           duration: const Duration(seconds: 3),
         ));
         Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -113,4 +105,3 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         ]))))));
   }
 }
-// We can change what the reset email shows us
