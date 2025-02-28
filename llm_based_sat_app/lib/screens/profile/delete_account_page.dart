@@ -5,6 +5,8 @@ import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
 import 'package:llm_based_sat_app/widgets/auth_widgets/text_input_field.dart';
 import 'package:llm_based_sat_app/widgets/custom_button.dart';
 
+/// A page that allows users to permanently delete their account.
+/// The user must provide their password and a reason for deletion.
 class DeleteAccountPage extends StatefulWidget {
   @override
   _DeleteAccountPageState createState() => _DeleteAccountPageState();
@@ -17,6 +19,7 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
   String? selectedReason;
   bool isLoading = false;
 
+  /// List of predefined reasons for account deletion.
   final List<String> reasons = [
     "Technical issues",
     "Don’t see the value",
@@ -33,6 +36,7 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
     super.dispose();
   }
 
+  /// Handles account deletion after verifying password and reason selection.
   void _submitDeletion() async {
     if (_passwordController.text.isEmpty) {
       _showSnackBar("Please enter your password.");
@@ -74,6 +78,7 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
     }
   }
 
+  /// Displays a Snackbar with a given message.
   void _showSnackBar(String message) {
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text(message)));
@@ -98,6 +103,7 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
                   "Deleting your account will erase your progress, data, and saved settings."),
               SizedBox(height: 20),
 
+              /// Radio buttons for selecting a reason
               Text("Tell us the reason:",
                   style: TextStyle(fontWeight: FontWeight.bold)),
               ...reasons.map((reason) {
@@ -109,7 +115,7 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
                 );
               }).toList(),
 
-              // Other reason input
+              // Input field for custom reason
               TextInputField(
                 label: "Other reason...",
                 icon: Icons.comment,
@@ -119,6 +125,7 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
 
               SizedBox(height: 20),
 
+              /// Password confirmation input
               Text("Please confirm your password:",
                   style: TextStyle(fontWeight: FontWeight.bold)),
               TextInputField(
@@ -130,6 +137,7 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
 
               SizedBox(height: 20),
 
+              /// Submit button to process account deletion
               CustomButton(
                 buttonText: isLoading ? "Processing..." : "Submit Request",
                 onPress: _submitDeletion,

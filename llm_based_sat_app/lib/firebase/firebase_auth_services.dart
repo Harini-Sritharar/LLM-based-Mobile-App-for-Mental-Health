@@ -10,6 +10,9 @@ class FirebaseAuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseMessaging _messaging = FirebaseMessaging.instance;
+
+  // Signs up a new user with email and password.
+  /// Creates a new user document in Firestore upon successful registration.
   Future<User?> signUpWithEmailAndPassword(
       BuildContext context, String email, String password) async {
     try {
@@ -36,6 +39,7 @@ class FirebaseAuthService {
     return null;
   }
 
+// Signs in a user with email and password.
   Future<User?> signInWithEmailandPassword(
       BuildContext context, String email, String password) async {
     try {
@@ -56,6 +60,8 @@ class FirebaseAuthService {
     return null;
   }
 
+  // Signs out the currently authenticated user.
+  /// Also removes their FCM token from Firestore for security reasons.
   Future<void> signOut(BuildContext context) async {
     try {
       UserProvider userProvider =
@@ -79,6 +85,7 @@ class FirebaseAuthService {
     }
   }
 
+  // Handles authentication errors and provides user-friendly messages.
   void _handleFirebaseAuthError(BuildContext context, FirebaseAuthException e) {
     switch (e.code) {
       case 'email-already-in-use':
@@ -109,54 +116,7 @@ class FirebaseAuthService {
     }
   }
 
-  // Future<bool> deleteAccount(
-  //     BuildContext context, String password, String reason) async {
-  //   try {
-  //     User? user = _auth.currentUser;
-  //     if (user == null) {
-  //       _showSnackBar(context, "No user signed in.");
-  //       return false;
-  //     }
-
-  //     // Re-authenticate user
-  //     AuthCredential credential = EmailAuthProvider.credential(
-  //       email: user.email!,
-  //       password: password,
-  //     );
-
-  //     await user.reauthenticateWithCredential(credential);
-
-  //     FirebaseFirestore db = FirebaseFirestore.instance;
-
-  //     // Save deletion reason before deleting account
-  //     await db.collection("DeletedAccounts").doc(user.uid).set({
-  //       "reason": reason.isNotEmpty ? reason : "Other",
-  //       "timestamp": FieldValue.serverTimestamp(),
-  //     });
-
-  //     // Delete user's profile data
-  //     await db.collection('Profile').doc(user.uid).delete();
-
-  //     // Delete user authentication
-  //     await user.delete();
-
-  //     _showSnackBar(context, "Account successfully deleted.");
-  //     return true; // Indicate success
-  //   } on FirebaseAuthException catch (e) {
-  //     if (e.code == 'wrong-password') {
-  //       _showSnackBar(context, "Incorrect password. Please try again.");
-  //     } else if (e.code == 'requires-recent-login') {
-  //       _showSnackBar(
-  //           context, "Please log in again before deleting your account.");
-  //     } else {
-  //       _showSnackBar(context, "Error: ${e.message}");
-  //     }
-  //   } catch (e) {
-  //     _showSnackBar(context, "An error occurred while deleting the account.");
-  //   }
-  //   return false; // Indicate failure
-  // }
-
+  // Deletes the authenticated user's account after re-authenticating.
   Future<bool> deleteAccount(
       BuildContext context, String password, String reason) async {
     User? user = _auth.currentUser;
@@ -190,51 +150,7 @@ class FirebaseAuthService {
     return true; // Indicate success
   }
 
-  // Future<bool> resetSettings(BuildContext context, String password) async {
-  //   try {
-  //     User? user = FirebaseAuth.instance.currentUser;
-  //     if (user == null) {
-  //       _showSnackBar(context, "No user signed in.");
-  //       return false;
-  //     }
-
-  //     // Re-authenticate user
-  //     AuthCredential credential = EmailAuthProvider.credential(
-  //       email: user.email!,
-  //       password: password,
-  //     );
-
-  //     await user.reauthenticateWithCredential(credential);
-
-  //     FirebaseFirestore db = FirebaseFirestore.instance;
-  //     DocumentReference profileRef = db.collection('Profile').doc(user.uid);
-
-  //     // Fetch the document
-  //     DocumentSnapshot profileSnapshot = await profileRef.get();
-  //     if (!profileSnapshot.exists) {
-  //       _showSnackBar(context, "Profile not found.");
-  //       return false;
-  //     }
-
-  //     // Delete all notifications settings
-  //     await _deleteSubcollection(profileRef, "notifications");
-
-  //     _showSnackBar(context, "Settings have been reset.");
-
-  //     return true; // Indicate success
-  //   } on FirebaseAuthException catch (e) {
-  //     if (e.code == 'wrong-password') {
-  //       _showSnackBar(context, "Incorrect password. Please try again.");
-  //     } else {
-  //       _showSnackBar(context, "Error: ${e.message}");
-  //     }
-  //   } catch (e) {
-  //     _showSnackBar(context, "Error resetting settings.");
-  //   }
-
-  //   return false;
-  // }
-
+  /// Resets user settings by clearing specific Firestore fields.
   Future<bool> resetSettings(BuildContext context, String password) async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user == null) {
@@ -265,6 +181,7 @@ class FirebaseAuthService {
     return true; // Indicate success
   }
 
+  /// Deletes all documents in a specified subcollection.
   Future<void> _deleteSubcollection(
       DocumentReference userDoc, String subcollection) async {
     final subcollectionRef = userDoc.collection(subcollection);
@@ -275,6 +192,7 @@ class FirebaseAuthService {
     }
   }
 
+  // Displays a Snackbar notification with a given message.
   void _showSnackBar(BuildContext context, String message) {
     final snackBar = SnackBar(content: Text(message));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
