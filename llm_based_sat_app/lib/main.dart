@@ -20,6 +20,7 @@ import '../widgets/bottom_nav_bar.dart';
 import 'firebase/firebase_options.dart';
 import 'package:provider/provider.dart';
 import 'utils/profile_notifier.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 // Background message handler
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -35,6 +36,9 @@ void main() async {
   
   // Register background handler before initializing Firebase
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+  
+  // Load environment variables
+  await dotenv.load(fileName: ".env");
 
   await _setup();  // Ensures Stripe and other initializations
 
@@ -49,6 +53,7 @@ void main() async {
     sound: true,
   );
 
+
   runApp(
     MultiProvider(
       providers: [
@@ -62,7 +67,7 @@ void main() async {
 }
 
 Future<void> _setup() async {
-  Stripe.publishableKey = stripePublishableKey;
+  Stripe.publishableKey = dotenv.env['STRIPE_PUBLISHABLE_KEY'] ?? '';
 }
 
 class MyApp extends StatefulWidget {
