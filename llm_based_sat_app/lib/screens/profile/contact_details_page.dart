@@ -12,8 +12,13 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 class ContactDetailsPage extends StatefulWidget {
   final Function(int) onItemTapped; // Receive function to update navbar index
   final int selectedIndex; // Keep track of selected index
+  final VoidCallback onCompletion;
+
   const ContactDetailsPage(
-      {Key? key, required this.onItemTapped, required this.selectedIndex})
+      {Key? key,
+      required this.onItemTapped,
+      required this.selectedIndex,
+      required this.onCompletion})
       : super(key: key);
 
   @override
@@ -61,6 +66,7 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
   }
 
   void _saveContactDetails() {
+    print("In Save Contact Details");
     if (!_formKey.currentState!.validate() ||
         mobileNumber == null ||
         mobileNumber!.isEmpty) {
@@ -75,6 +81,7 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
 
     updateContactDetails(
         _countryController.text, _zipPostalController.text, mobileNumber!);
+    widget.onCompletion();
     Navigator.pop(context);
   }
 

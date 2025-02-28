@@ -16,28 +16,19 @@ class PersonalProfilePage extends StatefulWidget {
 
 class _PersonalProfilePageState extends State<PersonalProfilePage> {
   bool isVerified = false;
-  //User_ user = User_();
 
   // Completion flags
   bool _isPersonalInfoComplete = false;
   bool _isContactDetailsComplete = false;
   bool _isProfilePictureComplete = false;
+  bool _isChildhoodPhotosComplete = false;
 
-  @override
-  void initState() {
-    super.initState();
-    _fetchCompletionStatus();
-  }
-
-  Future<void> _fetchCompletionStatus() async {
-    bool personalInfoComplete = await isPersonalInfoComplete();
-    bool contactDetailsComplete = await isContactDetailsComplete();
-    bool profilePictureComplete = await isProfilePictureComplete();
-
+  void _markAsComplete(String section) {
     setState(() {
-      _isPersonalInfoComplete = personalInfoComplete;
-      _isContactDetailsComplete = contactDetailsComplete;
-      _isProfilePictureComplete = profilePictureComplete;
+      if (section == "Personal Info") _isPersonalInfoComplete = true;
+      if (section == "Contact Details") _isContactDetailsComplete = true;
+      if (section == "Profile Picture") _isProfilePictureComplete = true;
+      if (section == "Childhood Photos") _isChildhoodPhotosComplete = true;
     });
   }
 
@@ -123,9 +114,9 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
                           builder: (context) => PersonalInfoPage(
                                 onItemTapped: (int) {},
                                 selectedIndex: 2,
-                                onCompletion: _fetchCompletionStatus,
+                                onCompletion: () =>
+                                    _markAsComplete("Personal Info"),
                               )));
-                  //_fetchCompletionStatus();
                 },
               ),
               const SizedBox(height: 24),
@@ -139,9 +130,10 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
                           builder: (context) => ContactDetailsPage(
                                 onItemTapped: (x) {},
                                 selectedIndex: 2,
+                                onCompletion: () =>
+                                    _markAsComplete("Contact Details"),
                               )));
                   // Navigate to Contact Details Screen
-                  _fetchCompletionStatus();
                 },
               ),
               const SizedBox(height: 24),
@@ -155,10 +147,11 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
                           builder: (context) => UploadProfilePicturePage(
                                 onItemTapped: (int) {},
                                 selectedIndex: 2,
+                                onCompletion: () =>
+                                    _markAsComplete("Profile Picture"),
                               )));
 
                   // Navigate to Profile Picture Screen
-                  _fetchCompletionStatus();
                 },
               ),
               const SizedBox(height: 24),
@@ -173,6 +166,8 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
                           builder: (context) => ChildhoodPhotosPage(
                                 onItemTapped: (int) {},
                                 selectedIndex: 2,
+                                onCompletion: () =>
+                                    _markAsComplete("Childhood Photos"),
                               )));
                 },
               ),

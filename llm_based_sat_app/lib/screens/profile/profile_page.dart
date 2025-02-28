@@ -174,6 +174,7 @@ class ProfilePage extends StatelessWidget {
                           builder: (context) => ChildhoodPhotosPage(
                             onItemTapped: onItemTapped,
                             selectedIndex: selectedIndex,
+                            onCompletion: () {},
                           ),
                         ),
                       );

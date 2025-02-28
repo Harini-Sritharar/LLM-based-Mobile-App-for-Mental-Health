@@ -12,11 +12,13 @@ import 'package:provider/provider.dart';
 class ChildhoodPhotosPage extends StatefulWidget {
   final Function(int) onItemTapped;
   final int selectedIndex;
+  final VoidCallback onCompletion;
 
   const ChildhoodPhotosPage({
     super.key,
     required this.onItemTapped,
     required this.selectedIndex,
+    required this.onCompletion,
   });
 
   @override
@@ -141,6 +143,9 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
         deletedFavouritePhotos.clear();
         deletedNonFavouritePhotos.clear();
       });
+
+      widget.onCompletion();
+      Navigator.pop(context);
     } catch (e) {
       print('Error saving photos: $e');
     } finally {
