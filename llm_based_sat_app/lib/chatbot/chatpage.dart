@@ -45,6 +45,7 @@ class ChatpageState extends State<Chatpage> {
   @override
   void dispose() {
     webSocketService.close();
+    _isWebSocketConnected = false;
     super.dispose();
   }
 
@@ -60,6 +61,7 @@ class ChatpageState extends State<Chatpage> {
   sendMessage() {
     if (_textController.text.isNotEmpty) {
       final chatProvider = context.read<ChatProvider>();
+      if (!_isWebSocketConnected) return;
       chatProvider.sendMessage(_textController.text);
       webSocketService.sendMessage(_textController.text);
       _textController.clear();
