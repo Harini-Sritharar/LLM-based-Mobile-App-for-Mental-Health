@@ -30,7 +30,6 @@ dependencies:
   flutter_local_notifications: ^18.0.1
   path: ^1.8.0
   intl_phone_field: ^3.2.0 # For phone number +country input
-  image_picker: ^1.1.2
   file_picker: ^8.1.7
   provider: ^6.1.2
   flutter_stripe: ^11.4.0
@@ -43,6 +42,9 @@ dependencies:
   http: ^1.2.2
   webview_flutter: ^4.10.0
   firebase_app_check: ^0.3.2+4
+  image_picker_ios: ^0.8.12+2
+  permission_handler: ^11.4.0
+  image_picker: ^1.1.2
 
 dev_dependencies:
   flutter_test:
