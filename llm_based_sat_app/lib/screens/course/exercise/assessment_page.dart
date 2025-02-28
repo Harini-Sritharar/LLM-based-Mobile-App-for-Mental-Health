@@ -103,12 +103,14 @@ class _AssessmentPageState extends State<AssessmentPage> {
               buttonText: 'Back to Course',
               onPress: () {
                 uploadTimeStampCommentAndRating();
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MainScreen(
-                              initialIndex: 4,
-                            )));
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MainScreen(
+                            initialIndex: 4,
+                          )),
+                  (route) => false,
+                );
               },
               backgroundColor: AppColours.brandBlueMinusFour,
               textColor: AppColours.brandBlueMain,
