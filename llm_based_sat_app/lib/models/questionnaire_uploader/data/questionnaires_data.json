@@ -1,6 +1,5 @@
 {
    "GAD-7": {
-        
         "description" : "Over the last 2 weeks, how often have you been bothered by the following problems; with 0 being not at all and 3 being nearly every day?",
         "questions" : [
             "Feeling nervous, anxious, or on edge.",

@@ -3,7 +3,7 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 
 # Initialize Firebase Admin SDK with Firestore
-cred = credentials.Certificate("./llm-based-sat-app-firebase-adminsdk-d18wo-071df6539f.json")
+cred = credentials.Certificate("./llm-based-sat-app-e33e3ed653dd.json")
 firebase_admin.initialize_app(cred)
 
 db = firestore.client()
@@ -24,4 +24,4 @@ def upload_questionnaire_data_to_firebase(questionnaires_path):
         })
 
 
-upload_questionnaire_data_to_firebase("../data/questionnaire_data.json")
+upload_questionnaire_data_to_firebase("../data/questionnaires_data.json")
