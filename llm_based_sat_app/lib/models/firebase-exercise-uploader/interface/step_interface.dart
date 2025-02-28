@@ -14,7 +14,7 @@ class Step {
     required this.description,
     this.additionalDetails = "",
     this.footerText = "",
-    required this.imageType,
+    this.imageType = "Happy",
   });
 
   factory Step.fromFirestore(String id, Map<String, dynamic> data) {
