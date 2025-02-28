@@ -109,126 +109,160 @@ class FirebaseAuthService {
     }
   }
 
+  // Future<bool> deleteAccount(
+  //     BuildContext context, String password, String reason) async {
+  //   try {
+  //     User? user = _auth.currentUser;
+  //     if (user == null) {
+  //       _showSnackBar(context, "No user signed in.");
+  //       return false;
+  //     }
+
+  //     // Re-authenticate user
+  //     AuthCredential credential = EmailAuthProvider.credential(
+  //       email: user.email!,
+  //       password: password,
+  //     );
+
+  //     await user.reauthenticateWithCredential(credential);
+
+  //     FirebaseFirestore db = FirebaseFirestore.instance;
+
+  //     // Save deletion reason before deleting account
+  //     await db.collection("DeletedAccounts").doc(user.uid).set({
+  //       "reason": reason.isNotEmpty ? reason : "Other",
+  //       "timestamp": FieldValue.serverTimestamp(),
+  //     });
+
+  //     // Delete user's profile data
+  //     await db.collection('Profile').doc(user.uid).delete();
+
+  //     // Delete user authentication
+  //     await user.delete();
+
+  //     _showSnackBar(context, "Account successfully deleted.");
+  //     return true; // Indicate success
+  //   } on FirebaseAuthException catch (e) {
+  //     if (e.code == 'wrong-password') {
+  //       _showSnackBar(context, "Incorrect password. Please try again.");
+  //     } else if (e.code == 'requires-recent-login') {
+  //       _showSnackBar(
+  //           context, "Please log in again before deleting your account.");
+  //     } else {
+  //       _showSnackBar(context, "Error: ${e.message}");
+  //     }
+  //   } catch (e) {
+  //     _showSnackBar(context, "An error occurred while deleting the account.");
+  //   }
+  //   return false; // Indicate failure
+  // }
+
   Future<bool> deleteAccount(
       BuildContext context, String password, String reason) async {
-    try {
-      User? user = _auth.currentUser;
-      if (user == null) {
-        _showSnackBar(context, "No user signed in.");
-        return false;
-      }
-
-      // Re-authenticate user
-      AuthCredential credential = EmailAuthProvider.credential(
-        email: user.email!,
-        password: password,
-      );
-
-      await user.reauthenticateWithCredential(credential);
-
-      FirebaseFirestore db = FirebaseFirestore.instance;
-
-      // Save deletion reason before deleting account
-      await db.collection("DeletedAccounts").doc(user.uid).set({
-        "reason": reason.isNotEmpty ? reason : "Other",
-        "timestamp": FieldValue.serverTimestamp(),
-      });
-
-      // Delete user's profile data
-      await db.collection('Profile').doc(user.uid).delete();
-
-      // Delete user authentication
-      await user.delete();
-
-      _showSnackBar(context, "Account successfully deleted.");
-      return true; // Indicate success
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'wrong-password') {
-        _showSnackBar(context, "Incorrect password. Please try again.");
-      } else if (e.code == 'requires-recent-login') {
-        _showSnackBar(
-            context, "Please log in again before deleting your account.");
-      } else {
-        _showSnackBar(context, "Error: ${e.message}");
-      }
-    } catch (e) {
-      _showSnackBar(context, "An error occurred while deleting the account.");
+    User? user = _auth.currentUser;
+    if (user == null) {
+      throw FirebaseAuthException(
+          code: 'no-user', message: "No user signed in.");
     }
-    return false; // Indicate failure
+
+    // Re-authenticate user
+    AuthCredential credential = EmailAuthProvider.credential(
+      email: user.email!,
+      password: password,
+    );
+
+    await user.reauthenticateWithCredential(credential);
+
+    FirebaseFirestore db = FirebaseFirestore.instance;
+
+    // Save deletion reason before deleting account
+    await db.collection("DeletedAccounts").doc(user.uid).set({
+      "reason": reason.isNotEmpty ? reason : "Other",
+      "timestamp": FieldValue.serverTimestamp(),
+    });
+
+    // Delete user's profile data
+    await db.collection('Profile').doc(user.uid).delete();
+
+    // Delete user authentication
+    await user.delete();
+
+    return true; // Indicate success
   }
 
+  // Future<bool> resetSettings(BuildContext context, String password) async {
+  //   try {
+  //     User? user = FirebaseAuth.instance.currentUser;
+  //     if (user == null) {
+  //       _showSnackBar(context, "No user signed in.");
+  //       return false;
+  //     }
+
+  //     // Re-authenticate user
+  //     AuthCredential credential = EmailAuthProvider.credential(
+  //       email: user.email!,
+  //       password: password,
+  //     );
+
+  //     await user.reauthenticateWithCredential(credential);
+
+  //     FirebaseFirestore db = FirebaseFirestore.instance;
+  //     DocumentReference profileRef = db.collection('Profile').doc(user.uid);
+
+  //     // Fetch the document
+  //     DocumentSnapshot profileSnapshot = await profileRef.get();
+  //     if (!profileSnapshot.exists) {
+  //       _showSnackBar(context, "Profile not found.");
+  //       return false;
+  //     }
+
+  //     // Delete all notifications settings
+  //     await _deleteSubcollection(profileRef, "notifications");
+
+  //     _showSnackBar(context, "Settings have been reset.");
+
+  //     return true; // Indicate success
+  //   } on FirebaseAuthException catch (e) {
+  //     if (e.code == 'wrong-password') {
+  //       _showSnackBar(context, "Incorrect password. Please try again.");
+  //     } else {
+  //       _showSnackBar(context, "Error: ${e.message}");
+  //     }
+  //   } catch (e) {
+  //     _showSnackBar(context, "Error resetting settings.");
+  //   }
+
+  //   return false;
+  // }
+
   Future<bool> resetSettings(BuildContext context, String password) async {
-    try {
-      User? user = FirebaseAuth.instance.currentUser;
-      if (user == null) {
-        _showSnackBar(context, "No user signed in.");
-        return false;
-      }
-
-      // Re-authenticate user
-      AuthCredential credential = EmailAuthProvider.credential(
-        email: user.email!,
-        password: password,
-      );
-
-      await user.reauthenticateWithCredential(credential);
-
-      FirebaseFirestore db = FirebaseFirestore.instance;
-      DocumentReference profileRef = db.collection('Profile').doc(user.uid);
-
-      // Fetch the document
-      DocumentSnapshot profileSnapshot = await profileRef.get();
-      if (!profileSnapshot.exists) {
-        _showSnackBar(context, "Profile not found.");
-        return false;
-      }
-
-      // Fields to keep
-      List<String> fieldsToKeep = [
-        "country",
-        "dob",
-        "favouritePhotos",
-        "firstname",
-        "gender",
-        "phoneNumber",
-        "surname",
-        "tier",
-        "zipcode"
-      ];
-
-      // Retain only the allowed fields
-      Map<String, dynamic> profileData =
-          profileSnapshot.data() as Map<String, dynamic>;
-      Map<String, dynamic> filteredData = {};
-
-      for (String field in fieldsToKeep) {
-        if (profileData.containsKey(field)) {
-          filteredData[field] = profileData[field];
-        }
-      }
-
-      // Update Firestore with only the allowed fields
-      await profileRef.set(filteredData);
-
-      // Delete all subcollections
-      await _deleteSubcollection(profileRef, "responses");
-      await _deleteSubcollection(profileRef, "course_progress");
-      await _deleteSubcollection(profileRef, "notifications");
-
-      _showSnackBar(context, "Settings have been reset.");
-
-      return true; // Indicate success
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'wrong-password') {
-        _showSnackBar(context, "Incorrect password. Please try again.");
-      } else {
-        _showSnackBar(context, "Error: ${e.message}");
-      }
-    } catch (e) {
-      _showSnackBar(context, "Error resetting settings.");
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw FirebaseAuthException(
+          code: 'no-user', message: "No user signed in.");
     }
 
-    return false;
+    // Re-authenticate user
+    AuthCredential credential = EmailAuthProvider.credential(
+      email: user.email!,
+      password: password,
+    );
+
+    await user.reauthenticateWithCredential(credential);
+
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    DocumentReference profileRef = db.collection('Profile').doc(user.uid);
+
+    // Fetch the document
+    DocumentSnapshot profileSnapshot = await profileRef.get();
+    if (!profileSnapshot.exists) {
+      throw Exception("Profile not found.");
+    }
+
+    // Delete notifications settings
+    await _deleteSubcollection(profileRef, "notifications");
+
+    return true; // Indicate success
   }
 
   Future<void> _deleteSubcollection(

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/firebase/firebase_auth_services.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
@@ -44,17 +45,32 @@ class _DeleteAccountPageState extends State<DeleteAccountPage> {
 
     setState(() => isLoading = true);
 
-    bool success = await _authServices.deleteAccount(
+    try {
+      bool success = await _authServices.deleteAccount(
         context,
         _passwordController.text,
-        selectedReason ?? _otherReasonController.text);
+        selectedReason ?? _otherReasonController.text,
+      );
 
-    setState(() => isLoading = false);
-
-    if (success) {
-      // Navigate to login page after successful deletion
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => SignInPage()));
+      if (success) {
+        _showSnackBar("Account successfully deleted.");
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => SignInPage()));
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'wrong-password') {
+        _showSnackBar("Incorrect password. Please try again.");
+      } else if (e.code == 'requires-recent-login') {
+        _showSnackBar("Please log in again before deleting your account.");
+      } else if (e.code == 'no-user') {
+        _showSnackBar("No user signed in.");
+      } else {
+        _showSnackBar("Please try again");
+      }
+    } catch (e) {
+      _showSnackBar("An error occurred while deleting the account.");
+    } finally {
+      setState(() => isLoading = false);
     }
   }
 
