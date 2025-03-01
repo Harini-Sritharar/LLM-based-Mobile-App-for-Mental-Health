@@ -408,3 +408,151 @@ Future<TimeStampEntry?> getTimeStamp(String uid, String courseId,
     return null;
   }
 }
+
+/* Fetches all exercises for a specific chapter in a course.
+   The output is returned in the format: ["Exercise_1", "Exercise_2", ...] */
+Future<List<String>?> getChapterExercises(
+    String courseId, String chapterId) async {
+  try {
+    // Reference to the exercises collection within the given chapter
+    final collection = FirebaseFirestore.instance
+        .collection('Courses')
+        .doc(courseId)
+        .collection('Chapters')
+        .doc(chapterId)
+        .collection('Exercises');
+
+    // Fetch all exercise documents in the chapter
+    final querySnapshot = await collection.get();
+
+    // Extract the document IDs (exercise names) and return them
+    List<String> exercises = querySnapshot.docs.map((doc) => doc.id).toList();
+
+    return exercises;
+  } catch (e) {
+    // Handle errors and print them
+    print('Error fetching exercises for $chapterId: $e');
+    return null;
+  }
+}
+
+/// Fetches the last chapter and last exercise where the user has progress in a given course.
+/// Returns a tuple: (chapter, exercise)
+Future<(String?, String?)> getCurrentChapterAndExerciseForCourse(
+    String uid, String courseId) async {
+  try {
+    // Reference to the course document inside course_progress
+    final docRef = FirebaseFirestore.instance
+        .collection('Profile')
+        .doc(uid)
+        .collection('course_progress')
+        .doc(courseId);
+
+    // Fetch the document snapshot
+    final docSnapshot = await docRef.get();
+
+    if (docSnapshot.exists) {
+      // Extract the Chapter_Exercise_Step field, which contains progress
+      final chapterExerciseSteps =
+          docSnapshot.data()?['Chapter_Exercise_Step'] as List?;
+
+      if (chapterExerciseSteps != null && chapterExerciseSteps.isNotEmpty) {
+        // Get the last recorded progress step
+        String lastStep = chapterExerciseSteps
+            .last; // Example: "Chapter 2/Self-Attachment_2_E/3"
+
+        List<String> parts =
+            lastStep.split('/'); // ["Chapter 2", "Self-Attachment_2_E", "3"]
+
+        if (parts.length >= 2) {
+          String chapter = parts[0]; // "Chapter 2"
+          String exercise = parts[1]
+              .split('_')
+              .last; // Extracts the letter from "Self-Attachment_2_E"
+          return (chapter, exercise);
+        }
+      }
+    }
+
+    return (null, null); // Return null values if no progress found
+  } catch (e) {
+    print('Error fetching current chapter and exercise for $courseId: $e');
+    return (null, null);
+  }
+}
+
+/// Fetches the last exercise letter from a given chapter.
+Future<String?> getLastExerciseFromChapter(String chapter) async {
+  try {
+    // Reference to the exercises collection inside the given chapter
+    final collectionRef = FirebaseFirestore.instance
+        .collection('Courses')
+        .doc('Self-Attachment') // Assuming "Self-Attachment" is the course name
+        .collection('Chapters')
+        .doc(chapter)
+        .collection('Exercises');
+
+    // Fetch all exercises inside the chapter
+    final querySnapshot = await collectionRef.get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      // Extract exercise names and sort them
+      List<String> exercises = querySnapshot.docs.map((doc) => doc.id).toList();
+      exercises.sort(); // Ensures exercises are sorted alphabetically
+
+      // Extract the last exercise name and return only the last letter
+      String lastExercise = exercises.last;
+      return lastExercise
+          .split('_')
+          .last; // Extracts the last letter (A, B, C, etc.)
+    }
+
+    return null; // Return null if no exercises are found
+  } catch (e) {
+    print('Error fetching last exercise from $chapter: $e');
+    return null;
+  }
+}
+
+/// Fetches the list of courses the user has started.
+Future<List<String>> getStartedCourses(String uid) async {
+  try {
+    // Reference to the user's course_progress subcollection
+    final collection = FirebaseFirestore.instance
+        .collection('Profile')
+        .doc(uid)
+        .collection('course_progress');
+
+    // Fetch all documents in the course_progress subcollection
+    final querySnapshot = await collection.get();
+
+    // Extract course IDs (document IDs)
+    List<String> startedCourses =
+        querySnapshot.docs.map((doc) => doc.id).toList();
+
+    return startedCourses;
+  } catch (e) {
+    print('Error fetching started courses: $e');
+    return [];
+  }
+}
+
+/// Fetches the last chapter of a given course from Firebase.
+Future<String?> getLastChapter(String courseId) async {
+  try {
+    final docRef = FirebaseFirestore.instance.collection('Courses').doc(courseId).collection('Chapters');
+    final docSnapshot = await docRef.get();
+
+    if (docSnapshot.docs.isNotEmpty) {
+      List<String>? chapters = docSnapshot.docs.map((doc) => doc.id).toList();
+      if (chapters != null && chapters.isNotEmpty) {
+        return chapters.last; // Returns the last chapter dynamically
+      }
+    }
+    return null;
+  } catch (e) {
+    print('Error fetching last chapter for $courseId: $e');
+    return null;
+  }
+}
+

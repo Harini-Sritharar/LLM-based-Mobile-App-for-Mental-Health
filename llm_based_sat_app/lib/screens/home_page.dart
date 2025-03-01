@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/firebase/firebase_courses.dart';
 import 'package:llm_based_sat_app/firebase/firebase_helpers.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
 import 'package:llm_based_sat_app/screens/score/score_page.dart'; // Import the ScoresPage
@@ -72,7 +73,7 @@ class HomePage extends StatelessWidget {
             const SizedBox(height: 16),
             _buildScoreCard(context), // Pass context to _buildScoreCard
             const SizedBox(height: 16),
-            _buildTasksCard(),
+            _buildTasksCard(uid),
             const SizedBox(height: 16),
             _buildCoursesSection(uid),
             const SizedBox(height: 16),
@@ -137,29 +138,41 @@ class HomePage extends StatelessWidget {
   }
 
   /// Builds the tasks card section which displays the tasks for the day.
-  Widget _buildTasksCard() {
-    return Card(
-      color: AppColours.brandBlueMinusTwo,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Tasks Today",
-              style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: AppColours.brandBluePlusThree),
+  Widget _buildTasksCard(String uid) {
+    return FutureBuilder<List<Map<String, dynamic>>>(
+      future: getTasks(uid),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Text("Error loading tasks");
+        } else {
+          List<Map<String, dynamic>> tasks = snapshot.data ?? [];
+          return Card(
+            color: AppColours.brandBlueMinusTwo,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Tasks Today",
+                    style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: AppColours.brandBluePlusThree),
+                  ),
+                  const SizedBox(height: 8),
+                  for (var task in tasks)
+                    _buildTaskItem(task["task"], task["completed"]),
+                ],
+              ),
             ),
-            const SizedBox(height: 8),
-            _buildTaskItem("Upload Childhood Photos", true),
-            _buildTaskItem("Practise Exercise A", false),
-            _buildTaskItem("Learn Song", false),
-          ],
-        ),
-      ),
+          );
+        }
+      },
     );
   }
 
@@ -171,7 +184,7 @@ class HomePage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            task,
+            formatTask(task),
             style: TextStyle(color: AppColours.brandBluePlusTwo, fontSize: 16),
           ),
           completed
@@ -349,5 +362,132 @@ class HomePage extends StatelessWidget {
         throw Exception('Failed to load quote');
       }
     }
+  }
+
+  Future<List<Map<String, dynamic>>> getTasks(String uid) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? storedDate = prefs.getString('tasksDate');
+    String todayDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+
+    if (storedDate == todayDate) {
+      // Load tasks from SharedPreferences if they are already set for today
+      String? storedTasks = prefs.getString('tasks');
+      if (storedTasks != "") {
+        print("Tasks loaded from SharedPreferences");
+        print(storedTasks);
+        List<dynamic> tasksJson = json.decode(storedTasks!);
+        return tasksJson
+            .map((task) => Map<String, dynamic>.from(task))
+            .toList();
+      }
+    }
+
+    // Fetch the user's started courses
+    List<String> startedCourses = await getStartedCourses(uid);
+    List<Map<String, dynamic>> tasks = [];
+
+    if (startedCourses.isEmpty) {
+      // Default tasks if no courses have been started
+      tasks = [
+        {"task": "Self-attachment_A", "completed": false},
+        {"task": "Self-attachment_B", "completed": false},
+        {"task": "Self-attachment_C", "completed": false},
+      ];
+    } else {
+      for (String course in startedCourses) {
+        (String?, String?) currentChapterAndExercise =
+            await getCurrentChapterAndExerciseForCourse(uid, course);
+
+        String? currentChapter = currentChapterAndExercise.$1;
+        String? currentExercise = currentChapterAndExercise.$2;
+
+        print(
+            "$course on chapter: $currentChapter on exercise: $currentExercise");
+
+        if (currentChapter == null || currentExercise == null) continue;
+
+        // Get the last exercise of the current chapter
+        String? lastExercise = await getLastExerciseFromChapter(currentChapter);
+        print("last exercise from chapter is $lastExercise");
+        if (lastExercise == null) continue;
+
+        // Get the last chapter of this course dynamically
+        String? lastChapter = await getLastChapter(course);
+        print("last chapter from course is $lastChapter");
+        if (lastChapter == null) continue;
+
+        // Check if the user has completed the last exercise of the last chapter
+        if (currentChapter == lastChapter && currentExercise == lastExercise) {
+          // Skip this course entirely as the user has completed it.
+          continue;
+        }
+
+        if (currentExercise == lastExercise) {
+          // Determine the next chapter by incrementing the current chapter number
+          int currentChapterNumber = int.parse(currentChapter.split(' ').last);
+          String nextChapter = 'Chapter ${currentChapterNumber + 1}';
+
+          // Get the last exercise of the next chapter
+          String? lastExerciseOfNextChapter =
+              await getLastExerciseFromChapter(nextChapter);
+          if (lastExerciseOfNextChapter == null) continue;
+
+          // Recommend all exercises between the current exercise and the last exercise of the next chapter
+          for (int i = currentExercise.codeUnitAt(0) + 1;
+              i <= lastExerciseOfNextChapter.codeUnitAt(0);
+              i++) {
+            String nextExercise = String.fromCharCode(i);
+            tasks.add({"task": "${course}_$nextExercise", "completed": false});
+            print("Added task: ${course}_$nextExercise");
+          }
+        } else {
+          // Add the next exercises in the current chapter
+          for (int i = currentExercise.codeUnitAt(0) + 1;
+              i <= lastExercise.codeUnitAt(0);
+              i++) {
+            String nextExercise = String.fromCharCode(i);
+            tasks.add({"task": "${course}_$nextExercise", "completed": false});
+            print("Added task: ${course}_$nextExercise");
+          }
+        }
+      }
+
+      // Limit to 3 tasks per day
+      tasks = tasks.take(3).toList();
+    }
+
+    // Save tasks to SharedPreferences
+    await prefs.setString('tasks', json.encode(tasks));
+    await prefs.setString('tasksDate', todayDate);
+
+    return tasks;
+  }
+
+  /// Updates the completion status of a task.
+  Future<void> updateTaskCompletion(String task, bool completed) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? storedTasks = prefs.getString('tasks');
+    if (storedTasks != null) {
+      List<dynamic> tasksJson = json.decode(storedTasks);
+      List<Map<String, dynamic>> tasks =
+          tasksJson.map((task) => Map<String, dynamic>.from(task)).toList();
+      for (var t in tasks) {
+        if (t["task"] == task) {
+          t["completed"] = completed;
+          break;
+        }
+      }
+      await prefs.setString('tasks', json.encode(tasks));
+    }
+  }
+}
+
+/// Converts a task string from the format Course_Exercise to 'Course Exercise X'.
+String formatTask(String task) {
+  List<String> parts = task.split('_');
+  if (parts.length == 2) {
+    return '${parts[0]} Exercise ${parts[1]}';
+  } else {
+    return task; // Return the original task if it doesn't match the expected format
   }
 }
