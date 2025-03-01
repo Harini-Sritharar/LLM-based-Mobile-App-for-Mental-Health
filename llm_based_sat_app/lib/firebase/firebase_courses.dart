@@ -454,3 +454,52 @@ Future<Map<String, List<String>>> getChildhoodImages(String uid) async {
     return {};
   }
 }
+
+Future<void> saveUnfinishedExercise(
+    String uid,
+    String courseId,
+    String exerciseId,
+    Timestamp startTime,
+    Timestamp endTime,
+    String step) async {
+  try {
+    // Reference to the 'unfinished_courses' subcollection for the user
+    final collection = FirebaseFirestore.instance
+        .collection('Profile')
+        .doc(uid)
+        .collection('unfinished_courses');
+
+    // Reference to the specific course document
+    final courseDocRef = collection.doc(courseId);
+
+    // Fetch the document snapshot to check existing entries
+    final courseDocSnapshot = await courseDocRef.get();
+
+    if (!courseDocSnapshot.exists) {
+      // If the course document doesn't exist, create it
+      await courseDocRef.set({});
+    }
+
+    // Reference to the exercise collection inside the course document
+    final exerciseCollection = courseDocRef.collection(exerciseId);
+
+    // Get the current number of entries to determine the next index
+    // TODO: Maybe have a ?? 0
+    final existingEntries = await exerciseCollection.get();
+    int nextIndex = existingEntries.docs.length + 1;
+
+    // Reference to the new indexed entry
+    final entryRef = exerciseCollection.doc(nextIndex.toString());
+
+    // Add the unfinished exercise entry
+    await entryRef.set({
+      'startTime': startTime,
+      'endTime': endTime,
+      'stepLeft': step,
+    });
+
+    print('Unfinished exercise entry added successfully');
+  } catch (e) {
+    print('Error updating unfinished exercises: $e');
+  }
+}

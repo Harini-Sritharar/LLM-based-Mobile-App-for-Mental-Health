@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/models/firebase-exercise-uploader/interface/course_interface.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_appBar.dart';
 import '../../../models/firebase-exercise-uploader/interface/exercise_interface.dart';
@@ -23,6 +24,8 @@ Parameters:
 - `exercise` (Exercise): The `Exercise` model containing exercise-specific details, such as duration, progress, and metadata. */
 
 class ExercisePage extends StatelessWidget {
+  final String userUID;
+  final Course course;
   final String heading;
   final String step;
   final String description;
@@ -35,6 +38,8 @@ class ExercisePage extends StatelessWidget {
 
   const ExercisePage({
     super.key,
+    required this.userUID,
+    required this.course,
     required this.heading,
     required this.step,
     required this.description,
@@ -74,7 +79,12 @@ class ExercisePage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 32),
-                ExerciseBottomMessage(messageText: messageText),
+                ExerciseBottomMessage(
+                    messageText: messageText,
+                    userUID: userUID,
+                    exercise: exercise,
+                    course: course,
+                    step: step)
               ],
             ),
           ),

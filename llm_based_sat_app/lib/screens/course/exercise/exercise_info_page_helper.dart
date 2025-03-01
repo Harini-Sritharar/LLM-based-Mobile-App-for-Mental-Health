@@ -105,6 +105,8 @@ Widget getExerciseStep(
     final header = "Exercise ${getExerciseLetter(currentExerciseStep.id)}";
 
     return ExercisePage(
+      course: course,
+      userUID: uid,
       heading: header,
       step: currentExerciseStep.stepTitle,
       description: currentExerciseStep.description,
