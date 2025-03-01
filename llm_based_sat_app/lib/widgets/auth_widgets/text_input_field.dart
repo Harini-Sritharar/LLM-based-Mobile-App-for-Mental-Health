@@ -87,6 +87,7 @@ class TextInputField extends StatelessWidget {
           fillColor: AppColours.brandBlueMinusFour,
         ),
         obscureText: isPassword, // hiding the input based on the label
-        validator: validator ?? _validateInput);
+        validator: validator ?? _validateInput,
+        enabled: enabled ?? true);
   }
 }

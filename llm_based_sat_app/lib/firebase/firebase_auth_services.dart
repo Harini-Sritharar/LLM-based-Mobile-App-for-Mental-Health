@@ -134,6 +134,7 @@ class FirebaseAuthService {
     await user.reauthenticateWithCredential(credential);
 
     FirebaseFirestore db = FirebaseFirestore.instance;
+    DocumentReference profileRef = db.collection('Profile').doc(user.uid);
 
     // Save deletion reason before deleting account
     await db.collection("DeletedAccounts").doc(user.uid).set({
@@ -141,8 +142,14 @@ class FirebaseAuthService {
       "timestamp": FieldValue.serverTimestamp(),
     });
 
+    // Deleting all user data that is stored in the subcollections
+    await _deleteSubcollection(profileRef, "course_progress");
+    await _deleteSubcollection(profileRef, "responses");
+    await _deleteSubcollection(profileRef, "notifications");
+    await _deleteSubcollection(profileRef, "unfinished_courses");
+
     // Delete user's profile data
-    await db.collection('Profile').doc(user.uid).delete();
+    await profileRef.delete();
 
     // Delete user authentication
     await user.delete();
@@ -192,6 +199,8 @@ class FirebaseAuthService {
       DocumentReference userDoc, String subcollection) async {
     final subcollectionRef = userDoc.collection(subcollection);
     final snapshot = await subcollectionRef.get();
+
+    if (snapshot.docs.isEmpty) return;
 
     for (DocumentSnapshot doc in snapshot.docs) {
       await doc.reference.delete();
