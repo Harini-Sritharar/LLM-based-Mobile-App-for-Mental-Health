@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/firebase/firebase_courses.dart';
 import 'package:llm_based_sat_app/firebase/firebase_helpers.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
+import 'package:llm_based_sat_app/screens/course/courses.dart';
 import 'package:llm_based_sat_app/screens/score/score_page.dart'; // Import the ScoresPage
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/utils/user_provider.dart';
@@ -9,6 +10,7 @@ import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import 'package:llm_based_sat_app/firebase/firebase_score.dart';
 import 'package:llm_based_sat_app/screens/course/courses_helper.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/course_card.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/score_widgets/circular_progress_bar.dart';
@@ -166,7 +168,7 @@ class HomePage extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   for (var task in tasks)
-                    _buildTaskItem(task["task"], task["completed"]),
+                    _buildTaskItem(context, task["task"], task["completed"]),
                 ],
               ),
             ),
@@ -177,27 +179,40 @@ class HomePage extends StatelessWidget {
   }
 
   /// Builds a single task item with a task name and completion status.
-  Widget _buildTaskItem(String task, bool completed) {
+  Widget _buildTaskItem(BuildContext context, String task, bool completed) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            formatTask(task),
-            style: TextStyle(color: AppColours.brandBluePlusTwo, fontSize: 16),
-          ),
-          completed
-              ? Container(
-                  decoration: BoxDecoration(
-                    color: Color(0xFFCEF2DE),
-                    borderRadius: BorderRadius.circular(4.0),
-                  ),
-                  child: Icon(Icons.check_box, color: Color(0xFF1C8C4E)),
-                )
-              : const Icon(Icons.arrow_forward_ios,
-                  color: AppColours.brandBluePlusTwo),
-        ],
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Courses(
+                onItemTapped: onItemTapped,
+                selectedIndex: selectedIndex,
+              ),
+            ),
+          );
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              formatTask(task),
+              style: TextStyle(color: AppColours.brandBluePlusTwo, fontSize: 16),
+            ),
+            completed
+                ? Container(
+                    decoration: BoxDecoration(
+                      color: Color(0xFFCEF2DE),
+                      borderRadius: BorderRadius.circular(4.0),
+                    ),
+                    child: Icon(Icons.check_box, color: Color(0xFF1C8C4E)),
+                  )
+                : const Icon(Icons.arrow_forward_ios,
+                    color: AppColours.brandBluePlusTwo),
+          ],
+        ),
       ),
     );
   }
@@ -407,7 +422,8 @@ class HomePage extends StatelessWidget {
         if (currentChapter == null || currentExercise == null) continue;
 
         // Get the last exercise of the current chapter
-        String? lastExercise = await getLastExerciseFromChapter(currentChapter);
+        String? lastExercise =
+            await getLastExerciseFromChapter(course, currentChapter);
         print("last exercise from chapter is $lastExercise");
         if (lastExercise == null) continue;
 
@@ -429,7 +445,7 @@ class HomePage extends StatelessWidget {
 
           // Get the last exercise of the next chapter
           String? lastExerciseOfNextChapter =
-              await getLastExerciseFromChapter(nextChapter);
+              await getLastExerciseFromChapter(course, nextChapter);
           if (lastExerciseOfNextChapter == null) continue;
 
           // Recommend all exercises between the current exercise and the last exercise of the next chapter
