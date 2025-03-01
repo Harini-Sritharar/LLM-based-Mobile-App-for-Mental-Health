@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 import 'package:llm_based_sat_app/screens/course/courses.dart';
 import 'package:llm_based_sat_app/screens/home_page.dart';
 import 'package:llm_based_sat_app/screens/payments/manage_plan_page.dart';
@@ -31,7 +32,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
   /// Handles tapping a notification: Marks as read and navigates to the correct page.
   Future<void> _handleNotificationTap(String type, String notificationId) async {
-    if (!mounted) return; // Ensure widget is still active before navigation
+    if (!mounted) return;
 
     Widget targetPage;
     switch (type) {
@@ -52,13 +53,18 @@ class _NotificationsPageState extends State<NotificationsPage> {
         return;
     }
 
-    // Mark the notification as read before navigating
     await _firebaseNotifications.markNotificationAsRead(notificationId);
+    navigatorKey.currentState?.push(MaterialPageRoute(builder: (context) => targetPage));
+  }
 
-    // Use navigatorKey to ensure safe navigation
-    navigatorKey.currentState?.push(
-      MaterialPageRoute(builder: (context) => targetPage),
-    );
+  /// Deletes a notification from Firestore.
+  Future<void> _deleteNotification(String notificationId) async {
+    try {
+      await _firebaseNotifications.markNotificationAsRead(notificationId);
+      print("Notification $notificationId read.");
+    } catch (error) {
+      print("Error deleting notification: $error");
+    }
   }
 
   @override
@@ -74,16 +80,14 @@ class _NotificationsPageState extends State<NotificationsPage> {
         body: Padding(
           padding: const EdgeInsets.all(10.0),
           child: StreamBuilder<QuerySnapshot>(
-            stream: _firebaseNotifications.getUnreadNotificationsStream(), // Fetch only unread notifications
+            stream: _firebaseNotifications.getUnreadNotificationsStream(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(child: CircularProgressIndicator());
               }
-
               if (snapshot.hasError) {
                 return Center(child: Text("Error fetching notifications."));
               }
-
               if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                 return Center(child: Text("No unread notifications."));
               }
@@ -96,12 +100,17 @@ class _NotificationsPageState extends State<NotificationsPage> {
                   var notification = notifications[index];
                   var data = notification.data() as Map<String, dynamic>?;
 
-                  if (data == null) return SizedBox.shrink(); // Skip if data is missing
+                  if (data == null) return SizedBox.shrink();
 
                   String? type = data["type"];
                   String? title = data["title"] ?? "Notification";
                   String? message = data["message"] ?? "";
                   String notificationId = notification.id;
+
+                  // Get timestamp and format it
+                  Timestamp? timestamp = data["timestamp"];
+                  DateTime notificationDateTime = timestamp?.toDate() ?? DateTime.now();
+                  String formattedDate = DateFormat('dd MMM yyyy, hh:mm a').format(notificationDateTime);
 
                   // Map notification type to icon
                   IconData iconData;
@@ -125,11 +134,25 @@ class _NotificationsPageState extends State<NotificationsPage> {
                       iconData = Icons.notifications;
                   }
 
-                  return NotificationItem(
-                    icon: iconData,
-                    title: title ?? "Notification",
-                    description: message ?? "",
-                    onTap: () => _handleNotificationTap(type ?? "", notificationId),
+                  return Dismissible(
+                    key: Key(notificationId), // Unique key for each notification
+                    direction: DismissDirection.endToStart, // Swipe left to delete
+                    background: Container(
+                      padding: EdgeInsets.only(right: 20),
+                      alignment: Alignment.centerRight,
+                      color: Colors.red,
+                      child: Icon(Icons.delete, color: Colors.white, size: 30),
+                    ),
+                    onDismissed: (direction) {
+                      _deleteNotification(notificationId);
+                    },
+                    child: NotificationItem(
+                      icon: iconData,
+                      title: title ?? "Notification",
+                      description: "$message",
+                      timestamp: notificationDateTime,
+                      onTap: () => _handleNotificationTap(type ?? "", notificationId),
+                    ),
                   );
                 },
               );

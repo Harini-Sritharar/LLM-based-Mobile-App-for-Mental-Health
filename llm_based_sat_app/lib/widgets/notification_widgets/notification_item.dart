@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class NotificationItem extends StatelessWidget {
   final IconData icon;
   final String title;
   final String description;
-  final VoidCallback? onTap; // Add onTap parameter
+  final DateTime timestamp;
+  final VoidCallback? onTap;
 
   const NotificationItem({
     Key? key,
     required this.icon,
     required this.title,
     required this.description,
-    this.onTap, // Make it optional
+    required this.timestamp,
+    this.onTap,
   }) : super(key: key);
 
   @override
@@ -52,6 +55,14 @@ class NotificationItem extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 14,
                       color: Colors.black54,
+                    ),
+                  ),
+                  SizedBox(height: 3),
+                  Text(
+                    "${DateFormat('dd MMM yyyy, hh:mm a').format(timestamp)}", // Only show timestamp here
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey,
                     ),
                   ),
                 ],
