@@ -39,7 +39,7 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
       setState(() {
         responses.clear();
         description = questionnaireData['description'] as String;
-        questions = questionnaireData['questions'] as List<String>;
+        questions = questionnaireData['questions'].cast<String>();
       });
     }
   }
