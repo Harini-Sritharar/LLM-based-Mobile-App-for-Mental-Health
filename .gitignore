@@ -28,3 +28,6 @@ doc/api/
 
 /llm_based_sat_app/node_modules/
 .vscode/launch.json
+
+# Ignore Firebase private key
+/llm_based_sat_app/lib/models/firebase-exercise-uploader/firebase/llm-based-sat-app-e33e3ed653dd.json
