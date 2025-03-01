@@ -150,7 +150,37 @@ class FirebaseAuthService {
     return true; // Indicate success
   }
 
-  /// Resets user settings by clearing specific Firestore fields.
+  // /// Resets user settings by clearing specific Firestore fields.
+  // Future<bool> resetSettings(BuildContext context, String password) async {
+  //   User? user = FirebaseAuth.instance.currentUser;
+  //   if (user == null) {
+  //     throw FirebaseAuthException(
+  //         code: 'no-user', message: "No user signed in.");
+  //   }
+
+  //   // Re-authenticate user
+  //   AuthCredential credential = EmailAuthProvider.credential(
+  //     email: user.email!,
+  //     password: password,
+  //   );
+
+  //   await user.reauthenticateWithCredential(credential);
+
+  //   FirebaseFirestore db = FirebaseFirestore.instance;
+  //   DocumentReference profileRef = db.collection('Profile').doc(user.uid);
+
+  //   // Fetch the document
+  //   DocumentSnapshot profileSnapshot = await profileRef.get();
+  //   if (!profileSnapshot.exists) {
+  //     throw Exception("Profile not found.");
+  //   }
+
+  //   // Delete notifications settings
+  //   await _deleteSubcollection(profileRef, "notifications");
+
+  //   return true; // Indicate success
+  // }
+
   Future<bool> resetSettings(BuildContext context, String password) async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user == null) {
@@ -158,27 +188,33 @@ class FirebaseAuthService {
           code: 'no-user', message: "No user signed in.");
     }
 
-    // Re-authenticate user
-    AuthCredential credential = EmailAuthProvider.credential(
-      email: user.email!,
-      password: password,
-    );
+    try {
+      // Re-authenticate user
+      AuthCredential credential = EmailAuthProvider.credential(
+        email: user.email!,
+        password: password,
+      );
+      await user.reauthenticateWithCredential(credential);
 
-    await user.reauthenticateWithCredential(credential);
+      FirebaseFirestore db = FirebaseFirestore.instance;
+      DocumentReference profileRef = db.collection('Profile').doc(user.uid);
 
-    FirebaseFirestore db = FirebaseFirestore.instance;
-    DocumentReference profileRef = db.collection('Profile').doc(user.uid);
+      // Delete only the `notificationPreferences` field
+      await profileRef.update({
+        "notificationPreferences": FieldValue.delete(),
+      });
 
-    // Fetch the document
-    DocumentSnapshot profileSnapshot = await profileRef.get();
-    if (!profileSnapshot.exists) {
-      throw Exception("Profile not found.");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Notification preferences reset successfully!")),
+      );
+
+      return true;
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error resetting settings: $e")),
+      );
+      return false;
     }
-
-    // Delete notifications settings
-    await _deleteSubcollection(profileRef, "notifications");
-
-    return true; // Indicate success
   }
 
   /// Deletes all documents in a specified subcollection.
