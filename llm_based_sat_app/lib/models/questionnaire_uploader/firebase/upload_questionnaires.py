@@ -3,7 +3,7 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 
 # Initialize Firebase Admin SDK with Firestore
-cred = credentials.Certificate("./llm-based-sat-app-e33e3ed653dd.json")
+cred = credentials.Certificate("../../firebase-exercise-uploader/firebase/llm-based-sat-app-e33e3ed653dd.json")
 firebase_admin.initialize_app(cred)
 
 db = firestore.client()
@@ -19,8 +19,8 @@ def upload_questionnaire_data_to_firebase(questionnaires_path):
         # Create a Firestore document for the questionnaire
         questionnaire_ref = db.collection("Questionnaires").document(name)
         questionnaire_ref.set({
-            "description": content.get("Description", ""),
-            "questions": content.get("Questions", [])
+            "description": content.get("description", ""),
+            "questions": content.get("questions", [])
         })
 
 
