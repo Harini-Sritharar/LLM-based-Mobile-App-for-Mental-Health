@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/data/cache_manager.dart';
@@ -12,6 +14,7 @@ import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_description.
 import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_sliderQuestion.dart';
 import 'package:llm_based_sat_app/widgets/exercise_widgets/exercise_step_label.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../models/firebase-exercise-uploader/interface/chapter_interface.dart';
 import '../../../models/firebase-exercise-uploader/interface/course_interface.dart';
 import '../../../models/firebase-exercise-uploader/interface/exercise_interface.dart';
@@ -109,6 +112,9 @@ class _AssessmentPageState extends State<AssessmentPage> {
               buttonText: 'Back to Course',
               onPress: () {
                 uploadTimeStampAndComment();
+                String exName =
+                    "${widget.course.id}_${getExerciseLetter(widget.exercise.exerciseFinalStep!.id)}";
+                updateTaskCompletion(exName, true);
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -191,5 +197,23 @@ class _AssessmentPageState extends State<AssessmentPage> {
     // Remove cached TimeStamp for current exercise and session
     CacheManager.removeValue(
         "${widget.exercise.id}/${getSessions(widget.exercise, widget.course) + 1}/TimeStamp");
+  }
+}
+
+/// Updates the completion status of a task.
+Future<void> updateTaskCompletion(String task, bool completed) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? storedTasks = prefs.getString('tasks');
+  if (storedTasks != null) {
+    List<dynamic> tasksJson = json.decode(storedTasks);
+    List<Map<String, dynamic>> tasks =
+        tasksJson.map((task) => Map<String, dynamic>.from(task)).toList();
+    for (var t in tasks) {
+      if (t["task"] == task) {
+        t["completed"] = completed;
+        break;
+      }
+    }
+    await prefs.setString('tasks', json.encode(tasks));
   }
 }

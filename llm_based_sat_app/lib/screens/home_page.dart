@@ -199,7 +199,8 @@ class HomePage extends StatelessWidget {
           children: [
             Text(
               formatTask(task),
-              style: TextStyle(color: AppColours.brandBluePlusTwo, fontSize: 16),
+              style:
+                  TextStyle(color: AppColours.brandBluePlusTwo, fontSize: 16),
             ),
             completed
                 ? Container(
@@ -479,31 +480,13 @@ class HomePage extends StatelessWidget {
     return tasks;
   }
 
-  /// Updates the completion status of a task.
-  Future<void> updateTaskCompletion(String task, bool completed) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? storedTasks = prefs.getString('tasks');
-    if (storedTasks != null) {
-      List<dynamic> tasksJson = json.decode(storedTasks);
-      List<Map<String, dynamic>> tasks =
-          tasksJson.map((task) => Map<String, dynamic>.from(task)).toList();
-      for (var t in tasks) {
-        if (t["task"] == task) {
-          t["completed"] = completed;
-          break;
-        }
-      }
-      await prefs.setString('tasks', json.encode(tasks));
+  /// Converts a task string from the format Course_Exercise to 'Course Exercise X'.
+  String formatTask(String task) {
+    List<String> parts = task.split('_');
+    if (parts.length == 2) {
+      return '${parts[0]} Exercise ${parts[1]}';
+    } else {
+      return task; // Return the original task if it doesn't match the expected format
     }
-  }
-}
-
-/// Converts a task string from the format Course_Exercise to 'Course Exercise X'.
-String formatTask(String task) {
-  List<String> parts = task.split('_');
-  if (parts.length == 2) {
-    return '${parts[0]} Exercise ${parts[1]}';
-  } else {
-    return task; // Return the original task if it doesn't match the expected format
   }
 }
