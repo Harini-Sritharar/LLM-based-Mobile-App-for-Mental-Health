@@ -8,7 +8,7 @@
 
 
     <application
-        android:label="llm_based_sat_app"
+        android:label="InvinciMind"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
