@@ -77,5 +77,8 @@ Both of these commands are run in our CI pipeline when we merge our branches to 
 - Run flutter pub run flutter_launcher_icons
 You should now be able to run the app and observe the new icon
 
+# Editing the App Name
+- Change the android:label field in android/app/src/main/AndroidManifest.xml and android/app/src/debug/AndroidManifest.xml to be the new app name
+- Change the CFBundleName field string in /ios/Runner/Info.plist to be the new app name
 # License
 This project is licensed under the [License Name] license.
