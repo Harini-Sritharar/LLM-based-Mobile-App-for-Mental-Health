@@ -150,37 +150,7 @@ class FirebaseAuthService {
     return true; // Indicate success
   }
 
-  // /// Resets user settings by clearing specific Firestore fields.
-  // Future<bool> resetSettings(BuildContext context, String password) async {
-  //   User? user = FirebaseAuth.instance.currentUser;
-  //   if (user == null) {
-  //     throw FirebaseAuthException(
-  //         code: 'no-user', message: "No user signed in.");
-  //   }
-
-  //   // Re-authenticate user
-  //   AuthCredential credential = EmailAuthProvider.credential(
-  //     email: user.email!,
-  //     password: password,
-  //   );
-
-  //   await user.reauthenticateWithCredential(credential);
-
-  //   FirebaseFirestore db = FirebaseFirestore.instance;
-  //   DocumentReference profileRef = db.collection('Profile').doc(user.uid);
-
-  //   // Fetch the document
-  //   DocumentSnapshot profileSnapshot = await profileRef.get();
-  //   if (!profileSnapshot.exists) {
-  //     throw Exception("Profile not found.");
-  //   }
-
-  //   // Delete notifications settings
-  //   await _deleteSubcollection(profileRef, "notifications");
-
-  //   return true; // Indicate success
-  // }
-
+  /// Resets the authenticated user's account to default settings after re-authenticating
   Future<bool> resetSettings(BuildContext context, String password) async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user == null) {
