@@ -49,6 +49,8 @@ class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
     false
   ]; // Initial states for checkboxes
 
+  late UserProvider userProvider;
+  late String uid;
   @override
   void dispose() {
     // Removes current step from cache so user must reset exercise
@@ -62,9 +64,15 @@ class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Access Provider here
+    userProvider = Provider.of<UserProvider>(context); // listen: false?
+    uid = userProvider.getUid();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    UserProvider userProvider = Provider.of<UserProvider>(context);
-    String uid = userProvider.getUid();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
@@ -242,8 +250,8 @@ class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => getExerciseStep(
-                            widget.exercise, widget.course, widget.chapter, uid),
+                        builder: (context) => getExerciseStep(widget.exercise,
+                            widget.course, widget.chapter, uid),
                       ),
                     );
                   },

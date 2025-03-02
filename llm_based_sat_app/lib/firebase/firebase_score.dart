@@ -267,7 +267,7 @@ Future<double> getOverallScore() async {
     DocumentSnapshot userSnapshot =
         await db.collection('Profile').doc(user!.uid).get();
     var data = userSnapshot.data() as Map<String, dynamic>;
-    return data['overallScore'];
+    return (data['overallScore'] as double?) ?? 0.0;
   } catch (e) {
     return 0.0;
   }

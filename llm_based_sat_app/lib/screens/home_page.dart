@@ -22,7 +22,7 @@ import 'package:intl/intl.dart'; // Add this import for date formatting
 
 /// The HomePage widget is the main screen of the application, displaying
 /// various sections such as the user's score, tasks, courses, and a daily quote.
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   final Function(int) onItemTapped;
   final int selectedIndex;
 
@@ -33,14 +33,28 @@ class HomePage extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  late UserProvider userProvider;
+  late String uid;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Access Provider here
+    userProvider = Provider.of<UserProvider>(context, listen: false);
+    uid = userProvider.getUid();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    UserProvider userProvider = Provider.of<UserProvider>(context);
-    String uid = userProvider.getUid();
     return Scaffold(
       appBar: CustomAppBar(
         title: "InvinciMind",
-        onItemTapped: onItemTapped,
-        selectedIndex: selectedIndex,
+        onItemTapped: widget.onItemTapped,
+        selectedIndex: widget.selectedIndex,
         backButton: false,
         image: AssetImage('assets/images/Logo.png'), // Pass the Logo.png image
       ),
@@ -292,7 +306,7 @@ class HomePage extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         FutureBuilder<List<CourseCard>>(
-          future: generateCourseCards(onItemTapped, selectedIndex, uid),
+          future: generateCourseCards(widget.onItemTapped, widget.selectedIndex, uid),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
