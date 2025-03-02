@@ -26,6 +26,16 @@ jobs:
       run: flutter pub get
       working-directory: llm_based_sat_app
 
+    - name: Install CocoaPods
+      run: |
+        sudo gem install cocoapods
+        pod repo update
+      working-directory: llm_based_sat_app/ios
+
+    - name: Install iOS Dependencies
+      run: pod install --repo-update
+      working-directory: llm_based_sat_app/ios
+
     - name: Set up JDK 17
       uses: actions/setup-java@v2
       with:
