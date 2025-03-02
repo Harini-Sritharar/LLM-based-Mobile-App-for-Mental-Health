@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - hs1922_ci_fix
 
 jobs:
   build:
