@@ -1,4 +1,5 @@
 import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:country_codes/country_codes.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -30,18 +31,21 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 // Global keys for navigation and scaffold
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
+    GlobalKey<ScaffoldMessengerState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
+  await CountryCodes.init();
+
   // Register background handler before initializing Firebase
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-  
+
   // Load environment variables
   await dotenv.load(fileName: ".env");
 
-  await _setup();  // Ensures Stripe and other initializations
+  await _setup(); // Ensures Stripe and other initializations
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -53,7 +57,7 @@ void main() async {
     badge: true,
     sound: true,
   );
-  
+
   await FirebaseAppCheck.instance.activate(
     androidProvider: AndroidProvider.playIntegrity,
     appleProvider: AppleProvider.deviceCheck,
@@ -97,7 +101,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Navigation',
-      navigatorKey: navigatorKey,  // Global navigator key for navigation
+      navigatorKey: navigatorKey, // Global navigator key for navigation
       scaffoldMessengerKey: scaffoldMessengerKey, // Global scaffold key
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -106,7 +110,8 @@ class _MyAppState extends State<MyApp> {
           backgroundColor: Colors.white,
         ),
       ),
-      home: FCMInitializer(   // DO NOT REMOVE IF YOU WANT TO KEEP NOTIFICATIONS WORKING
+      home: FCMInitializer(
+        // DO NOT REMOVE IF YOU WANT TO KEEP NOTIFICATIONS WORKING
         child: Wrapper(),
       ),
     );
