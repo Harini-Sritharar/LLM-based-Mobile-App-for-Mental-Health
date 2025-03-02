@@ -42,6 +42,8 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
           .collection('Profile')
           .doc(user.uid)
           .get();
+      if (!mounted) return;
+
       if (doc.exists) {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
         setState(() {

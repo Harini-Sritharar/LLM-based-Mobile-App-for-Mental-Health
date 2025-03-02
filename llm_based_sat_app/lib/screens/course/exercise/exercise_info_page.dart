@@ -43,6 +43,8 @@ class ExerciseInfoPage extends StatefulWidget {
 }
 
 class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
+  late UserProvider userProvider;
+  late String uid;
   @override
   void dispose() {
     // Removes current step from cache so user must reset exercise
@@ -56,9 +58,15 @@ class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
       checkedTasks.length == widget.exercise.preExerciseTasks.length;
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Access Provider here
+    userProvider = Provider.of<UserProvider>(context); // listen: false?
+    uid = userProvider.getUid();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    UserProvider userProvider = Provider.of<UserProvider>(context);
-    String uid = userProvider.getUid();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(

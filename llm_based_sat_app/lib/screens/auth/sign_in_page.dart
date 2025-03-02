@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/firebase_messaging_service.dart';
+import 'package:llm_based_sat_app/screens/auth/forgot_password_page.dart';
 import '../../firebase/firebase_auth_services.dart';
 import '/main.dart';
 import '/screens/auth/sign_up_page.dart';
@@ -128,6 +129,39 @@ class _SignInPageState extends State<SignInPage> {
                         ),
                       ],
                     )),
+                    // Forgot Password Link
+                    Center(
+                        child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text(
+                          "Forgot your password?",
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            // Navigate to the Sign-Up page
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ForgotPasswordPage()));
+                          },
+                          child: const Text(
+                            "Reset password?",
+                            style: TextStyle(
+                              color: AppColours.brandBlueMain,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ))
                   ],
                 ),
               ),
