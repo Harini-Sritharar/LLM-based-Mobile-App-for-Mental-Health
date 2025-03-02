@@ -30,9 +30,10 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
   final TextEditingController _countryController =
       TextEditingController(text: "United Kingdom");
   final TextEditingController _zipPostalController = TextEditingController();
-  String?
-      selectedCountryCode; // Stores the selected country's code -> can be used to convert to obtain the country's dial code
-  String? mobileNumber; // Stores the mobile number input
+  TextEditingController _mobileController = TextEditingController();
+  String selectedCountryCode = ''; // Stores the selected country's code -> can be used to convert to obtain the country's dial code
+  String mobileNumber = ''; // Stores the mobile number input
+  String dialCode = '+44';
 
   @override
   void initState() {
@@ -49,9 +50,19 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
           .get();
       if (doc.exists) {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+
+        String fullPhone = data['phoneNumber'] ?? '';
+        if (fullPhone.isNotEmpty) {
+          selectedCountryCode = fullPhone.substring(0, fullPhone.indexOf(' ')); // Extract the country code
+          mobileNumber = fullPhone.substring(fullPhone.indexOf(' ') + 1); // Extract the phone number
+          dialCode = fullPhone.split(' ')[0];
+        }
+        if (!mounted) return;
         setState(() {
           _countryController.text = data['country'] ?? 'United Kingdom';
           _zipPostalController.text = data['zipcode'] ?? '';
+          _mobileController.text = mobileNumber;
+  
         });
       }
     }
@@ -60,16 +71,15 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
   @override
   void dispose() {
     _countryController.dispose();
-    mobileNumber = null;
+    mobileNumber = '';
+    dialCode = '';
     _zipPostalController.dispose();
     super.dispose();
   }
 
   void _saveContactDetails() {
     print("In Save Contact Details");
-    if (!_formKey.currentState!.validate() ||
-        mobileNumber == null ||
-        mobileNumber!.isEmpty) {
+    if (!_formKey.currentState!.validate() || mobileNumber.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Please fill in all fields before saving."),
@@ -78,9 +88,9 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
       );
       return;
     }
-
+    String fullPhoneNumber = "+$dialCode $mobileNumber";
     updateContactDetails(
-        _countryController.text, _zipPostalController.text, mobileNumber!);
+        _countryController.text, _zipPostalController.text, fullPhoneNumber);
     widget.onCompletion();
     Navigator.pop(context);
   }
@@ -155,6 +165,7 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
                         ),
                         const SizedBox(height: 10),
                         IntlPhoneField(
+                          controller: _mobileController,
                             decoration: InputDecoration(
                               labelText: 'Mobile Number',
                               filled: true,
@@ -164,13 +175,16 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
                                 borderSide: BorderSide.none,
                               ),
                             ),
-                            initialCountryCode: "GB",
+                            initialCountryCode: dialCode.substring(1),
+                            initialValue: mobileNumber.replaceFirst(dialCode, '').trim(),
                             onCountryChanged: (country) {
                               setState(() {
                                 _countryController.text =
                                     country.name; // Country name
                                 selectedCountryCode =
                                     country.code; // ISO Code (e.g., US, IN)
+                                dialCode = country
+                                    .dialCode; // Dial code (e.g., +1, +91)
                               });
                             },
                             onChanged: (phone) {
