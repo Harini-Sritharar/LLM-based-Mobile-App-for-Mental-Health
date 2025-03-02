@@ -70,5 +70,15 @@ Both of these commands are run in our CI pipeline when we merge our branches to 
 - `/test` stores all of our test code; when `flutter test` is run, this command executes all the test files (ending in _test.dart) in this directory.
 - `/lib` is the folder that stores the bulk of our code that is shared amongst the iOS and Android versions of the app. we have internally organised this directory into subfolders differentiating between screens, widgets, data and functions to communicate with external services like Firebase.
 
+# Editing the App Icon/Logo
+- Add your new logo in assets/icons/logo/..
+- Update the image_path in the flutter_icons section of the pubspec.yaml to point to your new logo
+- Run flutter pub get
+- Run flutter pub run flutter_launcher_icons
+You should now be able to run the app and observe the new icon
+
+# Editing the App Name
+- Change the android:label field in android/app/src/main/AndroidManifest.xml and android/app/src/debug/AndroidManifest.xml to be the new app name
+- Change the CFBundleName field string in /ios/Runner/Info.plist to be the new app name
 # License
 This project is licensed under the [License Name] license.
