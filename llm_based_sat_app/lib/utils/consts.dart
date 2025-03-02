@@ -1,4 +1,2 @@
-const String stripePublishableKey =
-    "pk_test_51Lcxq8BXnr7WYl51kA6CbQ0uPrsQRy5gEUxCj4DJAzG0HgkNwUH4NHFDqR9mEB1cqiwOPRpbXSTHBtKFCRSlHb4j00pwY6LFXi";
-const String stripeSecretKey =
-    "sk_test_51Lcxq8BXnr7WYl516LkOKzqmWCiRg80EnoGJNZbEbs3J7apsJP4EKp3CNDS6H3rQR7jhVMMxPmjzL9DhlQ4ImEjN00GTuIC6bF";
+const String stripeMonthlyPriceId = "price_1QxVyDBXnr7WYl5100uevjmu";
+const String stripeYearlyPriceId = "price_1QxVxfBXnr7WYl51Fmg61LXh";
