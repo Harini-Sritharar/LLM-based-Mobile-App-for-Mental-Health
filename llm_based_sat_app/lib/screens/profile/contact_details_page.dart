@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:country_codes/country_codes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,13 +28,14 @@ class ContactDetailsPage extends StatefulWidget {
 
 class _ContactDetailsPageState extends State<ContactDetailsPage> {
   final _formKey = GlobalKey<FormState>();
+  Key phoneFieldKey = UniqueKey();
   final TextEditingController _countryController =
       TextEditingController(text: "United Kingdom");
   final TextEditingController _zipPostalController = TextEditingController();
-  TextEditingController _mobileController = TextEditingController();
-  String selectedCountryCode = ''; // Stores the selected country's code -> can be used to convert to obtain the country's dial code
+  final TextEditingController _mobileController = TextEditingController();
   String mobileNumber = ''; // Stores the mobile number input
-  String dialCode = '+44';
+  String dialCode = '44';
+  String selectedCountryISO = 'GB';
 
   @override
   void initState() {
@@ -53,19 +55,37 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
 
         String fullPhone = data['phoneNumber'] ?? '';
         if (fullPhone.isNotEmpty) {
-          selectedCountryCode = fullPhone.substring(0, fullPhone.indexOf(' ')); // Extract the country code
-          mobileNumber = fullPhone.substring(fullPhone.indexOf(' ') + 1); // Extract the phone number
+          mobileNumber = fullPhone.substring(
+              fullPhone.indexOf(' ') + 1); // Extract the phone number
           dialCode = fullPhone.split(' ')[0];
         }
+
+        String storedCountry = data['country'] ?? 'United Kingdom';
+
+        String? countryISO = _getISOCodeFromCountryName(storedCountry);
+        print("Country ISO: $countryISO");
+
         if (!mounted) return;
         setState(() {
-          _countryController.text = data['country'] ?? 'United Kingdom';
+          _countryController.text = storedCountry;
           _zipPostalController.text = data['zipcode'] ?? '';
           _mobileController.text = mobileNumber;
-  
+          selectedCountryISO =
+              _getISOCodeFromCountryName(storedCountry) ?? 'GB';
+              phoneFieldKey = UniqueKey();
         });
       }
     }
+  }
+
+  /// Convert country name to ISO code
+  String? _getISOCodeFromCountryName(String countryName) {
+    for (var country in CountryCodes.countryCodes()) {
+      if (country.localizedName?.toLowerCase() == countryName.toLowerCase()) {
+        return country.alpha2Code; // Returns ISO code (e.g., "GB")
+      }
+    }
+    return null; // Default if country not found
   }
 
   @override
@@ -88,7 +108,7 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
       );
       return;
     }
-    String fullPhoneNumber = "+$dialCode $mobileNumber";
+    String fullPhoneNumber = "$dialCode $mobileNumber";
     updateContactDetails(
         _countryController.text, _zipPostalController.text, fullPhoneNumber);
     widget.onCompletion();
@@ -165,7 +185,8 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
                         ),
                         const SizedBox(height: 10),
                         IntlPhoneField(
-                          controller: _mobileController,
+                          key: phoneFieldKey,
+                            controller: _mobileController,
                             decoration: InputDecoration(
                               labelText: 'Mobile Number',
                               filled: true,
@@ -175,14 +196,13 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
                                 borderSide: BorderSide.none,
                               ),
                             ),
-                            initialCountryCode: dialCode.substring(1),
-                            initialValue: mobileNumber.replaceFirst(dialCode, '').trim(),
+                            initialCountryCode: selectedCountryISO,
+                            initialValue:
+                                mobileNumber.replaceFirst(dialCode, '').trim(),
                             onCountryChanged: (country) {
                               setState(() {
                                 _countryController.text =
                                     country.name; // Country name
-                                selectedCountryCode =
-                                    country.code; // ISO Code (e.g., US, IN)
                                 dialCode = country
                                     .dialCode; // Dial code (e.g., +1, +91)
                               });

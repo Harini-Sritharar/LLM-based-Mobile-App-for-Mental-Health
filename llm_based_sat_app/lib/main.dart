@@ -1,3 +1,4 @@
+import 'package:country_codes/country_codes.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +33,8 @@ final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<Scaffol
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await CountryCodes.init();
   
   // Register background handler before initializing Firebase
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
