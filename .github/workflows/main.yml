@@ -1,108 +1,154 @@
 name: Flutter CI/CD
-
 on:
   push:
     branches:
       - main
       - hs1922_ci_fix
-
 jobs:
   setup:
-    runs-on: macos-latest
+    name: Setup Flutter Environment
+    runs-on: ubuntu-latest
+    env:
+      FLUTTER_VERSION: 3.27.2
     outputs:
-      FLUTTER_VERSION: ${{ env.FLUTTER_VERSION }}
+      flutter_cache_key: ${{ steps.generate-cache-key.outputs.flutter_cache_key }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      
+      - name: Generate cache key
+        id: generate-cache-key
+        run: echo "flutter_cache_key=${{ runner.os }}-flutter-${{ env.FLUTTER_VERSION }}-${{ hashFiles('llm_based_sat_app/pubspec.lock') }}" >> $GITHUB_OUTPUT
+
+  build_android:
+    name: Build Android App
+    needs: setup
+    runs-on: ubuntu-latest
+    env:
+      FLUTTER_VERSION: 3.27.2
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Set Flutter Version
-        run: echo "FLUTTER_VERSION=3.27.2" >> $GITHUB_ENV
-
-      - name: Cache Flutter SDK
+      # Cache Flutter dependencies
+      - name: Cache Flutter dependencies
         uses: actions/cache@v3
         with:
-          path: ~/.flutter
-          key: flutter-${{ env.FLUTTER_VERSION }}
+          path: |
+            ~/.pub-cache
+            ~/.flutter
+          key: ${{ needs.setup.outputs.flutter_cache_key }}
+          restore-keys: |
+            ${{ runner.os }}-flutter-${{ env.FLUTTER_VERSION }}-
 
+      # Setup Flutter
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
-
-      - name: Cache Flutter Dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.pub-cache
-          key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-flutter-
-
+          cache: true
+      
+      # Pub Get with caching
       - name: Install Dependencies
         run: flutter pub get
         working-directory: llm_based_sat_app
 
-  android_build:
-    needs: setup
-    runs-on: macos-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ needs.setup.outputs.FLUTTER_VERSION }}
-
-      - name: Cache Gradle
+      # Cache Gradle dependencies for Android
+      - name: Cache Gradle dependencies
         uses: actions/cache@v3
         with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            llm_based_sat_app/android/.gradle
+          key: ${{ runner.os }}-gradle-${{ hashFiles('llm_based_sat_app/android/gradle/wrapper/gradle-wrapper.properties', 'llm_based_sat_app/android/build.gradle', 'llm_based_sat_app/android/app/build.gradle') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Build APK
-        run: flutter build apk --release --split-per-abi
-        working-directory: llm_based_sat_app
-        env:
-          CI: true
+      # Set up JDK with cache
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: "temurin"
+          java-version: "17"
+          cache: gradle
 
+      # Build Android
+      - name: Build APK
+        run: flutter build apk --release --dart-define=CI=true
+        working-directory: llm_based_sat_app
+        
+      # Upload artifacts
       - name: Archive APK
         uses: actions/upload-artifact@v4
         with:
           name: android-apk
           path: llm_based_sat_app/build/app/outputs/flutter-apk/app-release.apk
 
-  ios_build:
+  build_ios:
+    name: Build iOS App
     needs: setup
     runs-on: macos-latest
+    env:
+      FLUTTER_VERSION: 3.27.2
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Restore Cached Flutter SDK
+      # Cache Flutter dependencies
+      - name: Cache Flutter dependencies
         uses: actions/cache@v3
         with:
-          path: ~/.flutter
-          key: flutter-3.27.2
+          path: |
+            ~/.pub-cache
+            ~/.flutter
+          key: ${{ needs.setup.outputs.flutter_cache_key }}
           restore-keys: |
-            flutter-
+            ${{ runner.os }}-flutter-${{ env.FLUTTER_VERSION }}-
 
+      # Setup Flutter
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 3.27.2
-
-      - name: Install Flutter Dependencies
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+      
+      # Pub Get with caching
+      - name: Install Dependencies
         run: flutter pub get
         working-directory: llm_based_sat_app
+        
+      # Cache CocoaPods
+      - name: Cache CocoaPods
+        uses: actions/cache@v3
+        with:
+          path: |
+            llm_based_sat_app/ios/Pods
+            ~/Library/Caches/CocoaPods
+          key: ${{ runner.os }}-pods-${{ hashFiles('llm_based_sat_app/ios/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
 
-      - name: Install CocoaPods Dependencies
-        run: pod install
+      # Install CocoaPods
+      - name: Install CocoaPods
+        run: |
+          sudo gem install cocoapods
+          pod repo update
+        working-directory: llm_based_sat_app/ios
+        
+      # Install iOS Dependencies with caching
+      - name: Install iOS Dependencies
+        run: pod install --repo-update
         working-directory: llm_based_sat_app/ios
 
+      # Build iOS
       - name: Build IPA
         run: flutter build ios --release --no-codesign
         working-directory: llm_based_sat_app
-        env:
-          CI: true
+        
+      # Upload artifacts
+      - name: Archive IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-ipa
+          path: llm_based_sat_app/build/ios/iphoneos/Runner.app
