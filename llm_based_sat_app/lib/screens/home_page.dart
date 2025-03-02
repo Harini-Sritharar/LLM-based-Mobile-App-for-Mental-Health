@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/firebase/firebase_courses.dart';
 import 'package:llm_based_sat_app/firebase/firebase_helpers.dart';
+import 'package:llm_based_sat_app/main.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
+import 'package:llm_based_sat_app/screens/course/courses.dart';
 import 'package:llm_based_sat_app/screens/score/score_page.dart'; // Import the ScoresPage
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/utils/user_provider.dart';
@@ -8,6 +11,7 @@ import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import 'package:llm_based_sat_app/firebase/firebase_score.dart';
 import 'package:llm_based_sat_app/screens/course/courses_helper.dart';
 import 'package:llm_based_sat_app/widgets/course_widgets/course_card.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/score_widgets/circular_progress_bar.dart';
@@ -36,68 +40,82 @@ class _HomePageState extends State<HomePage> {
   late UserProvider userProvider;
   late String uid;
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // Access Provider here
-    userProvider = Provider.of<UserProvider>(context, listen: false);
-    uid = userProvider.getUid();
-  }
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   // Access Provider here
+  //   userProvider = Provider.of<UserProvider>(context, listen: false);
+  //   uid = userProvider.getUid();
+  // }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(
-        title: "InvinciMind",
-        onItemTapped: widget.onItemTapped,
-        selectedIndex: widget.selectedIndex,
-        backButton: false,
-        image: AssetImage('assets/images/Logo.png'), // Pass the Logo.png image
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            FutureBuilder<String>(
-              future: getFirstName(uid),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Text(
-                    "Welcome, ...",
-                    style: TextStyle(
-                        fontSize: 22, color: AppColours.primaryGreyTextColor),
-                  );
-                } else if (snapshot.hasError) {
-                  return Text(
-                    "Welcome, User",
-                    style: TextStyle(
-                        fontSize: 22, color: AppColours.primaryGreyTextColor),
-                  );
-                } else {
-                  return Text(
-                    "Welcome, ${snapshot.data}",
-                    style: TextStyle(
-                        fontSize: 22, color: AppColours.primaryGreyTextColor),
-                  );
-                }
-              },
+    return Consumer<UserProvider>(
+      builder: (context, userProvider, child) {
+        return Scaffold(
+          appBar: CustomAppBar(
+            title: "InvinciMind",
+            onItemTapped: widget.onItemTapped,
+            selectedIndex: widget.selectedIndex,
+            backButton: false,
+            image:
+                AssetImage('assets/images/Logo.png'), // Pass the Logo.png image
+          ),
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                FutureBuilder<String>(
+                  future: getFirstName(userProvider.getUid()),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Text(
+                        "Welcome, ...",
+                        style: TextStyle(
+                            fontSize: 22,
+                            color: AppColours.primaryGreyTextColor),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text(
+                        "Welcome, User",
+                        style: TextStyle(
+                            fontSize: 22,
+                            color: AppColours.primaryGreyTextColor),
+                      );
+                    } else {
+                      return Text(
+                        "Welcome, ${snapshot.data}",
+                        style: TextStyle(
+                            fontSize: 22,
+                            color: AppColours.primaryGreyTextColor),
+                      );
+                    }
+                  },
+                ),
+                const SizedBox(height: 16),
+                _buildScoreCard(context), // Pass context to _buildScoreCard
+                const SizedBox(height: 16),
+                _buildTasksCard(userProvider.getUid()),
+                const SizedBox(height: 16),
+                _buildCoursesSection(userProvider.getUid()),
+                const SizedBox(height: 16),
+                _buildDailyQuote(),
+              ],
             ),
-            const SizedBox(height: 16),
-            _buildScoreCard(context), // Pass context to _buildScoreCard
-            const SizedBox(height: 16),
-            _buildTasksCard(),
-            const SizedBox(height: 16),
-            _buildCoursesSection(uid),
-            const SizedBox(height: 16),
-            _buildDailyQuote(),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
   /// Builds the score card section which displays the user's overall score.
+  ///
+  /// This method returns a [FutureBuilder] that fetches the user's overall score
+  /// and displays it in a card. If the score is not yet available, a loading
+  /// indicator is shown. If there is an error, an error message is displayed.
+  ///
+  /// [context] - The build context.
   Widget _buildScoreCard(BuildContext context) {
     return FutureBuilder<double>(
       future: getOverallScore(), // Fetch the overall score
@@ -111,13 +129,11 @@ class _HomePageState extends State<HomePage> {
           return InkWell(
             onTap: () {
               Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ScorePage(
-                          onItemTapped: (int) {},
-                          selectedIndex: 0,
-                        )),
-              );
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MainScreen(
+                            initialIndex: 3,
+                          )));
             },
             child: Card(
               color: AppColours.brandBlueMinusThree,
@@ -151,59 +167,140 @@ class _HomePageState extends State<HomePage> {
   }
 
   /// Builds the tasks card section which displays the tasks for the day.
-  Widget _buildTasksCard() {
-    return Card(
-      color: AppColours.brandBlueMinusTwo,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Tasks Today",
-              style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: AppColours.brandBluePlusThree),
+  ///
+  /// This method returns a [FutureBuilder] that fetches the tasks for the day
+  /// and displays them in a card. If the tasks are not yet available, a loading
+  /// indicator is shown. If there is an error, an error message is displayed.
+  ///
+  /// [uid] - The user ID.
+  Widget _buildTasksCard(String uid) {
+    return FutureBuilder<List<Map<String, dynamic>>>(
+      future: getTasks(uid),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Text("Error loading tasks");
+        } else {
+          List<Map<String, dynamic>> tasks = snapshot.data ?? [];
+          return Card(
+            color: AppColours.brandBlueMinusTwo,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Tasks Today",
+                    style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: AppColours.brandBluePlusThree),
+                  ),
+                  const SizedBox(height: 8),
+                  if (tasks.isEmpty)
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(16.0),
+                      decoration: BoxDecoration(
+                        color: AppColours.brandBlueMinusOne,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 8,
+                            offset: Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.task_alt,
+                              color: AppColours.brandBluePlusThree,
+                              size: 48,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              "No tasks for today. Try starting a course!",
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: AppColours.white,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  else
+                    for (var task in tasks)
+                      _buildTaskItem(context, task["task"], task["completed"]),
+                ],
+              ),
             ),
-            const SizedBox(height: 8),
-            _buildTaskItem("Upload Childhood Photos", true),
-            _buildTaskItem("Practise Exercise A", false),
-            _buildTaskItem("Learn Song", false),
+          );
+        }
+      },
+    );
+  }
+
+  /// Builds a single task item with a task name and completion status.
+  ///
+  /// This method returns a [Padding] widget containing a row with the task name
+  /// and a checkbox indicating the completion status. When the task is tapped,
+  /// the user is navigated to the corresponding screen.
+  ///
+  /// [context] - The build context.
+  /// [task] - The task name.
+  /// [completed] - The completion status of the task.
+  Widget _buildTaskItem(BuildContext context, String task, bool completed) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => MainScreen(
+                        initialIndex: 4,
+                      )));
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              formatTask(task),
+              style:
+                  TextStyle(color: AppColours.brandBluePlusTwo, fontSize: 16),
+            ),
+            completed
+                ? Container(
+                    decoration: BoxDecoration(
+                      color: Color(0xFFCEF2DE),
+                      borderRadius: BorderRadius.circular(4.0),
+                    ),
+                    child: Icon(Icons.check_box, color: Color(0xFF1C8C4E)),
+                  )
+                : const Icon(Icons.arrow_forward_ios,
+                    color: AppColours.brandBluePlusTwo),
           ],
         ),
       ),
     );
   }
 
-  /// Builds a single task item with a task name and completion status.
-  Widget _buildTaskItem(String task, bool completed) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            task,
-            style: TextStyle(color: AppColours.brandBluePlusTwo, fontSize: 16),
-          ),
-          completed
-              ? Container(
-                  decoration: BoxDecoration(
-                    color: Color(0xFFCEF2DE),
-                    borderRadius: BorderRadius.circular(4.0),
-                  ),
-                  child: Icon(Icons.check_box, color: Color(0xFF1C8C4E)),
-                )
-              : const Icon(Icons.arrow_forward_ios,
-                  color: AppColours.brandBluePlusTwo),
-        ],
-      ),
-    );
-  }
-
   /// Builds the courses section which displays the user's courses.
+  ///
+  /// This method returns a [Column] widget containing the user's courses.
+  /// If there are no courses available, a message is displayed.
+  ///
+  /// [uid] - The user ID.
   Widget _buildCoursesSection(String uid) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -217,7 +314,8 @@ class _HomePageState extends State<HomePage> {
         ),
         const SizedBox(height: 8),
         FutureBuilder<List<CourseCard>>(
-          future: generateCourseCards(widget.onItemTapped, widget.selectedIndex, uid),
+          future: generateCourseCards(
+              widget.onItemTapped, widget.selectedIndex, uid),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
@@ -242,6 +340,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   /// Builds the daily quote section which displays a motivational quote.
+  ///
+  /// This method returns a [FutureBuilder] that fetches the daily quote and
+  /// displays it in a card. If the quote is not yet available, a loading
+  /// indicator is shown. If there is an error, a default quote is displayed.
   Widget _buildDailyQuote() {
     return FutureBuilder<Map<String, dynamic>>(
       future: fetchDailyQuote(),
@@ -338,6 +440,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   /// Fetches the daily quote from a remote API or from local storage if already fetched.
+  ///
+  /// This method returns a [Future] that resolves to a map containing the daily quote
+  /// and its author. If the quote is already stored in local storage for the current day,
+  /// it is returned from there. Otherwise, it is fetched from a remote API.
   Future<Map<String, dynamic>> fetchDailyQuote() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? storedQuote = prefs.getString('dailyQuote');
@@ -362,6 +468,126 @@ class _HomePageState extends State<HomePage> {
       } else {
         throw Exception('Failed to load quote');
       }
+    }
+  }
+
+  /// Fetches the tasks for the day based on the user's progress.
+  ///
+  /// This method returns a [Future] that resolves to a list of tasks for the day.
+  /// If the tasks are already stored in local storage for the current day, they are
+  /// returned from there. Otherwise, they are fetched based on the user's progress
+  /// in their courses.
+  ///
+  /// [uid] - The user ID.
+  Future<List<Map<String, dynamic>>> getTasks(String uid) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? storedDate = prefs.getString('tasksDate');
+    String todayDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+
+    if (storedDate == todayDate) {
+      // Load tasks from SharedPreferences if they are already set for today
+      // Tasks will be saved in the format [{"task": "Course_Exercise", "completed": false}]
+      // Example  [{"task": "Self-Attachment_A", "completed": false}]
+      String? storedTasks = prefs.getString('tasks');
+      if (storedTasks != "") {
+        print("Tasks loaded from SharedPreferences");
+        print(storedTasks);
+        List<dynamic> tasksJson = json.decode(storedTasks!);
+        return tasksJson
+            .map((task) => Map<String, dynamic>.from(task))
+            .toList();
+      }
+    }
+
+    // Fetch the user's started courses
+    List<String> startedCourses = await getStartedCourses(uid);
+    List<Map<String, dynamic>> tasks = [];
+
+    if (startedCourses.isEmpty) {
+      // Default tasks if no courses have been started
+      tasks = [
+        {"task": "Self-Attachment_A", "completed": false},
+        {"task": "Self-Attachment_B", "completed": false},
+        {"task": "Self-Attachment_C", "completed": false},
+      ];
+    } else {
+      for (String course in startedCourses) {
+        (String?, String?) currentChapterAndExercise =
+            await getCurrentChapterAndExerciseForCourse(uid, course);
+
+        String? currentChapter = currentChapterAndExercise.$1;
+        String? currentExercise = currentChapterAndExercise.$2;
+
+        print(
+            "$course on chapter: $currentChapter on exercise: $currentExercise");
+
+        if (currentChapter == null || currentExercise == null) continue;
+
+        // Get all incompleted exercises in the latest chapter
+        List<String> incompletedExercises =
+            await getIncompleteExercisesInLatestChapter(uid, course);
+
+        if (incompletedExercises.isEmpty) {
+          // Get the last chapter of this course dynamically
+          String? lastChapter = await getLastChapter(course);
+          print("last chapter from course is $lastChapter");
+          if (lastChapter == null) continue;
+
+          // Check if the latest chapter is the last chapter of the course
+          if (currentChapter == lastChapter) {
+            // Skip this course entirely as the user has completed it.
+            continue;
+          } else {
+            // Determine the next chapter by incrementing the current chapter number
+            int currentChapterNumber =
+                int.parse(currentChapter.split(' ').last);
+            String nextChapter = 'Chapter ${currentChapterNumber + 1}';
+
+            // Get all exercises of the next chapter
+            List<String> nextChapterExercises =
+                await getAllExercisesInChapter(course, nextChapter);
+            if (nextChapterExercises.isEmpty) continue;
+
+            // Recommend all exercises in the next chapter
+            for (String exercise in nextChapterExercises) {
+              // Add the task in the format Course_Exercise
+              tasks.add({
+                "task": "${course}_${exercise.split('_').last}",
+                "completed": false
+              });
+              print("Added task: ${course}_${exercise.split('_').last}");
+            }
+          }
+        } else {
+          // Add all incompleted exercises in the current chapter
+          for (String exercise in incompletedExercises) {
+            tasks.add({
+              "task": "${course}_${exercise.split("_").last}",
+              "completed": false
+            });
+            print("Added task: ${course}_${exercise.split('_').last}");
+          }
+        }
+      }
+
+      // Limit to 3 tasks per day
+      tasks = tasks.take(3).toList();
+    }
+
+    // Save tasks to SharedPreferences
+    await prefs.setString('tasks', json.encode(tasks));
+    await prefs.setString('tasksDate', todayDate);
+
+    return tasks;
+  }
+
+  /// Converts a task string from the format Course_Exercise to 'Course Exercise X' In order to be displayed as a Task Item.
+  String formatTask(String task) {
+    List<String> parts = task.split('_');
+    if (parts.length == 2) {
+      return '${parts[0]} Exercise ${parts[1]}';
+    } else {
+      return task; // Return the original task if it doesn't match the expected format
     }
   }
 }
