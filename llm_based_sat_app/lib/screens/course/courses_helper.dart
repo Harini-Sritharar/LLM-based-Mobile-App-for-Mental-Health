@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:llm_based_sat_app/firebase/firebase_helpers.dart';
 import '../../data/cache_manager.dart';
 import '../../firebase/firebase_courses.dart';
 import '../../models/chapter_exercise_step_interface.dart';
@@ -25,6 +26,8 @@ Future<List<CourseCard>> generateCourseCards(
       return []; // Return an empty list if no courses are found
     }
 
+    List<CourseCard> courseCards = [];
+
     for (final course in coursesDatabase) {
       final userProgress = await getUserCourseProgress(uid, course.id);
       if (userProgress != null) {
@@ -44,25 +47,30 @@ Future<List<CourseCard>> generateCourseCards(
       // Update uploaded childhood photos
       final uploadedChildhoodPhoto = await getUploadedChildhoodPhoto(uid);
       CacheManager.setValue("childhood_photos", uploadedChildhoodPhoto);
+
+      // **Await the Future to get a boolean**
+      bool isLocked = await getIsCourseLocked(course, uid);
+
+      // Generate CourseCard widget
+      courseCards.add(
+        CourseCard(
+          imageUrl: course.imageUrl,
+          courseType: course.courseType,
+          courseTitle: course.title,
+          duration: course.duration,
+          rating: course.rating,
+          ratingsCount: course.ratingCount,
+          onButtonPress: createOnButtonPress(
+            course: course,
+            onItemTapped: onItemTapped,
+            selectedIndex: selectedIndex,
+          ),
+          isLocked: isLocked, // Now it's a boolean
+        ),
+      );
     }
 
-    // Generate CourseCard widgets for each course
-    return coursesDatabase.map((course) {
-      return CourseCard(
-        imageUrl: course.imageUrl,
-        courseType: course.courseType,
-        courseTitle: course.title,
-        duration: course.duration,
-        rating: course.rating,
-        ratingsCount: course.ratingCount,
-        onButtonPress: createOnButtonPress(
-          course: course,
-          onItemTapped: onItemTapped,
-          selectedIndex: selectedIndex,
-        ),
-        isLocked: getIsCourseLocked(),
-      );
-    }).toList();
+    return courseCards;
   } catch (e) {
     // Log and handle errors
     print("Error while generating course cards: $e");
@@ -88,10 +96,15 @@ Future<void> _fetchAndCacheChildhoodImages(String uid) async {
   }
 }
 
-getIsCourseLocked() {
-  // TODO
-  // Implement this
-  return false;
+/* Returns true if course is paid and user has free membership */
+getIsCourseLocked(Course course, String uid) async {
+  if (course.subscription == "Paid") {
+    String userTier = await getTier(uid);
+    if (userTier == "free") {
+      return false;
+    }
+  }
+  return true;
 }
 
 /* Creates a dynamic `onButtonPress` function that navigates to the `CourseInfo` page with the specified parameters. */

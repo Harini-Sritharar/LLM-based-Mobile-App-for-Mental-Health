@@ -484,7 +484,6 @@ Future<void> saveUnfinishedExercise(
     final exerciseCollection = courseDocRef.collection(exerciseId);
 
     // Get the current number of entries to determine the next index
-    // TODO: Maybe have a ?? 0
     final existingEntries = await exerciseCollection.get();
     int nextIndex = existingEntries.docs.length + 1;
 
