@@ -18,13 +18,34 @@ class _ImagePickerState extends State<ImagePickerWidget> {
   final ImagePicker _picker = ImagePicker();
 
   Future<void> _pickImage() async {
-    var status = await Permission.photos.request();
+    if (Platform.isIOS) {
+      var status = await Permission.photos.request();
 
-    if (status.isGranted) {
+      if (status.isGranted) {
+        try {
+          final XFile? pickedFile = await _picker.pickImage(
+            source: ImageSource.gallery,
+            requestFullMetadata: false, // Fixes potential crash on iOS
+          );
+
+          if (pickedFile != null) {
+            setState(() {
+              _selectedImage = File(pickedFile.path);
+            });
+            widget.onImagePicked?.call(_selectedImage);
+          }
+        } catch (e) {
+          print('Error picking image: $e');
+        }
+      } else if (status.isDenied) {
+        print('Photo permission denied.');
+      } else if (status.isPermanentlyDenied) {
+        openAppSettings(); // Opens settings so the user can enable manually
+      }
+    } else {
       try {
         final XFile? pickedFile = await _picker.pickImage(
           source: ImageSource.gallery,
-          requestFullMetadata: false, // Fixes potential crash on iOS
         );
 
         if (pickedFile != null) {
@@ -36,10 +57,6 @@ class _ImagePickerState extends State<ImagePickerWidget> {
       } catch (e) {
         print('Error picking image: $e');
       }
-    } else if (status.isDenied) {
-      print('Photo permission denied.');
-    } else if (status.isPermanentlyDenied) {
-      openAppSettings(); // Opens settings so the user can enable manually
     }
   }
 
