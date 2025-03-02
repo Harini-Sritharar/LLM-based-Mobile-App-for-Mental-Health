@@ -54,12 +54,16 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
     DocumentSnapshot snapshot =
         await FirebaseFirestore.instance.collection('Profile').doc(uid).get();
     if (!mounted) return;
-    setState(() {
-      favouritePhotos =
-          List<String>.from(snapshot.get('favouritePhotos') ?? []);
-      nonFavouritePhotos =
-          List<String>.from(snapshot.get('nonfavouritePhotos') ?? []);
-    });
+
+    if (snapshot.exists) {
+      Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
+
+      setState(() {
+        favouritePhotos = List<String>.from(data?['favouritePhotos'] ?? []);
+        nonFavouritePhotos =
+            List<String>.from(data?['nonfavouritePhotos'] ?? []);
+      });
+    }
   }
 
   Future<void> _pickImage(bool isFavourite) async {
@@ -99,12 +103,13 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
       DocumentReference userDoc =
           FirebaseFirestore.instance.collection('Profile').doc(uid);
 
-      // Retrieve current stored photos from Firestore
       DocumentSnapshot snapshot = await userDoc.get();
+      Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
+
       List<String> storedFavouritePhotos =
-          List<String>.from(snapshot.get('favouritePhotos') ?? []);
+          List<String>.from(data?['favouritePhotos'] ?? []);
       List<String> storedNonFavouritePhotos =
-          List<String>.from(snapshot.get('nonfavouritePhotos') ?? []);
+          List<String>.from(data?['nonfavouritePhotos'] ?? []);
 
       // Upload new local photos
       List<String> uploadedFavouritePhotos = [];
