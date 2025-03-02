@@ -47,7 +47,7 @@ class _CalendarPageState extends State<CalendarPage> {
   Future<void> _fetchExercises() async {
     List<CalendarExerciseEntry> result =
         await getExercisesByDate(uid, _selectedDate);
-
+    if (!mounted) return;
     setState(() {
       allCompletedExercises = result; // Update exercises
     });
@@ -61,6 +61,7 @@ class _CalendarPageState extends State<CalendarPage> {
       firstDate: DateTime(2023), // Determine the firstDate
       lastDate: DateTime.now(),
     );
+    if (!mounted) return;
 
     if (pickedDate != null && pickedDate != _selectedDate) {
       setState(() {

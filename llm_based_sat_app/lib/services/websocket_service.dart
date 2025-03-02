@@ -13,9 +13,17 @@ class WebSocketService {
   final StreamController<String> _messageController =
       StreamController.broadcast();
   bool isConnected = false;
-
+  // Store the provider reference
+  ChatProvider? _chatProvider;
+  String? _userId;
+  
   void connect(String userID, BuildContext context) {
     if (isConnected) return;
+    
+    _userId = userID;
+    
+    // Store the provider reference when connecting
+    _chatProvider = Provider.of<ChatProvider>(context, listen: false);
 
     final wsUrl = Uri.parse(
         'ws://chatbot-app-128555328235.europe-central2.run.app/ws/$userID'); // Backend URL, change this to the actual host one eventually.
@@ -23,29 +31,30 @@ class WebSocketService {
 
     _channel!.stream.listen(
       (message) {
-        // Notify the ChatProvider about the new message
-        final chatProvider = Provider.of<ChatProvider>(context, listen: false);
-        // extract out anything we don't want to show the user
-        try {
-          // filters out the {"token_used": 0} messages
-          final decodedMessage = jsonDecode(message);
-          if (decodedMessage is Map && decodedMessage.containsKey("tokens_used")) {
-            // handle tokens_used case
-            return;
-          }
-        } catch (e) {
-          // If message is not a JSON, proceed with the original message
-          // replacing the leading number and dashes used in the chatbot response
+        // Use the stored provider reference instead of accessing context
+        if (_chatProvider != null && isConnected) {
+          // extract out anything we don't want to show the user
+          try {
+            // filters out the {"token_used": 0} messages
+            final decodedMessage = jsonDecode(message);
+            if (decodedMessage is Map && decodedMessage.containsKey("tokens_used")) {
+              // handle tokens_used case
+              return;
+            }
+          } catch (e) {
+            // If message is not a JSON, proceed with the original message
+            // replacing the leading number and dashes used in the chatbot response
             message = message.replaceAll(RegExp(r'\\n'), '\n');
             message = message.replaceFirst(RegExp(r'^\d+-\s*'), '');
+          }
+          _chatProvider!.receiveMessage(message);
+          _messageController.add(message);
         }
-        chatProvider.receiveMessage(message);
-        _messageController.add(message);
       },
-      onDone: () => _reconnect(userID, context),
+      onDone: () => _handleDisconnection(),
       onError: (error) {
         print("WebSocket error: $error");
-        _reconnect(userID, context);
+        _handleDisconnection();
       },
     );
 
@@ -69,18 +78,34 @@ class WebSocketService {
 
   Stream<String> get messageStream => _messageController.stream;
 
-  void _reconnect(String userID, BuildContext context) {
-    isConnected = false;
-    Future.delayed(Duration(seconds: 2), () {
-      print("Reconnecting...");
-      connect(userID, context); // Replace with dynamic userID
-    });
+  void _handleDisconnection() {
+    // Just mark as disconnected, don't try to auto-reconnect
+    if (isConnected) {
+      isConnected = false;
+      print("WebSocket disconnected");
+      // Don't clear providers or try to reconnect automatically
+    }
+  }
+
+  // Call this method from UI with a fresh context when ready to reconnect
+  void reconnect(BuildContext context) {
+    if (_userId != null) {
+      _chatProvider = null;
+      isConnected = false;
+      connect(_userId!, context);
+    } else {
+      print("Can't reconnect: missing user ID");
+    }
   }
 
   void close() {
     _channel?.sink.close(status.goingAway);
-    _messageController.close();
     isConnected = false;
+    _chatProvider = null;
+    // Only close the controller if it's not already closed
+    if (!_messageController.isClosed) {
+      _messageController.close();
+    }
   }
 }
 
