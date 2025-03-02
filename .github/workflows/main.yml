@@ -1,9 +1,11 @@
 name: Flutter CI/CD
 on:
-  push:
+  pull_request:
     branches:
       - main
-      - hs1922_ci_fix
+    types:
+      - closed  # Trigger on pull request closure (including merge)
+
 jobs:
   setup:
     name: Setup Flutter Environment
@@ -84,6 +86,7 @@ jobs:
         with:
           name: android-apk
           path: llm_based_sat_app/build/app/outputs/flutter-apk/app-release.apk
+    if: github.event.pull_request.merged == true  # Only run if the PR is merged
 
   build_ios:
     name: Build iOS App
@@ -192,3 +195,4 @@ jobs:
         with:
           name: ios-ipa
           path: llm_based_sat_app/build/ios/iphoneos/Runner.app
+    if: github.event.pull_request.merged == true  # Only run if the PR is merged
