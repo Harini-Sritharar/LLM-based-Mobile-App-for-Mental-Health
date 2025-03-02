@@ -166,8 +166,47 @@ class HomePage extends StatelessWidget {
                         color: AppColours.brandBluePlusThree),
                   ),
                   const SizedBox(height: 8),
-                  for (var task in tasks)
-                    _buildTaskItem(context, task["task"], task["completed"]),
+                  if (tasks.isEmpty)
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(16.0),
+                      decoration: BoxDecoration(
+                        color: AppColours.brandBlueMinusOne,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 8,
+                            offset: Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.task_alt,
+                              color: AppColours.brandBluePlusThree,
+                              size: 48,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              "No tasks for today. Try starting a course!",
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: AppColours.white,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  else
+                    for (var task in tasks)
+                      _buildTaskItem(context, task["task"], task["completed"]),
                 ],
               ),
             ),
@@ -403,9 +442,9 @@ class HomePage extends StatelessWidget {
     if (startedCourses.isEmpty) {
       // Default tasks if no courses have been started
       tasks = [
-        {"task": "Self-attachment_A", "completed": false},
-        {"task": "Self-attachment_B", "completed": false},
-        {"task": "Self-attachment_C", "completed": false},
+        {"task": "Self-Attachment_A", "completed": false},
+        {"task": "Self-Attachment_B", "completed": false},
+        {"task": "Self-Attachment_C", "completed": false},
       ];
     } else {
       for (String course in startedCourses) {
@@ -448,7 +487,10 @@ class HomePage extends StatelessWidget {
             // Recommend all exercises in the next chapter
             for (String exercise in nextChapterExercises) {
               // Add the task in the format Course_Exercise
-              tasks.add({"task": "${course}_${exercise.split('_').last}", "completed": false});
+              tasks.add({
+                "task": "${course}_${exercise.split('_').last}",
+                "completed": false
+              });
               print("Added task: ${course}_${exercise.split('_').last}");
             }
           }
