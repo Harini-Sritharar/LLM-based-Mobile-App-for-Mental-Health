@@ -118,17 +118,12 @@ jobs:
         run: flutter pub get
         working-directory: llm_based_sat_app
         
-      # Cache CocoaPods
-      - name: Cache CocoaPods
-        uses: actions/cache@v3
-        with:
-          path: |
-            llm_based_sat_app/ios/Pods
-            ~/Library/Caches/CocoaPods
-          key: ${{ runner.os }}-pods-${{ hashFiles('llm_based_sat_app/ios/Podfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-pods-
-
+      # Always clear Pods due to Firebase version issues
+      - name: Clean Pods Directory
+        run: |
+          rm -rf Pods Podfile.lock
+        working-directory: llm_based_sat_app/ios
+        
       # Install CocoaPods
       - name: Install CocoaPods
         run: |
@@ -136,7 +131,31 @@ jobs:
           pod repo update
         working-directory: llm_based_sat_app/ios
         
-      # Install iOS Dependencies with caching
+      # Fix Firebase version conflicts
+      - name: Fix Firebase Versions
+        run: |
+          echo "Updating Firebase versions in Podfile"
+          if grep -q "firebase_core" ../pubspec.yaml; then
+            echo "platform :ios, '12.0'" > Podfile.new
+            echo "" >> Podfile.new
+            cat Podfile | grep -v "platform" >> Podfile.new
+            mv Podfile.new Podfile
+            
+            # Add post_install hook if not present
+            if ! grep -q "post_install" Podfile; then
+              echo "" >> Podfile
+              echo "post_install do |installer|" >> Podfile
+              echo "  installer.pods_project.targets.each do |target|" >> Podfile
+              echo "    target.build_configurations.each do |config|" >> Podfile
+              echo "      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'" >> Podfile
+              echo "    end" >> Podfile
+              echo "  end" >> Podfile
+              echo "end" >> Podfile
+            fi
+          fi
+        working-directory: llm_based_sat_app/ios
+        
+      # Install iOS Dependencies with no cache due to Firebase issues
       - name: Install iOS Dependencies
         run: pod install --repo-update
         working-directory: llm_based_sat_app/ios
