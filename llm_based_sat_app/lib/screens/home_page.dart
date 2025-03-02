@@ -40,64 +40,72 @@ class _HomePageState extends State<HomePage> {
   late UserProvider userProvider;
   late String uid;
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // Access Provider here
-    userProvider = Provider.of<UserProvider>(context, listen: false);
-    uid = userProvider.getUid();
-  }
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   // Access Provider here
+  //   userProvider = Provider.of<UserProvider>(context, listen: false);
+  //   uid = userProvider.getUid();
+  // }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(
-        title: "InvinciMind",
-        onItemTapped: widget.onItemTapped,
-        selectedIndex: widget.selectedIndex,
-        backButton: false,
-        image: AssetImage('assets/images/Logo.png'), // Pass the Logo.png image
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            FutureBuilder<String>(
-              future: getFirstName(uid),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Text(
-                    "Welcome, ...",
-                    style: TextStyle(
-                        fontSize: 22, color: AppColours.primaryGreyTextColor),
-                  );
-                } else if (snapshot.hasError) {
-                  return Text(
-                    "Welcome, User",
-                    style: TextStyle(
-                        fontSize: 22, color: AppColours.primaryGreyTextColor),
-                  );
-                } else {
-                  return Text(
-                    "Welcome, ${snapshot.data}",
-                    style: TextStyle(
-                        fontSize: 22, color: AppColours.primaryGreyTextColor),
-                  );
-                }
-              },
+    return Consumer<UserProvider>(
+      builder: (context, userProvider, child) {
+        return Scaffold(
+          appBar: CustomAppBar(
+            title: "InvinciMind",
+            onItemTapped: widget.onItemTapped,
+            selectedIndex: widget.selectedIndex,
+            backButton: false,
+            image:
+                AssetImage('assets/images/Logo.png'), // Pass the Logo.png image
+          ),
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                FutureBuilder<String>(
+                  future: getFirstName(userProvider.getUid()),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Text(
+                        "Welcome, ...",
+                        style: TextStyle(
+                            fontSize: 22,
+                            color: AppColours.primaryGreyTextColor),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text(
+                        "Welcome, User",
+                        style: TextStyle(
+                            fontSize: 22,
+                            color: AppColours.primaryGreyTextColor),
+                      );
+                    } else {
+                      return Text(
+                        "Welcome, ${snapshot.data}",
+                        style: TextStyle(
+                            fontSize: 22,
+                            color: AppColours.primaryGreyTextColor),
+                      );
+                    }
+                  },
+                ),
+                const SizedBox(height: 16),
+                _buildScoreCard(context), // Pass context to _buildScoreCard
+                const SizedBox(height: 16),
+                _buildTasksCard(userProvider.getUid()),
+                const SizedBox(height: 16),
+                _buildCoursesSection(userProvider.getUid()),
+                const SizedBox(height: 16),
+                _buildDailyQuote(),
+              ],
             ),
-            const SizedBox(height: 16),
-            _buildScoreCard(context), // Pass context to _buildScoreCard
-            const SizedBox(height: 16),
-            _buildTasksCard(uid),
-            const SizedBox(height: 16),
-            _buildCoursesSection(uid),
-            const SizedBox(height: 16),
-            _buildDailyQuote(),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -306,7 +314,8 @@ class _HomePageState extends State<HomePage> {
         ),
         const SizedBox(height: 8),
         FutureBuilder<List<CourseCard>>(
-          future: generateCourseCards(widget.onItemTapped, widget.selectedIndex, uid),
+          future: generateCourseCards(
+              widget.onItemTapped, widget.selectedIndex, uid),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
