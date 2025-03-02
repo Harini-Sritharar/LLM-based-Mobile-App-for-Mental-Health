@@ -531,40 +531,6 @@ Future<(String?, String?)> getCurrentChapterAndExerciseForCourse(
   }
 }
 
-/// Fetches the last exercise letter from a given chapter.
-Future<String?> getLastExerciseFromChapter(
-    String courseId, String chapter) async {
-  try {
-    // Reference to the exercises collection inside the given chapter
-    final collectionRef = FirebaseFirestore.instance
-        .collection('Courses')
-        .doc(courseId)
-        .collection('Chapters')
-        .doc(chapter)
-        .collection('Exercises');
-
-    // Fetch all exercises inside the chapter
-    final querySnapshot = await collectionRef.get();
-
-    if (querySnapshot.docs.isNotEmpty) {
-      // Extract exercise names and sort them
-      List<String> exercises = querySnapshot.docs.map((doc) => doc.id).toList();
-      exercises.sort(); // Ensures exercises are sorted alphabetically
-
-      // Extract the last exercise name and return only the last letter
-      String lastExercise = exercises.last;
-      return lastExercise
-          .split('_')
-          .last; // Extracts the last letter (A, B, C, etc.)
-    }
-
-    return null; // Return null if no exercises are found
-  } catch (e) {
-    print('Error fetching last exercise from $chapter: $e');
-    return null;
-  }
-}
-
 /// Fetches the list of courses the user has started.
 Future<List<String>> getStartedCourses(String uid) async {
   try {
