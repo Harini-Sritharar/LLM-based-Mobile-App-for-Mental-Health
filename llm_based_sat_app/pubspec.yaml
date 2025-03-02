@@ -46,6 +46,7 @@ dependencies:
   permission_handler: ^11.4.0
   image_picker: ^1.1.2
   flutter_launcher_icons: ^0.14.3
+  flutter_dotenv: ^5.2.1
 
 dev_dependencies:
   flutter_test:
@@ -96,6 +97,8 @@ flutter:
     - assets/images/humour.png
     - assets/images/nature.png
     - assets/images/Logo.png
+
+    - .env
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
