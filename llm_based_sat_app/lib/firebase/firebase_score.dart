@@ -57,7 +57,7 @@ Future<void> recalculateSubScores(String userId) async {
     'Self-efficacy': 0,
     'Personal growth': 0,
     'Self-Acceptance': 0,
-    'Acting to alleviate suffering': 0,
+    'Alleviating suffering': 0,
   };
 
   FirebaseFirestore db = FirebaseFirestore.instance;
@@ -83,9 +83,9 @@ Future<void> recalculateSubScores(String userId) async {
     if (name == 'CPC-12R') {
       // answers map key starts at index 0
       calculatedSubScores['Resilience'] = 100 *
-          (int.parse(answers['9'] ?? '0') +
-              int.parse(answers['10'] ?? '0') +
-              int.parse(answers['11'] ?? '0')) /
+          (int.parse(answers['9'] ?? '1') +
+              int.parse(answers['10'] ?? '1') +
+              int.parse(answers['11'] ?? '1')) /
           18;
 
       calculatedSubScores['Self-efficacy'] = 100 *
@@ -97,24 +97,25 @@ Future<void> recalculateSubScores(String userId) async {
 
     if (name == 'PWB') {
       calculatedSubScores['Personal growth'] = 100 *
-          (int.parse(answers['10'] ?? '0') +
-              int.parse(answers['11'] ?? '0') +
-              int.parse(answers['13'] ?? '0')) /
+          (int.parse(answers['10'] ?? '1') +
+              int.parse(answers['11'] ?? '1') +
+              int.parse(answers['13'] ?? '1')) /
           21;
 
       calculatedSubScores['Self-Acceptance'] = 100 *
-          (int.parse(answers['0'] ?? '0') +
-              int.parse(answers['1'] ?? '0') +
-              int.parse(answers['4'] ?? '0')) /
+          (int.parse(answers['0'] ?? '1') +
+              int.parse(answers['1'] ?? '1') +
+              int.parse(answers['4'] ?? '1')) /
           21;
     }
 
     if (name == 'SOCS-S') {
-      calculatedSubScores['Acting to alleviate suffering'] = 100 *
-          (int.parse(answers['4'] ?? '0') +
-              int.parse(answers['9'] ?? '0') +
-              int.parse(answers['14'] ?? '0') +
-              int.parse(answers['19'] ?? '0')) /
+      // high scores are better
+      calculatedSubScores['Alleviating suffering'] = 100 *
+          (int.parse(answers['4'] ?? '1') +
+              int.parse(answers['9'] ?? '1') +
+              int.parse(answers['14'] ?? '1') +
+              int.parse(answers['19'] ?? '1')) /
           20;
     }
   }
@@ -125,7 +126,7 @@ Future<void> recalculateSubScores(String userId) async {
     'Self-efficacy',
     'Personal growth',
     'Self-Acceptance',
-    'Acting to alleviate suffering'
+    'Alleviating suffering'
   ];
 
   if (data['subScoresHistory'] != null &&
@@ -221,14 +222,14 @@ Future<void> recalculateScores(String userId) async {
     }
   }
 
-  double mentalHealthScore =
-      1 - (0.5 * ((subScores['GAD-7']! / 21) + (subScores['PHQ-9']! / 27)));
-  double weightedScore = (0.4 * subScores['PWB']! +
-      0.25 * subScores['SOCS-S']! +
-      0.25 * subScores['CPC-12R']! +
-      0.1 * (subScores['ERQ_R']! + (28 - subScores['ERQ_S']!)));
+  double mentalHealthScore = 100 *
+      (1 - (0.5 * ((subScores['GAD-7']! / 21) + (subScores['PHQ-9']! / 27))));
+  double weightedScore = (0.4 * (subScores['PWB']!/126) +
+      0.25 * (subScores['SOCS-S']!/100) +
+      0.25 * (subScores['CPC-12R']!/72) +
+      0.1 * ((subScores['ERQ_R']!/42) + (28 - (subScores['ERQ_S']!/4))));
 
-  double overallScore = ((mentalHealthScore + weightedScore) / 2);
+  double overallScore = (mentalHealthScore + weightedScore) / 2;
 
   Map<String, List<double>> scoresMap = {};
   String currentMonth = DateFormat.MMMM().format(DateTime.now());
