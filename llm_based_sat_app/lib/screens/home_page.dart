@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/firebase/firebase_courses.dart';
 import 'package:llm_based_sat_app/firebase/firebase_helpers.dart';
+import 'package:llm_based_sat_app/main.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
 import 'package:llm_based_sat_app/screens/course/courses.dart';
 import 'package:llm_based_sat_app/screens/score/score_page.dart'; // Import the ScoresPage
@@ -100,13 +101,11 @@ class HomePage extends StatelessWidget {
           return InkWell(
             onTap: () {
               Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ScorePage(
-                          onItemTapped: (int) {},
-                          selectedIndex: 0,
-                        )),
-              );
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MainScreen(
+                            initialIndex: 3,
+                          )));
             },
             child: Card(
               color: AppColours.brandBlueMinusThree,
@@ -185,14 +184,11 @@ class HomePage extends StatelessWidget {
       child: InkWell(
         onTap: () {
           Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Courses(
-                onItemTapped: onItemTapped,
-                selectedIndex: selectedIndex,
-              ),
-            ),
-          );
+              context,
+              MaterialPageRoute(
+                  builder: (context) => MainScreen(
+                        initialIndex: 4,
+                      )));
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -387,6 +383,8 @@ class HomePage extends StatelessWidget {
 
     if (storedDate == todayDate) {
       // Load tasks from SharedPreferences if they are already set for today
+      // Tasks will be saved in the format [{"task": "Course_Exercise", "completed": false}]
+      // Example  [{"task": "Self-Attachment_A", "completed": false}]
       String? storedTasks = prefs.getString('tasks');
       if (storedTasks != "") {
         print("Tasks loaded from SharedPreferences");
@@ -422,49 +420,46 @@ class HomePage extends StatelessWidget {
 
         if (currentChapter == null || currentExercise == null) continue;
 
-        // Get the last exercise of the current chapter
-        String? lastExercise =
-            await getLastExerciseFromChapter(course, currentChapter);
-        print("last exercise from chapter is $lastExercise");
-        if (lastExercise == null) continue;
+        // Get all incompleted exercises in the latest chapter
+        List<String> incompletedExercises =
+            await getIncompleteExercisesInLatestChapter(uid, course);
 
-        // Get the last chapter of this course dynamically
-        String? lastChapter = await getLastChapter(course);
-        print("last chapter from course is $lastChapter");
-        if (lastChapter == null) continue;
+        if (incompletedExercises.isEmpty) {
+          // Get the last chapter of this course dynamically
+          String? lastChapter = await getLastChapter(course);
+          print("last chapter from course is $lastChapter");
+          if (lastChapter == null) continue;
 
-        // Check if the user has completed the last exercise of the last chapter
-        if (currentChapter == lastChapter && currentExercise == lastExercise) {
-          // Skip this course entirely as the user has completed it.
-          continue;
-        }
+          // Check if the latest chapter is the last chapter of the course
+          if (currentChapter == lastChapter) {
+            // Skip this course entirely as the user has completed it.
+            continue;
+          } else {
+            // Determine the next chapter by incrementing the current chapter number
+            int currentChapterNumber =
+                int.parse(currentChapter.split(' ').last);
+            String nextChapter = 'Chapter ${currentChapterNumber + 1}';
 
-        if (currentExercise == lastExercise) {
-          // Determine the next chapter by incrementing the current chapter number
-          int currentChapterNumber = int.parse(currentChapter.split(' ').last);
-          String nextChapter = 'Chapter ${currentChapterNumber + 1}';
+            // Get all exercises of the next chapter
+            List<String> nextChapterExercises =
+                await getAllExercisesInChapter(course, nextChapter);
+            if (nextChapterExercises.isEmpty) continue;
 
-          // Get the last exercise of the next chapter
-          String? lastExerciseOfNextChapter =
-              await getLastExerciseFromChapter(course, nextChapter);
-          if (lastExerciseOfNextChapter == null) continue;
-
-          // Recommend all exercises between the current exercise and the last exercise of the next chapter
-          for (int i = currentExercise.codeUnitAt(0) + 1;
-              i <= lastExerciseOfNextChapter.codeUnitAt(0);
-              i++) {
-            String nextExercise = String.fromCharCode(i);
-            tasks.add({"task": "${course}_$nextExercise", "completed": false});
-            print("Added task: ${course}_$nextExercise");
+            // Recommend all exercises in the next chapter
+            for (String exercise in nextChapterExercises) {
+              // Add the task in the format Course_Exercise
+              tasks.add({"task": "${course}_${exercise.split('_').last}", "completed": false});
+              print("Added task: ${course}_${exercise.split('_').last}");
+            }
           }
         } else {
-          // Add the next exercises in the current chapter
-          for (int i = currentExercise.codeUnitAt(0) + 1;
-              i <= lastExercise.codeUnitAt(0);
-              i++) {
-            String nextExercise = String.fromCharCode(i);
-            tasks.add({"task": "${course}_$nextExercise", "completed": false});
-            print("Added task: ${course}_$nextExercise");
+          // Add all incompleted exercises in the current chapter
+          for (String exercise in incompletedExercises) {
+            tasks.add({
+              "task": "${course}_${exercise.split("_").last}",
+              "completed": false
+            });
+            print("Added task: ${course}_${exercise.split('_').last}");
           }
         }
       }
