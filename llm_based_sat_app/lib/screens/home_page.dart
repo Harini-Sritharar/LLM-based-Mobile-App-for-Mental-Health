@@ -88,6 +88,12 @@ class HomePage extends StatelessWidget {
   }
 
   /// Builds the score card section which displays the user's overall score.
+  ///
+  /// This method returns a [FutureBuilder] that fetches the user's overall score
+  /// and displays it in a card. If the score is not yet available, a loading
+  /// indicator is shown. If there is an error, an error message is displayed.
+  ///
+  /// [context] - The build context.
   Widget _buildScoreCard(BuildContext context) {
     return FutureBuilder<double>(
       future: getOverallScore(), // Fetch the overall score
@@ -139,6 +145,12 @@ class HomePage extends StatelessWidget {
   }
 
   /// Builds the tasks card section which displays the tasks for the day.
+  ///
+  /// This method returns a [FutureBuilder] that fetches the tasks for the day
+  /// and displays them in a card. If the tasks are not yet available, a loading
+  /// indicator is shown. If there is an error, an error message is displayed.
+  ///
+  /// [uid] - The user ID.
   Widget _buildTasksCard(String uid) {
     return FutureBuilder<List<Map<String, dynamic>>>(
       future: getTasks(uid),
@@ -217,6 +229,14 @@ class HomePage extends StatelessWidget {
   }
 
   /// Builds a single task item with a task name and completion status.
+  ///
+  /// This method returns a [Padding] widget containing a row with the task name
+  /// and a checkbox indicating the completion status. When the task is tapped,
+  /// the user is navigated to the corresponding screen.
+  ///
+  /// [context] - The build context.
+  /// [task] - The task name.
+  /// [completed] - The completion status of the task.
   Widget _buildTaskItem(BuildContext context, String task, bool completed) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -254,6 +274,11 @@ class HomePage extends StatelessWidget {
   }
 
   /// Builds the courses section which displays the user's courses.
+  ///
+  /// This method returns a [Column] widget containing the user's courses.
+  /// If there are no courses available, a message is displayed.
+  ///
+  /// [uid] - The user ID.
   Widget _buildCoursesSection(String uid) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -292,6 +317,10 @@ class HomePage extends StatelessWidget {
   }
 
   /// Builds the daily quote section which displays a motivational quote.
+  ///
+  /// This method returns a [FutureBuilder] that fetches the daily quote and
+  /// displays it in a card. If the quote is not yet available, a loading
+  /// indicator is shown. If there is an error, a default quote is displayed.
   Widget _buildDailyQuote() {
     return FutureBuilder<Map<String, dynamic>>(
       future: fetchDailyQuote(),
@@ -388,6 +417,10 @@ class HomePage extends StatelessWidget {
   }
 
   /// Fetches the daily quote from a remote API or from local storage if already fetched.
+  ///
+  /// This method returns a [Future] that resolves to a map containing the daily quote
+  /// and its author. If the quote is already stored in local storage for the current day,
+  /// it is returned from there. Otherwise, it is fetched from a remote API.
   Future<Map<String, dynamic>> fetchDailyQuote() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? storedQuote = prefs.getString('dailyQuote');
@@ -415,6 +448,14 @@ class HomePage extends StatelessWidget {
     }
   }
 
+  /// Fetches the tasks for the day based on the user's progress.
+  ///
+  /// This method returns a [Future] that resolves to a list of tasks for the day.
+  /// If the tasks are already stored in local storage for the current day, they are
+  /// returned from there. Otherwise, they are fetched based on the user's progress
+  /// in their courses.
+  ///
+  /// [uid] - The user ID.
   Future<List<Map<String, dynamic>>> getTasks(String uid) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? storedDate = prefs.getString('tasksDate');
@@ -517,7 +558,7 @@ class HomePage extends StatelessWidget {
     return tasks;
   }
 
-  /// Converts a task string from the format Course_Exercise to 'Course Exercise X'.
+  /// Converts a task string from the format Course_Exercise to 'Course Exercise X' In order to be displayed as a Task Item.
   String formatTask(String task) {
     List<String> parts = task.split('_');
     if (parts.length == 2) {
