@@ -33,6 +33,7 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
     bool personalInfoComplete = await isPersonalInfoComplete();
     bool contactDetailsComplete = await isContactDetailsComplete();
     bool profilePictureComplete = await isProfilePictureComplete();
+    if (!mounted) return;
 
     setState(() {
       _isPersonalInfoComplete = personalInfoComplete;

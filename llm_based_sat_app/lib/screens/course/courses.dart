@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/utils/user_provider.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
@@ -8,7 +9,7 @@ import 'courses_helper.dart';
 Parameters:
 - [onItemTapped]: Callback function triggered when a bottom navigation item is tapped.
 - [selectedIndex]: The index of the currently selected navigation item. */
-class Courses extends StatelessWidget {
+class Courses extends StatefulWidget {
   final Function(int) onItemTapped;
   final int selectedIndex;
 
@@ -19,15 +20,33 @@ class Courses extends StatelessWidget {
   });
 
   @override
+  _CoursesState createState() => _CoursesState();
+}
+
+class _CoursesState extends State<Courses> {
+  late UserProvider userProvider;
+  late String uid;
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Access Provider here
+    userProvider = Provider.of<UserProvider>(context);
+    uid = userProvider.getUid();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    UserProvider userProvider = Provider.of<UserProvider>(context);
-    String uid = userProvider.getUid();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
         title: "Courses",
-        onItemTapped: onItemTapped,
-        selectedIndex: selectedIndex,
+        onItemTapped: widget.onItemTapped,
+        selectedIndex: widget.selectedIndex,
         backButton: false,
       ),
       body: Padding(
@@ -42,8 +61,8 @@ class Courses extends StatelessWidget {
             const SizedBox(height: 16),
             Expanded(
               child: FutureBuilder<List<Widget>>(
-                future:
-                    generateCourseCards(onItemTapped, selectedIndex, uid),
+                future: generateCourseCards(
+                    widget.onItemTapped, widget.selectedIndex, uid),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     // Show a loading indicator while waiting for data
