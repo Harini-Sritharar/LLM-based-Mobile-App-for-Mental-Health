@@ -43,6 +43,7 @@ dependencies:
   http: ^1.2.2
   webview_flutter: ^4.10.0
   firebase_app_check: ^0.3.2+4
+  flutter_dotenv: ^5.2.1
 
 dev_dependencies:
   flutter_test:
@@ -88,6 +89,8 @@ flutter:
     - assets/images/humour.png
     - assets/images/nature.png
     - assets/images/Logo.png
+
+    - .env
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
