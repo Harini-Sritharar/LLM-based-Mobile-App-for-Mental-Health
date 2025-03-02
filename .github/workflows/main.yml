@@ -91,6 +91,7 @@ jobs:
     runs-on: macos-latest
     env:
       FLUTTER_VERSION: 3.27.2
+      IOS_DEPLOYMENT_TARGET: "13.0"  # Higher iOS target for Firestore
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -123,7 +124,7 @@ jobs:
         run: |
           rm -rf Pods Podfile.lock
         working-directory: llm_based_sat_app/ios
-        
+
       # Install CocoaPods
       - name: Install CocoaPods
         run: |
@@ -131,33 +132,53 @@ jobs:
           pod repo update
         working-directory: llm_based_sat_app/ios
         
-      # Fix Firebase version conflicts
-      - name: Fix Firebase Versions
+      # Update Podfile with correct iOS deployment target
+      - name: Update iOS Deployment Target in Podfile
         run: |
-          echo "Updating Firebase versions in Podfile"
-          if grep -q "firebase_core" ../pubspec.yaml; then
-            echo "platform :ios, '12.0'" > Podfile.new
+          # Create new Podfile with higher deployment target
+          echo "platform :ios, '${{ env.IOS_DEPLOYMENT_TARGET }}'" > Podfile.new
+          
+          # Get the rest of the Podfile (skipping any existing platform line)
+          grep -v "platform :ios" Podfile >> Podfile.new
+          
+          # Ensure post_install hook exists to set deployment target
+          if ! grep -q "post_install" Podfile.new; then
             echo "" >> Podfile.new
-            cat Podfile | grep -v "platform" >> Podfile.new
-            mv Podfile.new Podfile
-            
-            # Add post_install hook if not present
-            if ! grep -q "post_install" Podfile; then
-              echo "" >> Podfile
-              echo "post_install do |installer|" >> Podfile
-              echo "  installer.pods_project.targets.each do |target|" >> Podfile
-              echo "    target.build_configurations.each do |config|" >> Podfile
-              echo "      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'" >> Podfile
-              echo "    end" >> Podfile
-              echo "  end" >> Podfile
-              echo "end" >> Podfile
-            fi
+            echo "post_install do |installer|" >> Podfile.new
+            echo "  installer.pods_project.targets.each do |target|" >> Podfile.new
+            echo "    target.build_configurations.each do |config|" >> Podfile.new
+            echo "      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '${{ env.IOS_DEPLOYMENT_TARGET }}'" >> Podfile.new
+            echo "    end" >> Podfile.new
+            echo "  end" >> Podfile.new
+            echo "end" >> Podfile.new
           fi
+          
+          # Replace original Podfile
+          mv Podfile.new Podfile
+          
+          # Display modified Podfile for debugging
+          echo "=== Modified Podfile ==="
+          cat Podfile
         working-directory: llm_based_sat_app/ios
         
-      # Install iOS Dependencies with no cache due to Firebase issues
+      # Install iOS Dependencies 
       - name: Install iOS Dependencies
         run: pod install --repo-update
+        working-directory: llm_based_sat_app/ios
+
+      # Update project.pbxproj with correct deployment target
+      - name: Update iOS Deployment Target in Xcode project
+        run: |
+          # Find the project.pbxproj file
+          PBXPROJ=$(find . -name "*.xcodeproj" -type d -maxdepth 1 | head -1)/project.pbxproj
+          
+          if [ -f "$PBXPROJ" ]; then
+            echo "Updating deployment target in $PBXPROJ"
+            # Replace IPHONEOS_DEPLOYMENT_TARGET values
+            sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = [0-9]*\.[0-9]*/IPHONEOS_DEPLOYMENT_TARGET = ${{ env.IOS_DEPLOYMENT_TARGET }}/g' "$PBXPROJ"
+          else
+            echo "Warning: Could not find project.pbxproj file"
+          fi
         working-directory: llm_based_sat_app/ios
 
       # Build iOS
