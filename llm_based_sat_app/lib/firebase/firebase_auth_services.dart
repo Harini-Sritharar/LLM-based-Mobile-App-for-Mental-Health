@@ -212,4 +212,9 @@ class FirebaseAuthService {
     final snackBar = SnackBar(content: Text(message));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
+
+// If we want the reset password link to open up inside the app, then we'll have to add dynamic links; the current implementation does not do that
+  Future<void> resetPassword(String email) async {
+      await _auth.sendPasswordResetEmail(email: email);      
+  }
 }

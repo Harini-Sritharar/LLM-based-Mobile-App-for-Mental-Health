@@ -39,6 +39,7 @@ class _FirebaseVideoPlayerState extends State<FirebaseVideoPlayer> {
   }
 
   Future<void> _initializeVideo() async {
+    if (!mounted) return;
     // Initialize the video controller with the provided video URL
     _controller = VideoPlayerController.networkUrl(Uri.parse(
         'https://firebasestorage.googleapis.com/v0/b/llm-based-sat-app.firebasestorage.app/o/introductory_videos%2F${widget.course.id}.mp4?alt=media&token=ab6614f3-d0d9-4d4e-a365-e96565039b5e'))

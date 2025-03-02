@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 import 'package:llm_based_sat_app/firebase/firebase_helpers.dart';
 import 'package:llm_based_sat_app/services/stripe_service.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
+import 'package:llm_based_sat_app/utils/consts.dart';
 import '../../widgets/main_layout.dart';
 import '../../widgets/custom_app_bar.dart';
 
@@ -36,98 +39,142 @@ class _ManagePlanPageState extends State<ManagePlanPage> {
     User? user = FirebaseAuth.instance.currentUser;
     if (user == null) return;
 
-    String? tier = await getTier(user.uid);
-    DateTime? expiryDate = tier == "monthly" || tier == "yearly"
-        ? await getTierExpiry(user.uid)
-        : null; // Don't fetch expiry for free tier
+    try {
+      // Get the user document directly
+      final userDoc = await FirebaseFirestore.instance.collection("Profile").doc(user.uid).get();
+      
+      if (userDoc.exists) {
+        final userData = userDoc.data() as Map<String, dynamic>;
+        final tier = userData['tier'] as String? ?? 'free';
+        
+        // Get subscription renewal date directly from Firestore
+        DateTime? expiryDate;
+        if ((tier == 'monthly' || tier == 'yearly') && 
+            userData.containsKey('subscriptionRenewalDate')) {
+          final renewalTimestamp = userData['subscriptionRenewalDate'] as Timestamp?;
+          expiryDate = renewalTimestamp?.toDate();
+        }
+        
+        setState(() {
+          _currentTier = tier;
+          _expiryDate = expiryDate;
+        });
+      }
+    } catch (e) {
+      print("Error fetching user subscription data: $e");
+    }
+  }
 
-    setState(() {
-      _currentTier = tier;
-      _expiryDate = expiryDate;
-    });
+  String _getButtonText() {
+    final selectedTier = _currentPage == 0 ? "free" : _currentPage == 1 ? "monthly" : "yearly";
+    
+    if (selectedTier == _currentTier) {
+      return "Current Plan";
+    }
+    
+    if (selectedTier == "free") {
+      return "Downgrade to Free";
+    } else if (selectedTier == "monthly") {
+      return _currentTier == "free" ? "Subscribe to Monthly" : "Downgrade to Monthly";
+    } else { // yearly
+      return _currentTier == "free" ? "Subscribe to Yearly" : "Switch to Yearly";
+    }
+  }
+
+  bool _isCurrentPlan() {
+    final selectedTier = _currentPage == 0 ? "free" : _currentPage == 1 ? "monthly" : "yearly";
+    return selectedTier == _currentTier;
   }
 
   @override
   Widget build(BuildContext context) {
     return MainLayout(
       selectedIndex: widget.selectedIndex,
-      body: Container(
-        color: AppColours.backgroundColor,
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      body: Scaffold(
+        appBar: CustomAppBar(
+          title: "Subscription",
+          onItemTapped: widget.onItemTapped,
+          selectedIndex: widget.selectedIndex,
+        ),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CustomAppBar(
-              title: "Subscription",
-              onItemTapped: widget.onItemTapped,
-              selectedIndex: widget.selectedIndex,
-            ),
-            const SizedBox(height: 20),
             Expanded(
               child: PageView(
                 controller: _pageController,
-                onPageChanged: (index) {
+                onPageChanged: (int page) {
                   setState(() {
-                    _currentPage = index;
+                    _currentPage = page;
                   });
                 },
-                scrollDirection: Axis.horizontal,
                 children: [
-                  _buildPlanCard(
-                    title: "Free Tier",
-                    price: "£0/month",
-                    benefits: [
-                      "Basic access to all core features without any cost.",
-                      "Access to core courses.",
-                      "Community support through forums and help sections.",
-                    ],
-                    color: Colors.grey.shade200,
-                    tierName: "free",
-                  ),
-                  _buildPlanCard(
-                    title: "Monthly Plan",
-                    price: "£10.00/month",
-                    benefits: [
-                      "Unlimited access to all courses with no restrictions.",
-                      "Priority support with faster response times.",
-                      "Exclusive content and early feature releases for subscribers.",
-                    ],
-                    color: Colors.blue.shade100,
-                    showButton:
-                        _currentTier != "monthly" && _currentTier != "yearly",
-                    tierName: "monthly",
-                  ),
-                  _buildPlanCard(
-                    title: "Yearly Plan",
-                    price: "£100.00/year",
-                    benefits: [
-                      "All benefits from the monthly plan at a discounted rate.",
-                      "Even more storage for long-term users.",
-                      "Early access to new and experimental features.",
-                      "Premium support with dedicated assistance.",
-                    ],
-                    color: Color(0xFF91a0f0),
-                    showButton:
-                        _currentTier != "monthly" && _currentTier != "yearly",
-                    tierName: "yearly",
-                  ),
+                  _buildPlanCard(tierName: "free"),
+                  _buildPlanCard(tierName: "monthly"),
+                  _buildPlanCard(tierName: "yearly"),
                 ],
               ),
             ),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(3, (index) {
-                return Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                  width: _currentPage == index ? 12.0 : 8.0,
-                  height: _currentPage == index ? 12.0 : 8.0,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: _currentPage == index ? Colors.blue : Colors.grey,
-                  ),
-                );
-              }),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  for (int i = 0; i < 3; i++)
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 4.0),
+                      width: 10,
+                      height: 10,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: _currentPage == i ? AppColours.brandBlueMain : Colors.grey,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 24.0),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColours.brandBlueMain,
+                  foregroundColor: Colors.white,
+                  minimumSize: Size(double.infinity, 50),
+                ),
+                onPressed: _isCurrentPlan() ? null : () async {
+                  User? user = FirebaseAuth.instance.currentUser;
+                  if (user == null) return;
+                  
+                  // Determine what action to take based on selected plan and current tier
+                  final selectedTier = _currentPage == 0 ? "free" : _currentPage == 1 ? "monthly" : "yearly";
+                  
+                  if (selectedTier == _currentTier) {
+                    // No change needed
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("You are already on the $selectedTier plan.")),
+                    );
+                    return;
+                  }
+                  
+                  // For free plan, cancel subscription
+                  if (selectedTier == "free") {
+                    await StripeService.instance.cancelSubscription(user.uid);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Your subscription will be canceled at the end of your billing period.")),
+                    );
+                  } else {
+                    // For paid plans, start Stripe checkout
+                    final priceId = selectedTier == "monthly" ? stripeMonthlyPriceId : stripeYearlyPriceId;
+                    await StripeService.instance.createSubscription(priceId);
+                  }
+                  
+                  // Refresh tier info
+                  await _fetchUserTier();
+                },
+                child: Text(
+                  _getButtonText(),
+                  style: TextStyle(fontSize: 18),
+                ),
+              ),
             ),
           ],
         ),
@@ -135,95 +182,113 @@ class _ManagePlanPageState extends State<ManagePlanPage> {
     );
   }
 
-  Widget _buildPlanCard({
-    required String title,
-    required String price,
-    required List<String> benefits,
-    required Color color,
-    bool showButton = false,
-    required String tierName,
-  }) {
-    bool isActiveTier = _currentTier == tierName;
-    bool showExpiry = isActiveTier &&
-        (tierName == "monthly" || tierName == "yearly") &&
-        _expiryDate != null;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Card(
-        color: color,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16.0),
-          side: isActiveTier
-              ? const BorderSide(color: Colors.orange, width: 3)
-              : BorderSide.none,
+  Widget _buildPlanCard({required String tierName}) {
+    String title;
+    String price;
+    List<String> benefits;
+    bool showExpiry = false;
+    bool isCurrentPlan = _currentTier == tierName;
+    
+    switch (tierName) {
+      case "monthly":
+        title = "Monthly Premium";
+        price = "£10.00/month";
+        benefits = [
+          "Unlimited conversations",
+          "Advanced mental health tracking",
+          "Personalized recommendations",
+          "Priority support"
+        ];
+        showExpiry = isCurrentPlan;
+        break;
+      case "yearly":
+        title = "Yearly Premium";
+        price = "£100.00/year";
+        benefits = [
+          "All monthly features",
+          "Save 17% compared to monthly",
+          "Exclusive yearly content",
+          "Premium analytics"
+        ];
+        showExpiry = isCurrentPlan;
+        break;
+      case "free":
+      default:
+        title = "Basic Plan";
+        price = "Free";
+        benefits = [
+          "Limited conversations per day",
+          "Basic mental health tracking",
+          "Standard features"
+        ];
+        break;
+    }
+    
+    return Card(
+      elevation: 5,
+      margin: EdgeInsets.all(20),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+        side: BorderSide(
+          color: isCurrentPlan ? AppColours.brandBlueMain : Colors.transparent,
+          width: 2,
         ),
-        elevation: 6,
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            if (isCurrentPlan)
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: AppColours.brandBlueMain,
+                  borderRadius: BorderRadius.circular(20),
+                ),
                 child: Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 22,
+                  "Current Plan",
+                  style: TextStyle(
+                    color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-              const SizedBox(height: 12),
-              Center(
-                child: Text(
-                  price,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black87,
+            SizedBox(height: 16),
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 8),
+            Text(
+              price,
+              style: TextStyle(
+                fontSize: 20,
+                color: AppColours.brandBlueMain,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 16),
+            for (String benefit in benefits)
+              _buildBenefitItem(benefit),
+            
+            if (showExpiry)
+              Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: Center(
+                  child: Text(
+                    "Renews on: ${_expiryDate != null ? DateFormat('MMM d, yyyy').format(_expiryDate!) : 'Unknown'}",
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.deepOrange),
                   ),
                 ),
               ),
-              const SizedBox(height: 12),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: benefits
-                    .map((benefit) => _buildBenefitItem(benefit))
-                    .toList(),
-              ),
-              if (showExpiry)
-                Padding(
-                  padding: const EdgeInsets.only(top: 16.0),
-                  child: Center(
-                    child: Text(
-                      "Expires on: ${_expiryDate!.toLocal().toString().split(' ')[0]}",
-                      style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red),
-                    ),
-                  ),
-                ),
-              const Spacer(), // Pushes the button to the bottom
-              if (showButton)
-                Padding(
-                  padding: const EdgeInsets.only(top: 16.0),
-                  child: Center(
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        print("Go Premium button pressed for $title");
-                        int amount = tierName == "monthly" ? 10 : 100;
-                        await StripeService.instance.makePayment(amount);
-                        await _fetchUserTier();
-                        setState(() {});
-                      },
-                      child: const Text("Go Premium"),
-                    ),
-                  ),
-                ),
-            ],
-          ),
+          ],
         ),
       ),
     );
@@ -234,12 +299,12 @@ class _ManagePlanPageState extends State<ManagePlanPage> {
       padding: const EdgeInsets.symmetric(vertical: 6.0),
       child: Row(
         children: [
-          const Icon(Icons.check_circle, color: Colors.green, size: 22),
-          const SizedBox(width: 10),
+          Icon(Icons.check_circle, color: AppColours.brandBlueMain, size: 20),
+          SizedBox(width: 12),
           Expanded(
             child: Text(
               benefit,
-              style: const TextStyle(fontSize: 18),
+              style: TextStyle(fontSize: 16),
             ),
           ),
         ],

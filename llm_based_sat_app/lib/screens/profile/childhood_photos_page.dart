@@ -53,19 +53,19 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
   Future<void> _loadStoredPhotos() async {
     DocumentSnapshot snapshot =
         await FirebaseFirestore.instance.collection('Profile').doc(uid).get();
-    if (snapshot.exists) {
-      setState(() {
-        favouritePhotos =
-            List<String>.from(snapshot.get('favouritePhotos') ?? []);
-        nonFavouritePhotos =
-            List<String>.from(snapshot.get('nonfavouritePhotos') ?? []);
-      });
-    }
+    if (!mounted) return;
+    setState(() {
+      favouritePhotos =
+          List<String>.from(snapshot.get('favouritePhotos') ?? []);
+      nonFavouritePhotos =
+          List<String>.from(snapshot.get('nonfavouritePhotos') ?? []);
+    });
   }
 
   Future<void> _pickImage(bool isFavourite) async {
     final XFile? pickedFile =
         await _picker.pickImage(source: ImageSource.gallery);
+    if (!mounted) return;
 
     if (pickedFile != null) {
       setState(() {
@@ -134,6 +134,8 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
         'favouritePhotos': storedFavouritePhotos,
         'nonfavouritePhotos': storedNonFavouritePhotos,
       }, SetOptions(merge: true));
+
+      if (!mounted) return;
 
       setState(() {
         favouritePhotos = storedFavouritePhotos;

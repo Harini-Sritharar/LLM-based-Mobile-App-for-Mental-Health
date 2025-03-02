@@ -157,7 +157,7 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
               const SizedBox(height: 24),
               ProfileStepItem(
                 title: "Childhood Photos",
-                isCompleted: false,
+                isCompleted: _isChildhoodPhotosComplete,
                 onTap: () {
                   // Navigate to Childhood Photos Screen
                   Navigator.push(

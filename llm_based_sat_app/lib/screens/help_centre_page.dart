@@ -35,6 +35,9 @@ class _HelpCentrePageState extends State<HelpCentrePage> {
   // List to store the selected file paths.
   List<String> _selectedFiles = [];
 
+  late UserProvider userProvider;
+  late String uid;
+
   @override
   void dispose() {
     _textController.dispose();
@@ -42,9 +45,16 @@ class _HelpCentrePageState extends State<HelpCentrePage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Access Provider here
+    userProvider = Provider.of<UserProvider>(context, listen: false);
+    uid = userProvider.getUid();
+  }
+
+
+  @override
   Widget build(BuildContext context) {
-    UserProvider userProvider = Provider.of<UserProvider>(context);
-    String uid = userProvider.getUid();
     return MainLayout(
       selectedIndex: widget.selectedIndex,
       body: Padding(
@@ -261,7 +271,7 @@ class _HelpCentrePageState extends State<HelpCentrePage> {
     final result = await FilePicker.platform.pickFiles(
       allowMultiple: true,
     );
-
+    if (!mounted) return;
     if (result != null && result.files.isNotEmpty) {
       setState(() {
         _selectedFiles = result.files.map((file) => file.path!).toList();

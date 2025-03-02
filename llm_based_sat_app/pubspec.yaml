@@ -41,14 +41,22 @@ dependencies:
   video_player: ^2.9.2
   http: ^1.2.2
   webview_flutter: ^4.10.0
+  firebase_app_check: ^0.3.2+4
   image_picker_ios: ^0.8.12+2
   permission_handler: ^11.4.0
   image_picker: ^1.1.2
+  flutter_launcher_icons: ^0.14.3
+  flutter_dotenv: ^5.2.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/logo/logo_transparent.png"
 
 flutter:
   uses-material-design: true
@@ -89,6 +97,8 @@ flutter:
     - assets/images/humour.png
     - assets/images/nature.png
     - assets/images/Logo.png
+
+    - .env
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
