@@ -133,14 +133,6 @@ class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
                   subject: 'Theory',
                   content: getLearning(widget.exercise),
                 ),
-                // TODO
-                // Check if we can remove this LearningTile since can't find step headings anywhere
-                LearningTile(
-                  title: 'Steps',
-                  icon: Icons.list,
-                  subject: 'Steps',
-                  content: getSteps(widget.exercise),
-                ),
               ],
             ),
             const SizedBox(height: 16),
@@ -195,8 +187,6 @@ class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(color: Color(0xFF123659))),
                       child: Text(
-                        // TODO
-                        // What value to put here
                         (widget.exerciseSession + 1).toString(),
                         style: TextStyle(
                             fontSize: 16,
