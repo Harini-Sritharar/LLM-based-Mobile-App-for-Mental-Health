@@ -71,6 +71,7 @@ class _UltimateGoalPageState extends State<UltimateGoalPage> {
   }
 
   Future<void> _fetchUltimateGoal() async {
+    if (!mounted) return;
     if (user == null) {
       print("No user logged in");
       setState(() => _isLoading = false);

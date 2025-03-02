@@ -40,6 +40,7 @@ class _ManagePlanPageState extends State<ManagePlanPage> {
     DateTime? expiryDate = tier == "monthly" || tier == "yearly"
         ? await getTierExpiry(user.uid)
         : null; // Don't fetch expiry for free tier
+    if (!mounted) return;
 
     setState(() {
       _currentTier = tier;
