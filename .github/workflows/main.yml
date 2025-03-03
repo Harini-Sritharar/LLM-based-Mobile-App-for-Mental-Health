@@ -1,5 +1,8 @@
 name: Flutter CI/CD
 on:
+  push:
+    branches:
+      - main # Trigger on pushes directly to the main branch
   pull_request:
     branches:
       - main
@@ -31,6 +34,12 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+
+      # Create .env file from GitHub Secrets
+      - name: Create .env file
+        run: |
+          echo "STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }}" > llm_based_sat_app/.env
+          echo "STRIPE_PUBLISHABLE_KEY=${{ secrets.STRIPE_PUBLISHABLE_KEY }}" >> llm_based_sat_app/.env
 
       # Cache Flutter dependencies
       - name: Cache Flutter dependencies
@@ -86,7 +95,7 @@ jobs:
         with:
           name: android-apk
           path: llm_based_sat_app/build/app/outputs/flutter-apk/app-release.apk
-    if: github.event.pull_request.merged == true  # Only run if the PR is merged
+    # if: github.event.pull_request.merged == true  # Only run if the PR is merged
 
   build_ios:
     name: Build iOS App
@@ -98,6 +107,12 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+
+      # Create .env file from GitHub Secrets
+      - name: Create .env file
+        run: |
+          echo "STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }}" > llm_based_sat_app/.env
+          echo "STRIPE_PUBLISHABLE_KEY=${{ secrets.STRIPE_PUBLISHABLE_KEY }}" >> llm_based_sat_app/.env
 
       # Cache Flutter dependencies
       - name: Cache Flutter dependencies
@@ -195,4 +210,4 @@ jobs:
         with:
           name: ios-ipa
           path: llm_based_sat_app/build/ios/iphoneos/Runner.app
-    if: github.event.pull_request.merged == true  # Only run if the PR is merged
+    # if: github.event.pull_request.merged == true  # Only run if the PR is merged
