@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:country_codes/country_codes.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -30,18 +33,21 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 // Global keys for navigation and scaffold
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
+    GlobalKey<ScaffoldMessengerState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
+  await CountryCodes.init();
+
   // Register background handler before initializing Firebase
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-  
+
   // Load environment variables
   await dotenv.load(fileName: ".env");
 
-  await _setup();  // Ensures Stripe and other initializations
+  await _setup(); // Ensures Stripe and other initializations
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -53,7 +59,7 @@ void main() async {
     badge: true,
     sound: true,
   );
-  
+
   await FirebaseAppCheck.instance.activate(
     androidProvider: AndroidProvider.playIntegrity,
     appleProvider: AppleProvider.deviceCheck,
@@ -97,7 +103,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Navigation',
-      navigatorKey: navigatorKey,  // Global navigator key for navigation
+      navigatorKey: navigatorKey, // Global navigator key for navigation
       scaffoldMessengerKey: scaffoldMessengerKey, // Global scaffold key
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -106,7 +112,8 @@ class _MyAppState extends State<MyApp> {
           backgroundColor: Colors.white,
         ),
       ),
-      home: FCMInitializer(   // DO NOT REMOVE IF YOU WANT TO KEEP NOTIFICATIONS WORKING
+      home: FCMInitializer(
+        // DO NOT REMOVE IF YOU WANT TO KEEP NOTIFICATIONS WORKING
         child: Wrapper(),
       ),
     );
@@ -123,11 +130,73 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 2;
+  bool _isLoading = true;
+  String? _errorMessage;
 
   @override
   void initState() {
     super.initState();
     _selectedIndex = widget.initialIndex;
+    _initializeUserData();
+  }
+
+  Future<void> _initializeUserData() async {
+    try {
+      // Give Firebase Auth time to fully initialize
+      await Future.delayed(Duration(milliseconds: 500));
+      
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        if (mounted) {
+          setState(() {
+            _errorMessage = "Not authenticated";
+            _isLoading = false;
+          });
+        }
+        return;
+      }
+      
+      // Force refresh user token to ensure we have the latest data
+      await user.getIdToken(true);
+      
+      // Fetch user profile data
+      final doc = await FirebaseFirestore.instance
+          .collection('Profile')
+          .doc(user.uid)
+          .get();
+      
+      // Log user data status
+      if (!doc.exists) {
+        print("User document doesn't exist yet for ${user.uid}. Creating profile may be needed.");
+      } else {
+        print("User data loaded successfully for ${user.uid}");
+        
+        // Update UserProvider with the latest user data
+        if (mounted) {
+          final userProvider = Provider.of<UserProvider>(context, listen: false);
+          userProvider.setUid(user.uid);
+          
+          // If there's user data, you might want to load it into your provider
+          if (doc.data() != null) {
+            // Example: userProvider.setUserData(doc.data()!);
+          }
+        }
+      }
+      
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      print("Error initializing user data: $e");
+      if (mounted) {
+        setState(() {
+          _errorMessage = "Error loading data: $e";
+          _isLoading = false;
+        });
+      }
+    }
   }
 
   void _onItemTapped(int index) {
@@ -138,6 +207,62 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(height: 20),
+              Text("Loading your profile...",
+                style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+    
+    if (_errorMessage != null) {
+      return Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.error_outline, size: 48, color: Colors.red),
+              SizedBox(height: 20),
+              Text("Error: $_errorMessage",
+                style: TextStyle(fontSize: 16),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    _isLoading = true;
+                    _errorMessage = null;
+                  });
+                  _initializeUserData();
+                },
+                child: Text("Retry"),
+              ),
+              SizedBox(height: 10),
+              TextButton(
+                onPressed: () async {
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => SignInPage()),
+                    (route) => false,
+                  );
+                },
+                child: Text("Sign Out"),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     final List<Widget> pages = [
       QuestionnaireAssessmentsPage(),
       CalendarPage(onItemTapped: _onItemTapped, selectedIndex: _selectedIndex),

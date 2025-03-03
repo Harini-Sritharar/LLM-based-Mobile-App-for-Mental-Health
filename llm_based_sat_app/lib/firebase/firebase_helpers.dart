@@ -24,11 +24,11 @@ Future<String> getName(String uid) async {
       }
     }
     // Return a default value if the name is null or the document doesn't exist
-    return 'No Name Found';
+    throw 'No Name Found';
   } catch (e) {
     // Handle errors and return a default value
     print('Error fetching user name: $e');
-    return 'Error Fetching Name';
+    throw 'Error Fetching Name';
   }
 }
 
@@ -49,11 +49,11 @@ Future<String> getFirstName(String uid) async {
       }
     }
     // Return a default value if the first name is null or the document doesn't exist
-    return 'No First Name Found';
+    throw 'No First Name Found';
   } catch (e) {
     // Handle errors and return a default value
     print('Error fetching first name: $e');
-    return 'Error Fetching First Name';
+    throw 'Error Fetching First Name';
   }
 }
 
@@ -72,11 +72,11 @@ Future<String> getTier(String uid) async {
       if (tier != null && tier.isNotEmpty) return tier;
     }
     // Return a default value if the name is null or the document doesn't exist
-    return 'free';
+    throw 'No Tier Found';
   } catch (e) {
     // Handle errors and return a default value
     print('Error fetching tier $e');
-    return 'Error Fetching Tier';
+    throw 'Error Fetching Tier';
   }
 }
 
@@ -165,11 +165,11 @@ Future<String> getProfilePictureUrl(String uid) async {
       }
     }
     // Return a default value if the URL is null or the document doesn't exist
-    return 'No Profile Picture Found';
+    throw 'No Profile Picture Found';
   } catch (e) {
     // Handle errors and return a default value
     print('Error fetching profile picture URL: $e');
-    return 'Error Fetching Profile Picture';
+    throw 'Error Fetching Profile Picture';
   }
 }
 
