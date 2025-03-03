@@ -1151,7 +1151,11 @@ PODS:
   - BoringSSL-GRPC/Implementation (0.0.36):
     - BoringSSL-GRPC/Interface (= 0.0.36)
   - BoringSSL-GRPC/Interface (0.0.36)
+<<<<<<< HEAD
+  - cloud_firestore (5.6.2):
+=======
   - cloud_firestore (5.6.1):
+>>>>>>> main
     - Firebase/Firestore (= 11.8.0)
     - firebase_core
     - Flutter
@@ -1203,18 +1207,30 @@ PODS:
   - Firebase/Storage (11.8.0):
     - Firebase/CoreOnly
     - FirebaseStorage (~> 11.8.0)
+<<<<<<< HEAD
+  - firebase_auth (5.4.1):
+=======
   - firebase_auth (5.4.0):
+>>>>>>> main
     - Firebase/Auth (= 11.8.0)
     - firebase_core
     - Flutter
   - firebase_core (3.12.1):
     - Firebase/CoreOnly (= 11.8.0)
     - Flutter
+<<<<<<< HEAD
+  - firebase_messaging (15.2.1):
+    - Firebase/Messaging (= 11.8.0)
+    - firebase_core
+    - Flutter
+  - firebase_storage (12.4.1):
+=======
   - firebase_messaging (15.2.2):
     - Firebase/Messaging (= 11.8.0)
     - firebase_core
     - Flutter
   - firebase_storage (12.4.0):
+>>>>>>> main
     - Firebase/Storage (= 11.8.0)
     - firebase_core
     - Flutter
@@ -1569,15 +1585,26 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   abseil: d121da9ef7e2ff4cab7666e76c5a3e0915ae08c3
   BoringSSL-GRPC: ca6a8e5d04812fce8ffd6437810c2d46f925eaeb
+<<<<<<< HEAD
+  cloud_firestore: c13af1e4486fbc81e6b17c612b29160d08092ee8
+=======
   cloud_firestore: fbc873cc3bc12488c4a7df46a75affeb9beeb8f5
+>>>>>>> main
   DKImagePickerController: 946cec48c7873164274ecc4624d19e3da4c1ef3c
   DKPhotoGallery: b3834fecb755ee09a593d7c9e389d8b5d6deed60
   file_picker: b159e0c068aef54932bb15dc9fd1571818edaf49
   Firebase: d80354ed7f6df5f9aca55e9eb47cc4b634735eaf
+<<<<<<< HEAD
+  firebase_auth: 323fcc85570d92a4378c5a5b0efbad14851e858b
+  firebase_core: ac395f994af4e28f6a38b59e05a88ca57abeb874
+  firebase_messaging: 2d9759eec281fad59aff3a0f9c140ba437c8f928
+  firebase_storage: 6e10bf53a0ddf02136da2b10ec70d1a94edfa038
+=======
   firebase_auth: b18275d58bdf6bb426ec2ffc1772b189474fc74e
   firebase_core: ac395f994af4e28f6a38b59e05a88ca57abeb874
   firebase_messaging: 11cb3411d2e465103a7f8e5119bab5b92bb820a3
   firebase_storage: b746f0fd98c0350047bcc496357a6cc3090061fc
+>>>>>>> main
   FirebaseAppCheckInterop: 9226f7217b43e99dfa0bc9f674ad8108cef89feb
   FirebaseAuth: ad59a1a7b161e75f74c39f70179d2482d40e2737
   FirebaseAuthInterop: 2a26ee1bea6d47df8048683cfa071e7da657798f
