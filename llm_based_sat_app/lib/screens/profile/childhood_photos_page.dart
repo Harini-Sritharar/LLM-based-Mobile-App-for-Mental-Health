@@ -35,18 +35,40 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
   List<String> deletedNonFavouritePhotos = [];
   bool isSaving = false;
   late UserProvider userProvider;
-  late String uid;
+  String uid = '';
 
   @override
   void initState() {
     super.initState();
+    _getUserId();
+  }
+
+  void _getUserId() {
+    // Get UID directly from Firebase Auth
+    final User? currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      setState(() {
+        uid = currentUser.uid;
+      });
+      print("Firebase Auth UID: $uid");
+    } else {
+      print("No user is signed in with Firebase Auth");
+    }
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     userProvider = Provider.of<UserProvider>(context);
-    uid = userProvider.getUid();
+    if (uid.isEmpty) {
+      String providerUid = userProvider.getUid();
+      if (providerUid.isNotEmpty) {
+        setState(() {
+          uid = providerUid;
+        });
+        print("Provider UID: $uid");
+      }
+    }
     _loadStoredPhotos();
   }
 
@@ -100,6 +122,24 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
     setState(() => isSaving = true);
 
     try {
+      // Double-check UID at save time - might have changed since page loaded
+      userProvider = Provider.of<UserProvider>(context, listen: false);
+      String currentUid = userProvider.getUid();
+
+      print("Original uid: '$uid', Current uid: '$currentUid'"); // Debug info
+
+      // Fallback to Firebase Auth if Provider fails
+      if (currentUid.isEmpty) {
+        final User? firebaseUser = FirebaseAuth.instance.currentUser;
+        if (firebaseUser == null) {
+          throw Exception("User not authenticated");
+        }
+        currentUid = firebaseUser.uid;
+        print("Using Firebase Auth UID: $currentUid");
+      } else {
+        print("Using Provider UID: $currentUid");
+      }
+
       DocumentReference userDoc =
           FirebaseFirestore.instance.collection('Profile').doc(uid);
 
