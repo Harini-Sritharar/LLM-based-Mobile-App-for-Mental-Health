@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 
+/* A widget that represents a slider-based question in an exercise assessment. Allows the user to select a value between 1 and 5 and updates the parent widget with the selected value. */
 class ExerciseSliderQuestionWidget extends StatefulWidget {
   final String question;
   final double initialValue;
+  final ValueChanged<double> onChanged; // Callback function
 
   const ExerciseSliderQuestionWidget({
     Key? key,
     required this.question,
-    this.initialValue = 3, 
+    this.initialValue = 3,
+    required this.onChanged,
   }) : super(key: key);
 
   @override
@@ -16,7 +19,7 @@ class ExerciseSliderQuestionWidget extends StatefulWidget {
 }
 
 class _ExerciseSliderQuestionWidgetState extends State<ExerciseSliderQuestionWidget> {
-  double _currentValue = 3;
+  late double _currentValue;
 
   @override
   void initState() {
@@ -45,13 +48,14 @@ class _ExerciseSliderQuestionWidgetState extends State<ExerciseSliderQuestionWid
                 min: 1,
                 max: 5,
                 divisions: 4,
-                activeColor: AppColours.brandBlueMain, // Blue slider color
+                activeColor: AppColours.brandBlueMain,
                 inactiveColor: Colors.grey[300],
                 label: _currentValue.round().toString(),
                 onChanged: (double value) {
                   setState(() {
                     _currentValue = value;
                   });
+                  widget.onChanged(value); // Notify parent
                 },
               ),
             ),
@@ -59,7 +63,7 @@ class _ExerciseSliderQuestionWidgetState extends State<ExerciseSliderQuestionWid
               _currentValue.round().toString(),
               style: TextStyle(
                 fontSize: 16,
-                color: AppColours.brandBlueMain, // Blue text color
+                color: AppColours.brandBlueMain,
                 fontWeight: FontWeight.bold,
               ),
             ),

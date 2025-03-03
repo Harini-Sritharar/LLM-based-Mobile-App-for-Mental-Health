@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
-import 'package:permission_handler/permission_handler.dart';
-
 class ImagePickerWidget extends StatefulWidget {
   final void Function(File? image)? onImagePicked;
 
@@ -18,28 +16,19 @@ class _ImagePickerState extends State<ImagePickerWidget> {
   final ImagePicker _picker = ImagePicker();
 
   Future<void> _pickImage() async {
-    var status = await Permission.photos.request();
-
-    if (status.isGranted) {
-      try {
-        final XFile? pickedFile = await _picker.pickImage(
-          source: ImageSource.gallery,
-          requestFullMetadata: false, // Fixes potential crash on iOS
-        );
-
-        if (pickedFile != null) {
-          setState(() {
-            _selectedImage = File(pickedFile.path);
-          });
-          widget.onImagePicked?.call(_selectedImage);
+    try {
+      final XFile? pickedFile =
+          await _picker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        setState(() {
+          _selectedImage = File(pickedFile.path);
+        });
+        if (widget.onImagePicked != null) {
+          widget.onImagePicked!(_selectedImage);
         }
-      } catch (e) {
-        print('Error picking image: $e');
       }
-    } else if (status.isDenied) {
-      print('Photo permission denied.');
-    } else if (status.isPermanentlyDenied) {
-      openAppSettings(); // Opens settings so the user can enable manually
+    } catch (e) {
+      print('Error picking image: $e');
     }
   }
 

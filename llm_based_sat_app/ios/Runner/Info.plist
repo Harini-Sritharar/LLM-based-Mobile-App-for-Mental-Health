@@ -28,20 +28,14 @@
 	<true/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-
-	<key>NSPhotoLibraryUsageDescription</key>
-    <string>We need access to your photo library to upload photos.</string>
 	<key>NSCameraUsageDescription</key>
-    <string>We need access to your camera to take photos.</string>
-    <key>NSMicrophoneUsageDescription</key>
-    <string>We need access to your microphone to record videos.</string>
+	<string>We need access to your camera to take photos.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-    <string>We need permission to save selected pictures to your library.</string>
-
+	<string>We need access to save photos to your library.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need access to your photo library to upload photos.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
-
-
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
@@ -74,6 +68,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-
 </dict>
 </plist>
