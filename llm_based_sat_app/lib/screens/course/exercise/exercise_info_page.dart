@@ -43,12 +43,6 @@ class ExerciseInfoPage extends StatefulWidget {
 }
 
 class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
-  List<bool> checkboxStates = [
-    false,
-    false,
-    false
-  ]; // Initial states for checkboxes
-
   late UserProvider userProvider;
   late String uid;
   @override
@@ -58,10 +52,10 @@ class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
     super.dispose();
   }
 
-  // Returns true if all Checkboxes are checked
-  bool allCheckboxesChecked() {
-    return checkboxStates.every((element) => element);
-  }
+  final Set<String> checkedTasks = {};
+
+  bool get allRequiredChecked =>
+      checkedTasks.length == widget.exercise.preExerciseTasks.length;
 
   @override
   void didChangeDependencies() {
@@ -108,39 +102,20 @@ class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
             const SizedBox(height: 8),
             Column(
               children: [
-                CheckboxTile(
-                  title:
-                      'Go to a quiet place. If not possible, wear headphones.',
-                  icon: Icons.headphones,
-                  value: checkboxStates[0],
-                  onChanged: (bool? newValue) {
-                    setState(() {
-                      checkboxStates[0] = newValue ?? false;
-                    });
-                  },
-                ),
-                CheckboxTile(
-                  title:
-                      'Set your childhood photo as the background on your phone.',
-                  icon: Icons.photo,
-                  value: checkboxStates[1],
-                  onChanged: (bool? newValue) {
-                    setState(() {
-                      checkboxStates[1] = newValue ?? false;
-                    });
-                  },
-                ),
-                CheckboxTile(
-                  title:
-                      'Plan a visit to a natural area (park, river, mountain, sea..).',
-                  icon: Icons.calendar_today,
-                  value: checkboxStates[2],
-                  onChanged: (bool? newValue) {
-                    setState(() {
-                      checkboxStates[2] = newValue ?? false;
-                    });
-                  },
-                ),
+                ...widget.exercise.preExerciseTasks.map((item) => CheckboxTile(
+                      title: item,
+                      icon: Icons.push_pin,
+                      value: checkedTasks.contains(item),
+                      onChanged: (bool? newValue) {
+                        setState(() {
+                          if (newValue == true) {
+                            checkedTasks.add(item);
+                          } else {
+                            checkedTasks.remove(item);
+                          }
+                        });
+                      },
+                    ))
               ],
             ),
             const SizedBox(height: 16),
@@ -165,14 +140,6 @@ class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
                   icon: Icons.article,
                   subject: 'Theory',
                   content: getLearning(widget.exercise),
-                ),
-                // TODO
-                // Check if we can remove this LearningTile since can't find step headings anywhere
-                LearningTile(
-                  title: 'Steps',
-                  icon: Icons.list,
-                  subject: 'Steps',
-                  content: getSteps(widget.exercise),
                 ),
               ],
             ),
@@ -228,8 +195,6 @@ class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(color: Color(0xFF123659))),
                       child: Text(
-                        // TODO
-                        // What value to put here
                         (widget.exerciseSession + 1).toString(),
                         style: TextStyle(
                             fontSize: 16,
@@ -242,7 +207,7 @@ class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
               ],
             ),
             const SizedBox(height: 16),
-            if (allCheckboxesChecked()) // Show button only when all Checkboxes are checked
+            if (allRequiredChecked) // Show button only when all Checkboxes are checked
               Center(
                 child: CustomButton(
                   buttonText: 'Start Exercise',

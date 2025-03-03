@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/data/cache_manager.dart';
 import 'package:llm_based_sat_app/firebase/firebase_courses.dart';
 import 'package:llm_based_sat_app/main.dart';
-import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 import 'package:llm_based_sat_app/utils/user_provider.dart';
 import 'package:llm_based_sat_app/widgets/custom_button.dart';
@@ -101,26 +100,22 @@ class _AssessmentPageState extends State<AssessmentPage> {
             SizedBox(height: 20),
             _buildSectionTitle('Assessment'),
             SizedBox(height: 8),
-            ExerciseSliderQuestionWidget(
-                question:
-                    '(A) Are you feeling better than before practising the exercise?'),
-            ExerciseSliderQuestionWidget(
-                question: '(B) How helpful was this exercise?'),
-            ExerciseSliderQuestionWidget(question: '(C) Rate this exercise.'),
+            _buildRatingsSection(),
             SizedBox(height: 30),
             CustomButton(
               buttonText: 'Back to Course',
               onPress: () {
-                uploadTimeStampAndComment();
+                uploadTimeStampCommentAndRating();
                 String exName =
                     "${widget.course.id}_${getExerciseLetter(widget.exercise.exerciseFinalStep!.id)}";
                 updateTaskCompletion(exName, true);
-                Navigator.push(
+                Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
                         builder: (context) => MainScreen(
                               initialIndex: 4,
-                            )));
+                            )),
+                    (route) => false);
               },
               backgroundColor: AppColours.brandBlueMinusFour,
               textColor: AppColours.brandBlueMain,
@@ -131,6 +126,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
     );
   }
 
+  // Builds a section title widget with bold styling.
   Widget _buildSectionTitle(String title) {
     return Text(
       title,
@@ -138,6 +134,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
     );
   }
 
+  // Creates a comment box where users can provide optional feedback.
   Widget _buildCommentBox() {
     return AnimatedOpacity(
       opacity: 1.0,
@@ -171,6 +168,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
     );
   }
 
+  // Retrieves the exercise number based on its position in the chapter's exercise list.
   getExerciseNumber() {
     int index = 1;
     for (final exercise in widget.chapter.exercises) {
@@ -182,17 +180,58 @@ class _AssessmentPageState extends State<AssessmentPage> {
     return index;
   }
 
-  // Add TimeStamp entry and comment for given exercise and session
-  void uploadTimeStampAndComment() {
-    updateTimeStampAndComment(
-        uid,
-        widget.course.id.trim(),
-        widget.exercise.id.trim(),
-        (getSessions(widget.exercise, widget.course) + 1).toString(),
-        CacheManager.getValue(
-            "${widget.exercise.id}/${getSessions(widget.exercise, widget.course) + 1}/TimeStamp"),
-        Timestamp.now(),
-        _commentController.text);
+  // Builds the ratings section with three slider questions.
+  Widget _buildRatingsSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ExerciseSliderQuestionWidget(
+          question:
+              '(A) Are you feeling better than before practising the exercise?',
+          initialValue: feelingBetterValue,
+          onChanged: (value) {
+            setState(() {
+              feelingBetterValue = value;
+            });
+          },
+        ),
+        ExerciseSliderQuestionWidget(
+          question: '(B) How helpful was this exercise?',
+          initialValue: helpfulnessValue,
+          onChanged: (value) {
+            setState(() {
+              helpfulnessValue = value;
+            });
+          },
+        ),
+        ExerciseSliderQuestionWidget(
+          question: '(C) Rate this exercise.',
+          initialValue: ratingValue,
+          onChanged: (value) {
+            setState(() {
+              ratingValue = value;
+            });
+          },
+        ),
+      ],
+    );
+  }
+
+  // Add TimeStamp entry, comment and ratings for given exercise and session
+  void uploadTimeStampCommentAndRating() {
+    updateTimeStampCommentAndRating(
+      uid,
+      widget.course.id.trim(),
+      widget.exercise.id.trim(),
+      (getSessions(widget.exercise, widget.course) + 1).toString(),
+      CacheManager.getValue(
+          "${widget.exercise.id}/${getSessions(widget.exercise, widget.course) + 1}/TimeStamp"),
+      Timestamp.now(),
+      _commentController.text,
+      feelingBetterValue,
+      helpfulnessValue,
+      ratingValue,
+    );
 
     // Remove cached TimeStamp for current exercise and session
     CacheManager.removeValue(

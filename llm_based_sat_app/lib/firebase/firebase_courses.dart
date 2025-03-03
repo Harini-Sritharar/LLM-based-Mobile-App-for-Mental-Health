@@ -316,14 +316,17 @@ Future<List<Course>> getAllCourses() async {
 }
 
 /* Adds a timestamp entry for a specific user and exercise Id by creating a new entry to the existing collection. */
-Future<void> updateTimeStampAndComment(
+Future<void> updateTimeStampCommentAndRating(
     String uid,
     String courseId,
     String exerciseId,
     String sessionNumber,
     Timestamp startTime,
     Timestamp endTime,
-    String comment) async {
+    String comment,
+    double feelingBetter,
+    double helpfulness,
+    double rating) async {
   try {
     // Reference to the user's course_progress subcollection
     final collection = FirebaseFirestore.instance
@@ -348,6 +351,9 @@ Future<void> updateTimeStampAndComment(
         'startTime': startTime,
         'endTime': endTime,
         'comment': comment,
+        'feelingBetter': feelingBetter,
+        'helpfulness': helpfulness,
+        'rating': rating,
       }, SetOptions(merge: true));
 
       print('Timestamp added successfully');
@@ -366,6 +372,9 @@ Future<void> updateTimeStampAndComment(
         'startTime': startTime,
         'endTime': endTime,
         'comment': comment,
+        'feelingBetter': feelingBetter,
+        'helpfulness': helpfulness,
+        'rating': rating,
       });
 
       print('New course entry created and timestamp added');
@@ -628,5 +637,90 @@ Future<List<String>> getAllExercisesInChapter(String courseId, String chapterId)
   } catch (e) {
     print('Error fetching exercises in chapter $chapterId of course $courseId: $e');
     return [];
+  }
+}
+
+/* Fetches childhood images categorized as "Happy" (Favourite Photos) and "Sad" (Non-Favourite Photos).
+
+The images are categorized into two types:
+- "Happy" → Stored under `favouritePhotos`
+- "Sad" → Stored under `nonfavouritePhotos`
+
+If the document doesn't exist or an error occurs, it returns an empty map. */
+Future<Map<String, List<String>>> getChildhoodImages(String uid) async {
+  try {
+    // Reference to the user's document in Firestore
+    final docSnapshot =
+        await FirebaseFirestore.instance.collection('Profile').doc(uid).get();
+
+    // Check if the document exists
+    if (!docSnapshot.exists) {
+      return {};
+    }
+
+    // Extract data from Firestore document
+    final data = docSnapshot.data();
+    if (data == null) {
+      return {};
+    }
+
+    // Convert to expected format
+    Map<String, List<String>> imagesMap = {
+      "Happy": List<String>.from(data["favouritePhotos"] ?? []),
+      "Sad": List<String>.from(data["nonfavouritePhotos"] ?? []),
+    };
+
+    return imagesMap;
+  } catch (e) {
+    print("Error fetching childhood images: $e");
+    return {};
+  }
+}
+
+Future<void> saveUnfinishedExercise(
+    String uid,
+    String courseId,
+    String exerciseId,
+    Timestamp startTime,
+    Timestamp endTime,
+    String step) async {
+  try {
+    // Reference to the 'unfinished_courses' subcollection for the user
+    final collection = FirebaseFirestore.instance
+        .collection('Profile')
+        .doc(uid)
+        .collection('unfinished_courses');
+
+    // Reference to the specific course document
+    final courseDocRef = collection.doc(courseId);
+
+    // Fetch the document snapshot to check existing entries
+    final courseDocSnapshot = await courseDocRef.get();
+
+    if (!courseDocSnapshot.exists) {
+      // If the course document doesn't exist, create it
+      await courseDocRef.set({});
+    }
+
+    // Reference to the exercise collection inside the course document
+    final exerciseCollection = courseDocRef.collection(exerciseId);
+
+    // Get the current number of entries to determine the next index
+    final existingEntries = await exerciseCollection.get();
+    int nextIndex = existingEntries.docs.length + 1;
+
+    // Reference to the new indexed entry
+    final entryRef = exerciseCollection.doc(nextIndex.toString());
+
+    // Add the unfinished exercise entry
+    await entryRef.set({
+      'startTime': startTime,
+      'endTime': endTime,
+      'stepLeft': step,
+    });
+
+    print('Unfinished exercise entry added successfully');
+  } catch (e) {
+    print('Error updating unfinished exercises: $e');
   }
 }

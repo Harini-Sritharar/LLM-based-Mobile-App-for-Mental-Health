@@ -5,6 +5,7 @@ class Step {
   final String description;
   final String additionalDetails;
   final String footerText;
+  final String imageType; // Value is either "Happy" or "Sad"
 
   Step({
     required this.id,
@@ -13,6 +14,7 @@ class Step {
     required this.description,
     this.additionalDetails = "",
     this.footerText = "",
+    this.imageType = "Happy",
   });
 
   factory Step.fromFirestore(String id, Map<String, dynamic> data) {
@@ -23,6 +25,7 @@ class Step {
       description: data['Description'],
       additionalDetails: data['Additional Details'],
       footerText: data['Footer_text'],
+      imageType: data['Image_Type'],
     );
   }
 }

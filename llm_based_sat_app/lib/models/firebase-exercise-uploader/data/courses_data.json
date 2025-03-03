@@ -1,17 +1,14 @@
 {
     "Self-Attachment": {
         "Aim": "To build a strong and compassionate connection with one's inner child, fostering emotional growth and self-regulation.",
-        "Subscription": "Free",
+        "Subscription": "Paid",
         "Course_type": "Core",
         "Course_title": "Self-attachment",
         "Rating": 4.2,
         "Rating_Count": 7830,
         "Duration": "2 weeks",
         "Image_URL": "assets/images/self_attachment.png",
-        "Prerequisites course tasks": [
-            "SAT introductory lessons",
-            "Select one happy and one unhappy photo (your most favourite to set as default selection for all exercises)"
-        ],
+        "Prerequisites course tasks": [],
         "Chapters": {
             "Chapter 1": {
                 "Aim": "Connecting compassionately with our child",
@@ -52,7 +49,7 @@
     },
     "Attachment Object Course": {
         "Aim": "To transform your favourite childhood photo into a permanent, omnipresent attachment object that supports and comforts you.",
-        "Subscription": "Paid",
+        "Subscription": "Free",
         "Course_type": "Advanced",
         "Course_title": "Nature",
         "Rating": 4.5,
