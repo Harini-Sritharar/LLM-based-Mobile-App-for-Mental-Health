@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/firebase/firebase_profile.dart';
 import 'package:llm_based_sat_app/main.dart';
@@ -32,10 +34,10 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
     });
   }
 
-  void _finishProfile() {
+  Future<void> _finishProfile() async {
     if (!_isPersonalInfoComplete || !_isContactDetailsComplete) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text(
               "Please complete Personal Info and Contact Details before finishing."),
           backgroundColor: Colors.red,
@@ -46,7 +48,7 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
 
     if (!isVerified) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text("Please verify that your information is correct."),
           backgroundColor: Colors.red,
         ),
@@ -54,11 +56,71 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
       return;
     }
 
-    // Navigate to the Main Screen upon finishing profile
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => MainScreen()));
+    // Show loading indicator
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+    );
+    
+    try {
+      // Ensure Firebase Auth is ready
+      final currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser == null) {
+        throw Exception("User not authenticated");
+      }
+      
+      String uid = currentUser.uid;
+      print("Current user UID: $uid");
+      
+      // Mark profile as completed in Firestore
+      await FirebaseFirestore.instance
+          .collection('Profile')
+          .doc(uid)
+          .set({
+            'profileCompleted': true,
+            'lastUpdated': FieldValue.serverTimestamp(),
+          }, SetOptions(merge: true));
+      
+      // Force token refresh to ensure data is consistent
+      await currentUser.getIdToken(true);
+      
+      // Longer delay for Firestore operations to complete and propagate
+      await Future.delayed(const Duration(milliseconds: 1500));
+      
+      // Remove loading indicator
+      if (Navigator.canPop(context)) {
+        Navigator.pop(context);
+      }
+      
+      // Navigate to Main Screen
+      Navigator.pushAndRemoveUntil(
+        context, 
+        MaterialPageRoute(builder: (context) => MainScreen()),
+        (route) => false
+      );
+    } catch (e) {
+      // Remove loading indicator
+      if (Navigator.canPop(context)) {
+        Navigator.pop(context);
+      }
+      
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Error completing profile: ${e.toString()}"),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 5),
+        ),
+      );
+      print("Error in _finishProfile: $e");
+    }
   }
 
+  
   @override
   build(BuildContext context) {
     return Scaffold(

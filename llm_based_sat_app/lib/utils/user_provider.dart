@@ -27,6 +27,24 @@ class UserProvider with ChangeNotifier {
     }
   }
 
+  // Add setUid method
+  void setUid(String uid) {
+    _uid = uid;
+    notifyListeners();
+  }
+
+  // Add setEmail method
+  void setEmail(String email) {
+    _email = email;
+    notifyListeners();
+  }
+
+  // Add method to update user data
+  void setUserData(Map<String, dynamic> userData) {
+    _userData = userData;
+    notifyListeners();
+  }
+
   String getUid() {
     try {
       final uid = _uid;
@@ -39,38 +57,51 @@ class UserProvider with ChangeNotifier {
     return 'No UID Found';
   }
 
-  // /// Returns the user's full name from the stored data.
-  // String getName() {
-  //   try {
-  //     String? firstName = _userData['firstname'];
-  //     String? surname = _userData['surname'];
+  // Get first name
+  String getFirstName() {
+    try {
+      final firstName = _userData['firstname'] as String?;
+      if (firstName != null && firstName.isNotEmpty) {
+        return firstName;
+      }
+    } catch (e) {
+      throw ('Error fetching first name: $e');
+    }
+    return 'No First Name Found';
+  }
 
-  //     if (firstName != null &&
-  //         firstName.isNotEmpty &&
-  //         surname != null &&
-  //         surname.isNotEmpty) {
-  //       return "$firstName $surname";
-  //     }
-  //   } catch (e) {
-  //     throw ("Error getting name: $e");
-  //   }
-  //   return "No Name Found";
-  // }
+  // Get full name
+  String getName() {
+    try {
+      String? firstName = _userData['firstname'];
+      String? surname = _userData['surname'];
 
-  // // Returns the user's profile picture URL from the stored data.
-  // String getProfilePictureUrl() {
-  //   try {
-  //     // Check if the document exists and return the profile picture URL
-  //     final profilePictureUrl = _userData['profilePictureUrl'] as String?;
+      if (firstName != null &&
+          firstName.isNotEmpty &&
+          surname != null &&
+          surname.isNotEmpty) {
+        return "$firstName $surname";
+      }
+    } catch (e) {
+      throw ("Error getting name: $e");
+    }
+    return "No Name Found";
+  }
 
-  //     if (profilePictureUrl != null && profilePictureUrl.isNotEmpty) {
-  //       return profilePictureUrl;
-  //     }
-  //     // Return a default value if the URL is null or the document doesn't exist
-  //     return 'No Profile Picture Found';
-  //   } catch (e) {
-  //     // Handle errors and return a default value
-  //     throw ('Error fetching profile picture URL: $e');
-  //   }
-  // }
+  // Returns the user's profile picture URL from the stored data.
+  String getProfilePictureUrl() {
+    try {
+      // Check if the document exists and return the profile picture URL
+      final profilePictureUrl = _userData['profilePictureUrl'] as String?;
+
+      if (profilePictureUrl != null && profilePictureUrl.isNotEmpty) {
+        return profilePictureUrl;
+      }
+      // Return a default value if the URL is null or the document doesn't exist
+      return 'No Profile Picture Found';
+    } catch (e) {
+      // Handle errors and return a default value
+      throw ('Error fetching profile picture URL: $e');
+    }
+  }
 }
