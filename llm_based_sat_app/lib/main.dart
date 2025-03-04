@@ -10,14 +10,11 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:llm_based_sat_app/chatbot/chatprovider.dart';
 import 'package:llm_based_sat_app/screens/home_page.dart';
 import 'package:llm_based_sat_app/screens/score/questionnaire_assessments_page.dart';
-import 'package:llm_based_sat_app/utils/consts.dart';
 import 'package:llm_based_sat_app/screens/course/courses.dart';
 import 'package:llm_based_sat_app/utils/user_provider.dart';
 import 'package:llm_based_sat_app/utils/wrapper.dart';
 import '/screens/auth/sign_in_page.dart';
-import '../screens/community_page.dart';
 import 'package:llm_based_sat_app/widgets/fcm_init.dart';
-import 'screens/auth/sign_in_page.dart';
 import 'screens/calendar/calendar_page.dart';
 import 'screens/score/score_page.dart';
 import '../widgets/bottom_nav_bar.dart';
@@ -144,7 +141,7 @@ class _MainScreenState extends State<MainScreen> {
     try {
       // Give Firebase Auth time to fully initialize
       await Future.delayed(Duration(milliseconds: 500));
-      
+
       final user = FirebaseAuth.instance.currentUser;
       if (user == null) {
         if (mounted) {
@@ -155,34 +152,36 @@ class _MainScreenState extends State<MainScreen> {
         }
         return;
       }
-      
+
       // Force refresh user token to ensure we have the latest data
       await user.getIdToken(true);
-      
+
       // Fetch user profile data
       final doc = await FirebaseFirestore.instance
           .collection('Profile')
           .doc(user.uid)
           .get();
-      
+
       // Log user data status
       if (!doc.exists) {
-        print("User document doesn't exist yet for ${user.uid}. Creating profile may be needed.");
+        print(
+            "User document doesn't exist yet for ${user.uid}. Creating profile may be needed.");
       } else {
         print("User data loaded successfully for ${user.uid}");
-        
+
         // Update UserProvider with the latest user data
         if (mounted) {
-          final userProvider = Provider.of<UserProvider>(context, listen: false);
+          final userProvider =
+              Provider.of<UserProvider>(context, listen: false);
           userProvider.setUid(user.uid);
-          
+
           // If there's user data, you might want to load it into your provider
           if (doc.data() != null) {
             // Example: userProvider.setUserData(doc.data()!);
           }
         }
       }
-      
+
       if (mounted) {
         setState(() {
           _isLoading = false;
@@ -215,7 +214,8 @@ class _MainScreenState extends State<MainScreen> {
             children: [
               CircularProgressIndicator(),
               SizedBox(height: 20),
-              Text("Loading your profile...",
+              Text(
+                "Loading your profile...",
                 style: TextStyle(fontSize: 16, color: Colors.grey[600]),
               ),
             ],
@@ -223,7 +223,7 @@ class _MainScreenState extends State<MainScreen> {
         ),
       );
     }
-    
+
     if (_errorMessage != null) {
       return Scaffold(
         body: Center(
@@ -232,7 +232,8 @@ class _MainScreenState extends State<MainScreen> {
             children: [
               Icon(Icons.error_outline, size: 48, color: Colors.red),
               SizedBox(height: 20),
-              Text("Error: $_errorMessage",
+              Text(
+                "Error: $_errorMessage",
                 style: TextStyle(fontSize: 16),
               ),
               SizedBox(height: 20),
