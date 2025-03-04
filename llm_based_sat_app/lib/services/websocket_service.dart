@@ -16,12 +16,13 @@ class WebSocketService {
   // Store the provider reference
   ChatProvider? _chatProvider;
   String? _userId;
-  
+
+  // Function to establish a WebSocket connection.
   void connect(String userID, BuildContext context) {
     if (isConnected) return;
-    
+
     _userId = userID;
-    
+
     // Store the provider reference when connecting
     _chatProvider = Provider.of<ChatProvider>(context, listen: false);
 
@@ -37,7 +38,8 @@ class WebSocketService {
           try {
             // filters out the {"token_used": 0} messages
             final decodedMessage = jsonDecode(message);
-            if (decodedMessage is Map && decodedMessage.containsKey("tokens_used")) {
+            if (decodedMessage is Map &&
+                decodedMessage.containsKey("tokens_used")) {
               // handle tokens_used case
               return;
             }
@@ -61,6 +63,7 @@ class WebSocketService {
     isConnected = true;
   }
 
+  // Function to send a message to the WebSocket server
   void sendMessage(String message) {
     if (_channel != null && isConnected) {
       final jsonMessage = jsonEncode({
@@ -76,8 +79,10 @@ class WebSocketService {
     }
   }
 
+  // Getter for the message stream
   Stream<String> get messageStream => _messageController.stream;
 
+  // Function to handle WebSocket disconnection.
   void _handleDisconnection() {
     // Just mark as disconnected, don't try to auto-reconnect
     if (isConnected) {
@@ -98,6 +103,7 @@ class WebSocketService {
     }
   }
 
+  // Function to close the WebSocket connection
   void close() {
     _channel?.sink.close(status.goingAway);
     isConnected = false;
@@ -109,4 +115,5 @@ class WebSocketService {
   }
 }
 
+// Create a singleton instance of the WebSocketService
 final webSocketService = WebSocketService();
