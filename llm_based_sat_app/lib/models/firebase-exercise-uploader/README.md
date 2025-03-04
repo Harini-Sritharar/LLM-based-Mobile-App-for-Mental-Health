@@ -6,10 +6,28 @@ A Python script to automate the upload of structured exercise data to Firebase C
 - Automates uploading exercise data.
 - Organizes data in a folder structure in Firebase Storage.
 - Supports scalability for multiple exercises.
+- Provides logging for upload status and error handling.
 
 ## Prerequisites
 1. Python 3.8 or later.
 2. Firebase Admin SDK service account key.
+
+## Getting a Firebase Admin SDK Key
+To use Firebase services programmatically, you need to generate a Firebase Admin SDK private key:
+
+1. Go to the [Firebase Console](https://console.firebase.google.com/).
+2. Select your project.
+3. Navigate to **Project settings** (click on the gear icon in the sidebar).
+4. Go to the **Service accounts** tab.
+5. Click **Generate new private key** under Firebase Admin SDK.
+6. A JSON file will be downloaded—this is your service account key.
+
+## Placing the Firebase Admin SDK Key
+- Save the downloaded JSON key file in the root directory of your project.
+- Update the file path in `upload_to_firebase.py` (line 10) to match your key file name:
+  ```
+  cred = credentials.Certificate("./your-firebase-key.json")
+  ```
 
 ## Data Structure and Storage
 
@@ -155,15 +173,17 @@ For final steps, `Assessment_questions` can be added:
 ---
 
 ## Upload Process
-The script reads the JSON files and organizes the data into Firebase Storage, following the structured format. Make sure to:
-1. Keep the file names (`course_data.json`, `exercise_data.json`, `step_data.json`) consistent.
-2. Maintain the unique identifiers for exercises and steps to avoid overwriting data.
-3. Store images in `assets/images/` and reference them correctly in JSON.
-
----
+1. Add the updated JSON data to:
+   - `llm_based_sat_app/lib/models/firebase-exercise-uploader/data/courses_data.json`
+   - `llm_based_sat_app/lib/models/firebase-exercise-uploader/data/exercise_data.json`
+   - `llm_based_sat_app/lib/models/firebase-exercise-uploader/data/steps_data.json`
+2. Run the script:
+   ```
+   python llm_based_sat_app/lib/models/firebase-exercise-uploader/firebase/upload_to_firebase.py
+   ```
+3. Check the logs for any errors or successful uploads.
 
 ---
 
 ## Contact
 For any queries, contact the development team.
-
