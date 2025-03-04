@@ -51,6 +51,7 @@ Future<void> saveQuestionnaireResponse(
   }
 }
 
+/// Recalculates sub scores based on completed questionnaire responses and updates Firestore.
 Future<void> recalculateSubScores(String userId) async {
   Map<String, double> calculatedSubScores = {
     'Resilience': 0,
@@ -171,6 +172,7 @@ Future<void> recalculateSubScores(String userId) async {
   });
 }
 
+/// Recalculates the overall score based on the user's questionnaire responses and updates Firestore.
 Future<void> recalculateScores(String userId) async {
   Map<String, int> subScores = {
     'GAD-7': 0,
@@ -224,10 +226,10 @@ Future<void> recalculateScores(String userId) async {
 
   double mentalHealthScore = 100 *
       (1 - (0.5 * ((subScores['GAD-7']! / 21) + (subScores['PHQ-9']! / 27))));
-  double weightedScore = (0.4 * (subScores['PWB']!/126) +
-      0.25 * (subScores['SOCS-S']!/100) +
-      0.25 * (subScores['CPC-12R']!/72) +
-      0.1 * ((subScores['ERQ_R']!/42) + (28 - (subScores['ERQ_S']!/4))));
+  double weightedScore = (0.4 * (subScores['PWB']! / 126) +
+      0.25 * (subScores['SOCS-S']! / 100) +
+      0.25 * (subScores['CPC-12R']! / 72) +
+      0.1 * ((subScores['ERQ_R']! / 42) + (28 - (subScores['ERQ_S']! / 4))));
 
   double overallScore = (mentalHealthScore + weightedScore) / 2;
 
@@ -260,6 +262,7 @@ Future<void> recalculateScores(String userId) async {
   print("Scores updated successfully!");
 }
 
+/// Retrieves the overall score of the user from Firestore. Returns 0.0 if the score is unavailable.
 Future<double> getOverallScore() async {
   User? user = FirebaseAuth.instance.currentUser;
   FirebaseFirestore db = FirebaseFirestore.instance;
@@ -274,6 +277,7 @@ Future<double> getOverallScore() async {
   }
 }
 
+/// Retrieves the user's sub scores from Firestore. Returns a map with default values of 0.0 if the data is unavailable.
 Future<Map<String, double>> getSubScores() async {
   User? user = FirebaseAuth.instance.currentUser;
   FirebaseFirestore db = FirebaseFirestore.instance;
@@ -304,6 +308,7 @@ Future<Map<String, double>> getSubScores() async {
   }
 }
 
+/// Retrieves the average sub-scores per month for the user
 Future<Map<String, dynamic>> getAverageSubScores() async {
   User? user = FirebaseAuth.instance.currentUser;
   if (user == null) {

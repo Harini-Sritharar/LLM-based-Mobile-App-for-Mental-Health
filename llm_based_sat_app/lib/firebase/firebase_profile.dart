@@ -48,6 +48,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 //           merge: true)); // Merging ensures we don’t overwrite other fields
 // }
 
+/// Updates the user's personal information in Firestore
 Future<void> updatePersonalInfo(
     String firstname, String surname, String dob, String gender) async {
   User? user = FirebaseAuth.instance.currentUser;
@@ -89,6 +90,7 @@ Future<void> updatePersonalInfo(
   );
 }
 
+/// Updates the user's contact details in Firestore
 Future<void> updateContactDetails(
     String country, String zipcode, String phoneNumber) async {
   User? user = FirebaseAuth.instance.currentUser;
@@ -97,6 +99,7 @@ Future<void> updateContactDetails(
       {'zipcode': zipcode, 'country': country, 'phoneNumber': phoneNumber});
 }
 
+/// Uploads a new profile picture to Firebase Storage and updates the Firestore profile document
 Future<void> updateProfilePictureAndUsername(
     File image, String username) async {
   User? user = FirebaseAuth.instance.currentUser;
@@ -117,6 +120,7 @@ Future<void> updateProfilePictureAndUsername(
   });
 }
 
+/// Checks if the user's personal information is complete
 Future<bool> isPersonalInfoComplete() async {
   User? user = FirebaseAuth.instance.currentUser;
   FirebaseFirestore db = FirebaseFirestore.instance;
@@ -142,6 +146,7 @@ Future<bool> isPersonalInfoComplete() async {
   }
 }
 
+/// Checks if the user's contact details are complete
 Future<bool> isContactDetailsComplete() async {
   User? user = FirebaseAuth.instance.currentUser;
   FirebaseFirestore db = FirebaseFirestore.instance;
@@ -165,6 +170,7 @@ Future<bool> isContactDetailsComplete() async {
   }
 }
 
+/// Checks if the user's profile picture is uploaded and complete
 Future<bool> isProfilePictureComplete() async {
   User? user = FirebaseAuth.instance.currentUser;
   FirebaseFirestore db = FirebaseFirestore.instance;

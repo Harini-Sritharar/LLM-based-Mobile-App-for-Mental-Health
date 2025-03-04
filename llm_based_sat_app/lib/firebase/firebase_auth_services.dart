@@ -6,6 +6,13 @@ import 'package:llm_based_sat_app/utils/user_provider.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
+/* A service class that manages Firebase Authentication and Firestore operations. 
+
+Dependencies:
+- Firebase Authentication (`FirebaseAuth`)
+- Cloud Firestore (`FirebaseFirestore`)
+- Firebase Cloud Messaging (`FirebaseMessaging`)
+- Provider (`UserProvider`) for managing user state.*/
 class FirebaseAuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
