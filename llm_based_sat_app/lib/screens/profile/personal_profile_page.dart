@@ -11,6 +11,9 @@ import 'package:llm_based_sat_app/screens/profile/upload_profile_picture_page.da
 import '../../widgets/auth_widgets/circular_checkbox.dart';
 import '../../widgets/custom_button.dart';
 
+/// A StatefulWidget representing the user's personal profile page.
+/// This page contains different sections that need to be completed
+/// before the profile is considered finished.
 class PersonalProfilePage extends StatefulWidget {
   @override
   _PersonalProfilePageState createState() => _PersonalProfilePageState();
@@ -19,12 +22,13 @@ class PersonalProfilePage extends StatefulWidget {
 class _PersonalProfilePageState extends State<PersonalProfilePage> {
   bool isVerified = false;
 
-  // Completion flags
+  // Flags indicating completion of each profile section
   bool _isPersonalInfoComplete = false;
   bool _isContactDetailsComplete = false;
   bool _isProfilePictureComplete = false;
   bool _isChildhoodPhotosComplete = false;
 
+  /// Marks a section as completed by updating the respective flag.
   void _markAsComplete(String section) {
     setState(() {
       if (section == "Personal Info") _isPersonalInfoComplete = true;
@@ -34,6 +38,8 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
     });
   }
 
+  /// Completes the profile by checking if all required sections are finished,
+  /// verifying the user, and updating Firestore.
   Future<void> _finishProfile() async {
     if (!_isPersonalInfoComplete || !_isContactDetailsComplete) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -46,6 +52,7 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
       return;
     }
 
+    // Ensure user verifies their information
     if (!isVerified) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -58,57 +65,52 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
 
     // Show loading indicator
     showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      }
-    );
-    
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        });
+
     try {
       // Ensure Firebase Auth is ready
       final currentUser = FirebaseAuth.instance.currentUser;
       if (currentUser == null) {
         throw Exception("User not authenticated");
       }
-      
+
       String uid = currentUser.uid;
       print("Current user UID: $uid");
-      
+
       // Mark profile as completed in Firestore
-      await FirebaseFirestore.instance
-          .collection('Profile')
-          .doc(uid)
-          .set({
-            'profileCompleted': true,
-            'lastUpdated': FieldValue.serverTimestamp(),
-          }, SetOptions(merge: true));
-      
+      await FirebaseFirestore.instance.collection('Profile').doc(uid).set({
+        'profileCompleted': true,
+        'lastUpdated': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
+
       // Force token refresh to ensure data is consistent
       await currentUser.getIdToken(true);
-      
+
       // Longer delay for Firestore operations to complete and propagate
       await Future.delayed(const Duration(milliseconds: 1500));
-      
+
       // Remove loading indicator
       if (Navigator.canPop(context)) {
         Navigator.pop(context);
       }
-      
+
       // Navigate to Main Screen
       Navigator.pushAndRemoveUntil(
-        context, 
-        MaterialPageRoute(builder: (context) => MainScreen()),
-        (route) => false
-      );
+          context,
+          MaterialPageRoute(builder: (context) => MainScreen()),
+          (route) => false);
     } catch (e) {
       // Remove loading indicator
       if (Navigator.canPop(context)) {
         Navigator.pop(context);
       }
-      
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Error completing profile: ${e.toString()}"),
@@ -120,7 +122,6 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
     }
   }
 
-  
   @override
   build(BuildContext context) {
     return Scaffold(

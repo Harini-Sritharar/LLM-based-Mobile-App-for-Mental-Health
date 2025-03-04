@@ -9,6 +9,7 @@ import 'package:llm_based_sat_app/utils/user_provider.dart';
 import 'package:provider/provider.dart';
 import '../../widgets/custom_app_bar.dart';
 
+/// Class to represent Calendar Page
 class CalendarPage extends StatefulWidget {
   final Function(int) onItemTapped;
   final int selectedIndex;
@@ -24,9 +25,16 @@ class CalendarPage extends StatefulWidget {
 }
 
 class _CalendarPageState extends State<CalendarPage> {
+  // The currently selected date for the calendar page
   DateTime _selectedDate = DateTime.now();
+
+  // List to hold all completed exercises for the user
   List<CalendarExerciseEntry> allCompletedExercises = [];
+
+  // Instance of UserProvider to fetch user-specific data like UID
   late UserProvider userProvider;
+
+  // Variable to store the UID of the current user
   late String uid;
 
   @override
@@ -37,45 +45,59 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // Access Provider here
+
+    // Access UserProvider here to get user data (UID)
     userProvider = Provider.of<UserProvider>(context);
-    uid = userProvider.getUid();
-    _fetchExercises(); // Fetch exercises when the page loads
+    uid = userProvider.getUid(); // Get the user's UID
+
+    // Fetch exercises when the page loads
+    _fetchExercises();
   }
 
-  // Function to fetch exercises from Firebase
+  // Function to fetch exercises from Firebase based on the selected date
   Future<void> _fetchExercises() async {
+    // Fetch exercises for the given UID and date
     List<CalendarExerciseEntry> result =
         await getExercisesByDate(uid, _selectedDate);
+
+    // Check if the widget is still mounted before updating the state
     if (!mounted) return;
+
+    // Update the list of completed exercises
     setState(() {
-      allCompletedExercises = result; // Update exercises
+      allCompletedExercises = result;
     });
   }
 
-  // Function to pick a date
+  // Function to open the date picker to select a date
   Future<void> _pickDate(BuildContext context) async {
+    // Show the date picker to select a date
     DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: _selectedDate,
-      firstDate: DateTime(2023), // Determine the firstDate
-      lastDate: DateTime.now(),
+      firstDate: DateTime(2023), // Start date for the picker
+      lastDate: DateTime.now(), // End date for the picker
     );
+
+    // Check if the widget is still mounted before updating state
     if (!mounted) return;
 
+    // If a valid date is picked and it is different from the current date
     if (pickedDate != null && pickedDate != _selectedDate) {
       setState(() {
-        _selectedDate = pickedDate;
+        _selectedDate = pickedDate; // Update selected date
       });
-      _fetchExercises(); // Fetch data for the new date
+      // Fetch exercises for the new selected date
+      _fetchExercises();
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    // Format the selected date to 'yyyy-MM-dd'
     String formattedDate = DateFormat('yyyy-MM-dd').format(_selectedDate);
 
-    // Filter exercises by selected date
+    // Filter the exercises by the selected date
     List<CalendarExerciseEntry> exercises = allCompletedExercises
         .where((entry) =>
             DateFormat('yyyy-MM-dd').format(entry.date) == formattedDate)
@@ -93,20 +115,21 @@ class _CalendarPageState extends State<CalendarPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // GestureDetector that triggers date picker when tapped
             GestureDetector(
-              onTap: () =>
-                  _pickDate(context), // Triggers date picker when tapped
+              onTap: () => _pickDate(context), // Open date picker when tapped
               child: Container(
-                width: double.infinity, // Stretch full width
+                width: double.infinity, // Take up full width
                 padding: const EdgeInsets.symmetric(
-                    horizontal: 16, vertical: 12), // Padding for spacing
+                    horizontal: 16,
+                    vertical: 12), // Padding inside the container
                 decoration: BoxDecoration(
                   color: AppColours.brandBlueMinusFour, // Background color
                   borderRadius: BorderRadius.circular(12), // Rounded corners
                 ),
                 child: Row(
                   children: [
-                    // Calendar Icon
+                    // Calendar icon using SVG
                     SvgPicture.asset(
                       'assets/icons/calendar.svg',
                       height: 24,
@@ -117,7 +140,7 @@ class _CalendarPageState extends State<CalendarPage> {
                       ),
                     ),
                     Spacer(),
-                    // Date Picker Text
+                    // Display the selected date in the format 'dd MMM yyyy'
                     Text(
                       DateFormat('dd MMM yyyy').format(_selectedDate),
                       style: const TextStyle(
@@ -131,7 +154,7 @@ class _CalendarPageState extends State<CalendarPage> {
 
             const SizedBox(height: 16),
 
-            // Display Exercises
+            // Display exercises for the selected date
             exercises.isNotEmpty
                 ? Expanded(
                     child: ListView.builder(
@@ -144,6 +167,7 @@ class _CalendarPageState extends State<CalendarPage> {
                           child: ListTile(
                             contentPadding: const EdgeInsets.all(12),
                             title: Row(children: [
+                              // Exercise name
                               Text(
                                 exercise.exerciseName,
                                 style: const TextStyle(
@@ -152,6 +176,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                     color: AppColours.brandBlueMain),
                               ),
                               Spacer(),
+                              // Course name in brackets
                               Text(
                                 "[${exercise.courseName}]",
                                 style: const TextStyle(
@@ -163,12 +188,14 @@ class _CalendarPageState extends State<CalendarPage> {
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                // Duration of the exercise
                                 Text("Duration: ${exercise.duration}",
                                     style: const TextStyle(fontSize: 14)),
                                 const Text(
                                   "Notes:",
                                   style: TextStyle(fontWeight: FontWeight.w700),
                                 ),
+                                // Notes for the exercise, if any
                                 Text(
                                   exercise.notes.isEmpty
                                       ? "No notes added"

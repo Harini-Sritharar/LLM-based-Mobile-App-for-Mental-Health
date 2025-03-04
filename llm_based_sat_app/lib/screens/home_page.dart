@@ -40,14 +40,6 @@ class _HomePageState extends State<HomePage> {
   late UserProvider userProvider;
   late String uid;
 
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   // Access Provider here
-  //   userProvider = Provider.of<UserProvider>(context, listen: false);
-  //   uid = userProvider.getUid();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Consumer<UserProvider>(
