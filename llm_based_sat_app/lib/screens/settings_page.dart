@@ -14,6 +14,9 @@ import 'package:url_launcher/url_launcher.dart';
 import '../widgets/main_layout.dart';
 import 'help_centre_page.dart';
 
+/// A StatelessWidget that represents the Settings Page.
+/// This page displays various settings options such as Notifications, Terms & Conditions,
+/// Help Centre, Reset Settings, and Delete Account options.
 class SettingsPage extends StatelessWidget {
   static const Color primaryTextColor = Color(0xFF687078);
   static const Color secondaryTextColor = Color(0xFF123659);
@@ -23,6 +26,9 @@ class SettingsPage extends StatelessWidget {
   final Function(int) onItemTapped;
   final int selectedIndex;
 
+  /// Creates a [SettingsPage] widget.
+  /// [onItemTapped] is a callback function triggered when an item in the navigation menu is tapped.
+  /// [selectedIndex] is the index of the selected item in the menu.
   SettingsPage({required this.onItemTapped, required this.selectedIndex});
 
   @override
@@ -40,6 +46,7 @@ class SettingsPage extends StatelessWidget {
               selectedIndex: selectedIndex,
             ),
             const SizedBox(height: 10),
+            // Menu item for Notifications settings.
             MenuItem(
               title: 'Notifications',
               icon: 'assets/icons/profile/notification-bing.svg',
@@ -55,6 +62,7 @@ class SettingsPage extends StatelessWidget {
                 );
               },
             ),
+            // Menu item for viewing Terms & Conditions.
             MenuItem(
               title: 'Terms & Conditions',
               icon: 'assets/icons/profile/book.svg',
@@ -70,6 +78,7 @@ class SettingsPage extends StatelessWidget {
                 );
               },
             ),
+            // Menu item for accessing the Help Centre.
             MenuItem(
               title: 'Help Centre',
               icon: 'assets/icons/profile/message-question.svg',
@@ -85,6 +94,7 @@ class SettingsPage extends StatelessWidget {
                 );
               },
             ),
+            // Menu item for resetting settings.
             MenuItem(
               title: 'Reset Setting',
               icon: 'assets/icons/profile/rotate-left.svg',
@@ -97,6 +107,7 @@ class SettingsPage extends StatelessWidget {
                 );
               },
             ),
+            // Menu item for deleting the user's account.
             MenuItem(
               title: 'Delete Account',
               icon: 'assets/icons/profile/trash.svg',
