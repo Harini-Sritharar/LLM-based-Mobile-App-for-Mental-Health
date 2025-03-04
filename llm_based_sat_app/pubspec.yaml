@@ -57,7 +57,8 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/icons/logo/logo_transparent.png"
+  image_path: "assets/icons/logo/logo_white_bg.png"
+  remove_alpha_ios: true
 
 flutter:
   uses-material-design: true
