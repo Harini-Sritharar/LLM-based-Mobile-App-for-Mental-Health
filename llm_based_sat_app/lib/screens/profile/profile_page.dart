@@ -188,6 +188,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           builder: (context) => ChildhoodPhotosPage(
                             onItemTapped: widget.onItemTapped,
                             selectedIndex: widget.selectedIndex,
+                            onCompletion: () {},
                           ),
                         ),
                       );

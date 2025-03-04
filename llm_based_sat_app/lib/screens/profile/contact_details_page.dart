@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:country_codes/country_codes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,8 +13,13 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 class ContactDetailsPage extends StatefulWidget {
   final Function(int) onItemTapped; // Receive function to update navbar index
   final int selectedIndex; // Keep track of selected index
+  final VoidCallback onCompletion;
+
   const ContactDetailsPage(
-      {Key? key, required this.onItemTapped, required this.selectedIndex})
+      {Key? key,
+      required this.onItemTapped,
+      required this.selectedIndex,
+      required this.onCompletion})
       : super(key: key);
 
   @override
@@ -22,12 +28,14 @@ class ContactDetailsPage extends StatefulWidget {
 
 class _ContactDetailsPageState extends State<ContactDetailsPage> {
   final _formKey = GlobalKey<FormState>();
+  Key phoneFieldKey = UniqueKey();
   final TextEditingController _countryController =
       TextEditingController(text: "United Kingdom");
   final TextEditingController _zipPostalController = TextEditingController();
-  String?
-      selectedCountryCode; // Stores the selected country's code -> can be used to convert to obtain the country's dial code
-  String? mobileNumber; // Stores the mobile number input
+  final TextEditingController _mobileController = TextEditingController();
+  String mobileNumber = ''; // Stores the mobile number input
+  String dialCode = '44';
+  String selectedCountryISO = 'GB';
 
   @override
   void initState() {
@@ -46,26 +54,54 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
 
       if (doc.exists) {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+
+        String fullPhone = data['phoneNumber'] ?? '';
+        if (fullPhone.isNotEmpty) {
+          mobileNumber = fullPhone.substring(
+              fullPhone.indexOf(' ') + 1); // Extract the phone number
+          dialCode = fullPhone.split(' ')[0];
+        }
+
+        String storedCountry = data['country'] ?? 'United Kingdom';
+
+        String? countryISO = _getISOCodeFromCountryName(storedCountry);
+        print("Country ISO: $countryISO");
+
+        if (!mounted) return;
         setState(() {
-          _countryController.text = data['country'] ?? 'United Kingdom';
+          _countryController.text = storedCountry;
           _zipPostalController.text = data['zipcode'] ?? '';
+          _mobileController.text = mobileNumber;
+          selectedCountryISO =
+              _getISOCodeFromCountryName(storedCountry) ?? 'GB';
+              phoneFieldKey = UniqueKey();
         });
       }
     }
   }
 
+  /// Convert country name to ISO code
+  String? _getISOCodeFromCountryName(String countryName) {
+    for (var country in CountryCodes.countryCodes()) {
+      if (country.localizedName?.toLowerCase() == countryName.toLowerCase()) {
+        return country.alpha2Code; // Returns ISO code (e.g., "GB")
+      }
+    }
+    return null; // Default if country not found
+  }
+
   @override
   void dispose() {
     _countryController.dispose();
-    mobileNumber = null;
+    mobileNumber = '';
+    dialCode = '';
     _zipPostalController.dispose();
     super.dispose();
   }
 
   void _saveContactDetails() {
-    if (!_formKey.currentState!.validate() ||
-        mobileNumber == null ||
-        mobileNumber!.isEmpty) {
+    print("In Save Contact Details");
+    if (!_formKey.currentState!.validate() || mobileNumber.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Please fill in all fields before saving."),
@@ -74,9 +110,10 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
       );
       return;
     }
-
+    String fullPhoneNumber = "$dialCode $mobileNumber";
     updateContactDetails(
-        _countryController.text, _zipPostalController.text, mobileNumber!);
+        _countryController.text, _zipPostalController.text, fullPhoneNumber);
+    widget.onCompletion();
     Navigator.pop(context);
   }
 
@@ -150,6 +187,8 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
                         ),
                         const SizedBox(height: 10),
                         IntlPhoneField(
+                          key: phoneFieldKey,
+                            controller: _mobileController,
                             decoration: InputDecoration(
                               labelText: 'Mobile Number',
                               filled: true,
@@ -159,13 +198,15 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
                                 borderSide: BorderSide.none,
                               ),
                             ),
-                            initialCountryCode: "GB",
+                            initialCountryCode: selectedCountryISO,
+                            initialValue:
+                                mobileNumber.replaceFirst(dialCode, '').trim(),
                             onCountryChanged: (country) {
                               setState(() {
                                 _countryController.text =
                                     country.name; // Country name
-                                selectedCountryCode =
-                                    country.code; // ISO Code (e.g., US, IN)
+                                dialCode = country
+                                    .dialCode; // Dial code (e.g., +1, +91)
                               });
                             },
                             onChanged: (phone) {

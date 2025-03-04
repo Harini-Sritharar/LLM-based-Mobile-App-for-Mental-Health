@@ -102,8 +102,10 @@ class EditProfilePage extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => ContactDetailsPage(
-                          onItemTapped: onItemTapped,
-                          selectedIndex: selectedIndex),
+                        onItemTapped: onItemTapped,
+                        selectedIndex: selectedIndex,
+                        onCompletion: () => (),
+                      ),
                     ),
                   );
                 },
@@ -118,8 +120,10 @@ class EditProfilePage extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => UploadProfilePicturePage(
-                          onItemTapped: onItemTapped,
-                          selectedIndex: selectedIndex),
+                        onItemTapped: onItemTapped,
+                        selectedIndex: selectedIndex,
+                        onCompletion: () {},
+                      ),
                     ),
                   );
                 },

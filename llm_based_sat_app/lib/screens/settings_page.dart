@@ -56,31 +56,6 @@ class SettingsPage extends StatelessWidget {
               },
             ),
             MenuItem(
-              title: 'Security',
-              icon: 'assets/icons/profile/security-safe.svg',
-              onTap: () {},
-            ),
-            MenuItem(
-              title: 'Accessibility',
-              icon: 'assets/icons/profile/accessibility.svg',
-              onTap: () {},
-            ),
-            MenuItem(
-              title: 'Language',
-              icon: 'assets/icons/profile/language-circle.svg',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => LanguagePage(
-                      onItemTapped: onItemTapped,
-                      selectedIndex: selectedIndex,
-                    ),
-                  ),
-                );
-              },
-            ),
-            MenuItem(
               title: 'Terms & Conditions',
               icon: 'assets/icons/profile/book.svg',
               onTap: () {

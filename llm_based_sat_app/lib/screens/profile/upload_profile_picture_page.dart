@@ -11,8 +11,13 @@ import 'package:llm_based_sat_app/widgets/profile_widgets/image_picker.dart';
 class UploadProfilePicturePage extends StatefulWidget {
   final Function(int) onItemTapped; // Receive function to update navbar index
   final int selectedIndex; // Keep track of selected index
+  final VoidCallback onCompletion;
+
   const UploadProfilePicturePage(
-      {Key? key, required this.onItemTapped, required this.selectedIndex})
+      {Key? key,
+      required this.onItemTapped,
+      required this.selectedIndex,
+      required this.onCompletion})
       : super(key: key);
   @override
   _UploadProfilePicturePageState createState() =>
@@ -41,6 +46,7 @@ class _UploadProfilePicturePageState extends State<UploadProfilePicturePage> {
     if (_selectedImage != null && _usernameController.text.isNotEmpty) {
       updateProfilePictureAndUsername(
           _selectedImage!, _usernameController.text);
+      widget.onCompletion();
       Navigator.pop(context);
     }
   }

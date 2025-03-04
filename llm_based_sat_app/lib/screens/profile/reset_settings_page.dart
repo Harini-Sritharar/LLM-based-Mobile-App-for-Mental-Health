@@ -1,9 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/firebase/firebase_auth_services.dart';
 import 'package:llm_based_sat_app/screens/settings_page.dart';
 import 'package:llm_based_sat_app/widgets/custom_button.dart';
 import 'package:llm_based_sat_app/widgets/auth_widgets/text_input_field.dart';
 
+/// A page that allows users to reset their settings to default.
+/// Requires the user to confirm their password before proceeding.
 class ResetSettingsPage extends StatefulWidget {
   @override
   _ResetSettingsPageState createState() => _ResetSettingsPageState();
@@ -20,6 +23,8 @@ class _ResetSettingsPageState extends State<ResetSettingsPage> {
     super.dispose();
   }
 
+  /// Handles the reset settings request.
+  /// Requires the user to enter their password for authentication.
   void _resetSettings() async {
     if (_passwordController.text.isEmpty) {
       _showSnackBar("Please enter your password.");
@@ -28,17 +33,29 @@ class _ResetSettingsPageState extends State<ResetSettingsPage> {
 
     setState(() => isLoading = true);
 
-    bool success =
-        await _authServices.resetSettings(context, _passwordController.text);
-
-    setState(() => isLoading = false);
-
-    if (success) {
-      // Navigate back to previous page if successful
-      Navigator.pop(context);
+    try {
+      bool success =
+          await _authServices.resetSettings(context, _passwordController.text);
+      if (success) {
+        _showSnackBar("Settings have been reset.");
+        Navigator.pop(context); // Navigate back to previous page
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'wrong-password') {
+        _showSnackBar("Incorrect password. Please try again.");
+      } else if (e.code == 'no-user') {
+        _showSnackBar("No user signed in.");
+      } else {
+        _showSnackBar("Please try again");
+      }
+    } catch (e) {
+      _showSnackBar("Error resetting settings.");
+    } finally {
+      setState(() => isLoading = false);
     }
   }
 
+  /// Displays a snack bar with the given message.
   void _showSnackBar(String message) {
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text(message)));
