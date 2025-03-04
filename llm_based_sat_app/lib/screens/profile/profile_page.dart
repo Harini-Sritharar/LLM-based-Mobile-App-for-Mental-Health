@@ -15,6 +15,7 @@ import '../../widgets/menu_item.dart';
 import 'package:provider/provider.dart';
 import '../../utils/profile_notifier.dart';
 
+/// Profile Page where users can view and manage their account settings.
 class ProfilePage extends StatefulWidget {
   final Function(int) onItemTapped;
   final int selectedIndex;
@@ -44,6 +45,7 @@ class _ProfilePageState extends State<ProfilePage> {
   void _signOut(BuildContext context) async {
     final FirebaseAuthService _auth = FirebaseAuthService();
     await _auth.signOut(context);
+    // Redirect user to Sign-In screen after logout
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => SignInPage()),
@@ -52,7 +54,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    String? userEmail = userProvider.email;
+    String? userEmail = userProvider.email; // Get user email from provider
     return MainLayout(
       selectedIndex: widget.selectedIndex,
       body: Container(
@@ -65,6 +67,7 @@ class _ProfilePageState extends State<ProfilePage> {
               selectedIndex: widget.selectedIndex,
             ),
             const SizedBox(height: 20),
+            // Profile Picture Section
             Consumer<ProfileNotifier>(
               builder: (context, profileNotifier, child) {
                 return FutureBuilder<String>(
@@ -103,6 +106,7 @@ class _ProfilePageState extends State<ProfilePage> {
               },
             ),
             const SizedBox(height: 10),
+            // User Name Section
             Consumer<ProfileNotifier>(
               builder: (context, profileNotifier, child) {
                 return FutureBuilder<String>(
@@ -119,6 +123,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 );
               },
             ),
+            // Display user email below the name
             Text(
               userEmail ?? "No email provided",
               style: const TextStyle(
@@ -127,6 +132,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
             const SizedBox(height: 20),
+            // List of Profile Options
             Expanded(
               child: ListView(
                 children: [
@@ -148,6 +154,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       });
                     },
                   ),
+                  // Settings Option
                   MenuItem(
                     title: "Settings",
                     icon: 'assets/icons/setting-2.svg',
@@ -163,6 +170,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       );
                     },
                   ),
+                  // Ultimate Goal Option
                   MenuItem(
                     title: "Ultimate Goal",
                     icon: 'assets/icons/cup.svg',
@@ -178,6 +186,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       );
                     },
                   ),
+                  // Childhood Photos Option
                   MenuItem(
                     title: "Childhood Photos",
                     icon: 'assets/icons/gallery.svg',
@@ -194,6 +203,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       );
                     },
                   ),
+                  // Manage Subscription Plan Option
                   MenuItem(
                     title: "Manage Plan",
                     icon: 'assets/icons/empty-wallet.svg',
@@ -209,6 +219,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       );
                     },
                   ),
+                  // Invite Friends Option
                   MenuItem(
                     title: "Invite Friends",
                     icon: 'assets/icons/send.svg',
@@ -216,6 +227,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       // Logic for inviting friends goes here.
                     },
                   ),
+                  // Invite Friends Option
                   MenuItem(
                     title: "Logout",
                     icon: 'assets/icons/logout.svg',
@@ -255,6 +267,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  /// Builds a styled text widget for displaying user information.
   Widget buildText(String text) {
     return Text(
       text,

@@ -9,6 +9,11 @@ import 'package:llm_based_sat_app/utils/user_provider.dart';
 import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import 'package:provider/provider.dart';
 
+// This page allows the user to upload childhood photos, categorize them as
+// "favourite" or "non-favourite", and save the changes to Firestore.
+// It also allows the user to delete photos from their lists (favourite or non-favourite).
+// The photos are uploaded to Firebase Storage, and their URLs are stored in Firestore.
+// The page also interacts with Firebase Authentication and UserProvider to retrieve and save user-specific data.
 class ChildhoodPhotosPage extends StatefulWidget {
   final Function(int) onItemTapped;
   final int selectedIndex;
@@ -26,29 +31,35 @@ class ChildhoodPhotosPage extends StatefulWidget {
 }
 
 class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
-  final ImagePicker _picker = ImagePicker();
-  List<String> favouritePhotos = [];
-  List<String> nonFavouritePhotos = [];
-  List<String> localFavouritePhotos = [];
-  List<String> localNonFavouritePhotos = [];
-  List<String> deletedFavouritePhotos = [];
-  List<String> deletedNonFavouritePhotos = [];
-  bool isSaving = false;
-  late UserProvider userProvider;
-  String uid = '';
+  final ImagePicker _picker =
+      ImagePicker(); // Image picker instance for photo selection
+  List<String> favouritePhotos = []; // List to store URLs of favourite photos
+  List<String> nonFavouritePhotos =
+      []; // List to store URLs of non-favourite photos
+  List<String> localFavouritePhotos =
+      []; // List to store locally picked favourite photos
+  List<String> localNonFavouritePhotos =
+      []; // List to store locally picked non-favourite photos
+  List<String> deletedFavouritePhotos =
+      []; // List to track deleted favourite photos
+  List<String> deletedNonFavouritePhotos =
+      []; // List to track deleted non-favourite photos
+  bool isSaving = false; // Flag to prevent multiple saves
+  late UserProvider userProvider; // User provider for managing user data
+  String uid = ''; // User ID to identify the user
 
   @override
   void initState() {
     super.initState();
-    _getUserId();
+    _getUserId(); // Fetch user ID from Firebase Auth on initialization
   }
 
+  // Fetches the current user's UID from Firebase Authentication
   void _getUserId() {
-    // Get UID directly from Firebase Auth
     final User? currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null) {
       setState(() {
-        uid = currentUser.uid;
+        uid = currentUser.uid; // Store UID
       });
       print("Firebase Auth UID: $uid");
     } else {
@@ -56,10 +67,13 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
     }
   }
 
+  // Called when dependencies change to initialize UserProvider and load photos
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     userProvider = Provider.of<UserProvider>(context);
+
+    // Fallback to Provider if UID from Firebase Auth is not available
     if (uid.isEmpty) {
       String providerUid = userProvider.getUid();
       if (providerUid.isNotEmpty) {
@@ -69,9 +83,10 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
         print("Provider UID: $uid");
       }
     }
-    _loadStoredPhotos();
+    _loadStoredPhotos(); // Load photos from Firestore if available
   }
 
+  // Loads stored photos from Firestore for the current user
   Future<void> _loadStoredPhotos() async {
     DocumentSnapshot snapshot =
         await FirebaseFirestore.instance.collection('Profile').doc(uid).get();
@@ -88,6 +103,7 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
     }
   }
 
+  // Picks an image from the gallery and adds it to the appropriate list (favourite or non-favourite)
   Future<void> _pickImage(bool isFavourite) async {
     final XFile? pickedFile =
         await _picker.pickImage(source: ImageSource.gallery);
@@ -104,31 +120,30 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
     }
   }
 
+  // Uploads an image to Firebase Storage and returns the URL
   Future<String> _uploadImage(File imageFile) async {
     try {
       String fileName = DateTime.now().millisecondsSinceEpoch.toString();
       Reference ref =
           FirebaseStorage.instance.ref().child('childhood_photos/$fileName');
-      await ref.putFile(imageFile);
-      return await ref.getDownloadURL();
+      await ref.putFile(imageFile); // Upload the image
+      return await ref.getDownloadURL(); // Get and return the download URL
     } catch (e) {
       print('Error uploading image: $e');
       return '';
     }
   }
 
+  // Saves the user's favourite and non-favourite photos to Firestore
   Future<void> _savePhotos() async {
-    if (isSaving) return; // Prevent multiple presses
+    if (isSaving) return; // Prevent multiple presses while saving
     setState(() => isSaving = true);
 
     try {
-      // Double-check UID at save time - might have changed since page loaded
       userProvider = Provider.of<UserProvider>(context, listen: false);
-      String currentUid = userProvider.getUid();
+      String currentUid = userProvider.getUid(); // Get UID from provider
 
-      print("Original uid: '$uid', Current uid: '$currentUid'"); // Debug info
-
-      // Fallback to Firebase Auth if Provider fails
+      // Fallback to Firebase Auth UID if provider UID is empty
       if (currentUid.isEmpty) {
         final User? firebaseUser = FirebaseAuth.instance.currentUser;
         if (firebaseUser == null) {
@@ -140,6 +155,7 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
         print("Using Provider UID: $currentUid");
       }
 
+      // Document reference for the user's profile
       DocumentReference userDoc =
           FirebaseFirestore.instance.collection('Profile').doc(uid);
 
@@ -156,11 +172,12 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
       List<String> uploadedNonFavouritePhotos = [];
 
       for (String path in localFavouritePhotos) {
-        String url = await _uploadImage(File(path));
+        String url = await _uploadImage(File(path)); // Upload favourite photo
         if (url.isNotEmpty) uploadedFavouritePhotos.add(url);
       }
       for (String path in localNonFavouritePhotos) {
-        String url = await _uploadImage(File(path));
+        String url =
+            await _uploadImage(File(path)); // Upload non-favourite photo
         if (url.isNotEmpty) uploadedNonFavouritePhotos.add(url);
       }
 
@@ -174,7 +191,7 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
       storedFavouritePhotos.addAll(uploadedFavouritePhotos);
       storedNonFavouritePhotos.addAll(uploadedNonFavouritePhotos);
 
-      // Update Firestore
+      // Update Firestore with the new lists of photos
       await userDoc.set({
         'favouritePhotos': storedFavouritePhotos,
         'nonfavouritePhotos': storedNonFavouritePhotos,
@@ -191,12 +208,12 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
         deletedNonFavouritePhotos.clear();
       });
 
-      widget.onCompletion();
-      Navigator.pop(context);
+      widget.onCompletion(); // Notify the parent widget on completion
+      Navigator.pop(context); // Navigate back after saving
     } catch (e) {
       print('Error saving photos: $e');
     } finally {
-      setState(() => isSaving = false);
+      setState(() => isSaving = false); // Reset the saving state
     }
   }
 
@@ -210,7 +227,7 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomAppBar(
-                title: "Personal Profile",
+                title: "Personal Profile", // Title for the app bar
                 onItemTapped: widget.onItemTapped,
                 selectedIndex: widget.selectedIndex,
               ),
@@ -226,11 +243,14 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
               ),
               const SizedBox(height: 20),
               _buildPhotoSection("Favourite photos", favouritePhotos,
-                  localFavouritePhotos, true),
-              _buildPhotoSection("Non-Favourite photos", nonFavouritePhotos,
-                  localNonFavouritePhotos, false),
+                  localFavouritePhotos, true), // Section for favourite photos
+              _buildPhotoSection(
+                  "Non-Favourite photos",
+                  nonFavouritePhotos,
+                  localNonFavouritePhotos,
+                  false), // Section for non-favourite photos
               const SizedBox(height: 20),
-              _buildSaveButton(),
+              _buildSaveButton(), // Save button at the bottom
             ],
           ),
         ),
@@ -238,6 +258,7 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
     );
   }
 
+  // Builds the section for displaying photos
   Widget _buildPhotoSection(String title, List<String> networkPhotos,
       List<String> localPhotos, bool isFavourite) {
     return Column(
@@ -271,6 +292,7 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
     );
   }
 
+  // Builds each individual photo item (either network or local)
   Widget _buildPhotoItem(String photo, bool isNetwork, bool isFavourite) {
     return ListTile(
       leading: CircleAvatar(
@@ -304,22 +326,25 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
     );
   }
 
+  // Builds the save button at the bottom of the page
   Widget _buildSaveButton() {
     return Center(
       child: SizedBox(
         width: double.infinity,
         height: 50,
         child: ElevatedButton(
-          onPressed: isSaving ? null : _savePhotos,
+          onPressed: isSaving ? null : _savePhotos, // Disable if already saving
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColours.brandBlueMain,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
           ),
           child: isSaving
-              ? const CircularProgressIndicator(color: Colors.white)
+              ? const CircularProgressIndicator(
+                  color: Colors.white) // Show progress indicator if saving
               : const Text("Save",
-                  style: TextStyle(fontSize: 18, color: Colors.white)),
+                  style: TextStyle(
+                      fontSize: 18, color: Colors.white)), // Save button text
         ),
       ),
     );

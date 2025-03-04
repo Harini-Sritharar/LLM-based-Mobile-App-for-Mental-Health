@@ -13,8 +13,14 @@ import 'package:llm_based_sat_app/firebase/firebase_notifications.dart';
 // Import navigatorKey from main.dart
 import '../../main.dart';
 
+/// A page that displays all the unread notifications for the user.
+/// The notifications are fetched from Firestore and can be tapped to navigate to the related pages.
+/// Users can also dismiss notifications by swiping them away.
 class NotificationsPage extends StatefulWidget {
+  /// A callback function to handle the navigation item tap.
   final Function(int) onItemTapped;
+
+  /// The index of the selected navigation item.
   final int selectedIndex;
 
   const NotificationsPage({
@@ -28,38 +34,58 @@ class NotificationsPage extends StatefulWidget {
 }
 
 class _NotificationsPageState extends State<NotificationsPage> {
+  // Instance of FirebaseNotifications for interacting with Firestore notifications
   final FirebaseNotifications _firebaseNotifications = FirebaseNotifications();
 
-  /// Handles tapping a notification: Marks as read and navigates to the correct page.
-  Future<void> _handleNotificationTap(String type, String notificationId) async {
+  /// Handles tapping on a notification. It marks the notification as read and navigates
+  /// to the corresponding page based on the notification's type.
+  ///
+  /// [type] The type of the notification that determines the target page.
+  /// [notificationId] The unique ID of the notification to mark as read.
+  Future<void> _handleNotificationTap(
+      String type, String notificationId) async {
     if (!mounted) return;
 
+    // Determine the target page based on the notification type
     Widget targetPage;
     switch (type) {
       case "score_update":
-        targetPage = ScorePage(onItemTapped: widget.onItemTapped, selectedIndex: widget.selectedIndex);
+        targetPage = ScorePage(
+            onItemTapped: widget.onItemTapped,
+            selectedIndex: widget.selectedIndex);
         break;
       case "session_reminder":
         targetPage = MainScreen();
         break;
       case "practice_reminder":
-        targetPage = Courses(onItemTapped: widget.onItemTapped, selectedIndex: widget.selectedIndex);
+        targetPage = Courses(
+            onItemTapped: widget.onItemTapped,
+            selectedIndex: widget.selectedIndex);
         break;
       case "subscription":
-        targetPage = ManagePlanPage(onItemTapped: widget.onItemTapped, selectedIndex: widget.selectedIndex);
+        targetPage = ManagePlanPage(
+            onItemTapped: widget.onItemTapped,
+            selectedIndex: widget.selectedIndex);
         break;
       default:
         print("Unknown notification type: $type");
         return;
     }
 
+    // Mark the notification as read in Firestore
     await _firebaseNotifications.markNotificationAsRead(notificationId);
-    navigatorKey.currentState?.push(MaterialPageRoute(builder: (context) => targetPage));
+
+    // Navigate to the target page
+    navigatorKey.currentState
+        ?.push(MaterialPageRoute(builder: (context) => targetPage));
   }
 
-  /// Deletes a notification from Firestore.
+  /// Deletes a notification from Firestore. The notification is also marked as read.
+  ///
+  /// [notificationId] The unique ID of the notification to be deleted.
   Future<void> _deleteNotification(String notificationId) async {
     try {
+      // Mark the notification as read before deleting
       await _firebaseNotifications.markNotificationAsRead(notificationId);
       print("Notification $notificationId read.");
     } catch (error) {
@@ -73,46 +99,60 @@ class _NotificationsPageState extends State<NotificationsPage> {
       selectedIndex: widget.selectedIndex,
       body: Scaffold(
         appBar: CustomAppBar(
-          title: "Notifications",
+          title: "Notifications", // Title of the notifications page
           onItemTapped: widget.onItemTapped,
           selectedIndex: widget.selectedIndex,
         ),
         body: Padding(
           padding: const EdgeInsets.all(10.0),
           child: StreamBuilder<QuerySnapshot>(
+            // Fetch unread notifications from Firestore
             stream: _firebaseNotifications.getUnreadNotificationsStream(),
             builder: (context, snapshot) {
+              // Show loading spinner while waiting for the data
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(child: CircularProgressIndicator());
               }
+
+              // Handle errors if they occur
               if (snapshot.hasError) {
                 return Center(child: Text("Error fetching notifications."));
               }
+
+              // Show a message if there are no unread notifications
               if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                 return Center(child: Text("No unread notifications."));
               }
 
+              // Fetch the list of notifications
               var notifications = snapshot.data!.docs;
 
               return ListView.builder(
-                itemCount: notifications.length,
+                itemCount:
+                    notifications.length, // Total number of notifications
                 itemBuilder: (context, index) {
                   var notification = notifications[index];
                   var data = notification.data() as Map<String, dynamic>?;
 
-                  if (data == null) return SizedBox.shrink();
+                  if (data == null)
+                    return SizedBox.shrink(); // Skip if data is null
 
-                  String? type = data["type"];
-                  String? title = data["title"] ?? "Notification";
-                  String? message = data["message"] ?? "";
-                  String notificationId = notification.id;
+                  String? type = data["type"]; // Get the notification type
+                  String? title = data["title"] ??
+                      "Notification"; // Get the title, default to "Notification"
+                  String? message = data["message"] ??
+                      ""; // Get the message, default to empty
+                  String notificationId =
+                      notification.id; // Get the notification's unique ID
 
-                  // Get timestamp and format it
+                  // Get the timestamp and format it to a readable date
                   Timestamp? timestamp = data["timestamp"];
-                  DateTime notificationDateTime = timestamp?.toDate() ?? DateTime.now();
-                  String formattedDate = DateFormat('dd MMM yyyy, hh:mm a').format(notificationDateTime);
+                  DateTime notificationDateTime =
+                      timestamp?.toDate() ?? DateTime.now();
+                  String formattedDate = DateFormat('dd MMM yyyy, hh:mm a')
+                      .format(notificationDateTime);
 
-                  // Map notification type to icon
+                  // Determine the appropriate icon based on the notification type
                   IconData iconData;
                   switch (type) {
                     case "session_reminder":
@@ -134,24 +174,31 @@ class _NotificationsPageState extends State<NotificationsPage> {
                       iconData = Icons.notifications;
                   }
 
+                  // Wrap each notification in a Dismissible widget to allow swiping to delete
                   return Dismissible(
-                    key: Key(notificationId), // Unique key for each notification
-                    direction: DismissDirection.endToStart, // Swipe left to delete
+                    key: Key(
+                        notificationId), // Use the notification ID as the key
+                    direction: DismissDirection
+                        .endToStart, // Swipe from right to left to delete
                     background: Container(
                       padding: EdgeInsets.only(right: 20),
                       alignment: Alignment.centerRight,
-                      color: Colors.red,
+                      color: Colors.red, // Background color when swiping
                       child: Icon(Icons.delete, color: Colors.white, size: 30),
                     ),
                     onDismissed: (direction) {
+                      // Delete the notification when swiped
                       _deleteNotification(notificationId);
                     },
                     child: NotificationItem(
-                      icon: iconData,
-                      title: title ?? "Notification",
-                      description: "$message",
-                      timestamp: notificationDateTime,
-                      onTap: () => _handleNotificationTap(type ?? "", notificationId),
+                      icon: iconData, // Icon based on notification type
+                      title:
+                          title ?? "Notification", // Title of the notification
+                      description: "$message", // Message of the notification
+                      timestamp:
+                          notificationDateTime, // Timestamp of the notification
+                      onTap: () => _handleNotificationTap(type ?? "",
+                          notificationId), // Handle tap on the notification
                     ),
                   );
                 },

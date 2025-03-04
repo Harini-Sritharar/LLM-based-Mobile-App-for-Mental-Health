@@ -5,6 +5,8 @@ import 'package:llm_based_sat_app/widgets/score_widgets/progress_row.dart';
 import 'package:llm_based_sat_app/widgets/score_widgets/score_graph.dart';
 import '../../widgets/custom_app_bar.dart';
 
+/// A StatefulWidget that represents the Score Page.
+/// This page displays the overall score, sub-scores, and score graph for the user.
 class ScorePage extends StatefulWidget {
   final Function(int) onItemTapped;
   final int selectedIndex;
@@ -17,10 +19,16 @@ class ScorePage extends StatefulWidget {
 }
 
 class _ScorePageState extends State<ScorePage> {
+  /// List of scores for different months.
   List<List<double>> scores = [];
+
+  /// List of months corresponding to the scores.
   List<String> months = [];
 
+  /// The overall score of the user.
   double overallScore = 0.0;
+
+  /// Map of sub-scores representing different categories.
   Map<String, double> subScores = {
     "Resilience": 0.0,
     "Self-efficacy": 0.0,
@@ -32,6 +40,7 @@ class _ScorePageState extends State<ScorePage> {
   @override
   void initState() {
     super.initState();
+    // Load the scores when the page initializes.
     _loadScores();
   }
 
@@ -42,12 +51,17 @@ class _ScorePageState extends State<ScorePage> {
     }
   }
 
+  /// Loads the scores and sub-scores from Firebase.
+  ///
+  /// It retrieves the overall score, sub-scores, average sub-scores, and months
+  /// from Firebase and updates the UI with the retrieved data.
   Future<void> _loadScores() async {
     overallScore = await getOverallScore();
     subScores = await getSubScores();
     Map<String, dynamic> res = await getAverageSubScores();
     List<dynamic> x = res["averages"];
     List<dynamic> y = res["months"];
+    // Update scores and months if data is available.
     if (x.isNotEmpty) {
       scores = res["averages"];
     }
@@ -75,6 +89,7 @@ class _ScorePageState extends State<ScorePage> {
         "title": "Alleviating suffering"
       },
     ];
+    // Return the UI layout for the ScorePage.
     return Scaffold(
         appBar: CustomAppBar(
           title: "InvinciMind",
@@ -92,22 +107,25 @@ class _ScorePageState extends State<ScorePage> {
               ScoreGraph(scores: scores, months: months)
             else
               Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                Icon(
-                  Icons.info_outline,
-                  color: Colors.grey,
-                  size: 40,
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    Icon(
+                      Icons.info_outline,
+                      color: Colors.grey,
+                      size: 40,
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      "Continue using the app for 3 months to view your score graph",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
                 ),
-                SizedBox(height: 8),
-                Text(
-                  "Continue using the app for 3 months to view your score graph",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey),
-                  textAlign: TextAlign.center,
-                ),
-                ],
-              ),
               ),
           ]),
         ));

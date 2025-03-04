@@ -9,9 +9,12 @@ import 'package:llm_based_sat_app/utils/consts.dart';
 import '../../widgets/main_layout.dart';
 import '../../widgets/custom_app_bar.dart';
 
+/// Manages the subscription plan page, allowing the user to view and modify their subscription tier.
 class ManagePlanPage extends StatefulWidget {
-  final Function(int) onItemTapped;
-  final int selectedIndex;
+  final Function(int)
+      onItemTapped; // Callback to handle bottom navigation item taps
+  final int
+      selectedIndex; // The currently selected index for the bottom navigation
 
   const ManagePlanPage({
     super.key,
@@ -24,40 +27,49 @@ class ManagePlanPage extends StatefulWidget {
 }
 
 class _ManagePlanPageState extends State<ManagePlanPage> {
-  final PageController _pageController = PageController();
-  int _currentPage = 0;
-  String? _currentTier;
-  DateTime? _expiryDate;
+  final PageController _pageController =
+      PageController(); // Controller for the PageView widget
+  int _currentPage =
+      0; // The current page index (used to display different subscription tiers)
+  String?
+      _currentTier; // The current tier of the user (free, monthly, or yearly)
+  DateTime? _expiryDate; // The subscription expiry date, if applicable
 
   @override
   void initState() {
     super.initState();
-    _fetchUserTier();
+    _fetchUserTier(); // Fetch the user's current subscription tier on initialization
   }
 
+  /// Fetches the user's current subscription tier and expiry date from Firestore.
   Future<void> _fetchUserTier() async {
     User? user = FirebaseAuth.instance.currentUser;
-    if (user == null) return;
+    if (user == null) return; // Ensure the user is logged in
 
     try {
-      // Get the user document directly
-      final userDoc = await FirebaseFirestore.instance.collection("Profile").doc(user.uid).get();
-      
+      // Fetch the user document from Firestore
+      final userDoc = await FirebaseFirestore.instance
+          .collection("Profile")
+          .doc(user.uid)
+          .get();
+
       if (userDoc.exists) {
         final userData = userDoc.data() as Map<String, dynamic>;
-        final tier = userData['tier'] as String? ?? 'free';
-        
-        // Get subscription renewal date directly from Firestore
+        final tier = userData['tier'] as String? ??
+            'free'; // Get the user's subscription tier
+
+        // Get the subscription renewal date if available
         DateTime? expiryDate;
-        if ((tier == 'monthly' || tier == 'yearly') && 
+        if ((tier == 'monthly' || tier == 'yearly') &&
             userData.containsKey('subscriptionRenewalDate')) {
-          final renewalTimestamp = userData['subscriptionRenewalDate'] as Timestamp?;
+          final renewalTimestamp =
+              userData['subscriptionRenewalDate'] as Timestamp?;
           expiryDate = renewalTimestamp?.toDate();
         }
-        
+
         setState(() {
           _currentTier = tier;
-          _expiryDate = expiryDate;
+          _expiryDate = expiryDate; // Set the expiry date if available
         });
       }
     } catch (e) {
@@ -65,25 +77,41 @@ class _ManagePlanPageState extends State<ManagePlanPage> {
     }
   }
 
+  /// Returns the appropriate text for the action button based on the selected plan and current plan.
   String _getButtonText() {
-    final selectedTier = _currentPage == 0 ? "free" : _currentPage == 1 ? "monthly" : "yearly";
-    
+    final selectedTier = _currentPage == 0
+        ? "free"
+        : _currentPage == 1
+            ? "monthly"
+            : "yearly";
+
     if (selectedTier == _currentTier) {
-      return "Current Plan";
+      return "Current Plan"; // User is already on this plan
     }
-    
+
     if (selectedTier == "free") {
-      return "Downgrade to Free";
+      return "Downgrade to Free"; // Offer to downgrade to the free plan
     } else if (selectedTier == "monthly") {
-      return _currentTier == "free" ? "Subscribe to Monthly" : "Downgrade to Monthly";
-    } else { // yearly
-      return _currentTier == "free" ? "Subscribe to Yearly" : "Switch to Yearly";
+      return _currentTier == "free"
+          ? "Subscribe to Monthly"
+          : "Downgrade to Monthly";
+    } else {
+      // yearly
+      return _currentTier == "free"
+          ? "Subscribe to Yearly"
+          : "Switch to Yearly";
     }
   }
 
+  /// Checks if the selected plan is the user's current plan.
   bool _isCurrentPlan() {
-    final selectedTier = _currentPage == 0 ? "free" : _currentPage == 1 ? "monthly" : "yearly";
-    return selectedTier == _currentTier;
+    final selectedTier = _currentPage == 0
+        ? "free"
+        : _currentPage == 1
+            ? "monthly"
+            : "yearly";
+    return selectedTier ==
+        _currentTier; // Returns true if the selected plan matches the current plan
   }
 
   @override
@@ -92,7 +120,7 @@ class _ManagePlanPageState extends State<ManagePlanPage> {
       selectedIndex: widget.selectedIndex,
       body: Scaffold(
         appBar: CustomAppBar(
-          title: "Subscription",
+          title: "Subscription", // Title of the screen
           onItemTapped: widget.onItemTapped,
           selectedIndex: widget.selectedIndex,
         ),
@@ -104,13 +132,14 @@ class _ManagePlanPageState extends State<ManagePlanPage> {
                 controller: _pageController,
                 onPageChanged: (int page) {
                   setState(() {
-                    _currentPage = page;
+                    _currentPage =
+                        page; // Update the current page when the user swipes
                   });
                 },
                 children: [
-                  _buildPlanCard(tierName: "free"),
-                  _buildPlanCard(tierName: "monthly"),
-                  _buildPlanCard(tierName: "yearly"),
+                  _buildPlanCard(tierName: "free"), // Free plan card
+                  _buildPlanCard(tierName: "monthly"), // Monthly plan card
+                  _buildPlanCard(tierName: "yearly"), // Yearly plan card
                 ],
               ),
             ),
@@ -119,59 +148,78 @@ class _ManagePlanPageState extends State<ManagePlanPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  for (int i = 0; i < 3; i++)
+                  for (int i = 0;
+                      i < 3;
+                      i++) // Dots indicating the selected page
                     Container(
                       margin: EdgeInsets.symmetric(horizontal: 4.0),
                       width: 10,
                       height: 10,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: _currentPage == i ? AppColours.brandBlueMain : Colors.grey,
+                        color: _currentPage == i
+                            ? AppColours.brandBlueMain
+                            : Colors.grey,
                       ),
                     ),
                 ],
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 24.0),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 24.0, horizontal: 24.0),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColours.brandBlueMain,
                   foregroundColor: Colors.white,
                   minimumSize: Size(double.infinity, 50),
                 ),
-                onPressed: _isCurrentPlan() ? null : () async {
-                  User? user = FirebaseAuth.instance.currentUser;
-                  if (user == null) return;
-                  
-                  // Determine what action to take based on selected plan and current tier
-                  final selectedTier = _currentPage == 0 ? "free" : _currentPage == 1 ? "monthly" : "yearly";
-                  
-                  if (selectedTier == _currentTier) {
-                    // No change needed
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("You are already on the $selectedTier plan.")),
-                    );
-                    return;
-                  }
-                  
-                  // For free plan, cancel subscription
-                  if (selectedTier == "free") {
-                    await StripeService.instance.cancelSubscription(user.uid);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Your subscription will be canceled at the end of your billing period.")),
-                    );
-                  } else {
-                    // For paid plans, start Stripe checkout
-                    final priceId = selectedTier == "monthly" ? stripeMonthlyPriceId : stripeYearlyPriceId;
-                    await StripeService.instance.createSubscription(priceId);
-                  }
-                  
-                  // Refresh tier info
-                  await _fetchUserTier();
-                },
+                onPressed: _isCurrentPlan()
+                    ? null
+                    : () async {
+                        User? user = FirebaseAuth.instance.currentUser;
+                        if (user == null) return;
+
+                        // Determine what action to take based on selected plan and current tier
+                        final selectedTier = _currentPage == 0
+                            ? "free"
+                            : _currentPage == 1
+                                ? "monthly"
+                                : "yearly";
+
+                        if (selectedTier == _currentTier) {
+                          // No change needed
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                content: Text(
+                                    "You are already on the $selectedTier plan.")),
+                          );
+                          return;
+                        }
+
+                        // For free plan, cancel subscription
+                        if (selectedTier == "free") {
+                          await StripeService.instance
+                              .cancelSubscription(user.uid);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                content: Text(
+                                    "Your subscription will be canceled at the end of your billing period.")),
+                          );
+                        } else {
+                          // For paid plans, start Stripe checkout
+                          final priceId = selectedTier == "monthly"
+                              ? stripeMonthlyPriceId
+                              : stripeYearlyPriceId;
+                          await StripeService.instance
+                              .createSubscription(priceId);
+                        }
+
+                        // Refresh tier info after the operation
+                        await _fetchUserTier();
+                      },
                 child: Text(
-                  _getButtonText(),
+                  _getButtonText(), // Display the appropriate button text
                   style: TextStyle(fontSize: 18),
                 ),
               ),
@@ -182,13 +230,14 @@ class _ManagePlanPageState extends State<ManagePlanPage> {
     );
   }
 
+  /// Builds a card for a subscription plan (free, monthly, or yearly) with relevant details.
   Widget _buildPlanCard({required String tierName}) {
     String title;
     String price;
     List<String> benefits;
     bool showExpiry = false;
     bool isCurrentPlan = _currentTier == tierName;
-    
+
     switch (tierName) {
       case "monthly":
         title = "Monthly Premium";
@@ -223,7 +272,7 @@ class _ManagePlanPageState extends State<ManagePlanPage> {
         ];
         break;
     }
-    
+
     return Card(
       elevation: 5,
       margin: EdgeInsets.all(20),
@@ -273,8 +322,9 @@ class _ManagePlanPageState extends State<ManagePlanPage> {
             ),
             SizedBox(height: 16),
             for (String benefit in benefits)
-              _buildBenefitItem(benefit),
-            
+              _buildBenefitItem(
+                  benefit), // Build the benefit items for the plan
+
             if (showExpiry)
               Padding(
                 padding: const EdgeInsets.only(top: 16.0),
@@ -282,9 +332,9 @@ class _ManagePlanPageState extends State<ManagePlanPage> {
                   child: Text(
                     "Renews on: ${_expiryDate != null ? DateFormat('MMM d, yyyy').format(_expiryDate!) : 'Unknown'}",
                     style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.deepOrange),
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.deepOrange),
                   ),
                 ),
               ),
@@ -294,6 +344,7 @@ class _ManagePlanPageState extends State<ManagePlanPage> {
     );
   }
 
+  /// Builds a row item for each benefit of a subscription plan.
   Widget _buildBenefitItem(String benefit) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6.0),
