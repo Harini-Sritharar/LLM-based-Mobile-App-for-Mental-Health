@@ -11,7 +11,6 @@ import 'package:llm_based_sat_app/utils/exercise_timer_manager.dart';
 import '../../main.dart';
 
 /* ExerciseBottomMessage is a widget that displays a cautionary message to the user and when clicked directs the user to the Courses page and resets cached time. */
-
 class ExerciseBottomMessage extends StatelessWidget {
   final String messageText; // Text to display
   final String userUID;

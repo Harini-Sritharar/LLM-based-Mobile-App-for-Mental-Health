@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 
+/// A widget that displays a label for an exercise step.
 class ExerciseStepLabel extends StatelessWidget {
   final String step;
 
@@ -10,7 +11,10 @@ class ExerciseStepLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       step,
-      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.normal, color: AppColours.brandBluePlusThree),
+      style: const TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.normal,
+          color: AppColours.brandBluePlusThree),
     );
   }
 }

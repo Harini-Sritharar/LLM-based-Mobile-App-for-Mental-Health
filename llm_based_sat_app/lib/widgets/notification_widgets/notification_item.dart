@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+/// A widget that displays a single notification item in a list.
 class NotificationItem extends StatelessWidget {
   final IconData icon;
   final String title;

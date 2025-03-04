@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:permission_handler/permission_handler.dart';
 
+/// A widget that allows users to pick an image from their gallery.
 class ImagePickerWidget extends StatefulWidget {
   final void Function(File? image)? onImagePicked;
 
@@ -17,6 +18,7 @@ class _ImagePickerState extends State<ImagePickerWidget> {
   File? _selectedImage;
   final ImagePicker _picker = ImagePicker();
 
+  /// Function to pick an image from the gallery.
   Future<void> _pickImage() async {
     if (Platform.isIOS) {
       var status = await Permission.photos.request();

@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
+/// A widget that displays a line graph of scores over time.
 class ScoreGraph extends StatelessWidget {
   final List<List<double>> scores;
   final List<String> months;
@@ -84,6 +85,7 @@ class ScoreGraph extends StatelessWidget {
     );
   }
 
+  /// Builds the line bars data for the line chart.
   List<LineChartBarData> _buildLineBarsData() {
     List<Color> colors = [
       Colors.red,
