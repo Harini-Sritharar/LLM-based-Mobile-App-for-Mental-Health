@@ -14,12 +14,19 @@ class ContactDetailsPage extends StatefulWidget {
   final Function(int) onItemTapped; // Receive function to update navbar index
   final int selectedIndex; // Keep track of selected index
   final VoidCallback onCompletion;
+  final FirebaseAuth? authOverride;
+  final FirebaseFirestore? firestoreOverride;
+  final updateContactDetailsOverride;
 
   const ContactDetailsPage(
       {Key? key,
       required this.onItemTapped,
       required this.selectedIndex,
-      required this.onCompletion})
+      required this.onCompletion,
+      this.authOverride,
+      this.firestoreOverride,
+      this.updateContactDetailsOverride
+      })
       : super(key: key);
 
   @override
@@ -27,6 +34,10 @@ class ContactDetailsPage extends StatefulWidget {
 }
 
 class _ContactDetailsPageState extends State<ContactDetailsPage> {
+  FirebaseAuth get _auth => widget.authOverride ?? FirebaseAuth.instance;
+  FirebaseFirestore get _firestore => widget.firestoreOverride ?? FirebaseFirestore.instance;
+  static bool isTestMode = false;
+
   final _formKey = GlobalKey<FormState>();
   Key phoneFieldKey = UniqueKey();
   final TextEditingController _countryController =
@@ -44,9 +55,9 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
   }
 
   void _loadUserData() async {
-    User? user = FirebaseAuth.instance.currentUser;
+    User? user = _auth.currentUser;
     if (user != null) {
-      DocumentSnapshot doc = await FirebaseFirestore.instance
+      DocumentSnapshot doc = await _firestore
           .collection('Profile')
           .doc(user.uid)
           .get();
@@ -100,6 +111,12 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
   }
 
   void _saveContactDetails() {
+    if (widget.updateContactDetailsOverride != null) {
+      widget.updateContactDetailsOverride!(
+          _countryController.text.trim(),
+          _zipPostalController.text.trim(),
+          "$dialCode $mobileNumber");
+    }
     print("In Save Contact Details");
     if (!_formKey.currentState!.validate() || mobileNumber.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(

@@ -17,12 +17,22 @@ class PersonalInfoPage extends StatefulWidget {
   final Function(int) onItemTapped;
   final int selectedIndex;
   final VoidCallback onCompletion;
+  // Optional test parameters
+  @visibleForTesting
+  final FirebaseAuth? authOverride;
+  @visibleForTesting
+  final FirebaseFirestore? firestoreOverride;
+  @visibleForTesting
+  final updatePersonalInfoOverride;
 
   const PersonalInfoPage({
     Key? key,
     required this.onItemTapped,
     required this.selectedIndex,
     required this.onCompletion,
+    this.authOverride,
+    this.firestoreOverride,
+    this.updatePersonalInfoOverride,
   }) : super(key: key);
 
   @override
@@ -30,6 +40,11 @@ class PersonalInfoPage extends StatefulWidget {
 }
 
 class _PersonalInfoPageState extends State<PersonalInfoPage> {
+  // Use the injected instances or fall back to real ones
+  FirebaseAuth get _auth => widget.authOverride ?? FirebaseAuth.instance;
+  FirebaseFirestore get _firestore =>
+      widget.firestoreOverride ?? FirebaseFirestore.instance;
+
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _surnameController = TextEditingController();
@@ -43,12 +58,10 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
   }
 
   void _loadUserData() async {
-    User? user = FirebaseAuth.instance.currentUser;
+    User? user = _auth.currentUser;
     if (user != null) {
-      DocumentSnapshot doc = await FirebaseFirestore.instance
-          .collection('Profile')
-          .doc(user.uid)
-          .get();
+      DocumentSnapshot doc =
+          await _firestore.collection('Profile').doc(user.uid).get();
       if (!mounted) return;
 
       if (doc.exists) {
@@ -71,6 +84,14 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
   }
 
   void _savePersonalInfo() {
+    if (widget.updatePersonalInfoOverride != null) {
+      widget.updatePersonalInfoOverride!(
+          _nameController.text.trim(),
+          _surnameController.text.trim(),
+          _dobController.text.trim(),
+          _genderController.text.trim());
+      return;
+    }
     if (!_formKey.currentState!.validate()) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(

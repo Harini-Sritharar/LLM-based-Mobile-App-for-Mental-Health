@@ -14,11 +14,21 @@ class ChildhoodPhotosPage extends StatefulWidget {
   final int selectedIndex;
   final VoidCallback onCompletion;
 
+  // Override fields
+  final FirebaseAuth? authOverride; 
+  final FirebaseFirestore? firestoreOverride;
+  final ImagePicker? pickerOverride;
+  final FirebaseStorage? storageOverride;
+
   const ChildhoodPhotosPage({
     super.key,
     required this.onItemTapped,
     required this.selectedIndex,
     required this.onCompletion,
+    this.authOverride,
+    this.firestoreOverride,
+    this.pickerOverride,
+    this.storageOverride,
   });
 
   @override
@@ -26,7 +36,13 @@ class ChildhoodPhotosPage extends StatefulWidget {
 }
 
 class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
-  final ImagePicker _picker = ImagePicker();
+  // Use the injected instances or fall back to real ones
+  FirebaseAuth get _auth => widget.authOverride ?? FirebaseAuth.instance;
+  FirebaseFirestore get _firestore =>
+      widget.firestoreOverride ?? FirebaseFirestore.instance;
+  ImagePicker get _picker => widget.pickerOverride ?? ImagePicker();
+  FirebaseStorage get _storage => widget.storageOverride ?? FirebaseStorage.instance;
+
   List<String> favouritePhotos = [];
   List<String> nonFavouritePhotos = [];
   List<String> localFavouritePhotos = [];
@@ -45,7 +61,7 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
 
   void _getUserId() {
     // Get UID directly from Firebase Auth
-    final User? currentUser = FirebaseAuth.instance.currentUser;
+    final User? currentUser = _auth.currentUser;
     if (currentUser != null) {
       setState(() {
         uid = currentUser.uid;
@@ -74,7 +90,7 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
 
   Future<void> _loadStoredPhotos() async {
     DocumentSnapshot snapshot =
-        await FirebaseFirestore.instance.collection('Profile').doc(uid).get();
+        await _firestore.collection('Profile').doc(uid).get();
     if (!mounted) return;
 
     if (snapshot.exists) {
@@ -108,7 +124,7 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
     try {
       String fileName = DateTime.now().millisecondsSinceEpoch.toString();
       Reference ref =
-          FirebaseStorage.instance.ref().child('childhood_photos/$fileName');
+          _storage.ref().child('childhood_photos/$fileName');
       await ref.putFile(imageFile);
       return await ref.getDownloadURL();
     } catch (e) {
@@ -130,7 +146,7 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
 
       // Fallback to Firebase Auth if Provider fails
       if (currentUid.isEmpty) {
-        final User? firebaseUser = FirebaseAuth.instance.currentUser;
+        final User? firebaseUser = _auth.currentUser;
         if (firebaseUser == null) {
           throw Exception("User not authenticated");
         }
@@ -141,7 +157,7 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
       }
 
       DocumentReference userDoc =
-          FirebaseFirestore.instance.collection('Profile').doc(uid);
+          _firestore.collection('Profile').doc(uid);
 
       DocumentSnapshot snapshot = await userDoc.get();
       Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
