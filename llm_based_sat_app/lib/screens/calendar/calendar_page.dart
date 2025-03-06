@@ -15,19 +15,19 @@ class CalendarPage extends StatefulWidget {
   @visibleForTesting
   final getExercisesByDateOverride;
 
-  const CalendarPage({
-    super.key,
-    required this.onItemTapped,
-    required this.selectedIndex,
-    this.getExercisesByDateOverride
-  });
+  const CalendarPage(
+      {super.key,
+      required this.onItemTapped,
+      required this.selectedIndex,
+      this.getExercisesByDateOverride});
 
   @override
   _CalendarPageState createState() => _CalendarPageState();
 }
 
 class _CalendarPageState extends State<CalendarPage> {
-  late Future<List<CalendarExerciseEntry>> Function(String, DateTime) getExercisesByDate;
+  late Future<List<CalendarExerciseEntry>> Function(String, DateTime)
+      _getExercisesByDate;
   DateTime _selectedDate = DateTime.now();
   List<CalendarExerciseEntry> allCompletedExercises = [];
   late UserProvider userProvider;
@@ -36,7 +36,8 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   void initState() {
     super.initState();
-    getExercisesByDate = widget.getExercisesByDateOverride ?? getExercisesByDate;
+    _getExercisesByDate =
+        widget.getExercisesByDateOverride ?? getExercisesByDate;
   }
 
   @override
@@ -51,7 +52,7 @@ class _CalendarPageState extends State<CalendarPage> {
   // Function to fetch exercises from Firebase
   Future<void> _fetchExercises() async {
     List<CalendarExerciseEntry> result =
-        await getExercisesByDate(uid, _selectedDate);
+        await _getExercisesByDate(uid, _selectedDate);
     if (!mounted) return;
     setState(() {
       allCompletedExercises = result; // Update exercises
