@@ -8,6 +8,7 @@ import 'package:llm_based_sat_app/widgets/custom_app_bar.dart';
 import 'package:llm_based_sat_app/widgets/custom_button.dart';
 import 'package:llm_based_sat_app/widgets/profile_widgets/image_picker.dart';
 
+/// A page that allows the user to upload a profile picture
 class UploadProfilePicturePage extends StatefulWidget {
   final Function(int) onItemTapped; // Receive function to update navbar index
   final int selectedIndex; // Keep track of selected index

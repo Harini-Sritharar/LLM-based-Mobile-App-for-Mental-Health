@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 
+/// A widget that displays the number of exercises and the duration of a course.
 class CourseExerciseDuration extends StatelessWidget {
   final String exercises;
   final String duration;
@@ -15,7 +16,10 @@ class CourseExerciseDuration extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(Icons.videocam_outlined, color: AppColours.brandBlueMain,),
+        Icon(
+          Icons.videocam_outlined,
+          color: AppColours.brandBlueMain,
+        ),
         const SizedBox(width: 8),
         Text(
           exercises,

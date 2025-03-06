@@ -9,6 +9,7 @@ import 'package:llm_based_sat_app/screens/notification/notifications_page.dart';
 // Import Global Keys from main.dart
 import '../main.dart';
 
+/// A service class to handle Firebase Cloud Messaging (FCM) and local notifications.
 class FirebaseMessagingService {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
@@ -39,6 +40,7 @@ class FirebaseMessagingService {
     }
   }
 
+  /// Initializes the Firebase Messaging and local notifications.
   Future<void> initialize() async {
     // Get and save the FCM token
     String? token = await _firebaseMessaging.getToken();
@@ -81,7 +83,9 @@ class FirebaseMessagingService {
       _navigateToNotificationsPage();
     });
 
-    FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) {
+    FirebaseMessaging.instance
+        .getInitialMessage()
+        .then((RemoteMessage? message) {
       if (message != null) {
         _navigateToNotificationsPage();
       }

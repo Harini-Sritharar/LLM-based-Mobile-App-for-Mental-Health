@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
+/// Retrieves the full name of a user from Firestore.
 Future<String> getName(String uid) async {
   try {
     // Reference to the Firestore collection
@@ -32,6 +33,7 @@ Future<String> getName(String uid) async {
   }
 }
 
+/// Retrieves the first name of a user from Firestore.
 Future<String> getFirstName(String uid) async {
   try {
     // Reference to the Firestore collection
@@ -57,6 +59,7 @@ Future<String> getFirstName(String uid) async {
   }
 }
 
+/// Retrieves the user's subscription tier from Firestore.
 Future<String> getTier(String uid) async {
   try {
     // Reference to the Firestore collection
@@ -80,6 +83,7 @@ Future<String> getTier(String uid) async {
   }
 }
 
+/// Retrieves the expiration date of the user's subscription tier.
 Future<DateTime> getTierExpiry(String uid) async {
   try {
     // Reference to the Firestore collection
@@ -111,6 +115,7 @@ Future<DateTime> getTierExpiry(String uid) async {
   }
 }
 
+/// Sets the user's subscription tier and updates the expiry date.
 Future<void> setTier(String uid, String tier) async {
   try {
     // Reference to the Firestore collection
@@ -147,6 +152,7 @@ Future<void> setTier(String uid, String tier) async {
   }
 }
 
+/// Retrieves the user's profile picture URL from Firestore.
 Future<String> getProfilePictureUrl(String uid) async {
   try {
     // Reference to the Firestore collection
@@ -199,6 +205,7 @@ Future<void> removeUserDocuments({
   }
 }
 
+/// Retrieves the user's favorite photos from Firestore.
 Future<List<String>> getFavouritePhotos(String uid) async {
   try {
     final snapshot =
@@ -216,6 +223,7 @@ Future<List<String>> getFavouritePhotos(String uid) async {
   }
 }
 
+/// Retrieves the user's non-favorite photos from Firestore.
 Future<List<String>> getNonFavouritePhotos(String uid) async {
   try {
     final snapshot =
@@ -233,6 +241,7 @@ Future<List<String>> getNonFavouritePhotos(String uid) async {
   }
 }
 
+/// Sets the user's ultimate goal in Firestore
 Future<void> setUltimateGoal(String uid, String goal) async {
   try {
     // Reference to the Firestore collection
@@ -250,6 +259,7 @@ Future<void> setUltimateGoal(String uid, String goal) async {
   }
 }
 
+/// Retrieves the user's ultimate goal from Firestore
 Future<String> getUltimateGoal(String uid) async {
   try {
     // Reference to the Firestore collection
@@ -318,6 +328,7 @@ Future<void> saveReportedIssue({
   }
 }
 
+/// Retrieves the user's notification preferences from Firestore
 Future<List<bool>?> getNotificationPreferences(String userId) async {
   try {
     final collection = FirebaseFirestore.instance.collection('Profile');
@@ -334,6 +345,7 @@ Future<List<bool>?> getNotificationPreferences(String userId) async {
   return null;
 }
 
+/// Saves the user's notification preferences in Firestore
 Future<void> saveNotificationPreferences(
     String userId, List<bool> preferences) async {
   try {

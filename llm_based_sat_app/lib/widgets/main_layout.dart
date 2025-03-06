@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../widgets/bottom_nav_bar.dart';
 import '../main.dart'; // For MainScreen
 
+/// A layout widget that provides a consistent structure for the app's main screens.
 class MainLayout extends StatelessWidget {
   final Widget body;
   final int selectedIndex;

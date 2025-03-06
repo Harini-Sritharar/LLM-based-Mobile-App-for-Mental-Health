@@ -10,6 +10,7 @@ import '/theme/app_colours.dart';
 import '/widgets/auth_widgets/text_input_field.dart';
 import '/widgets/custom_button.dart';
 
+// Global variable to store the current authenticated user.
 User? user;
 
 class SignInPage extends StatefulWidget {
@@ -18,47 +19,60 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
+  // Instance of FirebaseAuthService to handle authentication.
   final FirebaseAuthService _auth = FirebaseAuthService();
 
+  // Form key to manage the form validation.
   final _formKey = GlobalKey<FormState>();
+
+  // Text controllers to get email and password inputs.
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  /// Handles user sign-in by validating the form and using the provided email and password
+  /// to authenticate the user. If successful, navigates to the main screen.
   void _signIn() async {
+    // Validates the form inputs before proceeding.
     if (_formKey.currentState!.validate()) {
-      // Navigate to the main screen
+      // Retrieves email and password entered by the user.
       String email = _emailController.text;
       String password = _passwordController.text;
 
+      // Calls the sign-in method from the authentication service.
       user = await _auth.signInWithEmailandPassword(context, email, password);
 
+      // If the user is successfully authenticated, navigate to the main screen.
       if (user != null) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => MainScreen()),
         );
       }
+
+      // Get the Firebase messaging token for the device.
       String? token = await FirebaseMessaging.instance.getToken();
+
+      // If a token is retrieved, save it to the Firebase database.
       if (token != null) {
         await FirebaseMessagingService().saveTokenToDatabase(token);
       }
-
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColours.white, // Matches the white background
+      backgroundColor: AppColours.white, // Sets the background color to white
       body: Center(
         child: Form(
-            key: _formKey,
+            key: _formKey, // Attach the form key for validation
             child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    // Title Text
                     Center(
                       child: Text(
                         "Sign in",
@@ -79,24 +93,34 @@ class _SignInPageState extends State<SignInPage> {
                       ),
                     ),
                     const SizedBox(height: 40),
+
+                    // Email input field
                     TextInputField(
                         label: "Email",
                         icon: Icons.email,
                         isPassword: false,
                         controller: _emailController),
                     const SizedBox(height: 20),
+
+                    // Password input field
                     TextInputField(
                         label: "Password",
                         icon: Icons.lock,
                         isPassword: true,
                         controller: _passwordController),
                     const SizedBox(height: 40),
+
+                    // Sign In Button
                     Center(
                         child: CustomButton(
                             buttonText: "Sign In",
-                            onPress: _signIn,
+                            onPress:
+                                _signIn, // Calls _signIn method when pressed
                             rightArrowPresent: true)),
+
                     const SizedBox(height: 20),
+
+                    // Sign Up and Forgot Password Links
                     Center(
                         child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -129,6 +153,7 @@ class _SignInPageState extends State<SignInPage> {
                         ),
                       ],
                     )),
+
                     // Forgot Password Link
                     Center(
                         child: Row(
@@ -144,11 +169,12 @@ class _SignInPageState extends State<SignInPage> {
                         ),
                         TextButton(
                           onPressed: () {
-                            // Navigate to the Sign-Up page
+                            // Navigate to the Forgot Password page
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => ForgotPasswordPage()));
+                                    builder: (context) =>
+                                        ForgotPasswordPage()));
                           },
                           child: const Text(
                             "Reset password?",

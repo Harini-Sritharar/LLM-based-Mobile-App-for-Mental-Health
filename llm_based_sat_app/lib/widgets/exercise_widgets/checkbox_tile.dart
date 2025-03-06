@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// A widget that displays a list tile with a checkbox-like toggle.
 class CheckboxTile extends StatelessWidget {
   final String title;
   final IconData icon;

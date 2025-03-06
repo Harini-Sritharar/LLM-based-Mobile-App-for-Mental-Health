@@ -5,6 +5,7 @@ import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
 import 'package:llm_based_sat_app/utils/user_provider.dart';
 import 'package:provider/provider.dart';
 
+/// A widget that displays a course card with details like image, title, duration, rating, and lock status.
 class CourseCard extends StatefulWidget {
   final String imageUrl;
   final String courseType;
@@ -51,6 +52,7 @@ class _CourseCardState extends State<CourseCard> {
     // Now that uid is available, load the name and connect WebSocket
   }
 
+  /// Checks the user's tier and updates the lock status.
   Future<void> _checkUserTier() async {
     String tier = await getTier(uid);
     if (!mounted) return;
@@ -65,6 +67,7 @@ class _CourseCardState extends State<CourseCard> {
     }
   }
 
+  /// Shows a snackbar message indicating that the course is for premium users only.
   void _showPremiumMessage(BuildContext context) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(

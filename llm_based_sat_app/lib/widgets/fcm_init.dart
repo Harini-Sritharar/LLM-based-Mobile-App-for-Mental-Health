@@ -3,8 +3,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/firebase_messaging_service.dart';
 import 'package:llm_based_sat_app/screens/auth/sign_in_page.dart';
-import 'package:llm_based_sat_app/screens/notification/notifications_page.dart'; 
+import 'package:llm_based_sat_app/screens/notification/notifications_page.dart';
 
+/// A widget that initializes Firebase Cloud Messaging (FCM) and handles incoming notifications.
 class FCMInitializer extends StatefulWidget {
   final Widget child;
 
@@ -21,12 +22,14 @@ class _FCMInitializerState extends State<FCMInitializer> {
     _initializeFCM();
   }
 
+  /// Initializes Firebase Cloud Messaging (FCM) and sets up notification handling.
   Future<void> _initializeFCM() async {
     try {
       final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
       // Request notification permissions (required for iOS)
-      NotificationSettings settings = await _firebaseMessaging.requestPermission(
+      NotificationSettings settings =
+          await _firebaseMessaging.requestPermission(
         alert: true,
         badge: true,
         sound: true,
@@ -50,7 +53,8 @@ class _FCMInitializerState extends State<FCMInitializer> {
         } else {
           print("Token is null. Retrying in 5 seconds...");
           await Future.delayed(const Duration(seconds: 5));
-          if (mounted) _initializeFCM(); // Retry only if widget is still mounted
+          if (mounted)
+            _initializeFCM(); // Retry only if widget is still mounted
         }
 
         // Listen for token updates and save them
@@ -64,20 +68,25 @@ class _FCMInitializerState extends State<FCMInitializer> {
 
         // Handle Foreground Notifications
         FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-          print("Foreground Notification Received: ${message.notification?.title}");
+          print(
+              "Foreground Notification Received: ${message.notification?.title}");
           _showNotification(message);
         });
 
         // Handle Background Notification Click
         FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-          print("Notification Clicked (Background) - ${message.notification?.title}");
+          print(
+              "Notification Clicked (Background) - ${message.notification?.title}");
           if (mounted) _navigateToNotificationsPage(context);
         });
 
         // Handle Terminated Notification Click
-        FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) {
+        FirebaseMessaging.instance
+            .getInitialMessage()
+            .then((RemoteMessage? message) {
           if (message != null && mounted) {
-            print("App Opened from Terminated State via Notification: ${message.notification?.title}");
+            print(
+                "App Opened from Terminated State via Notification: ${message.notification?.title}");
             _navigateToNotificationsPage(context);
           }
         });
@@ -126,12 +135,14 @@ class _FCMInitializerState extends State<FCMInitializer> {
         builder: (context) {
           return AlertDialog(
             title: Text(message.notification!.title ?? "Notification"),
-            content: Text(message.notification!.body ?? "You have a new message"),
+            content:
+                Text(message.notification!.body ?? "You have a new message"),
             actions: [
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
-                  _navigateToNotificationsPage(context); // Navigate to notifications on dismiss
+                  _navigateToNotificationsPage(
+                      context); // Navigate to notifications on dismiss
                 },
                 child: const Text("View"),
               ),

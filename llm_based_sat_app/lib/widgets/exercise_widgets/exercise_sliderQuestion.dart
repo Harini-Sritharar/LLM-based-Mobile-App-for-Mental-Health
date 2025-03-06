@@ -15,10 +15,12 @@ class ExerciseSliderQuestionWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ExerciseSliderQuestionWidgetState createState() => _ExerciseSliderQuestionWidgetState();
+  _ExerciseSliderQuestionWidgetState createState() =>
+      _ExerciseSliderQuestionWidgetState();
 }
 
-class _ExerciseSliderQuestionWidgetState extends State<ExerciseSliderQuestionWidget> {
+class _ExerciseSliderQuestionWidgetState
+    extends State<ExerciseSliderQuestionWidget> {
   late double _currentValue;
 
   @override
