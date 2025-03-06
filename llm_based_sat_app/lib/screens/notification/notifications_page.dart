@@ -16,11 +16,17 @@ import '../../main.dart';
 class NotificationsPage extends StatefulWidget {
   final Function(int) onItemTapped;
   final int selectedIndex;
+  @visibleForTesting
+  final FirebaseFirestore? firestoreOverride;
+  @visibleForTesting
+  final FirebaseNotifications? firebaseNotificationsOverride;
 
   const NotificationsPage({
     Key? key,
     required this.onItemTapped,
     required this.selectedIndex,
+    this.firestoreOverride,
+    this.firebaseNotificationsOverride,
   }) : super(key: key);
 
   @override
@@ -28,25 +34,33 @@ class NotificationsPage extends StatefulWidget {
 }
 
 class _NotificationsPageState extends State<NotificationsPage> {
-  final FirebaseNotifications _firebaseNotifications = FirebaseNotifications();
+  FirebaseNotifications get _firebaseNotifications =>
+      widget.firebaseNotificationsOverride ?? FirebaseNotifications();
 
   /// Handles tapping a notification: Marks as read and navigates to the correct page.
-  Future<void> _handleNotificationTap(String type, String notificationId) async {
+  Future<void> _handleNotificationTap(
+      String type, String notificationId) async {
     if (!mounted) return;
 
     Widget targetPage;
     switch (type) {
       case "score_update":
-        targetPage = ScorePage(onItemTapped: widget.onItemTapped, selectedIndex: widget.selectedIndex);
+        targetPage = ScorePage(
+            onItemTapped: widget.onItemTapped,
+            selectedIndex: widget.selectedIndex);
         break;
       case "session_reminder":
         targetPage = MainScreen();
         break;
       case "practice_reminder":
-        targetPage = Courses(onItemTapped: widget.onItemTapped, selectedIndex: widget.selectedIndex);
+        targetPage = Courses(
+            onItemTapped: widget.onItemTapped,
+            selectedIndex: widget.selectedIndex);
         break;
       case "subscription":
-        targetPage = ManagePlanPage(onItemTapped: widget.onItemTapped, selectedIndex: widget.selectedIndex);
+        targetPage = ManagePlanPage(
+            onItemTapped: widget.onItemTapped,
+            selectedIndex: widget.selectedIndex);
         break;
       default:
         print("Unknown notification type: $type");
@@ -54,7 +68,8 @@ class _NotificationsPageState extends State<NotificationsPage> {
     }
 
     await _firebaseNotifications.markNotificationAsRead(notificationId);
-    navigatorKey.currentState?.push(MaterialPageRoute(builder: (context) => targetPage));
+    navigatorKey.currentState
+        ?.push(MaterialPageRoute(builder: (context) => targetPage));
   }
 
   /// Deletes a notification from Firestore.
@@ -109,8 +124,10 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
                   // Get timestamp and format it
                   Timestamp? timestamp = data["timestamp"];
-                  DateTime notificationDateTime = timestamp?.toDate() ?? DateTime.now();
-                  String formattedDate = DateFormat('dd MMM yyyy, hh:mm a').format(notificationDateTime);
+                  DateTime notificationDateTime =
+                      timestamp?.toDate() ?? DateTime.now();
+                  String formattedDate = DateFormat('dd MMM yyyy, hh:mm a')
+                      .format(notificationDateTime);
 
                   // Map notification type to icon
                   IconData iconData;
@@ -135,8 +152,10 @@ class _NotificationsPageState extends State<NotificationsPage> {
                   }
 
                   return Dismissible(
-                    key: Key(notificationId), // Unique key for each notification
-                    direction: DismissDirection.endToStart, // Swipe left to delete
+                    key:
+                        Key(notificationId), // Unique key for each notification
+                    direction:
+                        DismissDirection.endToStart, // Swipe left to delete
                     background: Container(
                       padding: EdgeInsets.only(right: 20),
                       alignment: Alignment.centerRight,
@@ -151,7 +170,8 @@ class _NotificationsPageState extends State<NotificationsPage> {
                       title: title ?? "Notification",
                       description: "$message",
                       timestamp: notificationDateTime,
-                      onTap: () => _handleNotificationTap(type ?? "", notificationId),
+                      onTap: () =>
+                          _handleNotificationTap(type ?? "", notificationId),
                     ),
                   );
                 },

@@ -12,11 +12,14 @@ import '../../widgets/custom_app_bar.dart';
 class CalendarPage extends StatefulWidget {
   final Function(int) onItemTapped;
   final int selectedIndex;
+  @visibleForTesting
+  final getExercisesByDateOverride;
 
   const CalendarPage({
     super.key,
     required this.onItemTapped,
     required this.selectedIndex,
+    this.getExercisesByDateOverride
   });
 
   @override
@@ -24,6 +27,7 @@ class CalendarPage extends StatefulWidget {
 }
 
 class _CalendarPageState extends State<CalendarPage> {
+  late Future<List<CalendarExerciseEntry>> Function(String, DateTime) getExercisesByDate;
   DateTime _selectedDate = DateTime.now();
   List<CalendarExerciseEntry> allCompletedExercises = [];
   late UserProvider userProvider;
@@ -32,6 +36,7 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   void initState() {
     super.initState();
+    getExercisesByDate = widget.getExercisesByDateOverride ?? getExercisesByDate;
   }
 
   @override
