@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 
+/// A custom AppBar widget for exercise screens.
 class ExerciseAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final double fontSize;

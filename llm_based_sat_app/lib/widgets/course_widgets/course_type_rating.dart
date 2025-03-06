@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/theme/app_colours.dart';
 
+/// A widget that displays the course type and rating.
 class CourseTypeRating extends StatelessWidget {
   final String courseType;
   final double rating;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// A widget that displays a learning tile with a title, icon, subject, and content.
 class LearningTile extends StatelessWidget {
   final String title;
   final IconData icon;

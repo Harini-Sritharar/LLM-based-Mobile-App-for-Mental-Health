@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:llm_based_sat_app/widgets/score_widgets/circular_progress_bar.dart';
 
+/// A widget that displays a row of circular progress bars.
 class ProgressRow extends StatelessWidget {
   final List<Map<String, dynamic>> progressData;
 

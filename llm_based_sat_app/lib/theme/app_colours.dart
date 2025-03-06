@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Each color is defined as a static constant, making them easily accessible throughout the app without needing to create instances of the `AppColours` class.
 class AppColours {
   // White
   static const Color white = Colors.white;

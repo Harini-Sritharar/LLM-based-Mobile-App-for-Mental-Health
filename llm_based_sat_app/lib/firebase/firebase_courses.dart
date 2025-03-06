@@ -385,6 +385,7 @@ Future<void> updateTimeStampCommentAndRating(
   }
 }
 
+/* Retrieves the timestamp entry for a specific exercise session. Returns a `TimeStampEntry` object if found, otherwise returns `null`. */
 Future<TimeStampEntry?> getTimeStamp(String uid, String courseId,
     String exerciseId, String sessionNumber) async {
   try {
@@ -677,6 +678,7 @@ Future<Map<String, List<String>>> getChildhoodImages(String uid) async {
   }
 }
 
+/* Saves an unfinished exercise attempt for a user in Firestore. This function stores the start and end timestamps along with the step left for an unfinished exercise under the user's `unfinished_courses` subcollection. If the course document does not exist, it creates one. */
 Future<void> saveUnfinishedExercise(
     String uid,
     String courseId,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 
+/// A widget that displays a circular progress bar with an animated progress value.
 class CircularProgressBar extends StatelessWidget {
   final double percentage;
   final String title;
@@ -54,6 +55,7 @@ class CircularProgressBar extends StatelessWidget {
   }
 }
 
+/// A CustomPainter to draw the circular progress bar.
 class ProgressPainter extends CustomPainter {
   final double progress;
   final double strokeWidth = 10;
@@ -62,6 +64,7 @@ class ProgressPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    // Draw the progress bar.
     final center = Offset(size.width / 2, size.height / 2);
     final radius = (size.width - strokeWidth) / 2;
     final startAngle = -pi / 2;

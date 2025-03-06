@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart'
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
 /// Example:
-/// ```dart
+/// ```
 /// import 'firebase_options.dart';
 /// // ...
 /// await Firebase.initializeApp(
@@ -15,6 +15,7 @@ import 'package:flutter/foundation.dart'
 /// );
 /// ```
 class DefaultFirebaseOptions {
+  /* Returns the Firebase options for the current platform. Throws an error if the platform is not supported */
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
       return web;
@@ -40,6 +41,7 @@ class DefaultFirebaseOptions {
     }
   }
 
+  /// Firebase configuration options for the Web platform
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyBbop_K4oX-fn3qDdvBJL4L2PCDFAio-tE',
     appId: '1:128555328235:web:553a30f691410a81b9d4ae',
@@ -50,6 +52,7 @@ class DefaultFirebaseOptions {
     measurementId: 'G-5R02DP5E9T',
   );
 
+  /// Firebase configuration options for the Android platform.
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyC9ihVmKyo3AZXYdo06yk7j7jxgeVHlR10',
     appId: '1:128555328235:android:1258809a117affd2b9d4ae',
@@ -58,6 +61,7 @@ class DefaultFirebaseOptions {
     storageBucket: 'llm-based-sat-app.firebasestorage.app',
   );
 
+  /// Firebase configuration options for the IOS platform.
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDgse9hgX6mqfhZGBRQ7WoQFQ5CueTHbn0',
     appId: '1:128555328235:ios:4d09a79a2d667192b9d4ae',
@@ -67,6 +71,7 @@ class DefaultFirebaseOptions {
     iosBundleId: 'com.invincimind.satapp',
   );
 
+  /// Firebase configuration options for the macOS platform.
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyDgse9hgX6mqfhZGBRQ7WoQFQ5CueTHbn0',
     appId: '1:128555328235:ios:4d09a79a2d667192b9d4ae',
@@ -76,6 +81,7 @@ class DefaultFirebaseOptions {
     iosBundleId: 'com.invincimind.satapp',
   );
 
+  /// Firebase configuration options for the Windows platform.
   static const FirebaseOptions windows = FirebaseOptions(
     apiKey: 'AIzaSyBbop_K4oX-fn3qDdvBJL4L2PCDFAio-tE',
     appId: '1:128555328235:web:ce4534ee44bfdce2b9d4ae',
@@ -85,5 +91,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'llm-based-sat-app.firebasestorage.app',
     measurementId: 'G-5ZY72557NE',
   );
-
 }
