@@ -74,11 +74,14 @@ class _ExerciseTimerState extends State<ExerciseTimer> {
             top: -2,
             child: ElevatedButton(
               onPressed: () {
-                if (timerManager.isPaused) {
-                  timerManager.resumeTimer();
-                } else {
-                  timerManager.pauseTimer();
-                }
+                setState(() {
+                  // Ensure widget rebuilds when state changes
+                  if (timerManager.isPaused) {
+                    timerManager.resumeTimer();
+                  } else {
+                    timerManager.pauseTimer();
+                  }
+                });
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColours.brandBlueMinusThree,
