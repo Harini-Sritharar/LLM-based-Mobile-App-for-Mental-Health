@@ -19,11 +19,21 @@ class ChildhoodPhotosPage extends StatefulWidget {
   final int selectedIndex;
   final VoidCallback onCompletion;
 
+  // Override fields
+  final FirebaseAuth? authOverride; 
+  final FirebaseFirestore? firestoreOverride;
+  final ImagePicker? pickerOverride;
+  final FirebaseStorage? storageOverride;
+
   const ChildhoodPhotosPage({
     super.key,
     required this.onItemTapped,
     required this.selectedIndex,
     required this.onCompletion,
+    this.authOverride,
+    this.firestoreOverride,
+    this.pickerOverride,
+    this.storageOverride,
   });
 
   @override
@@ -31,8 +41,14 @@ class ChildhoodPhotosPage extends StatefulWidget {
 }
 
 class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
-  final ImagePicker _picker =
+  // Use the injected instances or fall back to real ones
+  FirebaseAuth get _auth => widget.authOverride ?? FirebaseAuth.instance;
+  FirebaseFirestore get _firestore =>
+      widget.firestoreOverride ?? FirebaseFirestore.instance;
+  ImagePicker get _picker => widget.pickerOverride ??
       ImagePicker(); // Image picker instance for photo selection
+  FirebaseStorage get _storage => widget.storageOverride ?? FirebaseStorage.instance;
+
   List<String> favouritePhotos = []; // List to store URLs of favourite photos
   List<String> nonFavouritePhotos =
       []; // List to store URLs of non-favourite photos
@@ -56,7 +72,8 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
 
   // Fetches the current user's UID from Firebase Authentication
   void _getUserId() {
-    final User? currentUser = FirebaseAuth.instance.currentUser;
+    // Get UID directly from Firebase Auth
+    final User? currentUser = _auth.currentUser;
     if (currentUser != null) {
       setState(() {
         uid = currentUser.uid; // Store UID
@@ -89,7 +106,7 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
   // Loads stored photos from Firestore for the current user
   Future<void> _loadStoredPhotos() async {
     DocumentSnapshot snapshot =
-        await FirebaseFirestore.instance.collection('Profile').doc(uid).get();
+        await _firestore.collection('Profile').doc(uid).get();
     if (!mounted) return;
 
     if (snapshot.exists) {
@@ -125,7 +142,7 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
     try {
       String fileName = DateTime.now().millisecondsSinceEpoch.toString();
       Reference ref =
-          FirebaseStorage.instance.ref().child('childhood_photos/$fileName');
+          _storage.ref().child('childhood_photos/$fileName');
       await ref.putFile(imageFile); // Upload the image
       return await ref.getDownloadURL(); // Get and return the download URL
     } catch (e) {
@@ -145,7 +162,7 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
 
       // Fallback to Firebase Auth UID if provider UID is empty
       if (currentUid.isEmpty) {
-        final User? firebaseUser = FirebaseAuth.instance.currentUser;
+        final User? firebaseUser = _auth.currentUser;
         if (firebaseUser == null) {
           throw Exception("User not authenticated");
         }
@@ -157,7 +174,7 @@ class _ChildhoodPhotosPageState extends State<ChildhoodPhotosPage> {
 
       // Document reference for the user's profile
       DocumentReference userDoc =
-          FirebaseFirestore.instance.collection('Profile').doc(uid);
+          _firestore.collection('Profile').doc(uid);
 
       DocumentSnapshot snapshot = await userDoc.get();
       Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;

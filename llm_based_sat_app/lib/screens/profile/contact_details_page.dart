@@ -18,19 +18,30 @@ class ContactDetailsPage extends StatefulWidget {
       onItemTapped; // Callback function to update the navbar index
   final int selectedIndex; // Tracks the selected index of the navbar
   final VoidCallback onCompletion; // Callback function to indicate completion
+  final FirebaseAuth? authOverride;
+  final FirebaseFirestore? firestoreOverride;
+  final updateContactDetailsOverride;
 
-  const ContactDetailsPage({
-    Key? key,
-    required this.onItemTapped,
-    required this.selectedIndex,
-    required this.onCompletion,
-  }) : super(key: key);
+  const ContactDetailsPage(
+      {Key? key,
+      required this.onItemTapped,
+      required this.selectedIndex,
+      required this.onCompletion,
+      this.authOverride,
+      this.firestoreOverride,
+      this.updateContactDetailsOverride
+      })
+      : super(key: key);
 
   @override
   _ContactDetailsPageState createState() => _ContactDetailsPageState();
 }
 
 class _ContactDetailsPageState extends State<ContactDetailsPage> {
+  FirebaseAuth get _auth => widget.authOverride ?? FirebaseAuth.instance;
+  FirebaseFirestore get _firestore => widget.firestoreOverride ?? FirebaseFirestore.instance;
+  static bool isTestMode = false;
+
   final _formKey = GlobalKey<FormState>(); // Key to manage form validation
   Key phoneFieldKey = UniqueKey(); // Unique key for the phone field widget
   final TextEditingController _countryController = TextEditingController(
@@ -53,9 +64,9 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
   /// If the user has a stored phone number, country, and zipcode, they are populated in the form fields.
   void _loadUserData() async {
     User? user =
-        FirebaseAuth.instance.currentUser; // Get the current Firebase user
+        _auth.currentUser; // Get the current Firebase user
     if (user != null) {
-      DocumentSnapshot doc = await FirebaseFirestore.instance
+      DocumentSnapshot doc = await _firestore
           .collection(
               'Profile') // Fetch the user's profile document from Firestore
           .doc(user.uid)
@@ -118,6 +129,12 @@ class _ContactDetailsPageState extends State<ContactDetailsPage> {
   /// Saves the user's contact details, including the country, zip code, and mobile number.
   /// This function validates the form and updates the Firestore profile document with the new data.
   void _saveContactDetails() {
+    if (widget.updateContactDetailsOverride != null) {
+      widget.updateContactDetailsOverride!(
+          _countryController.text.trim(),
+          _zipPostalController.text.trim(),
+          "$dialCode $mobileNumber");
+    }
     print("In Save Contact Details");
 
     // Check if the form is valid and the mobile number is not empty

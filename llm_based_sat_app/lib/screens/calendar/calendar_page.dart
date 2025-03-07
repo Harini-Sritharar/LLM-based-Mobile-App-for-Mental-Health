@@ -13,18 +13,22 @@ import '../../widgets/custom_app_bar.dart';
 class CalendarPage extends StatefulWidget {
   final Function(int) onItemTapped;
   final int selectedIndex;
+  @visibleForTesting
+  final getExercisesByDateOverride;
 
-  const CalendarPage({
-    super.key,
-    required this.onItemTapped,
-    required this.selectedIndex,
-  });
+  const CalendarPage(
+      {super.key,
+      required this.onItemTapped,
+      required this.selectedIndex,
+      this.getExercisesByDateOverride});
 
   @override
   _CalendarPageState createState() => _CalendarPageState();
 }
 
 class _CalendarPageState extends State<CalendarPage> {
+  late Future<List<CalendarExerciseEntry>> Function(String, DateTime)
+      _getExercisesByDate;
   // The currently selected date for the calendar page
   DateTime _selectedDate = DateTime.now();
 
@@ -40,6 +44,8 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   void initState() {
     super.initState();
+    _getExercisesByDate =
+        widget.getExercisesByDateOverride ?? getExercisesByDate;
   }
 
   @override
@@ -58,7 +64,7 @@ class _CalendarPageState extends State<CalendarPage> {
   Future<void> _fetchExercises() async {
     // Fetch exercises for the given UID and date
     List<CalendarExerciseEntry> result =
-        await getExercisesByDate(uid, _selectedDate);
+        await _getExercisesByDate(uid, _selectedDate);
 
     // Check if the widget is still mounted before updating the state
     if (!mounted) return;
