@@ -43,24 +43,40 @@ class ExerciseTimerManager extends ChangeNotifier {
   Future<void> startTimer(String exerciseId) async {
     _exerciseId = exerciseId;
     await _loadInitialTime();
-    _stopwatch.start();
+
+    final prefs = await SharedPreferences.getInstance();
+    _isPaused = prefs.getBool('exercise_timer_paused_$_exerciseId') ?? false;
+
+    if (!_isPaused) {
+      _stopwatch.start();
+    }
 
     _timer ??= Timer.periodic(const Duration(milliseconds: 10), (timer) {
       notifyListeners();
     });
+
+    notifyListeners();
   }
 
   /// Pause the timer
-  void pauseTimer() {
+  void pauseTimer() async {
     _stopwatch.stop();
     _isPaused = true;
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('exercise_timer_paused_$_exerciseId', true);
+
     notifyListeners();
   }
 
   /// Resume the timer
-  void resumeTimer() {
+  void resumeTimer() async {
     _stopwatch.start();
     _isPaused = false;
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('exercise_timer_paused_$_exerciseId', false);
+
     notifyListeners();
   }
 
@@ -69,7 +85,12 @@ class ExerciseTimerManager extends ChangeNotifier {
     _stopwatch.stop();
     _timer?.cancel();
     _timer = null;
+    _isPaused = false;
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('exercise_timer_paused_$_exerciseId', false);
     await _resetCachedTimer();
+
     notifyListeners();
   }
 
