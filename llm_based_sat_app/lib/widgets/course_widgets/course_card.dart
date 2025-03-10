@@ -183,8 +183,21 @@ class _CourseCardState extends State<CourseCard> {
           ),
           if (_isLocked)
             Positioned.fill(
-              // Ensure it's properly positioned within the Stack
+              child: IgnorePointer(
+                child: Container(
+                  margin: const EdgeInsets.only(bottom: 16),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.grey.shade400, width: 1.5),
+                  ),
+                ),
+              ),
+            ),
+          // The overlay for locked courses
+          if (_isLocked)
+            Positioned.fill(
               child: Container(
+                margin: const EdgeInsets.only(bottom: 16),
                 decoration: BoxDecoration(
                   color: Colors.black45,
                   borderRadius: BorderRadius.circular(12),
